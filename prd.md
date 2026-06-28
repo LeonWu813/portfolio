@@ -68,9 +68,9 @@ Main content area to the right of the sidebar: single column, comfortable line l
 
 ### Theme
 
-**Design reference analysis (amankumar.ai)**
+**Design reference**
 
-The reference site (https://amankumar.ai) establishes the visual standard this portfolio applies to Leon's content. Key observations:
+The reference site establishes the visual standard this portfolio applies to Leon's content. Key observations:
 
 - **Color:** Light neutral background, near-black body text, no vibrant accent colors. The palette is intentionally understated — nothing competes with the content. Platform-specific colors appear only on social icons and nowhere else on the page.
 - **Typography:** A single sans-serif family throughout, with a clear size hierarchy: a large hero heading, a prominent role subtitle, and smaller body text at generous line-height. Weight variation (bold heading, regular body) does the work that color would do on a more decorative site.
