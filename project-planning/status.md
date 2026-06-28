@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: pm
-mode: init
+agent: doc-sync
+mode: initial
 module: n/a
 result: success
-commit: 69d016ba0da2049cff08b39ff7687db804afdc91
+commit: 2b4e82679cc095770134402ffb518d029784b559
 timestamp: 2026-06-28T00:00:00Z
 ```
 
@@ -121,13 +121,40 @@ Test:  (none — static site, no automated test suite defined)
 
 ## Phase Plan
 
-*(Blank — Doc-Sync populates this during the initial sync.)*
+[AMBIGUITY: PRD revision 1.2 does not contain a Phases and Milestones section. No phase names, milestone names, or sequencing dates are defined in the PRD. The following phase structure is derived from the module dependency order stated in the Tech Lead review (MOD-001 must be first; all other modules depend on it) and the grouping of modules by function. PM must confirm or revise this phase structure and add it to prd.md before the Engineer begins work.]
+
+**Proposed phase structure based on module dependencies:**
+
+Phase 1 — Site Shell
+- MOD-001: Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode)
+- Milestone: Layout shell renders on all routes; dark mode toggle works without hydration flash; Roboto font loads via next/font; sidebar collapses correctly on mobile.
+
+Phase 2 — Core Content Pages
+- MOD-002: Home Page
+- MOD-003: Projects Grid Page
+- MOD-007: Experience Page
+- MOD-008: About Page
+- MOD-009: Skills Page
+- MOD-010: Contact Page
+- Milestone: All six content pages render inside the site shell with correct copy, metadata, and external links.
+
+Phase 3 — Project Detail Pages
+- MOD-004: Project Detail: Marketing Analytics
+- MOD-005: Project Detail: Multi-Agent System
+- MOD-006: Project Detail: TabVault
+- Milestone: All three project detail pages render case study markdown correctly; [slug] dynamic route returns 404 for unknown slugs; generateStaticParams iterates the data file.
+
+Phase 4 — Deploy
+- Production deploy to Vercel; domain configured; canonical URLs and OG tags updated with confirmed domain.
+- Milestone: Site live on custom domain; Lighthouse score above 90; all external links verified working.
 
 ---
 
 ## Current Phase
 
-*(Blank — Doc-Sync populates this during the initial sync.)*
+Phase 1 — Site Shell
+
+[AMBIGUITY: PRD revision 1.2 does not define phases. Current Phase is set to Phase 1 (Site Shell / MOD-001) based on the Tech Lead's approval of the module breakdown ordering. PM must confirm this phase structure.]
 
 ---
 
@@ -146,6 +173,74 @@ Test:  (none — static site, no automated test suite defined)
 ## Checkpoint History
 
 *(No checkpoints yet.)*
+
+---
+
+## Sync Reports
+
+### Sync Report — Initial Sync — 2026-06-28
+**Sync type:** initial
+**PRD Revision:** 1.2
+**Files created:**
+- project-planning/production.md
+- project-planning/modules/mod-site-shell/spec.md
+- project-planning/modules/mod-site-shell/status.md
+- project-planning/modules/mod-home/spec.md
+- project-planning/modules/mod-home/status.md
+- project-planning/modules/mod-projects-grid/spec.md
+- project-planning/modules/mod-projects-grid/status.md
+- project-planning/modules/mod-project-marketing/spec.md
+- project-planning/modules/mod-project-marketing/status.md
+- project-planning/modules/mod-project-multi-agent/spec.md
+- project-planning/modules/mod-project-multi-agent/status.md
+- project-planning/modules/mod-project-tabvault/spec.md
+- project-planning/modules/mod-project-tabvault/status.md
+- project-planning/modules/mod-experience/spec.md
+- project-planning/modules/mod-experience/status.md
+- project-planning/modules/mod-about/spec.md
+- project-planning/modules/mod-about/status.md
+- project-planning/modules/mod-skills/spec.md
+- project-planning/modules/mod-skills/status.md
+- project-planning/modules/mod-contact/spec.md
+- project-planning/modules/mod-contact/status.md
+- .claude/agents/engineer-mod-site-shell.md
+- .claude/agents/qa-mod-site-shell.md
+- .claude/agents/engineer-mod-home.md
+- .claude/agents/qa-mod-home.md
+- .claude/agents/engineer-mod-projects-grid.md
+- .claude/agents/qa-mod-projects-grid.md
+- .claude/agents/engineer-mod-project-marketing.md
+- .claude/agents/qa-mod-project-marketing.md
+- .claude/agents/engineer-mod-project-multi-agent.md
+- .claude/agents/qa-mod-project-multi-agent.md
+- .claude/agents/engineer-mod-project-tabvault.md
+- .claude/agents/qa-mod-project-tabvault.md
+- .claude/agents/engineer-mod-experience.md
+- .claude/agents/qa-mod-experience.md
+- .claude/agents/engineer-mod-about.md
+- .claude/agents/qa-mod-about.md
+- .claude/agents/engineer-mod-skills.md
+- .claude/agents/qa-mod-skills.md
+- .claude/agents/engineer-mod-contact.md
+- .claude/agents/qa-mod-contact.md
+
+**AMBIGUITY markers logged:**
+- production.md: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.
+- mod-home/spec.md: same domain/og:url ambiguity (replicated to each affected module spec).
+- mod-projects-grid/spec.md: same domain/og:url ambiguity.
+- mod-project-marketing/spec.md: same domain/og:url ambiguity.
+- mod-project-multi-agent/spec.md: same domain/og:url ambiguity.
+- mod-project-tabvault/spec.md: same domain/og:url ambiguity.
+- mod-experience/spec.md: same domain/og:url ambiguity.
+- mod-about/spec.md: same domain/og:url ambiguity.
+- mod-skills/spec.md: same domain/og:url ambiguity.
+- mod-contact/spec.md: same domain/og:url ambiguity.
+- status.md Phase Plan: PRD revision 1.2 does not contain a Phases and Milestones section. Phase structure is proposed from module dependency order. PM must confirm.
+- status.md Current Phase: same — PM must confirm phase structure.
+
+**CONFLICT markers logged:** none
+
+**verify-sync.sh result:** Script requires prd.md to be inside the project-planning/ directory; this project keeps prd.md at the repo root. Manual verification performed in lieu of script: Check 1 (MOD-IDs) — PASS (PRD has no MOD-IDs, nothing to verify); Check 2 (orphan specs) — PASS (all 10 spec.md files map to Module Map entries); Check 3 (Tech Stack) — PASS (Next.js 16.2.9, TypeScript, Tailwind CSS v4, Roboto, marked, Vercel all present in production.md); Check 4 (US-IDs) — PASS (PRD has no US-IDs, nothing to verify); Check 5 (AMBIGUITY markers logged) — PASS (all 10 AMBIGUITY markers logged in status.md Sync Reports); Check 6 (Phase names) — N/A (PRD has no Phases section; AMBIGUITY marker placed in Phase Plan).
 
 ---
 
