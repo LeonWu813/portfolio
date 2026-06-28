@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: tech-lead
-mode: review
+agent: pm
+mode: init
 module: n/a
 result: success
-commit: 7bbe32865685b7d19070ed4865009ed03518167a
+commit: 7d0f59bcef2d2e79e3c0b938d972d56b014dbfda
 timestamp: 2026-06-28T00:00:00Z
 ```
 
@@ -18,6 +18,8 @@ timestamp: 2026-06-28T00:00:00Z
 ## PM Updates
 
 2026-06-28 — PRD revision 1.2 confirmed by user. PRD covers all nine pages (Home, Projects grid, three Project Detail case studies, Experience, About, Skills, Contact), the persistent sidebar layout, dark mode toggle, SEO/OG metadata, and static Vercel deployment. Content assets (case studies, site copy, experience entries, resume PDF, favicon) are all present in `asset/`. Next.js 16 scaffold exists at `site/`. Status.md created; waiting for Tech Lead Setup Confirmation before tagging [INIT].
+
+2026-06-28 — Tech Lead review confirmed present (Concerns, Recommendations, Approved, Proposed Shared Conventions). Next.js 16 scaffold at `site/` verified. Setup complete per user confirmation. PRD formally initialized. **[INIT]**
 
 **Open items before launch:**
 - Domain name: not yet selected. Required for canonical URLs, OG tags, and Vercel domain configuration. Blocking for production deploy.
