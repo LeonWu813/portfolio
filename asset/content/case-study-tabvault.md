@@ -2,6 +2,8 @@
 
 **A production full-stack tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend, with an AI content-analysis pipeline. I produced it by running my own multi-agent development system, reviewing and approving every step.**
 
+**At a glance:** Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate
+
 `Java 21 / Spring Boot` · `React / TypeScript PWA` · `Chrome Extension (MV3)` · `PostgreSQL` · `Redis` · `Quartz` · `Claude API` · `AWS ECS Fargate`
 [Live: tab-vault.com](https://tab-vault.com) · [GitHub: tab-management](https://github.com/LeonWu813/tab-management)
 
@@ -27,7 +29,7 @@ The product is split into three clients that share one Spring Boot backend: a Ch
 
 **An asynchronous AI pipeline that never blocks the user.** When someone saves an item, a background job fetches the page content, using the right tool for each source, then calls the Claude API to write a plain-English summary, suggest a category, and detect any time-sensitive deadlines. All of this happens asynchronously and writes back to the item when it is ready, so the save feels instant and the analysis simply appears on the dashboard a moment later.
 
-**A deployment gotcha worth remembering.** Apple Silicon Macs build ARM images by default, but ECS Fargate runs on x86. A normal Docker build passed every local check and then failed silently at runtime on ECS. Pinning every build to `linux/amd64` solved it. I am including this because the most useful engineering lessons are often the ones that only surface in a real deployment, not in a tutorial.
+**A deployment gotcha worth remembering.** Apple Silicon Macs build ARM images by default, but ECS Fargate runs on x86. A normal Docker build passed every local check and then failed silently at runtime on ECS. Pinning every build to `linux/amd64` solved it. These deployment-only failures are the ones that don't show up until production.
 
 ## Impact
 
@@ -37,4 +39,4 @@ Just as importantly, it is the proof that my multi-agent system works. A real, m
 
 ## What I learned
 
-Operating the system to build something this size taught me where the real difficulty in production software lives, and it is rarely in the happy path. It is in the restart that drops your scheduled jobs, the token that should expire faster, and the image that builds fine and runs nowhere. Reviewing each of those decisions sharpened my judgment about what "done" actually means for a deployed system. It also gave me a clear, honest answer to the question every reviewer asks about an AI-built project: yes, I understand all of it, because understanding it was the part I owned.
+Operating the system to build something this size taught me where the real difficulty in production software lives, and it is rarely in the happy path. It is in the restart that drops your scheduled jobs, the token that should expire faster, and the image that builds fine and runs nowhere. Reviewing each of those decisions sharpened my judgment about what "done" actually means for a deployed system. And because I reviewed and approved every step, I can speak to every decision in this build.

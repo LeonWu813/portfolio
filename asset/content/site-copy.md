@@ -10,7 +10,7 @@ This file covers the home hero and bio, the About paragraph, and the short tease
 
 **Title / role:** Full-Stack Engineer
 
-**Primary CTA button:** Connect me on LinkedIn
+**Primary CTA button:** View my work (links to Projects)
 
 ### Bio
 I'm a full-stack engineer and CS master's student at Northeastern. I build production systems by hand, from the database schema to the cloud deployment, and I design multi-agent systems that plan, implement, and ship software end to end. What I care about most is the engineering that makes software hold up in the real world, not just in a demo.
@@ -19,7 +19,7 @@ I'm a full-stack engineer and CS master's student at Northeastern. I build produ
 Currently pursuing my MS in Computer Science at Northeastern and looking for a Summer 2026 software engineering internship across full-stack, frontend, or backend roles.
 
 ### Secondary CTA
-Reach out (links to Contact)
+Reach out (links to Contact) · Download résumé (links to résumé PDF) · Connect on LinkedIn
 
 ---
 
@@ -40,23 +40,25 @@ The pivot is the point. I learned to engineer by shipping software that people a
 
 Order is fixed as below. Each card shows a name, a one-line tagline that leads with the strongest fact, a short description, tags, a status, and action links.
 
-### 1. Marketing Analytics Platform
+### 1. SitePlus+
 - **Tagline:** Adopted in production, cut recurring analytics work by ~60%
-- **Description:** A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end on a multi-AZ AWS setup.
+- **Description:** A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end by myself on a multi-AZ AWS setup.
 - **Tags:** Full-Stack · Java/Spring Boot · React · AWS
-- **Status:** Active
+- **Status:** Live in production
 - **Links:** Live demo · GitHub
 
 ### 2. Multi-Agent Software Development System
 - **Tagline:** Six AI agents that plan, build, and ship full-stack software
-- **Description:** A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app end to end.
+- **Description:** A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app, TabVault, end to end.
 - **Tags:** AI Agents · Systems Design · Claude Code
-- **Status:** Active
+- **Status:** Live in production
+- **See also:** TabVault below — the product this system built ↓
 - **Links:** GitHub · Built by the system: tab-vault.com
 
 ### 3. TabVault
 - **Tagline:** A live full-stack PWA, built by my multi-agent system
 - **Description:** A production tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend with an AI content-analysis pipeline. I produced it by running my agent system and reviewing every step.
 - **Tags:** Full-Stack · PWA · AI · AWS
-- **Status:** Active
+- **Status:** Live in production
+- **Built by:** ↑ Multi-Agent Software Development System above
 - **Links:** Live: tab-vault.com · GitHub

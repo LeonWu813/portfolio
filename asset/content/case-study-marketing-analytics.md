@@ -1,6 +1,8 @@
-# Marketing Analytics Platform
+# SitePlus+
 
 **A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent.**
+
+**At a glance:** Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%
 
 `Java 21 / Spring Boot` · `React / TypeScript` · `Redux Toolkit` · `PostgreSQL` · `Redis` · `Docker` · `GitHub Actions` · `AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)`
 [Live demo](https://www.siteplusplus.space) · [GitHub: marketing-analytics](https://github.com/LeonWu813/marketing-analytics)

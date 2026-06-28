@@ -2,10 +2,36 @@
 
 **A team of six AI agents that plan, build, and QA software through a controlled, human-approved workflow. The system shipped a deployed full-stack app, TabVault, from start to finish.**
 
+**At a glance:** Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live)
+
 `Claude Code (subagents, skills, hooks)` · `Bash` · `Git`
 [Built by the system: tab-vault.com](https://tab-vault.com) · [System repo](https://github.com/LeonWu813/multi-agent-software-development-system) · [TabVault repo](https://github.com/LeonWu813/tab-management)
 
 ---
+
+## Architecture
+
+```mermaid
+flowchart TD
+    U([User requirements]) --> PM1[PM: write prd.md]
+    PM1 --> TL[Tech Lead: architectural review]
+    TL --> H1{{Human: setup + approve}}
+    H1 --> PM2[PM: finalize PRD, tag INIT]
+    PM2 --> DS[Doc-Sync: PRD -> module specs,<br/>generate per-module Engineer + QA]
+    DS --> ENG[Engineer: implement one module]
+    ENG --> QA[QA: verify module vs spec]
+    QA -->|pass| CP[PM checkpoint with user]
+    QA -->|bug| ENG
+    QA -->|spec issue| PM3[PM: update PRD]
+    PM3 --> DS
+    CP -->|next phase| DS
+    CP -->|complete| DONE([Project complete])
+    DONE -.manual.-> RETRO[Retrospective: propose improvements]
+    classDef human fill:#f4e4c1,stroke:#b8975a,color:#000;
+    class H1 human;
+```
+
+*A human approval gate sits on every arrow — the hook proposes the next step; the human runs it.*
 
 ## The problem
 
