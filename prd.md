@@ -34,10 +34,6 @@
 
 A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's three flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
-### Design Reference
-
-The site is modeled structurally and aesthetically on https://amankumar.ai: content-first layout, slim left sidebar for navigation, light minimal theme with generous whitespace. It is not a clone of that site; it applies the same visual discipline to Leon's content.
-
 ### Goals
 
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
@@ -72,13 +68,28 @@ Main content area to the right of the sidebar: single column, comfortable line l
 
 ### Theme
 
-- Light, minimal, high whitespace.
-- One restrained accent color (specific value TBD by Leon; default to a neutral such as slate or indigo if no preference is provided).
-- Clean type scale: large heading, medium subheading, normal body, small caption/tag.
+**Design reference analysis (amankumar.ai)**
+
+The reference site (https://amankumar.ai) establishes the visual standard this portfolio applies to Leon's content. Key observations:
+
+- **Color:** Light neutral background, near-black body text, no vibrant accent colors. The palette is intentionally understated — nothing competes with the content. Platform-specific colors appear only on social icons and nowhere else on the page.
+- **Typography:** A single sans-serif family throughout, with a clear size hierarchy: a large hero heading, a prominent role subtitle, and smaller body text at generous line-height. Weight variation (bold heading, regular body) does the work that color would do on a more decorative site.
+- **Whitespace:** Whitespace is structural, not decorative. Major sections are separated by significant vertical space so each block reads as its own unit. Within sections, consistent padding gives components room to breathe without feeling sparse.
+- **Components:** Cards use simple padding and a subtle border or shadow — no gradients or heavy chrome. Navigation links are plain text, styled only on hover. The call-to-action button is the one visually prominent element on the page, reinforcing a single clear action.
+- **Overall impression:** Professional and approachable. The restraint signals confidence — the work speaks rather than the wrapper. The design scales cleanly to a recruiter skimming in 10 seconds or an engineer reading a full case study.
+
+**Application to this site**
+
+Leon's site inherits this discipline directly:
+- Light background, near-black text, one restrained accent color (specific value TBD by Leon; default to a neutral such as slate or indigo if no preference is provided).
+- Clean type scale: H1 page title, H2 section headings, H3 subsections in case studies, body at ~16–18px with generous line-height.
+- Whitespace as a first-class layout tool — sections breathe, cards are not crowded, the sidebar does not compete with the main content.
+- No decorative flourishes: no gradients, no background textures, no animated elements beyond subtle hover states.
 
 ### Typography
 
-- Choose a legible sans-serif (e.g., Inter, Geist, or system-ui stack).
+- **Font:** Roboto (Google Fonts). Load via `@import` or `<link>` with `font-display: swap` for performance. Fallback: sans-serif.
+- **Weights in use:** 400 (body), 500 (nav links, labels), 700 (headings). Do not load weights that are not used.
 - Clear hierarchy: H1 for page title, H2 for section headings, H3 for subsections within case studies, body text at ~16–18px.
 - No em dashes anywhere in site copy. Use hyphens or sentence rewrites instead.
 
@@ -103,6 +114,10 @@ Mobile-first. Sidebar behavior at small breakpoints:
 - Optimized images (next/image or equivalent, WebP format, lazy-loaded below the fold).
 - Minimal blocking scripts; defer or async non-critical JS.
 - No heavyweight third-party widgets that block render.
+
+### Dark Mode
+
+Dark mode is a production feature. Implement a light/dark theme toggle using Tailwind CSS `dark:` variant with a class-based strategy (`class="dark"` on `<html>`). Default to the system preference via `prefers-color-scheme`; persist overrides in `localStorage`. The toggle should be reachable from the sidebar on desktop and from the mobile top bar or hamburger menu on small screens.
 
 ### Tone
 
@@ -257,39 +272,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | Live demo link | https://www.siteplusplus.space |
 | GitHub link | https://github.com/LeonWu813/marketing-analytics |
 
-**Case study body (render verbatim, section by section):**
-
-**The problem**
-
-A small company I worked with was spending hours every week pulling together the same marketing numbers by hand: page views, campaign performance, and the periodic SEO checkup. The data lived in several disconnected places, so every report meant repeating the same manual gathering. I set out to replace that routine with a single platform a site owner could install once and then rely on, covering behavior tracking, campaign management, and automated SEO auditing in one place.
-
-I designed, built, and deployed the whole thing myself, from the database schema to the production AWS infrastructure.
-
-**My role**
-
-Sole engineer across the entire stack. I built the Spring Boot backend, the React and TypeScript front end, the JavaScript tracking snippet that customers paste into their sites, and the full AWS deployment with a continuous-delivery pipeline. Every design decision below was mine to make and to own.
-
-**Approach and key decisions**
-
-The platform ingests events from a lightweight tracking snippet, enriches and stores them, and surfaces everything through an analytics dashboard, alongside a campaign manager and an SEO auditor. Several decisions shaped how it holds up under real use.
-
-*Securing an endpoint that has to be public.* The tracking snippet runs in a visitor's browser with no credentials, so the event-ingest endpoint cannot require authentication. Rather than weaken security, I moved the guarantee to the read side: anyone can write an event, but only the authenticated site owner can ever read events back. To keep the open write endpoint from being abused, I added per-IP rate limiting so an attacker can be throttled but never mine the data. This separation of a public write path from a strictly private read path is the heart of the design.
-
-*Rate limiting that stays correct across multiple servers.* The platform runs on two EC2 instances behind a load balancer. An in-memory request counter on each instance would have effectively doubled the real limit, since an attacker could alternate between them. I kept the counter in Redis instead, giving all instances a single shared source of truth so the limit holds no matter which server answers a given request. Reasoning about state across a distributed deployment, rather than a single box, was what made this work.
-
-*Stateless auth that made scaling free.* I chose JWTs over server-side sessions so any instance can validate a request on its own. The payoff was concrete: adding the second EC2 instance behind the load balancer required zero code changes, because there was no shared session store to coordinate. A design decision made early paid off directly when it was time to scale.
-
-*Resilience and resourcefulness in the deployment.* The two instances sit in different availability zones, so if one zone fails the load balancer sends all traffic to the survivor automatically. The instances themselves only accept traffic from the load balancer's security group, so rate limiting and other protections cannot be bypassed by hitting a server directly. Running on small t3.micro instances also forced careful JVM memory tuning, constraining the heap and thread pools to fit comfortably alongside Docker, which taught me a lot about getting real work out of limited hardware.
-
-*State that survives a restart.* The automated follow-up audits, which re-run an SEO check a week later and email the owner a comparison, store their pending work as fields in the database rather than in server memory. A scheduled job picks up whatever is due. Because the intent lives in PostgreSQL, a server restart never loses a follow-up.
-
-**Impact**
-
-The platform was adopted in production by a real company and cut their recurring analytics work by roughly 60 percent, replacing hours of weekly manual reporting with a system that gathers, enriches, and visualizes the data on its own. It runs on a multi-AZ AWS deployment with a GitHub Actions pipeline that tests every change against a live PostgreSQL container, then builds and ships Docker images that redeploy automatically without any manual server access.
-
-**What I learned**
-
-Building and operating this alone taught me that the interesting problems live where the textbook stops. The clean answer says authenticate every endpoint, but a tracking snippet cannot carry a credential, so I had to find a different place to put the security guarantee. The clean answer says rate-limit requests, but the moment there are two servers, a naive counter is wrong. Working through those gaps end to end, and then keeping the result running in front of a real customer, is where I learned the most about building software that has to survive contact with the real world.
+**Case study body:** Render verbatim from `content/case-study-marketing-analytics.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** Screenshots of the dashboard UI or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
 
@@ -312,45 +295,7 @@ Building and operating this alone taught me that the interesting problems live w
 | GitHub (TabVault repo) | https://github.com/LeonWu813/tab-management |
 | "Built by the system" link | https://tab-vault.com |
 
-**Case study body (render verbatim, section by section):**
-
-**The problem**
-
-After shipping a full-stack analytics platform end to end on my own, I kept running into the same limitation: a single AI coding agent tends to lose the plot on a real project. Context drifts over a long session, earlier decisions get quietly overwritten, and there is no clean way to review or undo a bad step. I wanted to understand whether the answer was a better prompt or a better system.
-
-I decided it was the system. So I built one: a development team made up of specialized agents, each with a single job, coordinating the way real engineers do through documents, reviews, and version control, with a human in control at every step.
-
-**My role**
-
-I was the sole architect and builder. I designed the agent roles, the information boundaries between them, the skill layer, and the git-backed handoff mechanism. I treated the design itself as the deliverable. I drafted the full architecture up front in ARCHITECTURE.md, then hardened it by running real projects through the system and fixing whatever broke along the way.
-
-**Approach and key decisions**
-
-I started from the idea of an agent harness, the belief that the engineering around the model matters more than any single prompt. Four design decisions did most of the work.
-
-*Single responsibility, enforced by information boundaries.* Rather than one agent that does everything, there are six: PM, Doc-Sync, Tech Lead, Engineer, QA, and Retrospective. Each has one input, one output, and one handoff rule. More importantly, each agent can only read and write the files its role actually needs. The Engineer, for instance, never sees the product requirements document; it sees only its own module spec. I encoded these permissions as an explicit write-access matrix, so a mistake in one agent stays contained instead of corrupting the whole project.
-
-There was a clear trade-off here. Strict boundaries mean information has to be carried forward deliberately. A dedicated Doc-Sync agent translates the requirements document into per-module specs, rather than letting every agent reach for whatever it wants. That adds moving parts, but it is also what keeps each agent small enough to constrain and reason about.
-
-*Coordination through files, not shared memory.* Every agent runs as a fully independent claude --agent session with no shared context. They communicate the way a real team does, by writing to disk: a requirements document as the single source of truth, downstream module specs, and a machine-readable status.md that records the last action taken. This makes the whole workflow inspectable, with no hidden state.
-
-*A human in the loop at every handoff.* A Stop hook reads the last action from status.md and prints the exact next command to run, such as claude --agent qa-mod-auth. It never runs that command automatically. The person reviews each step and decides whether to proceed. The system proposes; the human approves.
-
-*Git as a rollback safety net.* Every agent commits its work before stopping, so every handoff becomes an atomic, revertible point. Paired with a progressive-disclosure skill layer, where lean router files load detailed workflows only when an agent needs them, this keeps each agent's context efficient while keeping every change reviewable and reversible.
-
-One decision I am especially glad I made: Doc-Sync generates the Engineer and QA agents for each module at sync time, hard-coding into every generated agent exactly which spec and dependencies it is allowed to read. The system writes part of itself, with least-privilege access built in from the start.
-
-I also chose to build honesty into QA rather than pretend that CLI tests are always enough. Backend modules do not pass on code inspection alone; QA has to start a real server, hit live endpoints, and check the actual database state. And because a React interface genuinely cannot be verified from the command line, the frontend QA agent stops and produces a written test script for a human instead of falsely reporting a pass. Designing around the limits of automated verification was part of the point.
-
-**Impact**
-
-The system designed, implemented, and QA'd TabVault, a deployed full-stack tab and notes manager that is live in production. The agents built it while I reviewed and approved each handoff. The result is a development workflow where failures stay contained to a single module instead of cascading, every step is reviewable and any step is cleanly reversible through git, and the entire process is transparent because coordination happens in plain files rather than hidden state.
-
-**What I learned**
-
-The hard part of a multi-agent system is not the code the agents write. It is the system that makes them produce correct software reliably. Most of my iterations went into tightening information boundaries and handoff rules, not into prompting. I also learned to design for the limits of automated verification rather than around them. The most trustworthy part of the system turned out to be the place where it admits a machine cannot check something and asks a person instead.
-
-If I extended the project, I would add automated metrics on handoff success rates and time to ship across projects, so that improvements to the harness could be measured rather than judged by feel.
+**Case study body:** Render verbatim from `content/case-study-multi-agent-system.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** A diagram of the six-agent architecture or a short screen recording of the system in use. [ASSET NEEDED: optional diagram or demo clip]
 
@@ -372,39 +317,7 @@ If I extended the project, I would add automated metrics on handoff success rate
 | Live link | https://tab-vault.com |
 | GitHub link | https://github.com/LeonWu813/tab-management |
 
-**Case study body (render verbatim, section by section):**
-
-**The problem**
-
-I needed a real, non-trivial product to prove that my multi-agent development system could do more than scaffold a toy app. A throwaway CRUD demo would not have tested anything. So I set the bar high: a genuine full-stack product with three separate clients, asynchronous background jobs, an external AI integration, push notifications, and a real cloud deployment. If the system could ship that, with me reviewing each handoff rather than writing the code myself, it would be a credible result.
-
-TabVault is that product. It lets people save, organize, and revisit browser tabs across devices, and it is live in production.
-
-**My role**
-
-I was the orchestrator and the technical reviewer. The implementation came from my multi-agent system, but I directed the work and approved every design decision and handoff before it moved forward. That meant reading and signing off on the architecture, catching problems at each gate, and making the judgment calls that the design records below. I understand every one of these decisions because approving them was my job. Building the product this way was also the real test of the system that produced it.
-
-**Approach and key decisions**
-
-The product is split into three clients that share one Spring Boot backend: a Chrome extension built on Manifest V3 for one-click saving, a React PWA dashboard for managing saved items, and a backend that handles auth, storage, scheduling, and AI analysis. A handful of decisions stand out.
-
-*Scheduled jobs that survive ephemeral infrastructure.* Reminders and auto-cleanup run on Quartz, but Quartz defaults to an in-memory job store that loses every scheduled job when a container restarts. Since the app runs on ECS Fargate, where tasks are ephemeral by design, that default would have quietly dropped reminders on every redeploy. The fix was to back Quartz with a JDBC job store in PostgreSQL so triggers persist across restarts. This is the kind of decision that only shows up once you take deployment seriously.
-
-*Refresh-token rotation for sessions that are both safe and long-lived.* Access tokens expire after fifteen minutes, and every refresh call issues a brand-new refresh token on a sliding seven-day window. Because each refresh token is single-use, a stolen one becomes useless almost immediately, while genuine active users stay logged in indefinitely. The trade-off is that the client has to store and send the new token on every cycle, which adds a little complexity on the front end in exchange for a meaningfully stronger security posture.
-
-*An asynchronous AI pipeline that never blocks the user.* When someone saves an item, a background job fetches the page content, using the right tool for each source, then calls the Claude API to write a plain-English summary, suggest a category, and detect any time-sensitive deadlines. All of this happens asynchronously and writes back to the item when it is ready, so the save feels instant and the analysis simply appears on the dashboard a moment later.
-
-*A deployment gotcha worth remembering.* Apple Silicon Macs build ARM images by default, but ECS Fargate runs on x86. A normal Docker build passed every local check and then failed silently at runtime on ECS. Pinning every build to linux/amd64 solved it. I am including this because the most useful engineering lessons are often the ones that only surface in a real deployment, not in a tutorial.
-
-**Impact**
-
-TabVault is deployed and running in production on AWS, served through CloudFront and an Application Load Balancer in front of containers on ECS Fargate, backed by RDS PostgreSQL and ElastiCache Redis. It is a complete product: save tabs from the extension or share sheet, get AI-generated summaries and categories, receive push reminders for detected deadlines, and browse everything offline through the PWA.
-
-Just as importantly, it is the proof that my multi-agent system works. A real, multi-client, cloud-deployed application came out the other end of that workflow, with a human reviewing every handoff, which is exactly what the system was designed to make possible.
-
-**What I learned**
-
-Operating the system to build something this size taught me where the real difficulty in production software lives, and it is rarely in the happy path. It is in the restart that drops your scheduled jobs, the token that should expire faster, and the image that builds fine and runs nowhere. Reviewing each of those decisions sharpened my judgment about what "done" actually means for a deployed system. It also gave me a clear, honest answer to the question every reviewer asks about an AI-built project: yes, I understand all of it, because understanding it was the part I owned.
+**Case study body:** Render verbatim from `content/case-study-tabvault.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** Screenshots of the PWA dashboard, the Chrome extension popup, or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
 
@@ -674,11 +587,10 @@ The resume PDF must be hosted as a static asset (e.g., in the /public directory)
 
 ### Deployment
 
-- Target: custom domain [ASSET NEEDED: preferred domain name]
-- Preferred host: Leon's choice of AWS (reinforces AWS/Docker skills on resume), Vercel, or Netlify
-  - If AWS: containerize with Docker, deploy to EC2 or ECS, serve via CloudFront + ALB
-  - If Vercel or Netlify: connect the GitHub repo for automatic deploys on push to main
-- All live demo links (tab-vault.com, siteplusplus.space) must remain working at all times — a broken link reads as abandoned work
+- **Host:** Vercel. The site is a static Next.js export with no backend, making Vercel the right fit: zero-config deploys, automatic HTTPS, and a global CDN with no infrastructure to manage.
+- **Deploy:** Connect the GitHub repo to Vercel. Every push to `main` triggers an automatic production deploy. Preview deployments are created automatically for pull requests.
+- **Domain:** Custom domain [ASSET NEEDED: preferred domain name]. Configure via Vercel's domain settings after registering the domain.
+- All live demo links (tab-vault.com, siteplusplus.space) must remain working at all times — a broken link reads as abandoned work.
 
 ### Repository Maintenance (pre-launch checklist)
 
@@ -739,20 +651,14 @@ The following items are not yet available and must be provided by Leon before th
 
 | Decision | Notes |
 |---|---|
-| Preferred host | AWS self-hosted vs. Vercel vs. Netlify |
-| Preferred domain name | To be registered if not already owned |
+| Preferred domain name | To be registered if not already owned; configure in Vercel after registration |
 
 ---
 
 ## 8. Out of Scope
 
-The following are explicitly not part of this build. They may be revisited as future enhancements.
+The following are explicitly not part of this build.
 
 - **Blog or blog infrastructure:** No blog section, no Blogs nav item, no MDX/CMS setup for posts.
-- **Dark mode toggle:** Light mode only for v1. Can be added as an enhancement later.
-- **X/Twitter-first connect flow:** LinkedIn is the primary connect channel. X/Twitter and other social accounts are not linked in v1.
-- **Comments, newsletters, or user accounts:** No interactive back-end features.
-- **Contact form:** Contact page shows a real email address and links, not a form. (Forms can break silently; a visible address always works.)
-- **CMS or admin interface:** All content is managed in TypeScript data files and markdown source files in the repository.
+- **Contact form:** Contact page shows a real email address and links only. Forms can break silently; a visible address always works.
 - **Internationalization (i18n):** English only.
-- **Any social platforms beyond LinkedIn, GitHub, and email:** Instagram, Medium, etc. are not included in v1.
