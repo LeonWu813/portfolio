@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: doc-sync
-mode: initial
+agent: tech-lead
+mode: setup-confirm
 module: n/a
 result: success
-commit: 2b4e82679cc095770134402ffb518d029784b559
-timestamp: 2026-06-28T00:00:00Z
+commit: cb41af7fcc1b05f3cdd0627507f4a95e633d2c14
+timestamp: 2026-06-28T00:01:00Z
 ```
 
 ---
@@ -116,6 +116,35 @@ Test:  (none — static site, no automated test suite defined)
 - Path alias `@/*` maps to the `site/` root. Use it for all cross-directory imports. No `../../` relative imports except within the same feature directory.
 - File naming follows SKILL.md defaults: React component files use PascalCase (`Sidebar.tsx`, `ProjectCard.tsx`); data, utility, and config files use kebab-case (`project-data.ts`, `markdown-utils.ts`).
 - `generateStaticParams` iterates the data array — it never contains hard-coded slug strings. Adding a project means adding a record to the data file only.
+
+### Setup Confirmation — 2026-06-28
+
+Infrastructure verified against live scaffold at `site/`.
+
+**Runtime versions confirmed:**
+- Node.js v24.14.1 (exceeds >= 20.x LTS requirement)
+- npm 11.11.0 (exceeds >= 10.x requirement)
+
+**Lint status:** PASS — `npm run lint` exits with zero errors or warnings on the unmodified scaffold.
+
+**Build status:** PASS — `npm run build` compiles successfully and generates static pages for `/` and `/_not-found`. One CSS warning is emitted about the `@import url(...)` order in `globals.css` — this is a warning only, not an error, and is resolved by MOD-001 scaffold cleanup.
+
+**`marked` installed:** v18.0.5 added to `dependencies` in `site/package.json`.
+
+**Assets verified present:**
+- `site/app/favicon.ico` — confirmed (App Router file convention)
+- `site/public/Leon_cv.pdf` — confirmed (served as plain `<a download>` link)
+
+**Known scaffold items MOD-001 engineer must clean up (not blockers, but required before MOD-001 is complete):**
+1. `site/app/layout.tsx` — `Geist` and `Geist_Mono` imports must be deleted; replaced with `Roboto` via `next/font/google`.
+2. `site/app/globals.css` line 2 — `@import url("https://fonts.googleapis.com/css2?family=Roboto:...")` must be removed; font loading moves to `layout.tsx`.
+3. `site/app/projects/marketing-analytics/`, `multi-agent-system/`, `tabvault/` — three empty static directories must be deleted and replaced with a single `app/projects/[slug]/page.tsx` dynamic route.
+4. `globals.css` — `@variant dark (&:where(.dark, .dark *));` must be added for Tailwind v4 dark mode utilities to compile correctly.
+5. `layout.tsx` — blocking inline theme script must be added as the first child of `<html>` to prevent dark mode hydration flash.
+
+**`project-planning/setup.md` created:** step-by-step runbook covering runtime requirements, repository layout, dependency install, dev server, production build, lint, scaffold cleanup checklist, and asset locations.
+
+Environment is ready for MOD-001. Engineer may begin immediately.
 
 ---
 
