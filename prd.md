@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.0
+**Revision:** 1.2
 **Date:** 2026-06-28
 **Author:** PM Agent (synthesized from portfolio-plan.md and content files)
 
@@ -60,7 +60,7 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 ### Layout
 
 Persistent slim left sidebar containing:
-- Logo or initials mark (e.g., "L" or "LW").
+- Wordmark: **"Leon"** (confirmed).
 - Primary navigation links.
 - "Connect" block with social/contact links.
 
@@ -81,7 +81,12 @@ The reference site (https://amankumar.ai) establishes the visual standard this p
 **Application to this site**
 
 Leon's site inherits this discipline directly:
-- Light background, near-black text, one restrained accent color (specific value TBD by Leon; default to a neutral such as slate or indigo if no preference is provided).
+- **Color palette (confirmed):**
+  - `#f2f0ef` — off-white/cream background
+  - `#898989` — medium gray (secondary text, borders, muted elements)
+  - `#b2ac88` — warm tan/khaki (primary accent, CTA buttons, links, active nav state)
+  - `#4b6e48` — forest green (secondary accent, status badges, hover states)
+  - Near-black (e.g. `#1a1a1a`) for body text
 - Clean type scale: H1 page title, H2 section headings, H3 subsections in case studies, body at ~16–18px with generous line-height.
 - Whitespace as a first-class layout tool — sections breathe, cards are not crowded, the sidebar does not compete with the main content.
 - No decorative flourishes: no gradients, no background textures, no animated elements beyond subtle hover states.
@@ -143,9 +148,9 @@ Humanized and professional. First-person voice consistent with the copy in site-
 ### Connect Block (sidebar, present on every page)
 
 Displayed below the nav in the sidebar. Three links in this order:
-1. **LinkedIn** (primary) — link to Leon's LinkedIn profile URL [ASSET NEEDED: LinkedIn URL]
-2. **GitHub** — link to Leon's GitHub profile URL [ASSET NEEDED: GitHub profile URL]
-3. **Email** — mailto: link to Leon's public email address [ASSET NEEDED: public email]
+1. **LinkedIn** (primary) — https://www.linkedin.com/in/leon-wu-tsan-yu/
+2. **GitHub** — https://github.com/LeonWu813
+3. **Email** — leon.wu.tsan.yu@gmail.com
 
 X/Twitter and other social links are out of scope unless Leon later requests them.
 
@@ -185,8 +190,8 @@ Rendered in the page layout below the main content area on every page.
 
 **Layout notes:**
 - Hero content is visible without scrolling on a standard laptop viewport.
-- Primary CTA links to Leon's LinkedIn profile URL [ASSET NEEDED: LinkedIn URL].
-- Optionally place a headshot beside or below the bio [ASSET NEEDED: headshot/photo].
+- Primary CTA links to https://www.linkedin.com/in/leon-wu-tsan-yu/
+- No headshot on home page.
 
 ---
 
@@ -260,7 +265,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /projects/marketing-analytics
 
-**Source file:** `content/case-study-marketing-analytics.md` — case study is fully written and ready.
+**Source file:** `asset/content/case-study-marketing-analytics.md` — case study is fully written and ready.
 
 **Header area (above the case study body):**
 
@@ -272,7 +277,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | Live demo link | https://www.siteplusplus.space |
 | GitHub link | https://github.com/LeonWu813/marketing-analytics |
 
-**Case study body:** Render verbatim from `content/case-study-marketing-analytics.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
+**Case study body:** Render verbatim from `asset/content/case-study-marketing-analytics.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** Screenshots of the dashboard UI or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
 
@@ -282,7 +287,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /projects/multi-agent-system
 
-**Source file:** `content/case-study-multi-agent-system.md` — case study is fully written and ready.
+**Source file:** `asset/content/case-study-multi-agent-system.md` — case study is fully written and ready.
 
 **Header area:**
 
@@ -295,7 +300,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | GitHub (TabVault repo) | https://github.com/LeonWu813/tab-management |
 | "Built by the system" link | https://tab-vault.com |
 
-**Case study body:** Render verbatim from `content/case-study-multi-agent-system.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
+**Case study body:** Render verbatim from `asset/content/case-study-multi-agent-system.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** A diagram of the six-agent architecture or a short screen recording of the system in use. [ASSET NEEDED: optional diagram or demo clip]
 
@@ -305,7 +310,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /projects/tabvault
 
-**Source file:** `content/case-study-tabvault.md` — case study is fully written and ready.
+**Source file:** `asset/content/case-study-tabvault.md` — case study is fully written and ready.
 
 **Header area:**
 
@@ -317,7 +322,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | Live link | https://tab-vault.com |
 | GitHub link | https://github.com/LeonWu813/tab-management |
 
-**Case study body:** Render verbatim from `content/case-study-tabvault.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
+**Case study body:** Render verbatim from `asset/content/case-study-tabvault.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
 
 **Optional assets for this page:** Screenshots of the PWA dashboard, the Chrome extension popup, or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
 
@@ -337,17 +342,23 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Role 1: Front-End Developer**
 - Company: Exascend
-- Location: [ASSET NEEDED: city/remote]
-- Dates: [ASSET NEEDED: start date] -- [ASSET NEEDED: end date or "Present"]
-- Bullets: [ASSET NEEDED: 2--3 bullet points framed around engineering substance with outcomes]
+- Location: Taipei, Taiwan
+- Dates: Sep 2023 – Jun 2025
+- Bullets:
+  - Designed and implemented a custom JavaScript event-tracking system posting structured user interactions to CRM and GA4 APIs, automating cross-platform data capture and cutting manual reporting by 70%.
+  - Led end-to-end development of two customer-facing websites from scratch (HTML, CSS, JavaScript), growing monthly active users by 350% and increasing average session engagement time by 22.3%.
+  - Ran technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) validated via A/B testing, driving a 48.84% increase in page views while ensuring inclusive, accessible experiences.
 
 ---
 
-**Role 2: Marketing Project Manager**
+**Role 2: Growth Marketer / Marketing Project Manager**
 - Company: GoFreight
-- Location: [ASSET NEEDED: city/remote]
-- Dates: [ASSET NEEDED: start date] -- [ASSET NEEDED: end date]
-- Bullets: [ASSET NEEDED: 2--3 bullet points framed around engineering substance with outcomes]
+- Location: Taipei, Taiwan
+- Dates: Jul 2021 – Mar 2023
+- Bullets:
+  - Planned and executed conversion rate optimization experiments, growing conversion from 0.38% to 2.55%, and improved technical SEO by raising Lighthouse score from 20 to 70.
+  - Managed Google Ads campaigns to cut cost per demo from $5,000 to below $2,000, and expanded into the China market via Baidu Ads, generating $3,150 in inbound pipeline.
+  - Planned and executed an SEO migration strategy that held the primary keyword to a one-rank drop, and organized the JCTrans GFFC 12th event achieving a $16,500 target pipeline.
 
 ---
 
@@ -368,7 +379,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Page heading:** About
 
-**Photo:** [ASSET NEEDED: professional headshot or photo]
+**Photo:** None (not included).
 
 **Main paragraph (verbatim from site-copy.md):**
 
@@ -426,14 +437,14 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 | Method | Display | Action |
 |---|---|---|
-| Email | [ASSET NEEDED: public email address] | mailto: link |
-| LinkedIn | [ASSET NEEDED: display text, e.g., linkedin.com/in/...] | External link |
-| GitHub | [ASSET NEEDED: display text, e.g., github.com/LeonWu813] | External link |
+| Email | leon.wu.tsan.yu@gmail.com | mailto: link |
+| LinkedIn | linkedin.com/in/leon-wu-tsan-yu | https://www.linkedin.com/in/leon-wu-tsan-yu/ |
+| GitHub | github.com/LeonWu813 | https://github.com/LeonWu813 |
 
 **Resume download:**
 - Label: "Download resume" or "Resume (PDF)"
 - Action: download or open the hosted resume PDF
-- [ASSET NEEDED: final resume PDF file]
+- File: `asset/Leon_cv.pdf` — copy to `public/Leon_cv.pdf` at build time
 
 **Note:** Showing a real email address (not only a contact form) is required. Forms can break silently; a visible email address always works.
 
@@ -478,7 +489,7 @@ status: "Active"
 liveUrl: "https://www.siteplusplus.space"
 repoUrl: "https://github.com/LeonWu813/marketing-analytics"
 detailSlug: "marketing-analytics"
-caseStudyFile: "content/case-study-marketing-analytics.md"
+caseStudyFile: "asset/content/case-study-marketing-analytics.md"
 ```
 
 **Record 2:**
@@ -496,7 +507,7 @@ extraLinks: [
   { label: "TabVault repo", url: "https://github.com/LeonWu813/tab-management" }
 ]
 detailSlug: "multi-agent-system"
-caseStudyFile: "content/case-study-multi-agent-system.md"
+caseStudyFile: "asset/content/case-study-multi-agent-system.md"
 ```
 
 **Record 3:**
@@ -510,7 +521,7 @@ status: "Active"
 liveUrl: "https://tab-vault.com"
 repoUrl: "https://github.com/LeonWu813/tab-management"
 detailSlug: "tabvault"
-caseStudyFile: "content/case-study-tabvault.md"
+caseStudyFile: "asset/content/case-study-tabvault.md"
 ```
 
 ### Experience Record
@@ -581,9 +592,9 @@ Optional. Leon is familiar with GA4. If added, load the GA4 script asynchronousl
 
 ### Resume Hosting
 
-The resume PDF must be hosted as a static asset (e.g., in the /public directory) and served at a stable URL (e.g., /resume.pdf). Link from the Contact page as a download. Optionally also link from the sidebar or home page CTA area.
+The resume PDF must be hosted as a static asset in `/public` and served at a stable URL (`/Leon_cv.pdf`). Link from the Contact page as a download. Optionally also link from the sidebar or home page CTA area.
 
-[ASSET NEEDED: final resume PDF]
+**File:** `asset/Leon_cv.pdf` — copy to `public/Leon_cv.pdf` before deploying.
 
 ### Deployment
 
@@ -603,55 +614,35 @@ Before the site is published and recruiter links go live, the GitHub repos linke
 
 ## 7. Assets Needed
 
-The following items are not yet available and must be provided by Leon before the corresponding page or feature can be finalized. All copy and case study content is ready; the gaps below are identity, links, and media.
+### Confirmed (ready to use)
 
-### Identity and Visuals
+| Asset | Location / Value |
+|---|---|
+| Accent color palette | `#f2f0ef` bg · `#b2ac88` primary accent · `#4b6e48` secondary accent · `#898989` muted |
+| Sidebar wordmark | "Leon" |
+| Favicon | `asset/favicon_io/` (favicon.ico, 16×16, 32×32, apple-touch-icon, webmanifest) |
+| Resume PDF | `asset/Leon_cv.pdf` → copy to `public/Leon_cv.pdf` |
+| LinkedIn URL | https://www.linkedin.com/in/leon-wu-tsan-yu/ |
+| GitHub URL | https://github.com/LeonWu813 |
+| Public email | leon.wu.tsan.yu@gmail.com |
+| Case study content | `asset/content/case-study-*.md` |
+| Site copy | `asset/content/site-copy.md` |
+| Experience content | `asset/content/experience.md` |
+
+### Still needed — blocking
 
 | Asset | Used On | Notes |
 |---|---|---|
-| Professional headshot or photo | About page, optionally Home hero | Any quality; will be optimized at build time |
-| Sidebar logo / initials mark | Sidebar (all pages) | "L" or "LW" or a simple logomark; can be text |
-| Accent color preference | All pages (Tailwind config) | Or confirm "use a neutral minimal palette" |
-| Favicon | Browser tab (all pages) | Can be derived from the initials mark |
-| Social preview image (OG image) | All pages (og:image) | 1200x630px recommended |
+| Preferred domain name | Deployment, canonical URLs, OG tags | To be provided at deployment time; configure in Vercel |
 
-### Links
-
-| Asset | Used On |
-|---|---|
-| LinkedIn profile URL | Home CTA button, sidebar Connect block |
-| GitHub profile URL | Sidebar Connect block, Contact page |
-| Public email address | Sidebar Connect block, Contact page |
-| Preferred domain name | Deployment, canonical URLs, OG tags |
-
-### Files
-
-| Asset | Used On |
-|---|---|
-| Final resume PDF | Contact page download, optional sidebar link |
-
-### Experience Page Content
-
-| Asset | Notes |
-|---|---|
-| Exascend role: city/remote, start date, end date | Required for Experience page |
-| Exascend role: 2--3 bullet points (engineering-first framing) | Required for Experience page |
-| GoFreight role: city/remote, start date, end date | Required for Experience page |
-| GoFreight role: 2--3 bullet points (engineering-first framing) | Required for Experience page |
-
-### Optional Media (Nice-to-Have, Not Blocking)
+### Still needed — non-blocking
 
 | Asset | Used On | Notes |
 |---|---|---|
-| Screenshot(s) of the Marketing Analytics dashboard | /projects/marketing-analytics | 1--2 images or a short clip |
-| Diagram or demo clip of the multi-agent system | /projects/multi-agent-system | Architecture diagram or screen recording |
-| Screenshot(s) of TabVault PWA or Chrome extension | /projects/tabvault | 1--2 images or a short clip |
-
-### Deployment Decision
-
-| Decision | Notes |
-|---|---|
-| Preferred domain name | To be registered if not already owned; configure in Vercel after registration |
+| Social preview image (OG image) | All pages (og:image) | 1200x630px; affects link previews only |
+| Screenshot(s) of Marketing Analytics dashboard | /projects/marketing-analytics | To be provided later |
+| Diagram or demo clip of multi-agent system | /projects/multi-agent-system | To be provided later |
+| Screenshot(s) of TabVault PWA / Chrome extension | /projects/tabvault | To be provided later |
 
 ---
 
