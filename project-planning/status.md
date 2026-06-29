@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: qa-mod-projects-grid
+agent: qa-mod-project-tabvault
 mode: verify
-module: mod-projects-grid
-result: success
-commit: e02338b1decb281af90e12caa3bbef063fa8adfe
+module: mod-project-tabvault
+result: bugs-found
+commit: 71632bc2a0f6bf026bbc8996b19aba7987514b8c
 timestamp: 2026-06-29T00:00:00Z
 ```
 
@@ -278,6 +278,13 @@ Phase 3 was implemented without a separate QA agent pass. Build PASS and lint PA
 
 See `project-planning/modules/mod-projects-grid/status.md` for full AC-by-AC results.
 Overall: PASS. All 8 ACs (AC-019 through AC-026) verified. Build clean.
+
+### MOD-006 — Project Detail: TabVault — 2026-06-29 — FAIL
+
+3 ACs failing. See `project-planning/modules/mod-project-tabvault/status.md` for full details.
+- AC-055 FAIL: Tags wrong — 11 chips instead of 8; wrong chip labels (spec: "Java 21 / Spring Boot" as 1 chip; data: "Java 21" + "Spring Boot 3.3" as 2 chips; spec: "React / TypeScript PWA" as 1 chip; data: "React" + "TypeScript" + "PWA" as 3 chips; spec: "Chrome Extension (MV3)"; data: "Chrome Extension MV3" missing parentheses)
+- AC-058 FAIL: "Architecture" section entirely missing; only 7 sections instead of 8; section 3 heading has spurious comma ("How it works, end to end" vs "How it works end to end"); section 7 heading has spurious comma ("What I learned, and what I would improve" vs "What I learned and what I would improve")
+- AC-064 FAIL: generateMetadata returns only title and description; OG tags (og:title, og:description, og:url, og:type, og:images), Twitter card tags, and canonical URL all absent
 
 ---
 
