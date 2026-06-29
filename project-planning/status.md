@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: qa-mod-project-marketing
+agent: qa-mod-project-multi-agent
 mode: regression
-module: mod-project-marketing
+module: mod-project-multi-agent
 result: success
-commit: 5e983681399a097e5feb57b19dfcdcf137a41286
+commit: 3f788d6413973478cf86e8ff81095516882f7c6d
 timestamp: 2026-06-29T00:00:00Z
 ```
 
@@ -285,6 +285,11 @@ Overall: PASS. All 8 ACs (AC-019 through AC-026) verified. Build clean.
 - AC-055 FAIL: Tags wrong — 11 chips instead of 8; wrong chip labels (spec: "Java 21 / Spring Boot" as 1 chip; data: "Java 21" + "Spring Boot 3.3" as 2 chips; spec: "React / TypeScript PWA" as 1 chip; data: "React" + "TypeScript" + "PWA" as 3 chips; spec: "Chrome Extension (MV3)"; data: "Chrome Extension MV3" missing parentheses)
 - AC-058 FAIL: "Architecture" section entirely missing; only 7 sections instead of 8; section 3 heading has spurious comma ("How it works, end to end" vs "How it works end to end"); section 7 heading has spurious comma ("What I learned, and what I would improve" vs "What I learned and what I would improve")
 - AC-064 FAIL: generateMetadata returns only title and description; OG tags (og:title, og:description, og:url, og:type, og:images), Twitter card tags, and canonical URL all absent
+
+### MOD-005 — Project Detail: Multi-Agent System — 2026-06-29 — PASS
+
+Regression test run. Both previously failing ACs (AC-046, AC-052) now fixed. All 12 ACs pass.
+See `project-planning/modules/mod-project-multi-agent/status.md` for full AC-by-AC results.
 
 ---
 

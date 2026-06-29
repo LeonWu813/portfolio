@@ -109,3 +109,117 @@ Note: The spec includes an AMBIGUITY marker on domain/og:url — canonical URL a
 |----|---------|-------|
 | AC-046 | "Decisions worth calling out" section missing; 3 heading strings differ from spec (comma discrepancies + missing section) | Engineer |
 | AC-052 | openGraph, twitter, and canonical metadata blocks absent from generateMetadata return | Engineer |
+
+---
+
+## QA Run 2 — Regression — 2026-06-29
+
+**QA Agent:** qa-mod-project-multi-agent
+**Workflow:** regression-test (re-verification after Engineer bug fix)
+**Date:** 2026-06-29
+**Re-verifying:** AC-046 (sections), AC-052 (metadata OG/twitter/canonical)
+**Verdict:** PASS — both previously failing ACs now fixed; no regressions found in passing ACs
+
+---
+
+### Automated Test Suite
+
+No automated test suite defined (production.md: "Test: (none — static site, no automated test suite defined)"). Exit code 127 from run-qa.sh expected and observed. Manual verification only.
+
+---
+
+### Previously Failing ACs — Regression Verification
+
+**AC-046:** REGRESSION PASS
+Input: multi-agent-system entry in `site/data/projects-data.ts`
+Previously: 7 sections; commas in section 3 and section 8 headings; "Decisions worth calling out" entirely absent.
+Now: 8 sections in exact spec order with exact spec headings (no commas):
+  1. "The problem" ✓
+  2. "My role" ✓
+  3. "How it works end to end" ✓ (comma removed)
+  4. "Design principles" ✓
+  5. "The six agents" ✓
+  6. "Decisions worth calling out" ✓ (section added with 5 paragraphs)
+  7. "Impact" ✓
+  8. "What I learned and what I would improve" ✓ (comma removed)
+All three sub-failures resolved: correct section count (8), correct heading strings, "Decisions worth calling out" present.
+
+**AC-052:** REGRESSION PASS
+Input: generateMetadata called with slug "multi-agent-system" in `site/app/projects/[slug]/page.tsx`
+Previously: returned only `{ title, description }` — no openGraph, no twitter, no canonical.
+Now: returns full metadata object:
+  - title: `${project.title} — Leon Wu` ✓
+  - description: project.description ✓
+  - openGraph: { title, description, type: "website", url: placeholder domain + slug, images: [{ url: "/og-image.png", width: 1200, height: 630 }] } ✓
+  - twitter: { card: "summary_large_image", title, description, images: ["/og-image.png"] } ✓
+  - alternates: { canonical: placeholder domain + slug } ✓
+Note: og:url and canonical use placeholder domain "your-domain.com" — consistent with the spec AMBIGUITY marker that domain cannot be populated until confirmed. All required fields present.
+
+---
+
+### Previously Passing ACs — Regression Re-verification
+
+**AC-041:** PASS
+`project.title` remains "Multi-Agent Software Development System"; page renders it as `<h1>`. Unchanged.
+
+**AC-042:** PASS
+`project.atAGlance` = "Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live)"; styled `text-[var(--text-muted)]` below H1. Unchanged.
+
+**AC-043:** PASS
+`tags: ["Claude Code", "Bash", "Git", "Multi-agent", "Systems Design"]` — 5 tags, exact spec match. Unchanged.
+
+**AC-044:** PASS
+Three links with correct hrefs and `target="_blank" rel="noopener noreferrer"` — no ↗ icon. Unchanged.
+  - "Built by the system: tab-vault.com" → https://tab-vault.com ✓
+  - "System repo" → https://github.com/LeonWu813/multi-agent-software-development-system ✓
+  - "TabVault repo" → https://github.com/LeonWu813/tab-management ✓
+
+**AC-045:** PASS
+Description pull-quote: `border-l-2 border-[var(--accent)] pl-4` class confirmed in page.tsx; description text matches spec. Unchanged.
+
+**AC-047:** PASS
+InlineBold helper splits on `/\*\*(.+?)\*\*/g`; odd-indexed parts rendered as `<strong>`. "Decisions worth calling out" section newly added by fix contains bold spans (Doc-Sync, synchronization, handoff hook, QA honesty, self-improvement); InlineBold correctly handles them. No regression; bold rendering intact and exercised by new section content.
+
+**AC-048:** PASS
+No `fs.readFileSync`, `marked`, or filesystem import in page.tsx. Import remains `from "@/data/projects-data"`. Unchanged.
+
+**AC-049:** PASS
+`params: Promise<{ slug: string }>` in both generateMetadata and page component; `const { slug } = await params` appears twice. Unchanged.
+
+**AC-050:** PASS
+`export const dynamicParams = false` at line 5 of page.tsx. Unchanged.
+
+**AC-051:** PASS
+`generateStaticParams` returns `projects.map((p) => ({ slug: p.slug }))` — no hard-coded slug strings. Unchanged.
+
+---
+
+### Integration Checks — Regression
+
+- Server Component: PASS — no `'use client'` in page.tsx. ✓
+- No gold-plating: PASS — only spec-required functionality present. ✓
+- Shared convention — params as Promise: PASS. ✓
+- Shared convention — external links target/rel: PASS. ✓
+- Shared convention — generateStaticParams from data array: PASS. ✓
+- Shared convention — no fs.readFileSync: PASS. ✓
+
+---
+
+### Regression Summary
+
+| AC | Run 1 Result | Run 2 Result |
+|----|-------------|-------------|
+| AC-041 | PASS | PASS — no regression |
+| AC-042 | PASS | PASS — no regression |
+| AC-043 | PASS | PASS — no regression |
+| AC-044 | PASS | PASS — no regression |
+| AC-045 | PASS | PASS — no regression |
+| AC-046 | FAIL | REGRESSION PASS — fixed |
+| AC-047 | PASS | PASS — no regression |
+| AC-048 | PASS | PASS — no regression |
+| AC-049 | PASS | PASS — no regression |
+| AC-050 | PASS | PASS — no regression |
+| AC-051 | PASS | PASS — no regression |
+| AC-052 | FAIL | REGRESSION PASS — fixed |
+
+All 12 ACs pass. Module verified PASS.
