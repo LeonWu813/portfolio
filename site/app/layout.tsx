@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import TopNav from "@/components/TopNav";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -37,13 +37,13 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-screen font-sans antialiased bg-[var(--bg)] text-[var(--text)]">
-        <Sidebar />
-        <div className="flex flex-col flex-1 min-w-0 md:ml-56">
-          <main className="flex-1 px-6 py-10 md:px-12 md:py-14 max-w-3xl">
+      <body className="min-h-screen font-sans antialiased bg-[var(--bg)] text-[var(--text)]">
+        <TopNav />
+        <div className="pt-14 flex flex-col min-h-screen">
+          <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
             {children}
           </main>
-          <footer className="px-6 py-4 md:px-12 text-sm text-[var(--text-muted)] border-t border-[var(--border)]">
+          <footer className="max-w-2xl mx-auto w-full px-6 py-6 text-sm text-[var(--text-muted)] border-t border-[var(--border)]">
             Made by Leon · {new Date().getFullYear()}
           </footer>
         </div>
