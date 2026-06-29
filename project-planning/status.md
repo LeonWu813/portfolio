@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: qa-mod-project-tabvault
-mode: regression
-module: mod-project-tabvault
+agent: pm
+mode: checkpoint
+module: n/a
 result: success
-commit: cc22e151366a0a55b365004ff16000b72aa7b49e
+commit: 297a877c8bdde250b7ab491046d93660da06ee78
 timestamp: 2026-06-29T00:00:00Z
 ```
 
@@ -29,6 +29,8 @@ timestamp: 2026-06-29T00:00:00Z
 - Screenshot(s) for TabVault detail page: not yet provided. Non-blocking.
 
 2026-06-29 — Phases 1, 2, and 3 completed in a single engineering session (2026-06-28). Checkpoint recorded. Current phase advanced to Phase 4 — Deploy. PRD updated to revision 1.3 to reflect all implemented changes. [SUBSTANTIVE] — scope changes: footer removed, split-panel replaces grid on projects page, SitePlus+ rename from "Marketing Analytics Platform", keyboard shortcuts 1–6 wired globally, IBM Carbon palette formalized as design system.
+
+2026-06-29 — Phase 2 and Phase 3 QA formally closed after dedicated QA agent passes. All Phase 2 modules (MOD-002/007/008/009/010) confirmed PASS. All Phase 3 modules (MOD-003/004/005/006) confirmed PASS after one bug-fix round. Project is ready for Phase 4 — Deploy. Blocking item remains: domain name not yet selected (required before Vercel domain config, canonical URLs, and OG tags can be finalized). [TRIVIAL]
 
 ---
 
@@ -320,6 +322,46 @@ Phases 1, 2, and 3 completed in a single engineering session on 2026-06-28. No p
 - "Marketing Analytics Platform" renamed to "SitePlus+" with slug `siteplus`
 - Keyboard shortcuts 1–6 wired globally in Sidebar.tsx
 - ProjectEntry data model replaces original Project interface
+
+**Proceeding to Phase 4 — Deploy.**
+
+---
+
+Phase 2 approved — 2026-06-29 — commit: 25138ee6a9de35de1d81e8e11255e973fc9b5911
+
+**Phase 2 — Core Content Pages — QA formally closed.**
+
+All five Phase 2 modules passed dedicated QA agent verification on 2026-06-29. All acceptance criteria confirmed:
+- MOD-002 Home: H1/H2, bio, status line, three CTAs (LinkedIn / Reach out / Download CV), projects list with tech strings. ACs 011–018 all PASS.
+- MOD-007 Experience: two-column timeline, dot + vertical line, tech chips, "MMM YYYY – MMM YYYY" date format, GoFreight including "Project Planning" tag, Education section. ACs 053–058 all PASS.
+- MOD-008 About: two verbatim paragraphs, no education block on the about page, no photo. ACs 059–065 all PASS.
+- MOD-009 Skills: six labeled chip groups, all skill items verbatim per spec. ACs 066–071 all PASS.
+- MOD-010 Contact: intro line verbatim, email mailto, LinkedIn, GitHub (all target/rel), resume `<a download>`, no form. ACs 072–078 all PASS.
+
+One fix round was required across all five pages: og:url and alternates.canonical were absent in the initial implementation; engineer applied a single fix commit (`db942ab`) and all five pages then passed. No other issues found.
+
+---
+
+Phase 3 approved — 2026-06-29 — commit: 25138ee6a9de35de1d81e8e11255e973fc9b5911
+
+**Phase 3 — Project Detail Pages — QA formally closed.**
+
+All four Phase 3 modules passed dedicated QA agent verification on 2026-06-29. All acceptance criteria confirmed:
+
+- MOD-003 Projects Split Panel: 8/8 ACs (AC-019 through AC-026) PASS on first QA run. /projects redirect, persistent aside (w-64 xl:w-72), active highlight, scroll isolation, aside hidden below lg — all verified. No bug-fix round required.
+
+- MOD-004 SitePlus+: 12/12 ACs PASS after one bug-fix round. Failures in QA Run 1: tags wrong (11 chips instead of 10, "Full-Stack" missing, "Java/Spring Boot" split, "Cloudflare" extra tag, wrong ordering), "Live demo" link label had URL appended, "Architecture" and "Challenges and how I resolved them" sections absent, two heading commas, OG/Twitter/canonical metadata absent. All fixed by engineer before QA Run 2 (regression); all 12 ACs pass.
+
+- MOD-005 Multi-Agent System: 12/12 ACs PASS after one bug-fix round. Failures in QA Run 1: "Decisions worth calling out" section entirely absent (7 sections instead of 8), heading commas on sections 3 and 8, OG/Twitter/canonical metadata absent. All fixed; all 12 ACs pass in regression run.
+
+- MOD-006 TabVault: 12/12 ACs PASS after one bug-fix round. Failures in QA Run 1: tags wrong (11 chips instead of 8, combined labels split, parentheses missing from "Chrome Extension (MV3)"), "Architecture" section missing (7 sections instead of 8), heading commas on sections 3 and 8, OG/Twitter/canonical metadata absent. All fixed; all 12 ACs pass in regression run.
+
+**Common pattern in the bug-fix round:** MOD-004, MOD-005, and MOD-006 all shared the same two classes of defects — (1) missing case study sections and spurious heading commas, and (2) OG/Twitter/canonical metadata entirely absent from generateMetadata. These were consistent engineer implementation gaps across all three detail pages, resolved in a single fix pass.
+
+**Open items affecting Phase 4:**
+- Domain name: not yet selected. Blocking — required for Vercel domain configuration, canonical URLs, and OG url tags. All placeholder `your-domain.com` values across all ten pages must be updated once the domain is confirmed.
+- OG image 1200x630px: not yet produced. Non-blocking — OG image placeholder `/og-image.png` used in metadata; affects social link preview appearance only.
+- Project screenshots: not yet provided for any of the three detail pages. Non-blocking.
 
 **Proceeding to Phase 4 — Deploy.**
 
