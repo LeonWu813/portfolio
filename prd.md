@@ -1,8 +1,8 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.2
-**Date:** 2026-06-28
-**Author:** PM Agent (synthesized from portfolio-plan.md and content files)
+**Revision:** 1.3
+**Date:** 2026-06-29
+**Author:** PM Agent (updated to reflect implemented state)
 
 ---
 
@@ -13,8 +13,8 @@
 3. Information Architecture
 4. Page Requirements
    - 4.1 Home
-   - 4.2 Projects (grid)
-   - 4.3 Project Detail: Marketing Analytics Platform
+   - 4.2 Projects (split panel)
+   - 4.3 Project Detail: SitePlus+
    - 4.4 Project Detail: Multi-Agent Software Development System
    - 4.5 Project Detail: TabVault
    - 4.6 Experience
@@ -37,7 +37,7 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 ### Goals
 
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
-2. Showcase three strong projects as full case studies, each reachable in one click from the projects grid.
+2. Showcase three strong projects as full case studies, each reachable in one click from the projects sidebar.
 3. Make contact and resume access effortless from any page.
 4. Have the site itself serve as evidence of Leon's frontend, accessibility, and deployment skills by being fast, responsive, and WCAG-conscious.
 
@@ -48,7 +48,7 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 
 ### Success Criteria
 
-- The top three projects, each showing role and stack, are visible without scrolling on the Projects page.
+- The top three projects are visible in the projects sidebar without scrolling on a standard laptop viewport.
 - Every project links to a working live demo and a GitHub repository.
 - The site loads fast, works well on mobile, and passes basic WCAG accessibility checks.
 - A visitor can reach Leon's email, LinkedIn, GitHub, and resume PDF from any page.
@@ -59,74 +59,78 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 
 ### Layout
 
-Persistent slim left sidebar containing:
-- Wordmark: **"Leon"** (confirmed).
-- Primary navigation links.
-- "Connect" block with social/contact links.
+Persistent slim left sidebar (w-64, fixed) containing:
+- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Engineer".
+- Primary navigation links with SVG icons and keyboard shortcut badges.
+- Horizontal rule separator.
+- "Online" block with social/contact links and external link icons.
+- Theme toggle at the bottom (desktop only).
 
-Main content area to the right of the sidebar: single column, comfortable line length (~65–75 characters), generous top and bottom padding between sections.
+Main content area to the right of the sidebar (`md:ml-64`): each page controls its own max-width and padding. The root `<main>` has no padding or max-width of its own.
+
+**No footer.** The footer requirement has been removed.
 
 ### Theme
 
-**Design reference**
+**Design reference:** onur.dev layout and IBM Carbon Design System colors.
 
-The reference site establishes the visual standard this portfolio applies to Leon's content. Key observations:
+Key observations:
+- **Color:** IBM Carbon White theme (light) and G100 theme (dark). Exact tokens below.
+- **Typography:** Roboto throughout; clear size hierarchy; weight variation carries structure.
+- **Whitespace:** Structural, not decorative. Sections breathe; components have room.
+- **Components:** Rounded cards/links (`rounded-lg`), subtle border/hover states, no gradients or heavy chrome.
+- **Overall impression:** Professional and approachable; restraint signals confidence.
 
-- **Color:** Light neutral background, near-black body text, no vibrant accent colors. The palette is intentionally understated — nothing competes with the content. Platform-specific colors appear only on social icons and nowhere else on the page.
-- **Typography:** A single sans-serif family throughout, with a clear size hierarchy: a large hero heading, a prominent role subtitle, and smaller body text at generous line-height. Weight variation (bold heading, regular body) does the work that color would do on a more decorative site.
-- **Whitespace:** Whitespace is structural, not decorative. Major sections are separated by significant vertical space so each block reads as its own unit. Within sections, consistent padding gives components room to breathe without feeling sparse.
-- **Components:** Cards use simple padding and a subtle border or shadow — no gradients or heavy chrome. Navigation links are plain text, styled only on hover. The call-to-action button is the one visually prominent element on the page, reinforcing a single clear action.
-- **Overall impression:** Professional and approachable. The restraint signals confidence — the work speaks rather than the wrapper. The design scales cleanly to a recruiter skimming in 10 seconds or an engineer reading a full case study.
+**Color palette — IBM Carbon Design System:**
 
-**Application to this site**
+| Token | Light (White theme) | Dark (G100 theme) | Role |
+|---|---|---|---|
+| `--bg` | `#ffffff` | `#161616` | Page background |
+| `--surface` | `#f4f4f4` | `#262626` | Sidebar, cards, chips |
+| `--text` | `#161616` | `#f4f4f4` | Primary text; also active nav bg |
+| `--text-muted` | `#525252` | `#c6c6c6` | Secondary text, dates, subtitles |
+| `--border` | `#e0e0e0` | `#393939` | Dividers, chip borders |
+| `--hover` | `#e8e8e8` | `#333333` | Nav/link hover background |
+| `--accent` | `#0f62fe` | `#78a9ff` | Links, focus rings, pull-quote border |
+| `--accent-hover` | `#0043ce` | `#a6c8ff` | Accent hover state |
 
-Leon's site inherits this discipline directly:
-- **Color palette (confirmed):**
-  - `#f2f0ef` — off-white/cream background
-  - `#898989` — medium gray (secondary text, borders, muted elements)
-  - `#b2ac88` — warm tan/khaki (primary accent, CTA buttons, links, active nav state)
-  - `#4b6e48` — forest green (secondary accent, status badges, hover states)
-  - Near-black (e.g. `#1a1a1a`) for body text
-- Clean type scale: H1 page title, H2 section headings, H3 subsections in case studies, body at ~16–18px with generous line-height.
-- Whitespace as a first-class layout tool — sections breathe, cards are not crowded, the sidebar does not compete with the main content.
-- No decorative flourishes: no gradients, no background textures, no animated elements beyond subtle hover states.
+Active nav item: `bg-[var(--text)] text-[var(--bg)]` (dark bg, light text in light mode; inverted in dark mode).
 
 ### Typography
 
-- **Font:** Roboto (Google Fonts). Load via `@import` or `<link>` with `font-display: swap` for performance. Fallback: sans-serif.
-- **Weights in use:** 400 (body), 500 (nav links, labels), 700 (headings). Do not load weights that are not used.
-- Clear hierarchy: H1 for page title, H2 for section headings, H3 for subsections within case studies, body text at ~16–18px.
+- **Font:** Roboto (Google Fonts), weights 400/500/700, `font-display: swap`.
+- Clear hierarchy: H1 page title → H2 section headings → H3 subsections → body ~16px with generous line-height.
 - No em dashes anywhere in site copy. Use hyphens or sentence rewrites instead.
 
 ### Responsiveness
 
-Mobile-first. Sidebar behavior at small breakpoints:
-- Collapses into a top bar or hamburger menu on mobile.
-- Connect block accessible from the collapsed menu or relocated to footer on mobile.
+Mobile-first. On mobile:
+- Fixed top bar (h-12) shows "Leon Wu" wordmark + theme toggle + hamburger.
+- Off-canvas drawer slides in from the left.
+- Body is `h-screen overflow-hidden`; mobile content area accounts for the 48px top-bar spacer.
 
 ### Accessibility
 
-- Semantic HTML throughout (nav, main, section, article, aside, footer).
+- Semantic HTML throughout (nav, main, section, article, aside).
 - Sufficient color contrast on all text (WCAG AA minimum; AAA preferred for body text).
-- All images have meaningful alt text (or alt="" for purely decorative images).
-- Keyboard navigability: all interactive elements reachable and operable by keyboard.
-- Visible focus states on links and buttons.
-- This doubles as demonstrable evidence for the accessibility skills listed on Leon's resume.
+- All images have meaningful alt text (or `alt=""` for decorative).
+- Keyboard navigability: all interactive elements reachable by keyboard.
+- Visible focus states (outline using `--accent`).
+- Number-key shortcuts 1–6 for nav (see section 6).
 
 ### Performance
 
-- Fast initial load: aim for a Lighthouse performance score above 90.
-- Optimized images (next/image or equivalent, WebP format, lazy-loaded below the fold).
-- Minimal blocking scripts; defer or async non-critical JS.
-- No heavyweight third-party widgets that block render.
+- Fast initial load: aim for Lighthouse performance > 90.
+- All routes statically generated at build time.
+- Minimal blocking scripts.
 
 ### Dark Mode
 
-Dark mode is a production feature. Implement a light/dark theme toggle using Tailwind CSS `dark:` variant with a class-based strategy (`class="dark"` on `<html>`). Default to the system preference via `prefers-color-scheme`; persist overrides in `localStorage`. The toggle should be reachable from the sidebar on desktop and from the mobile top bar or hamburger menu on small screens.
+Class-based strategy (`dark` class on `<html>`). Default to `prefers-color-scheme`; persist override in `localStorage`. Toggle reachable from desktop sidebar and mobile top bar.
 
 ### Tone
 
-Humanized and professional. First-person voice consistent with the copy in site-copy.md. No em dashes. Concise, concrete sentences.
+Humanized and professional. First-person voice. No em dashes. Concise, concrete sentences.
 
 ---
 
@@ -134,31 +138,29 @@ Humanized and professional. First-person voice consistent with the copy in site-
 
 ### Sidebar Navigation (ordered)
 
-| Position | Label      | Route           |
-|----------|------------|-----------------|
-| 1        | Home       | /               |
-| 2        | Projects   | /projects       |
-| 3        | Experience | /experience     |
-| 4        | About      | /about          |
-| 5        | Skills     | /skills         |
-| 6        | Contact    | /contact        |
+| Position | Label      | Route       | Keyboard shortcut |
+|----------|------------|-------------|-------------------|
+| 1        | Home       | /           | `1`               |
+| 2        | Projects   | /projects   | `2`               |
+| 3        | Experience | /experience | `3`               |
+| 4        | Skills     | /skills     | `4`               |
+| 5        | About      | /about      | `5`               |
+| 6        | Contact    | /contact    | `6`               |
 
-"Tools" from the reference site is renamed to "Skills". "Blogs" is removed entirely.
+Keyboard shortcuts fire on `keydown` with no modifier keys, and are suppressed when focus is on an `<input>`, `<textarea>`, or `contenteditable` element.
 
 ### Connect Block (sidebar, present on every page)
 
-Displayed below the nav in the sidebar. Three links in this order:
-1. **LinkedIn** (primary) — https://www.linkedin.com/in/leon-wu-tsan-yu/
+Displayed below the nav separator in the sidebar under the label "Online". Three links in this order:
+1. **LinkedIn** — https://www.linkedin.com/in/leon-wu-tsan-yu/
 2. **GitHub** — https://github.com/LeonWu813
 3. **Email** — leon.wu.tsan.yu@gmail.com
 
-X/Twitter and other social links are out of scope unless Leon later requests them.
+Each link opens in a new tab with an external-link arrow icon.
 
-### Footer
+### No Footer
 
-Single line: "Made by Leon · {current year}"
-
-Rendered in the page layout below the main content area on every page.
+The footer has been removed. No bottom bar or copyright line appears on any page.
 
 ---
 
@@ -170,116 +172,77 @@ Rendered in the page layout below the main content area on every page.
 
 **Purpose:** A single, short hero screen that orients the visitor immediately. No featured blog card. No long scroll.
 
-**Content (exact copy from site-copy.md):**
+**Content:**
 
 | Element | Copy |
 |---|---|
 | Greeting headline (H1) | Hey, I'm Leon |
 | Title / role (H2 or subtitle) | Full-Stack Engineer |
-| Primary CTA button | Connect me on LinkedIn |
+| Primary CTA | Connect me on LinkedIn |
+| Secondary CTA | Reach out (links to /contact) |
+| Tertiary CTA | Download CV (links to /Leon_cv.pdf) |
 
-**Bio (body text, verbatim from site-copy.md):**
+**Bio (body text):**
 
 > I'm a full-stack engineer and CS master's student at Northeastern. I build production systems by hand, from the database schema to the cloud deployment, and I design multi-agent systems that plan, implement, and ship software end to end. What I care about most is the engineering that makes software hold up in the real world, not just in a demo.
 
-**Current status line (verbatim from site-copy.md):**
+**Current status line:**
 
 > Currently pursuing my MS in Computer Science at Northeastern and looking for a Summer 2026 software engineering internship across full-stack, frontend, or backend roles.
 
-**Secondary CTA:** "Reach out" — links to /contact
+**Projects list** (below bio, no dates):
+- Project title + tech string (e.g. "Full-Stack · Java/Spring Boot · React · AWS")
+- No year/date column shown.
+- Each entry links to its project detail page.
 
 **Layout notes:**
-- Hero content is visible without scrolling on a standard laptop viewport.
+- Outer wrapper: `px-8 py-16 max-w-2xl mx-auto w-full`.
 - Primary CTA links to https://www.linkedin.com/in/leon-wu-tsan-yu/
 - No headshot on home page.
 
 ---
 
-### 4.2 Projects (Grid)
+### 4.2 Projects (Split Panel)
 
 **Route:** /projects
 
-**Purpose:** Show all three projects at a glance. Recruiters should be able to see the project name, the strongest fact, and the tech stack without clicking through.
+**Behavior:** Immediately redirects to the first project (`/projects/multi-agent-system`). The Projects layout renders a persistent split panel:
+- **Left panel (aside):** `w-64 xl:w-72`, scrollable project list with "Projects" header and count. Active item: `bg-[var(--text)] text-[var(--bg)]`. Shows project title and tech string.
+- **Right panel:** `flex-1 overflow-y-auto` — renders the project detail page.
 
-**Page heading:** Projects
+**Scroll isolation:** The root `<body>` is `h-screen overflow-hidden`. The projects layout is `flex flex-1 min-h-0 overflow-hidden`. Each panel scrolls independently; the window never scrolls.
 
-**Intro line (verbatim from site-copy.md):** Things I have designed, built, and shipped
-
-**Project cards — fixed order:**
-
-Each card contains: name, tagline, description, tags, status badge, action links.
+The aside panel is hidden on screens smaller than `lg`. On mobile, projects are accessible via normal navigation.
 
 ---
 
-**Card 1: Marketing Analytics Platform**
+### 4.3 Project Detail: SitePlus+
 
-- **Name:** Marketing Analytics Platform
-- **Tagline:** Adopted in production, cut recurring analytics work by ~60%
-- **Description:** A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end on a multi-AZ AWS setup.
-- **Tags:** Full-Stack · Java/Spring Boot · React · AWS
-- **Status:** Active
-- **Links:**
-  - Live demo: https://www.siteplusplus.space
-  - GitHub: https://github.com/LeonWu813/marketing-analytics
-- **Routes to:** /projects/marketing-analytics
+**Route:** /projects/siteplus
 
----
+**Source file:** `asset/content/case-study-siteplus-detailed.md`
 
-**Card 2: Multi-Agent Software Development System**
-
-- **Name:** Multi-Agent Software Development System
-- **Tagline:** Six AI agents that plan, build, and ship full-stack software
-- **Description:** A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app end to end.
-- **Tags:** AI Agents · Systems Design · Claude Code
-- **Status:** Active
-- **Links:**
-  - GitHub: https://github.com/LeonWu813/multi-agent-software-development-system
-  - Built by the system: https://tab-vault.com
-- **Routes to:** /projects/multi-agent-system
-
----
-
-**Card 3: TabVault**
-
-- **Name:** TabVault
-- **Tagline:** A live full-stack PWA, built by my multi-agent system
-- **Description:** A production tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend with an AI content-analysis pipeline. I produced it by running my agent system and reviewing every step.
-- **Tags:** Full-Stack · PWA · AI · AWS
-- **Status:** Active
-- **Links:**
-  - Live: https://tab-vault.com
-  - GitHub: https://github.com/LeonWu813/tab-management
-- **Routes to:** /projects/tabvault
-
----
-
-**Layout notes:**
-- Responsive grid: 1 column on mobile, 2–3 columns on tablet/desktop.
-- Cards should be visually equivalent in weight — no "featured" card that visually dominates.
-- Tags render as small chip/badge elements.
-- Status renders as a small "Active" badge (green dot or similar).
-
----
-
-### 4.3 Project Detail: Marketing Analytics Platform
-
-**Route:** /projects/marketing-analytics
-
-**Source file:** `asset/content/case-study-marketing-analytics.md` — case study is fully written and ready.
-
-**Header area (above the case study body):**
+**Header area:**
 
 | Element | Value |
 |---|---|
-| Project name (H1) | Marketing Analytics Platform |
-| Tagline | Adopted in production, cut recurring analytics work by ~60% |
-| Stack chips | Java 21 / Spring Boot · React / TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) |
-| Live demo link | https://www.siteplusplus.space |
-| GitHub link | https://github.com/LeonWu813/marketing-analytics |
+| Project name (H1) | SitePlus+ |
+| At-a-glance | Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60% |
+| Tags | Full-Stack · Java/Spring Boot · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS |
+| Link 1 | Live demo — https://www.siteplusplus.space |
+| Link 2 | GitHub — https://github.com/LeonWu813/marketing-analytics |
 
-**Case study body:** Render verbatim from `asset/content/case-study-marketing-analytics.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
+**Case study sections (in order):**
+1. The problem
+2. My role
+3. How it works, end to end
+4. Architecture
+5. Key engineering decisions
+6. Challenges and how I resolved them
+7. Impact
+8. What I learned, and what I would improve
 
-**Optional assets for this page:** Screenshots of the dashboard UI or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
+**Inline bold:** Paragraphs may contain `**bold text**` markdown which renders as `<strong>` in the UI.
 
 ---
 
@@ -287,22 +250,28 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /projects/multi-agent-system
 
-**Source file:** `asset/content/case-study-multi-agent-system.md` — case study is fully written and ready.
+**Source file:** `asset/content/case-study-multi-agent-detailed.md`
 
 **Header area:**
 
 | Element | Value |
 |---|---|
 | Project name (H1) | Multi-Agent Software Development System |
-| Tagline | Six AI agents that plan, build, and ship full-stack software |
-| Stack chips | Claude Code (subagents, skills, hooks) · Bash · Git |
-| GitHub (system repo) | https://github.com/LeonWu813/multi-agent-software-development-system |
-| GitHub (TabVault repo) | https://github.com/LeonWu813/tab-management |
-| "Built by the system" link | https://tab-vault.com |
+| At-a-glance | Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live) |
+| Tags | Claude Code · Bash · Git · Multi-agent · Systems Design |
+| Link 1 | Built by the system: tab-vault.com — https://tab-vault.com |
+| Link 2 | System repo — https://github.com/LeonWu813/multi-agent-software-development-system |
+| Link 3 | TabVault repo — https://github.com/LeonWu813/tab-management |
 
-**Case study body:** Render verbatim from `asset/content/case-study-multi-agent-system.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
-
-**Optional assets for this page:** A diagram of the six-agent architecture or a short screen recording of the system in use. [ASSET NEEDED: optional diagram or demo clip]
+**Case study sections (in order):**
+1. The problem
+2. My role
+3. How it works, end to end
+4. Design principles
+5. The six agents
+6. Decisions worth calling out
+7. Impact
+8. What I learned, and what I would improve
 
 ---
 
@@ -310,21 +279,27 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /projects/tabvault
 
-**Source file:** `asset/content/case-study-tabvault.md` — case study is fully written and ready.
+**Source file:** `asset/content/case-study-tabvault-detailed.md`
 
 **Header area:**
 
 | Element | Value |
 |---|---|
 | Project name (H1) | TabVault |
-| Tagline | A live full-stack PWA, built by my multi-agent system |
-| Stack chips | Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate |
-| Live link | https://tab-vault.com |
-| GitHub link | https://github.com/LeonWu813/tab-management |
+| At-a-glance | Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate |
+| Tags | Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate |
+| Link 1 | Live: tab-vault.com — https://tab-vault.com |
+| Link 2 | GitHub — https://github.com/LeonWu813/tab-management |
 
-**Case study body:** Render verbatim from `asset/content/case-study-tabvault.md`. Sections: The problem, My role, Approach and key decisions, Impact, What I learned.
-
-**Optional assets for this page:** Screenshots of the PWA dashboard, the Chrome extension popup, or a short demo clip. [ASSET NEEDED: optional screenshot(s) or demo clip]
+**Case study sections (in order):**
+1. The problem
+2. My role
+3. How it works, end to end
+4. Architecture
+5. Key engineering decisions
+6. Challenges and how I resolved them
+7. Impact
+8. What I learned, and what I would improve
 
 ---
 
@@ -332,13 +307,13 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /experience
 
-**Purpose:** Reverse-chronological list of professional roles. Each entry emphasizes engineering substance first, with outcomes as supporting evidence. Education can appear here or on About (default: include here).
+**Layout:** Two-column timeline (`grid grid-cols-[9rem_1fr]`). Left column: date range right-aligned. Right column: dot indicator with vertical line connector, role title, company, bullets, tech chips.
 
-**Page heading:** Experience
+- Date format: `{startDate} – {endDate}` (no line break between start and end).
+- Tech chips: small `px-2 py-0.5 rounded` badges.
+- Outer wrapper: `px-8 py-16 max-w-2xl mx-auto w-full`.
 
-**Entries (reverse-chronological order):**
-
----
+**Entries (reverse-chronological):**
 
 **Role 1: Front-End Developer**
 - Company: Exascend
@@ -349,22 +324,19 @@ Each card contains: name, tagline, description, tags, status badge, action links
   - Led end-to-end development of two customer-facing websites from scratch (HTML, CSS, JavaScript), growing monthly active users by 350% and increasing average session engagement time by 22.3%.
   - Ran technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) validated via A/B testing, driving a 48.84% increase in page views while ensuring inclusive, accessible experiences.
 
----
-
 **Role 2: Growth Marketer / Marketing Project Manager**
 - Company: GoFreight
 - Location: Taipei, Taiwan
 - Dates: Jul 2021 – Mar 2023
+- Tags: Project Planning · Google Ads · Baidu Ads · SEO · CRO · A/B Testing · Analytics
 - Bullets:
   - Planned and executed conversion rate optimization experiments, growing conversion from 0.38% to 2.55%, and improved technical SEO by raising Lighthouse score from 20 to 70.
   - Managed Google Ads campaigns to cut cost per demo from $5,000 to below $2,000, and expanded into the China market via Baidu Ads, generating $3,150 in inbound pipeline.
   - Planned and executed an SEO migration strategy that held the primary keyword to a one-rank drop, and organized the JCTrans GFFC 12th event achieving a $16,500 target pipeline.
 
----
+**Education section** (same timeline visual, at the bottom of the page):
 
-**Education (can appear on this page or on About):**
-
-| Degree | Institution | GPA | Expected / Completed | Location |
+| Degree | Institution | GPA | Period | Location |
 |---|---|---|---|---|
 | MS in Computer Science | Northeastern University | 3.9 / 4.0 | Expected Dec 2027 | Seattle, WA |
 | BA in International Business | National Chengchi University | 3.5 / 4.0 | Completed | Taipei, Taiwan |
@@ -375,24 +347,15 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /about
 
-**Purpose:** A short, human narrative plus a photo. Tells Leon's pivot story and frames it as a differentiator.
+**Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`. No education block on this page (education lives on Experience).
 
-**Page heading:** About
-
-**Photo:** None (not included).
-
-**Main paragraph (verbatim from site-copy.md):**
+**Main paragraph:**
 
 > My path into engineering did not start in a computer science classroom. I studied International Business in Taipei and spent the early part of my career on the product and marketing side, where I taught myself to code so I could build the things I was responsible for shipping. That habit grew into building full-stack products that real companies and real users came to depend on. I am now pursuing my MS in Computer Science at Northeastern to strengthen the fundamentals beneath the work I had already been doing.
 
-**Second paragraph (verbatim from site-copy.md):**
+**Second paragraph:**
 
 > The pivot is the point. I learned to engineer by shipping software that people actually use, and I bring that same bias toward real, working results to everything I build, whether that is a production analytics platform or a system of AI agents that ships software on its own.
-
-**Education block (from site-copy.md — include here if not shown on Experience):**
-
-- Northeastern University, MS in Computer Science, GPA 3.9 / 4.0, expected Dec 2027, Seattle, WA
-- National Chengchi University, BA in International Business, GPA 3.5 / 4.0, Taipei, Taiwan
 
 ---
 
@@ -400,7 +363,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /skills
 
-**Purpose:** Technical skills listed by category, scannable at a glance. Renamed from "Tools" (as on the reference site) to "Skills".
+**Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`.
 
 **Page heading:** Skills
 
@@ -417,9 +380,7 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | DevOps and Tools | Docker, GitHub Actions, Nginx, Git, Maven |
 | Analytics and Design | Figma, GA4, SEO, WCAG |
 
-**Display notes:**
-- Each category rendered as a labeled group with chip/badge elements per skill.
-- Do not pad with tools touched only once. List represents genuine working familiarity.
+Each category rendered as a labeled group with chip/badge elements per skill.
 
 ---
 
@@ -427,13 +388,11 @@ Each card contains: name, tagline, description, tags, status badge, action links
 
 **Route:** /contact
 
-**Purpose:** Make contact effortless. Show a real email address, social links, and a one-click resume download.
-
-**Page heading:** Contact
+**Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`.
 
 **Intro line:** Looking for a Summer 2026 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it.
 
-**Contact methods (all three required):**
+**Contact methods:**
 
 | Method | Display | Action |
 |---|---|---|
@@ -442,109 +401,114 @@ Each card contains: name, tagline, description, tags, status badge, action links
 | GitHub | github.com/LeonWu813 | https://github.com/LeonWu813 |
 
 **Resume download:**
-- Label: "Download resume" or "Resume (PDF)"
-- Action: download or open the hosted resume PDF
-- File: `asset/Leon_cv.pdf` — copy to `public/Leon_cv.pdf` at build time
+- Label: "Download CV" or "Resume (PDF)"
+- File served at `/Leon_cv.pdf`
 
-**Note:** Showing a real email address (not only a contact form) is required. Forms can break silently; a visible email address always works.
+A real email address (not only a contact form) is required. Forms can break silently; a visible email always works.
 
 ---
 
 ## 5. Content Model
 
-Project data must be structured so new projects can be added without touching layout or component code.
-
-### Project Record (TypeScript interface)
+### ProjectLink
 
 ```typescript
-interface Project {
-  id: string;                  // URL slug, e.g. "marketing-analytics"
-  name: string;                // Display name
-  tagline: string;             // One-line, leads with strongest fact
-  description: string;         // 1-2 sentence card description
-  tags: string[];              // Chip labels, e.g. ["Full-Stack", "Java/Spring Boot"]
-  status: "Active" | "Archived" | "In Progress";
-  liveUrl: string | null;      // Primary live demo or product URL
-  repoUrl: string;             // Primary GitHub repo URL
-  extraLinks?: {               // Additional named links (e.g., second repo, related project)
-    label: string;
-    url: string;
-  }[];
-  detailSlug: string;          // Maps to /projects/[slug]
-  caseStudyFile: string;       // Path to source markdown, for reference
-  images?: string[];           // Optional array of image paths/URLs
+interface ProjectLink {
+  label: string;
+  href: string;
 }
 ```
 
-### Project Records (source of truth for the grid and detail pages)
+### ProjectSection
 
-**Record 1:**
-```
-id: "marketing-analytics"
-name: "Marketing Analytics Platform"
-tagline: "Adopted in production, cut recurring analytics work by ~60%"
-description: "A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end on a multi-AZ AWS setup."
-tags: ["Full-Stack", "Java/Spring Boot", "React", "AWS"]
-status: "Active"
-liveUrl: "https://www.siteplusplus.space"
-repoUrl: "https://github.com/LeonWu813/marketing-analytics"
-detailSlug: "marketing-analytics"
-caseStudyFile: "asset/content/case-study-marketing-analytics.md"
+```typescript
+interface ProjectSection {
+  heading: string;
+  paragraphs: string[];   // may contain **bold** markdown syntax
+}
 ```
 
-**Record 2:**
-```
-id: "multi-agent-system"
-name: "Multi-Agent Software Development System"
-tagline: "Six AI agents that plan, build, and ship full-stack software"
-description: "A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app end to end."
-tags: ["AI Agents", "Systems Design", "Claude Code"]
-status: "Active"
-liveUrl: null
-repoUrl: "https://github.com/LeonWu813/multi-agent-software-development-system"
-extraLinks: [
-  { label: "Built by the system", url: "https://tab-vault.com" },
-  { label: "TabVault repo", url: "https://github.com/LeonWu813/tab-management" }
-]
-detailSlug: "multi-agent-system"
-caseStudyFile: "asset/content/case-study-multi-agent-system.md"
+### ProjectEntry
+
+```typescript
+interface ProjectEntry {
+  slug: string;           // URL slug, e.g. "siteplus"
+  year: string;
+  date: string;           // "MM/DD" format
+  title: string;
+  tech: string;           // single string shown in sidebar and home list
+  tags: string[];         // chip labels shown on detail page header
+  atAGlance: string;      // one-line summary shown under title
+  description: string;    // pull-quote shown above sections
+  links: ProjectLink[];   // external links shown in detail header
+  sections: ProjectSection[];
+}
 ```
 
-**Record 3:**
+### Project Records (source of truth)
+
+**Record 1 — SitePlus+**
 ```
-id: "tabvault"
-name: "TabVault"
-tagline: "A live full-stack PWA, built by my multi-agent system"
-description: "A production tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend with an AI content-analysis pipeline. I produced it by running my agent system and reviewing every step."
-tags: ["Full-Stack", "PWA", "AI", "AWS"]
-status: "Active"
-liveUrl: "https://tab-vault.com"
-repoUrl: "https://github.com/LeonWu813/tab-management"
-detailSlug: "tabvault"
-caseStudyFile: "asset/content/case-study-tabvault.md"
+slug: "siteplus"
+title: "SitePlus+"
+tech: "Full-Stack · Java/Spring Boot · React · AWS"
+tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]
+atAGlance: "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%"
+description: "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent."
+links:
+  - { label: "Live demo", href: "https://www.siteplusplus.space" }
+  - { label: "GitHub: marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
 ```
 
-### Experience Record
+**Record 2 — Multi-Agent Software Development System**
+```
+slug: "multi-agent-system"
+title: "Multi-Agent Software Development System"
+tech: "Harness Engineering · AI Agents · Systems Design · Claude Code"
+tags: ["Claude Code", "Bash", "Git", "Multi-agent", "Systems Design"]
+atAGlance: "Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live)"
+description: "A team of six AI agents that plan, build, and QA software through a controlled, human-approved workflow. The system shipped a deployed full-stack app, TabVault, from start to finish."
+links:
+  - { label: "Built by the system: tab-vault.com", href: "https://tab-vault.com" }
+  - { label: "System repo", href: "https://github.com/LeonWu813/multi-agent-software-development-system" }
+  - { label: "TabVault repo", href: "https://github.com/LeonWu813/tab-management" }
+```
+
+**Record 3 — TabVault**
+```
+slug: "tabvault"
+title: "TabVault"
+tech: "Full-Stack · PWA · AI · AWS"
+tags: ["Java 21 / Spring Boot", "React / TypeScript PWA", "Chrome Extension (MV3)", "PostgreSQL", "Redis", "Quartz", "Claude API", "AWS ECS Fargate"]
+atAGlance: "Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate"
+description: "A production full-stack tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend, with an AI content-analysis pipeline. I produced it by running my own multi-agent development system, reviewing and approving every step."
+links:
+  - { label: "Live: tab-vault.com", href: "https://tab-vault.com" }
+  - { label: "GitHub: tab-management", href: "https://github.com/LeonWu813/tab-management" }
+```
+
+### ExperienceEntry
 
 ```typescript
 interface ExperienceEntry {
   title: string;
   company: string;
   location: string;
-  startDate: string;    // "MMM YYYY" format
+  startDate: string;    // "MMM YYYY"
   endDate: string;      // "MMM YYYY" or "Present"
-  bullets: string[];    // 2-3 items, engineering-first framing
+  bullets: string[];
+  tags?: string[];      // optional tech/skill chips (used by GoFreight role)
 }
 ```
 
-### Education Record
+### EducationEntry
 
 ```typescript
 interface EducationEntry {
   degree: string;
   institution: string;
   gpa: string;
-  period: string;       // e.g., "Expected Dec 2027" or "Graduated Jun 2019"
+  period: string;
   location: string;
 }
 ```
@@ -555,20 +519,22 @@ interface EducationEntry {
 
 ### Stack
 
-- **Framework:** Next.js (App Router preferred for file-based routing and built-in SEO metadata API)
-- **Styling:** Tailwind CSS
-- **Component library:** shadcn/ui (optional but consistent with reference aesthetic)
+- **Framework:** Next.js 16 (App Router), TypeScript throughout
+- **Styling:** Tailwind CSS v4 with `@theme inline` custom tokens
 - **Language:** TypeScript throughout
+- **Font:** Roboto via `next/font/google`
+
+**Tailwind v4 CSS cascade note:** All base resets (e.g. `a { color: inherit }`) must be wrapped in `@layer base { }` to avoid unlayered CSS overriding layered utility classes.
 
 ### Routing
 
-All routes are static or statically generated at build time (no server-side rendering required — all content is known at build time).
+All routes are statically generated at build time (`generateStaticParams` + `dynamicParams = false`).
 
 | Route | Page |
 |---|---|
 | / | Home |
-| /projects | Projects grid |
-| /projects/marketing-analytics | Marketing Analytics detail |
+| /projects | Redirects to /projects/multi-agent-system |
+| /projects/siteplus | SitePlus+ detail |
 | /projects/multi-agent-system | Multi-Agent System detail |
 | /projects/tabvault | TabVault detail |
 | /experience | Experience |
@@ -576,38 +542,56 @@ All routes are static or statically generated at build time (no server-side rend
 | /skills | Skills |
 | /contact | Contact |
 
+### Layout Architecture
+
+```
+body.h-screen.overflow-hidden.flex.flex-col
+  Sidebar (position: fixed, w-64)
+  div.md:hidden.flex-shrink-0.h-12   ← mobile spacer
+  div.md:ml-64.flex-1.flex.flex-col.min-h-0
+    main.flex-1.flex.flex-col.overflow-y-auto   ← scroll container for non-projects pages
+      {children}
+```
+
+**Projects layout override** (replaces main's overflow-y-auto scroll with two independent panels):
+```
+projects/layout.tsx:
+  div.flex.flex-1.min-h-0.overflow-hidden
+    aside (ProjectList, w-64, overflow-y-auto)
+    div.flex-1.overflow-y-auto  ← project detail content
+```
+
+### Keyboard Shortcuts
+
+Number keys `1`–`6` navigate to the corresponding nav item. Implemented as a global `keydown` listener in `Sidebar.tsx`. Suppressed when:
+- Focus is on `INPUT`, `TEXTAREA`, or `contenteditable` element
+- Any modifier key (`metaKey`, `ctrlKey`, `altKey`) is held
+
 ### SEO and Open Graph
 
 Every page must include:
-- `<title>`: page-specific title in format "{Page Name} — Leon Wu" (e.g., "Projects — Leon Wu")
-- `<meta name="description">`: page-specific one-line description
-- Open Graph tags: `og:title`, `og:description`, `og:image`, `og:url`, `og:type`
-- Twitter card tags: `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`
-- Social preview image [ASSET NEEDED: OG image, recommended 1200x630px]
-- Canonical URL tag on every page
+- `<title>`: `"{Page Name} — Leon Wu"`
+- `<meta name="description">`: page-specific description
+- Open Graph and Twitter card tags
+- Canonical URL tag
 
-### Analytics
-
-Optional. Leon is familiar with GA4. If added, load the GA4 script asynchronously and defer it so it does not block render. Respect Do Not Track signals if feasible.
+Social preview image: [ASSET NEEDED — 1200×630px]
 
 ### Resume Hosting
 
-The resume PDF must be hosted as a static asset in `/public` and served at a stable URL (`/Leon_cv.pdf`). Link from the Contact page as a download. Optionally also link from the sidebar or home page CTA area.
-
-**File:** `asset/Leon_cv.pdf` — copy to `public/Leon_cv.pdf` before deploying.
+Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
+**File:** `asset/Leon_cv.pdf` → copy to `public/Leon_cv.pdf` before deploying.
 
 ### Deployment
 
-- **Host:** Vercel. The site is a static Next.js export with no backend, making Vercel the right fit: zero-config deploys, automatic HTTPS, and a global CDN with no infrastructure to manage.
-- **Deploy:** Connect the GitHub repo to Vercel. Every push to `main` triggers an automatic production deploy. Preview deployments are created automatically for pull requests.
-- **Domain:** Custom domain [ASSET NEEDED: preferred domain name]. Configure via Vercel's domain settings after registering the domain.
-- All live demo links (tab-vault.com, siteplusplus.space) must remain working at all times — a broken link reads as abandoned work.
+- **Host:** Vercel. Zero-config deploys, automatic HTTPS, global CDN.
+- **Deploy:** Connect GitHub repo to Vercel; every push to `main` triggers production deploy.
+- **Domain:** Custom domain [ASSET NEEDED]. Configure via Vercel domain settings.
 
 ### Repository Maintenance (pre-launch checklist)
 
-Before the site is published and recruiter links go live, the GitHub repos linked from the portfolio must be polished:
 - Remove all placeholder comments from READMEs
-- Fill any empty sections (e.g., License)
+- Fill any empty sections (License, etc.)
 - Ensure each repo has a useful description and topic tags on GitHub
 
 ---
@@ -618,14 +602,13 @@ Before the site is published and recruiter links go live, the GitHub repos linke
 
 | Asset | Location / Value |
 |---|---|
-| Accent color palette | `#f2f0ef` bg · `#b2ac88` primary accent · `#4b6e48` secondary accent · `#898989` muted |
-| Sidebar wordmark | "Leon" |
+| Color palette | IBM Carbon: `--bg #ffffff` · `--text #161616` · `--accent #0f62fe` (light); `--bg #161616` · `--text #f4f4f4` · `--accent #78a9ff` (dark) |
 | Favicon | `asset/favicon_io/` (favicon.ico, 16×16, 32×32, apple-touch-icon, webmanifest) |
 | Resume PDF | `asset/Leon_cv.pdf` → copy to `public/Leon_cv.pdf` |
 | LinkedIn URL | https://www.linkedin.com/in/leon-wu-tsan-yu/ |
 | GitHub URL | https://github.com/LeonWu813 |
 | Public email | leon.wu.tsan.yu@gmail.com |
-| Case study content | `asset/content/case-study-*.md` |
+| Case study content | `asset/content/case-study-*-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
 
@@ -633,16 +616,16 @@ Before the site is published and recruiter links go live, the GitHub repos linke
 
 | Asset | Used On | Notes |
 |---|---|---|
-| Preferred domain name | Deployment, canonical URLs, OG tags | To be provided at deployment time; configure in Vercel |
+| Preferred domain name | Deployment, canonical URLs, OG tags | Configure in Vercel at deploy time |
 
 ### Still needed — non-blocking
 
 | Asset | Used On | Notes |
 |---|---|---|
-| Social preview image (OG image) | All pages (og:image) | 1200x630px; affects link previews only |
-| Screenshot(s) of Marketing Analytics dashboard | /projects/marketing-analytics | To be provided later |
-| Diagram or demo clip of multi-agent system | /projects/multi-agent-system | To be provided later |
-| Screenshot(s) of TabVault PWA / Chrome extension | /projects/tabvault | To be provided later |
+| Social preview image (OG image) | All pages (og:image) | 1200×630px; affects link previews only |
+| Screenshot(s) of SitePlus+ dashboard | /projects/siteplus | Optional; provide later |
+| Diagram or demo clip of multi-agent system | /projects/multi-agent-system | Optional; provide later |
+| Screenshot(s) of TabVault PWA / Chrome extension | /projects/tabvault | Optional; provide later |
 
 ---
 
@@ -650,6 +633,8 @@ Before the site is published and recruiter links go live, the GitHub repos linke
 
 The following are explicitly not part of this build.
 
-- **Blog or blog infrastructure:** No blog section, no Blogs nav item, no MDX/CMS setup for posts.
-- **Contact form:** Contact page shows a real email address and links only. Forms can break silently; a visible address always works.
+- **Blog or blog infrastructure:** No blog section, no Blogs nav item, no MDX/CMS setup.
+- **Contact form:** Contact page shows a real email address and links only.
 - **Internationalization (i18n):** English only.
+- **Footer:** Removed. No bottom bar or copyright line on any page.
+- **Analytics:** GA4 is deferred. Not implemented in current revision.

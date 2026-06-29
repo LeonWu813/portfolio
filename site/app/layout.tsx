@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import TopNav from "@/components/TopNav";
+import Sidebar from "@/components/Sidebar";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -33,19 +33,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-screen font-sans antialiased bg-[var(--bg)] text-[var(--text)]">
-        <TopNav />
-        <div className="pt-14 flex flex-col min-h-screen">
-          <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12">
+      <body className="h-screen overflow-hidden flex flex-col font-sans antialiased bg-[var(--bg)] text-[var(--text)]">
+        <Sidebar />
+        {/* Mobile top-bar spacer */}
+        <div className="md:hidden flex-shrink-0 h-12" />
+        <div className="md:ml-64 flex-1 flex flex-col min-h-0">
+          <main className="flex-1 flex flex-col overflow-y-auto">
             {children}
           </main>
-          <footer className="max-w-2xl mx-auto w-full px-6 py-6 text-sm text-[var(--text-muted)] border-t border-[var(--border)]">
-            Made by Leon · {new Date().getFullYear()}
-          </footer>
         </div>
       </body>
     </html>

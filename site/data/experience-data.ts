@@ -5,6 +5,7 @@ export interface ExperienceEntry {
   startDate: string;
   endDate: string;
   bullets: string[];
+  tags: string[];
 }
 
 export interface EducationEntry {
@@ -27,6 +28,7 @@ export const experience: ExperienceEntry[] = [
       "Led end-to-end development of two customer-facing websites from scratch (HTML, CSS, JavaScript), growing monthly active users by 350% and increasing average session engagement time by 22.3%.",
       "Ran technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) validated via A/B testing, driving a 48.84% increase in page views while ensuring inclusive, accessible experiences.",
     ],
+    tags: ["JavaScript", "HTML", "CSS", "GA4", "SEO", "Lighthouse", "WCAG"],
   },
   {
     title: "Growth Marketer / Marketing Project Manager",
@@ -39,6 +41,7 @@ export const experience: ExperienceEntry[] = [
       "Managed Google Ads campaigns to cut cost per demo from $5,000 to below $2,000, and expanded into the China market via Baidu Ads, generating $3,150 in inbound pipeline.",
       "Planned and executed an SEO migration strategy that held the primary keyword to a one-rank drop, and organized the JCTrans GFFC 12th event achieving a $16,500 target pipeline.",
     ],
+    tags: ["Project Planning", "Google Ads", "Baidu Ads", "SEO", "CRO", "A/B Testing", "Analytics"],
   },
 ];
 

@@ -5,38 +5,39 @@
 @theme inline {
   --font-sans: var(--font-roboto);
 
-  /* Light palette */
-  --color-bg: #f2f0ef;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #898989;
-  --color-border: #e0ddd9;
-  --color-accent: #b2ac88;
-  --color-accent-hover: #9e9872;
-  --color-accent2: #4b6e48;
-  --color-accent2-hover: #3d5b3b;
+  /* IBM Carbon White theme */
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f4;
+  --color-text: #161616;
+  --color-text-muted: #525252;
+  --color-border: #e0e0e0;
+  --color-hover: #e8e8e8;
+  --color-accent: #0f62fe;
+  --color-accent-hover: #0043ce;
 }
 
 :root {
-  --bg: #f2f0ef;
-  --surface: #ffffff;
-  --text: #1a1a1a;
-  --text-muted: #898989;
-  --border: #e0ddd9;
-  --accent: #b2ac88;
-  --accent-hover: #9e9872;
-  --accent2: #4b6e48;
+  /* IBM Carbon White theme */
+  --bg: #ffffff;
+  --surface: #f4f4f4;
+  --text: #161616;
+  --text-muted: #525252;
+  --border: #e0e0e0;
+  --hover: #e8e8e8;
+  --accent: #0f62fe;
+  --accent-hover: #0043ce;
 }
 
 .dark {
-  --bg: #1c1b18;
-  --surface: #252420;
-  --text: #f0ede8;
-  --text-muted: #8a8880;
-  --border: #333028;
-  --accent: #b2ac88;
-  --accent-hover: #c4bfa0;
-  --accent2: #6a9e67;
+  /* IBM Carbon Gray 100 theme */
+  --bg: #161616;
+  --surface: #262626;
+  --text: #f4f4f4;
+  --text-muted: #c6c6c6;
+  --border: #393939;
+  --hover: #333333;
+  --accent: #78a9ff;
+  --accent-hover: #a6c8ff;
 }
 
 *,
@@ -58,9 +59,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  main {
+    position: relative;
+  }
+
+  main::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 120px;
+    height: 80px;
+    background: url("/Subject.png") no-repeat center / contain;
+  }
 }
 
 ::selection {

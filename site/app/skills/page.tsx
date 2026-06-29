@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function SkillsPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="px-8 py-16 max-w-2xl mx-auto w-full flex flex-col gap-8">
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-medium tracking-tight text-[var(--text)]">
           Skills

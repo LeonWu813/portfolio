@@ -1,7 +1,6 @@
+import { redirect } from "next/navigation";
+import { projects } from "@/data/projects-data";
+
 export default function ProjectsPage() {
-  return (
-    <div>
-      <p className="text-[var(--text-muted)]">Projects coming soon.</p>
-    </div>
-  );
+  redirect(`/projects/${projects[0].slug}`);
 }
