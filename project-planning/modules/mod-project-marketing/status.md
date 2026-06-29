@@ -93,3 +93,82 @@ Note: The og:url and canonical URL are acknowledged as ambiguous (domain not yet
 | AC-040 | FAIL — Open Graph and Twitter card tags absent from generateMetadata |
 
 **Overall result: FAIL — 4 ACs failing (AC-031, AC-032, AC-034, AC-040). All failures are implementation bugs. Route all four to Engineer.**
+
+---
+
+### MOD-004 — Regression test — 2026-06-29
+
+**Workflow:** regression-test
+**Automated test suite:** No test suite defined (static site). Script exited with code 127 — expected; same as first-time run.
+**Re-verifying:** AC-031, AC-032, AC-034, AC-040 (previously failing). Re-running all previously passing ACs for regression check.
+
+**Key files inspected:**
+- `site/app/projects/[slug]/page.tsx`
+- `site/data/projects-data.ts` (siteplus record)
+
+---
+
+**AC-031 — REGRESSION PASS**
+Input: `projects-data.ts` siteplus `tags` array.
+Actual: `["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]` — 10 tags.
+Expected per spec: `["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]` — 10 tags.
+All discrepancies from first run resolved: "Full-Stack" is present, "Java/Spring Boot" is a single tag, "Cloudflare" is absent, and ordering matches spec exactly.
+
+**AC-032 — REGRESSION PASS**
+Input: `projects-data.ts` siteplus `links` array, first entry.
+Actual: `{ label: "Live demo", href: "https://www.siteplusplus.space" }`.
+Expected per spec: label `"Live demo"`, href `https://www.siteplusplus.space`.
+First link label is now exactly "Live demo" with no appended URL text. Second link label "GitHub: marketing-analytics" and href unchanged — still correct. Both links retain `target="_blank" rel="noopener noreferrer"` in `page.tsx`.
+
+**AC-034 — REGRESSION PASS**
+Input: `projects-data.ts` siteplus `sections` array.
+Actual: 8 sections in order — "The problem", "My role", "How it works end to end", "Architecture", "Key engineering decisions", "Challenges and how I resolved them", "Impact", "What I learned and what I would improve".
+Expected per spec: same 8 sections in same order.
+All discrepancies from first run resolved: "Architecture" section is present, "Challenges and how I resolved them" section is present, no spurious commas in any heading.
+
+**AC-040 — REGRESSION PASS**
+Input: `generateMetadata` function in `page.tsx`.
+Actual: Returns `{ title, description, openGraph: { title, description, type: "website", url, images }, twitter: { card: "summary_large_image", title, description, images }, alternates: { canonical } }`.
+Expected per spec: metadata object with Open Graph tags (title, description, type, url, images) and Twitter card tags (card, title, description, images) and alternates.canonical.
+All required fields are now present. Placeholder domain (`https://your-domain.com`) is used for `url` and `canonical` — this is acceptable per the AMBIGUITY note in the spec (domain not yet confirmed, non-blocking for current phase).
+
+---
+
+**Re-verification of previously passing ACs (regression check):**
+
+**AC-029:** PASS — `{project.title}` rendered as `<h1>`; data title is "SitePlus+". No change.
+
+**AC-030:** PASS — atAGlance rendered in `<p>` with `text-[var(--text-muted)]`; data value matches spec. No change.
+
+**AC-033:** PASS — Description pull-quote at `page.tsx` line 99 with `border-l-2 border-[var(--accent)] pl-4`. No change.
+
+**AC-035:** PASS — InlineBold helper at lines 39–48 of `page.tsx` unchanged; splits on `\*\*(.+?)\*\*`, renders odd-indexed parts as `<strong>`. No change.
+
+**AC-036:** PASS — Content still served from `@/data/projects-data`; no `fs.readFileSync` or markdown parsing. No change.
+
+**AC-037:** PASS — `params: Promise<{ slug: string }>` awaited in both `generateMetadata` and `ProjectDetailPage`. No change.
+
+**AC-038:** PASS — `export const dynamicParams = false` present at line 5. No change.
+
+**AC-039:** PASS — `generateStaticParams` maps over `projects` array with no hard-coded slugs. No change.
+
+---
+
+**Summary**
+
+| AC | First Run | Regression Run |
+|----|-----------|----------------|
+| AC-029 | PASS | PASS |
+| AC-030 | PASS | PASS |
+| AC-031 | FAIL | REGRESSION PASS |
+| AC-032 | FAIL | REGRESSION PASS |
+| AC-033 | PASS | PASS |
+| AC-034 | FAIL | REGRESSION PASS |
+| AC-035 | PASS | PASS |
+| AC-036 | PASS | PASS |
+| AC-037 | PASS | PASS |
+| AC-038 | PASS | PASS |
+| AC-039 | PASS | PASS |
+| AC-040 | FAIL | REGRESSION PASS |
+
+**Overall result: PASS — All 12 ACs pass. 4 previously failing ACs now fixed. No regressions introduced. No new failures found.**
