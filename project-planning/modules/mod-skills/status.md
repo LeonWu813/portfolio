@@ -41,12 +41,8 @@ No additions or omissions detected.
 ### AC-070 — PASS
 Skills data imported from `@/data/skills-data.ts` via `import { skillGroups } from "@/data/skills-data"`. Component does not hardcode any values; `skillGroups` array is fully defined in the TypeScript data file with `SkillGroup` interface.
 
-### AC-071 — FAIL
-**FAIL AC-071 (partial):** Metadata exports `title: "Skills — Leon Wu"`, OpenGraph tags (`og:title`, `og:description`, `og:type`, `og:image`), and Twitter card tags. However:
-- Input: `site/app/skills/page.tsx` metadata export
-- Actual: `openGraph` object contains no `url` property; no `alternates: { canonical: ... }` field in metadata export
-- Expected per spec: `og:url` present in openGraph object; canonical URL tag exported via `alternates.canonical`
-- Note: The spec AMBIGUITY marker acknowledges the domain is unconfirmed, but the spec still requires the tags to be present. The tags are entirely absent.
+### AC-071 — PASS (fixed after QA report)
+`og:url: "https://your-domain.com/skills"` and `alternates.canonical` added. Placeholder domain pending confirmation. All SEO/OG/Twitter fields now present.
 
 **Server Component:** PASS — no `'use client'` directive in `site/app/skills/page.tsx`.
 **No gold-plating:** PASS — no features beyond spec requirements detected.

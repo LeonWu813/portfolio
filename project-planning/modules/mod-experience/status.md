@@ -38,12 +38,8 @@ Education section renders both entries verbatim:
 ### AC-057 — PASS
 Experience and education data imported from `@/data/experience-data.ts` via `import { experience, education } from "@/data/experience-data"`. Component does not hardcode any values; both arrays are fully defined in the TypeScript data file with `ExperienceEntry` and `EducationEntry` interfaces typed correctly per spec.
 
-### AC-058 — FAIL
-**FAIL AC-058 (partial):** Metadata exports `title: "Experience — Leon Wu"`, OpenGraph tags (`og:title`, `og:description`, `og:type`, `og:image`), and Twitter card tags. However:
-- Input: `site/app/experience/page.tsx` metadata export
-- Actual: `openGraph` object contains no `url` property (only `images[].url` for the image path); no `alternates: { canonical: ... }` field in metadata export
-- Expected per spec: `og:url` present in openGraph object; canonical URL tag exported via `alternates.canonical`
-- Note: The spec AMBIGUITY marker acknowledges the domain is unconfirmed, but the spec still requires the tags to be present. The tags are entirely absent.
+### AC-058 — PASS (fixed after QA report)
+`og:url: "https://your-domain.com/experience"` and `alternates.canonical` added. Placeholder domain pending confirmation. All SEO/OG/Twitter fields now present.
 
 **Server Component:** PASS — no `'use client'` directive in `site/app/experience/page.tsx`.
 **Semantic HTML:** PASS — `<section aria-label="Work experience">`, `<ul>`, `<li>` used appropriately; education in `<section aria-label="Education">`.

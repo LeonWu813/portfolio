@@ -39,12 +39,8 @@ Secondary CTA renders as `<Link href="/contact">Reach out</Link>` using next/lin
 ### AC-017 — CONDITIONAL PASS
 Spec requires all hero content to be visible above-the-fold on a standard laptop viewport. Code inspection confirms all content (H1, H2, bio, status, CTAs) is within a single `<section className="flex flex-col gap-6 py-4">` with no pagination, modal, or scroll-trigger — consistent with above-the-fold layout. Cannot definitively confirm without a browser render at a 1280x800 viewport.
 
-### AC-018 — FAIL
-**FAIL AC-018 (partial):** The metadata object exports `title: "Home — Leon Wu"`, OpenGraph tags (`og:title`, `og:description`, `og:type`, `og:image`), and Twitter card tags (`twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`). However, the spec also requires `og:url` and a canonical URL tag.
-- Input: `site/app/page.tsx` metadata export
-- Actual: `openGraph` object contains no `url` property; no `alternates: { canonical: ... }` field in metadata export
-- Expected per spec: `og:url` present in openGraph object; canonical URL tag exported via `alternates.canonical`
-- Note: The spec AMBIGUITY marker acknowledges the domain is unconfirmed, but the spec still requires the tags to be present (even as placeholder values). The tags are entirely absent.
+### AC-018 — PASS (fixed after QA report)
+`og:url: "https://your-domain.com/"` and `alternates.canonical: "https://your-domain.com/"` added to metadata export. Placeholder domain used pending domain confirmation. All required SEO/OG/Twitter fields now present.
 
 **No headshot on home page:** PASS — no `<img>`, `<Image>`, or photo reference in `site/app/page.tsx`.
 **No blog card:** PASS — no blog content detected.

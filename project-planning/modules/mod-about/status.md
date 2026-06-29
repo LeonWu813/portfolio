@@ -38,12 +38,8 @@ No photo or headshot on the `/about` page. No `<img>`, `<Image>`, or photo/heads
 ### AC-064 — PASS
 No em dashes in rendered copy. All 6 em dash characters (U+2014) found in the file are located exclusively within the `metadata` export object (in `title` and `description` string values used as SEO meta tags), not in any rendered JSX body copy. The two visible body paragraphs and education block contain no em dashes.
 
-### AC-065 — FAIL
-**FAIL AC-065 (partial):** Metadata exports `title: "About — Leon Wu"`, OpenGraph tags (`og:title`, `og:description`, `og:type`, `og:image`), and Twitter card tags. However:
-- Input: `site/app/about/page.tsx` metadata export
-- Actual: `openGraph` object contains no `url` property; no `alternates: { canonical: ... }` field in metadata export
-- Expected per spec: `og:url` present in openGraph object; canonical URL tag exported via `alternates.canonical`
-- Note: The spec AMBIGUITY marker acknowledges the domain is unconfirmed, but the spec still requires the tags to be present. The tags are entirely absent.
+### AC-065 — PASS (fixed after QA report)
+`og:url: "https://your-domain.com/about"` and `alternates.canonical` added. Placeholder domain pending confirmation. All SEO/OG/Twitter fields now present.
 
 **Server Component:** PASS — no `'use client'` directive in `site/app/about/page.tsx`.
 **No gold-plating:** PASS — no features beyond spec requirements detected.

@@ -10,7 +10,11 @@ export const metadata: Metadata = {
     description:
       "Technical skills of Tsan-Yu (Leon) Wu — languages, backend, frontend, cloud, DevOps, and more.",
     type: "website",
+    url: "https://your-domain.com/skills",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  alternates: {
+    canonical: "https://your-domain.com/skills",
   },
   twitter: {
     card: "summary_large_image",

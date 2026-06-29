@@ -9,7 +9,11 @@ export const metadata: Metadata = {
     description:
       "About Tsan-Yu (Leon) Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
     type: "website",
+    url: "https://your-domain.com/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  alternates: {
+    canonical: "https://your-domain.com/about",
   },
   twitter: {
     card: "summary_large_image",

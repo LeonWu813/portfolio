@@ -10,7 +10,11 @@ export const metadata: Metadata = {
     description:
       "Full-stack engineer and CS master's student at Northeastern, seeking a Summer 2026 software engineering internship.",
     type: "website",
+    url: "https://your-domain.com/",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  alternates: {
+    canonical: "https://your-domain.com/",
   },
   twitter: {
     card: "summary_large_image",
