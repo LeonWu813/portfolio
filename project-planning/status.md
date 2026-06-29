@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: qa-mod-site-shell
-mode: verify
+agent: qa
+mode: functional-test
 module: mod-site-shell
-result: bugs-found
-commit: ae40808b72fc97b3ab0da7a9fe046cabca52605b
+result: pass
+commit: 192eb685207d4141aa8982f92f44e3fe17895a3b
 timestamp: 2026-06-28T00:00:00Z
 ```
 

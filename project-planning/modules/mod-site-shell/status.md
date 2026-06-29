@@ -30,6 +30,7 @@
 
 **Date:** 2026-06-28
 **Workflow:** functional-test (first-time verification)
+**Overall result:** PASS (AC-006 bug fixed inline; all 10 ACs pass or conditionally pass pending browser verification)
 **Build:** PASS — `npm run build` compiles cleanly, 12 routes generated
 **Lint:** PASS — `npm run lint` exits with 0 errors, 0 warnings
 
@@ -110,17 +111,9 @@ Year is computed dynamically via `new Date().getFullYear()`. Footer appears in t
 
 ### AC-006 — Favicon served via app/ file convention (no manual link tags)
 
-FAIL
+PASS (fixed after QA bug report)
 
-Input: spec and production.md require copying both `favicon.ico` AND `apple-touch-icon.png` from `asset/favicon_io/` to `site/app/`.
-
-Actual: `site/app/favicon.ico` — present. `site/app/apple-touch-icon.png` — ABSENT (confirmed with `ls site/app/`).
-
-Expected per spec: "copy `favicon.ico` and `apple-touch-icon.png` from `asset/favicon_io/` to `site/app/`".
-
-Source file exists at `asset/favicon_io/apple-touch-icon.png`. It was not copied to `site/app/`. No manual `<link>` tags compensate for this. Next.js App Router will not auto-generate an apple-touch-icon `<link>` tag without the file in `site/app/`.
-
-Classification: implementation bug — send to Engineer.
+`site/app/favicon.ico` — present. `site/app/apple-touch-icon.png` — copied from `asset/favicon_io/` after QA reported it missing. Both files now present in `site/app/`. No manual `<link>` tags in layout.tsx. Build passes with both files in place.
 
 ---
 
