@@ -1,144 +1,98 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.3 | **Last Updated**: 2026-06-29
 
 ---
 
 ## Module ID & Name
 
-MOD-003: Projects Grid Page
+MOD-003: Projects Split Panel
 
 ## Purpose
 
-Show all three projects at a glance at route /projects. Recruiters should be able to see the project name, the strongest fact, and the tech stack without clicking through. Renders three project cards in a responsive grid (1 column on mobile, 2–3 columns on tablet/desktop). Each card shows name, tagline, description, tags, status badge, and action links. Cards are visually equivalent in weight — no featured card that visually dominates.
+Provide the /projects route and its persistent split-panel layout. The /projects route immediately redirects to /projects/multi-agent-system. The projects layout renders a persistent left aside (w-64, xl:w-72) showing a scrollable project list alongside a right panel that renders the active project detail page. The aside shows each project's title and tech string; the active item is highlighted. Both panels scroll independently.
 
 ## Context
 
-**Business problem:** From PRD Goal 2: "Showcase three strong projects as full case studies, each reachable in one click from the projects grid." From PRD Success Criteria: "The top three projects, each showing role and stack, are visible without scrolling on the Projects page." Recruiters scanning the site need enough information on each card to decide whether to click through.
+**Business problem:** From PRD Goal 2: "Showcase three strong projects as full case studies, each reachable in one click from the projects sidebar." From PRD Success Criteria: "The top three projects are visible in the projects sidebar without scrolling on a standard laptop viewport." The split-panel layout gives recruiters a persistent project list on the left while the selected project case study fills the right panel, enabling fast switching between projects without losing context.
 
 **User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.2 govern this module:
 
 - Route: /projects
-- Page heading: "Projects"
-- Intro line (verbatim): "Things I have designed, built, and shipped"
-- Three project cards in fixed order: Marketing Analytics Platform, Multi-Agent Software Development System, TabVault.
-- Each card contains: name, tagline, description, tags, status badge, action links.
-- Cards link to their respective detail routes.
-- Responsive grid: 1 column on mobile, 2–3 columns on tablet/desktop.
-- Cards are visually equivalent in weight — no "featured" card that visually dominates.
-- Tags render as small chip/badge elements.
-- Status renders as a small "Active" badge (green dot or similar).
+- Behavior: immediately redirects to /projects/multi-agent-system (the first project).
+- Layout: persistent split panel — left aside (w-64, xl:w-72) + right panel (flex-1 overflow-y-auto).
+- Aside: scrollable project list with "Projects" header and count. Shows each project's title and tech string. Active item: `bg-[var(--text)] text-[var(--bg)]`.
+- Right panel: renders the project detail page as {children}.
+- Scroll isolation: body is `h-screen overflow-hidden`; projects layout is `flex flex-1 min-h-0 overflow-hidden`; each panel scrolls independently.
+- Aside is hidden on screens smaller than lg.
+- Implementation: `app/projects/layout.tsx` renders ProjectList component + {children}; `app/projects/page.tsx` redirects to first project.
 
 **Non-goals (from PRD section 8 — Out of Scope):**
 - No blog or blog infrastructure.
+- No "Projects" page heading or intro line on the /projects route (redirect replaces the page).
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.2.
+- No formal US-IDs defined in PRD revision 1.3. Requirements are drawn directly from PRD section 4.2.
 
 ## Requirements
 
-- Page route: `/projects`
-- Page heading: "Projects"
-- Intro line (verbatim): "Things I have designed, built, and shipped"
-- Three project cards rendered in fixed order: Card 1 Marketing Analytics Platform, Card 2 Multi-Agent Software Development System, Card 3 TabVault.
-- Project data is read from the data file (TypeScript data file, e.g., `lib/project-data.ts` or `data/projects.ts`) — not hardcoded in the component.
-- Each card displays: project name, tagline, description, tags (as chip/badge elements), status badge (Active), and action links.
-- Card 1 action links: "Live demo" (https://www.siteplusplus.space) and "GitHub" (https://github.com/LeonWu813/marketing-analytics) with `target="_blank" rel="noopener noreferrer"`. Card routes to /projects/marketing-analytics.
-- Card 2 action links: "GitHub" (https://github.com/LeonWu813/multi-agent-software-development-system) and "Built by the system" (https://tab-vault.com) with `target="_blank" rel="noopener noreferrer"`. Card routes to /projects/multi-agent-system.
-- Card 3 action links: "Live" (https://tab-vault.com) and "GitHub" (https://github.com/LeonWu813/tab-management) with `target="_blank" rel="noopener noreferrer"`. Card routes to /projects/tabvault.
-- All external links include `target="_blank" rel="noopener noreferrer"`.
-- Responsive grid: 1 column on mobile, 2–3 columns on tablet/desktop.
-- Cards are visually equivalent in weight — no featured card.
-- Status badge renders as "Active" with a green dot or similar indicator.
-- Tags render as small chip/badge elements.
-- Each card's name/heading links to its respective detail route (internal navigation).
-- Page exports a `metadata` object with title "Projects — Leon Wu" and page-specific description.
-- Page exports Open Graph tags and Twitter card tags.
-- Page exports a canonical URL tag.
-- [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
-- Page is a Server Component (no `'use client'`).
-- Project data must use the `Project` TypeScript interface as defined in PRD section 5.
+- Page route: `/projects` — immediately redirects to `/projects/multi-agent-system`.
+- `app/projects/page.tsx` implements the redirect to `/projects/multi-agent-system`.
+- `app/projects/layout.tsx` renders the split-panel layout wrapping all project detail pages.
+- Left aside: `w-64 xl:w-72`, scrollable (`overflow-y-auto`), contains a ProjectList component.
+- ProjectList shows a "Projects" header and count, then each project's title and tech string.
+- Active project item in the aside is highlighted: `bg-[var(--text)] text-[var(--bg)]`.
+- Right panel: `flex-1 overflow-y-auto` — renders `{children}` (the active project detail page).
+- Scroll isolation: the projects layout uses `flex flex-1 min-h-0 overflow-hidden`; body is `h-screen overflow-hidden`.
+- Each panel (aside and right panel) scrolls independently; the window never scrolls.
+- Aside is hidden on screens smaller than lg (`hidden lg:block` or equivalent).
+- Project data is read from `site/data/projects-data.ts` using the `ProjectEntry` TypeScript interface.
+- The ProjectList component iterates the projects array from the data file — no hard-coded titles or slugs.
+- All project routes are statically generated at build time via `generateStaticParams` in the `[slug]` page.
 
-**Project data records (from PRD section 5):**
-
-Record 1:
-- id: "marketing-analytics"
-- name: "Marketing Analytics Platform"
-- tagline: "Adopted in production, cut recurring analytics work by ~60%"
-- description: "A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end on a multi-AZ AWS setup."
-- tags: ["Full-Stack", "Java/Spring Boot", "React", "AWS"]
-- status: "Active"
-- liveUrl: "https://www.siteplusplus.space"
-- repoUrl: "https://github.com/LeonWu813/marketing-analytics"
-- detailSlug: "marketing-analytics"
-- caseStudyFile: "asset/content/case-study-marketing-analytics.md"
-
-Record 2:
-- id: "multi-agent-system"
-- name: "Multi-Agent Software Development System"
-- tagline: "Six AI agents that plan, build, and ship full-stack software"
-- description: "A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app end to end."
-- tags: ["AI Agents", "Systems Design", "Claude Code"]
-- status: "Active"
-- liveUrl: null
-- repoUrl: "https://github.com/LeonWu813/multi-agent-software-development-system"
-- extraLinks: [{ label: "Built by the system", url: "https://tab-vault.com" }, { label: "TabVault repo", url: "https://github.com/LeonWu813/tab-management" }]
-- detailSlug: "multi-agent-system"
-- caseStudyFile: "asset/content/case-study-multi-agent-system.md"
-
-Record 3:
-- id: "tabvault"
-- name: "TabVault"
-- tagline: "A live full-stack PWA, built by my multi-agent system"
-- description: "A production tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend with an AI content-analysis pipeline. I produced it by running my agent system and reviewing every step."
-- tags: ["Full-Stack", "PWA", "AI", "AWS"]
-- status: "Active"
-- liveUrl: "https://tab-vault.com"
-- repoUrl: "https://github.com/LeonWu813/tab-management"
-- detailSlug: "tabvault"
-- caseStudyFile: "asset/content/case-study-tabvault.md"
-
-**Project TypeScript interface (from PRD section 5):**
+**ProjectEntry TypeScript interface (from PRD section 5):**
 ```typescript
-interface Project {
-  id: string;
-  name: string;
-  tagline: string;
-  description: string;
+interface ProjectLink { label: string; href: string; }
+interface ProjectSection { heading: string; paragraphs: string[]; }
+interface ProjectEntry {
+  slug: string;
+  year: string;
+  date: string;
+  title: string;
+  tech: string;
   tags: string[];
-  status: "Active" | "Archived" | "In Progress";
-  liveUrl: string | null;
-  repoUrl: string;
-  extraLinks?: { label: string; url: string; }[];
-  detailSlug: string;
-  caseStudyFile: string;
-  images?: string[];
+  atAGlance: string;
+  description: string;
+  links: ProjectLink[];
+  sections: ProjectSection[];
 }
 ```
+
+**Project records order in aside (from PRD section 5):**
+1. Multi-Agent Software Development System (slug: multi-agent-system)
+2. SitePlus+ (slug: siteplus)
+3. TabVault (slug: tabvault)
 
 ## Input / Output Contract
 
 **Input:**
-- Project data array from the TypeScript data file (e.g., `lib/project-data.ts`), typed against the `Project` interface.
+- Project data array from `site/data/projects-data.ts`, typed against the `ProjectEntry` interface.
+- Current URL path — used to determine the active project in the aside.
 
 **Output:**
-- Rendered page at route `/projects` inside the Site Shell layout (MOD-001).
-- Page heading "Projects" and intro line.
-- Three project cards in fixed order, each with name, tagline, description, tag chips, status badge, and action links.
-- Page-level `metadata` object for SEO and Open Graph.
+- On `/projects`: a redirect to `/projects/multi-agent-system`.
+- On `/projects/[slug]`: the split-panel layout shell rendered inside the Site Shell layout (MOD-001), with the aside showing the project list and the right panel rendering the active project detail page via `{children}`.
 
 ## Dependencies
 
-- MOD-001 (Site Shell) — the projects grid is rendered inside the layout shell.
+- MOD-001 (Site Shell) — the projects split panel is rendered inside the layout shell.
 
 ## Acceptance Criteria
 
-- AC-019: The system shall render the page heading "Projects" and intro line "Things I have designed, built, and shipped" on the /projects route.
-- AC-020: The system shall render three project cards in the fixed order: Marketing Analytics Platform, Multi-Agent Software Development System, TabVault.
-- AC-021: The system shall display each card's name, tagline, description, tags as chip/badge elements, status as an "Active" badge, and action links.
-- AC-022: The system shall render the top three projects without scrolling on a standard desktop viewport.
-- AC-023: The system shall render the grid in 1 column on mobile and 2–3 columns on tablet/desktop.
-- AC-024: The system shall render all cards at visually equivalent weight — no card is visually featured over others.
-- AC-025: The system shall apply `target="_blank" rel="noopener noreferrer"` to all external action links on project cards.
-- AC-026: The system shall link each card to its corresponding detail route (/projects/marketing-analytics, /projects/multi-agent-system, /projects/tabvault).
-- AC-027: The system shall export a metadata object with title "Projects — Leon Wu" and Open Graph and Twitter card tags.
-- AC-028: The system shall read project data from the TypeScript data file rather than hardcoding values in the component.
+- AC-019: The system shall redirect `/projects` immediately to `/projects/multi-agent-system` without rendering a grid or page heading.
+- AC-020: The system shall render a persistent left aside (`w-64 xl:w-72`) on all `/projects/[slug]` routes showing the project list.
+- AC-021: The system shall show each project's title and tech string in the aside list.
+- AC-022: The system shall highlight the active project item in the aside using `bg-[var(--text)] text-[var(--bg)]`.
+- AC-023: The system shall render the project detail as `{children}` in the right panel (`flex-1 overflow-y-auto`) alongside the aside.
+- AC-024: The system shall use `flex flex-1 min-h-0 overflow-hidden` on the projects layout so that both panels scroll independently and the window never scrolls.
+- AC-025: The system shall hide the aside on screens smaller than `lg`.
+- AC-026: The system shall populate the aside list by iterating the projects data array — no hard-coded titles or slugs in the layout component.

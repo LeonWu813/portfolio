@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: pm
-mode: checkpoint
+agent: doc-sync
+mode: delta
 module: n/a
 result: success
-commit: 8ad37237db6db4bdb632c5103484eefa679981a4
+commit: 1a08e1493898d7c40412dbb777c20c8aacf61468
 timestamp: 2026-06-29T00:00:00Z
 ```
 
@@ -365,6 +365,25 @@ Phases 1, 2, and 3 completed in a single engineering session on 2026-06-28. No p
 **CONFLICT markers logged:** none
 
 **verify-sync.sh result:** Script requires prd.md to be inside the project-planning/ directory; this project keeps prd.md at the repo root. Manual verification performed in lieu of script: Check 1 (MOD-IDs) — PASS (PRD has no MOD-IDs, nothing to verify); Check 2 (orphan specs) — PASS (all 10 spec.md files map to Module Map entries); Check 3 (Tech Stack) — PASS (Next.js 16.2.9, TypeScript, Tailwind CSS v4, Roboto, marked, Vercel all present in production.md); Check 4 (US-IDs) — PASS (PRD has no US-IDs, nothing to verify); Check 5 (AMBIGUITY markers logged) — PASS (all 10 AMBIGUITY markers logged in status.md Sync Reports); Check 6 (Phase names) — N/A (PRD has no Phases section; AMBIGUITY marker placed in Phase Plan).
+
+---
+
+### Sync Report — Delta Sync — 2026-06-29
+**Sync type:** delta
+**PRD Revision:** 1.3
+**PM Update reference:** 2026-06-29 — [SUBSTANTIVE] — split-panel replaces grid, SitePlus+ rename, ProjectEntry data model, structured TypeScript content, inline bold renderer, /projects redirect
+**Files modified:**
+- project-planning/modules/mod-projects-grid/spec.md — rewrote entirely: grid layout replaced with split-panel layout; /projects now redirects to /projects/multi-agent-system; aside (w-64, xl:w-72) with project list and active highlight; scroll isolation via flex flex-1 min-h-0 overflow-hidden; aside hidden below lg; stale grid ACs (AC-019 through AC-028) replaced with split-panel ACs
+- project-planning/modules/mod-project-marketing/spec.md — route changed from /projects/marketing-analytics to /projects/siteplus; title changed to "SitePlus+"; source file changed to case-study-siteplus-detailed.md; atAGlance field added; description pull-quote rendering added; content model changed from fs.readFileSync+marked to structured ProjectEntry TypeScript data; InlineBold helper added; tag list updated; link labels updated; stale ACs replaced with PRD 1.3 ACs (AC-029 through AC-040)
+- project-planning/modules/mod-project-multi-agent/spec.md — source file changed to case-study-multi-agent-detailed.md; atAGlance field added; description pull-quote rendering added; content model changed from fs.readFileSync+marked to structured ProjectEntry TypeScript data; InlineBold helper added; sections list updated (8 sections per PRD 1.3); link labels updated; stale ACs replaced with PRD 1.3 ACs (AC-041 through AC-052)
+- project-planning/modules/mod-project-tabvault/spec.md — source file changed to case-study-tabvault-detailed.md; atAGlance field added; description pull-quote rendering added; content model changed from fs.readFileSync+marked to structured ProjectEntry TypeScript data; InlineBold helper added; link label updated to "GitHub: tab-management"; stale ACs replaced with PRD 1.3 ACs (AC-053 through AC-064)
+- project-planning/status.md — Last Action updated; this sync report appended
+**Files created:** none
+**Module removals noted:** none
+**AMBIGUITY markers added:** none (domain/og:url ambiguity carried forward in all four updated specs — it was present in revision 1.2 and remains unresolved in revision 1.3)
+**AMBIGUITY markers resolved:** none
+**CONFLICT markers added:** none
+**verify-sync.sh result:** Script requires prd.md inside the project-planning/ directory; prd.md is at the repo root. Manual verification performed: Check 1 (MOD-IDs) — PASS (PRD 1.3 has no MOD-IDs); Check 2 (orphan specs) — PASS (all 10 spec.md files map to Module Map entries); Check 3 (Tech Stack) — PASS (unchanged from revision 1.2 sync); Check 4 (US-IDs) — PASS (no US-IDs in PRD 1.3); Check 5 (AMBIGUITY markers) — PASS (domain/og:url ambiguity carried forward and logged); Check 6 (Phase names) — PASS (Phase Plan unchanged).
 
 ---
 
