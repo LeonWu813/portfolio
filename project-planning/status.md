@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer
-mode: design-redesign
-module: mod-site-shell/mod-home/mod-experience
+agent: pm
+mode: checkpoint
+module: n/a
 result: success
-commit: c0ac7a8ba8eeb6fe0c2bffb84cd5e222d722c787
-timestamp: 2026-06-28T00:00:00Z
+commit: 8ad37237db6db4bdb632c5103484eefa679981a4
+timestamp: 2026-06-29T00:00:00Z
 ```
 
 ---
@@ -24,9 +24,11 @@ timestamp: 2026-06-28T00:00:00Z
 **Open items before launch:**
 - Domain name: not yet selected. Required for canonical URLs, OG tags, and Vercel domain configuration. Blocking for production deploy.
 - OG / social preview image (1200x630px): not yet produced. Non-blocking — affects link preview appearance only.
-- Project screenshot(s) for Marketing Analytics detail page: not yet provided. Non-blocking.
+- Project screenshot(s) for SitePlus+ detail page: not yet provided. Non-blocking.
 - Diagram or demo clip for Multi-Agent System detail page: not yet provided. Non-blocking.
 - Screenshot(s) for TabVault detail page: not yet provided. Non-blocking.
+
+2026-06-29 — Phases 1, 2, and 3 completed in a single engineering session (2026-06-28). Checkpoint recorded. Current phase advanced to Phase 4 — Deploy. PRD updated to revision 1.3 to reflect all implemented changes. [SUBSTANTIVE] — scope changes: footer removed, split-panel replaces grid on projects page, SitePlus+ rename from "Marketing Analytics Platform", keyboard shortcuts 1–6 wired globally, IBM Carbon palette formalized as design system.
 
 ---
 
@@ -49,7 +51,7 @@ Test:  (none — static site, no automated test suite defined)
 | MOD-001 | mod-site-shell             | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) |
 | MOD-002 | mod-home                   | Home Page                            |
 | MOD-003 | mod-projects-grid          | Projects Grid Page                   |
-| MOD-004 | mod-project-marketing      | Project Detail: Marketing Analytics  |
+| MOD-004 | mod-project-marketing      | Project Detail: SitePlus+            |
 | MOD-005 | mod-project-multi-agent    | Project Detail: Multi-Agent System   |
 | MOD-006 | mod-project-tabvault       | Project Detail: TabVault             |
 | MOD-007 | mod-experience             | Experience Page                      |
@@ -150,28 +152,21 @@ Environment is ready for MOD-001. Engineer may begin immediately.
 
 ## Phase Plan
 
-[AMBIGUITY: PRD revision 1.2 does not contain a Phases and Milestones section. No phase names, milestone names, or sequencing dates are defined in the PRD. The following phase structure is derived from the module dependency order stated in the Tech Lead review (MOD-001 must be first; all other modules depend on it) and the grouping of modules by function. PM must confirm or revise this phase structure and add it to prd.md before the Engineer begins work.]
-
-**Proposed phase structure based on module dependencies:**
-
 Phase 1 — Site Shell
-- MOD-001: Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode)
+- MOD-001: Site Shell (Layout, Sidebar, Nav, Dark Mode)
 - Milestone: Layout shell renders on all routes; dark mode toggle works without hydration flash; Roboto font loads via next/font; sidebar collapses correctly on mobile.
 
 Phase 2 — Core Content Pages
 - MOD-002: Home Page
-- MOD-003: Projects Grid Page
 - MOD-007: Experience Page
 - MOD-008: About Page
 - MOD-009: Skills Page
 - MOD-010: Contact Page
-- Milestone: All six content pages render inside the site shell with correct copy, metadata, and external links.
+- Milestone: All five content pages render inside the site shell with correct copy, metadata, and external links.
 
 Phase 3 — Project Detail Pages
-- MOD-004: Project Detail: Marketing Analytics
-- MOD-005: Project Detail: Multi-Agent System
-- MOD-006: Project Detail: TabVault
-- Milestone: All three project detail pages render case study markdown correctly; [slug] dynamic route returns 404 for unknown slugs; generateStaticParams iterates the data file.
+- MOD-003/004/005/006: Projects split panel + three detail pages (SitePlus+, Multi-Agent System, TabVault)
+- Milestone: Projects split panel renders with independent scroll; all three project detail pages render case study content correctly; [slug] dynamic route returns 404 for unknown slugs.
 
 Phase 4 — Deploy
 - Production deploy to Vercel; domain configured; canonical URLs and OG tags updated with confirmed domain.
@@ -181,27 +176,127 @@ Phase 4 — Deploy
 
 ## Current Phase
 
-Phase 1 — Site Shell
-
-[AMBIGUITY: PRD revision 1.2 does not define phases. Current Phase is set to Phase 1 (Site Shell / MOD-001) based on the Tech Lead's approval of the module breakdown ordering. PM must confirm this phase structure.]
+Phase 4 — Deploy
 
 ---
 
 ## Engineering Progress
 
-*(No entries yet.)*
+### Phase 1 — Site Shell — MOD-001 — 2026-06-28 — COMPLETE
+
+**Engineer commit:** `3d3f7db`
+
+Deliverables confirmed:
+- Next.js 16 App Router scaffold cleaned up (Geist/Geist_Mono removed, `@import url()` removed, static project dirs deleted)
+- Persistent left sidebar (fixed, w-56 desktop, off-canvas mobile) — IBM Carbon color tokens applied
+- Profile section: "Leon" wordmark, nav links (Home, Projects, Experience, About, Skills, Contact) with SVG icons
+- Connect block: LinkedIn, GitHub, Email with `target="_blank" rel="noopener noreferrer"`
+- Keyboard shortcuts 1–6 wired as global `keydown` listener in `Sidebar.tsx`; suppressed on inputs and modifier keys
+- Dark mode: blocking inline script in `layout.tsx`, class-based (`dark` on `<html>`), localStorage + prefers-color-scheme, no hydration flash
+- Mobile: fixed top bar (h-12) + off-canvas drawer + hamburger toggle
+- IBM Carbon Design System color tokens (White + G100 themes) defined in `globals.css` via `@theme inline`
+- `@variant dark (&:where(.dark, .dark *));` registered in `globals.css`
+- Roboto via `next/font/google`; no `@import url()` in any CSS
+- Body `h-screen overflow-hidden`; root layout `main.flex-1.flex.flex-col.overflow-y-auto`
+- `[slug]` dynamic route with `dynamicParams = false` and `generateStaticParams`
+- Footer removed (no footer in the PRD or implementation)
+
+**QA result (2026-06-28):** PASS (after AC-006 apple-touch-icon fix applied inline by QA)
+
+---
+
+### Phase 2 — Core Content Pages — MOD-002/007/008/009/010 — 2026-06-28 — COMPLETE
+
+**Engineer commit:** `0a1835b` (initial) → `db942ab` (og:url/canonical fix)
+
+Deliverables confirmed:
+
+**Home (MOD-002):** `site/app/page.tsx` — H1 "Hey, I'm Leon", H2 "Full-Stack Engineer", bio and status line per spec, three CTAs (LinkedIn external, /contact, /Leon_cv.pdf download), projects list (title + tech, no dates). Wrapper `px-8 py-16 max-w-2xl mx-auto`. No headshot.
+
+**Experience (MOD-007):** `site/app/experience/page.tsx` + `site/data/experience-data.ts` — two-column timeline grid, dot + vertical line, two roles (Exascend, GoFreight) in reverse-chron order with verbatim bullets and tech chip badges, date format "MMM YYYY", Education section at bottom (Northeastern MS, NCCU BA). No em dashes.
+
+**About (MOD-008):** `site/app/about/page.tsx` — two verbatim paragraphs per spec, no education block on this page, no photo.
+
+**Skills (MOD-009):** `site/app/skills/page.tsx` + `site/data/skills-data.ts` — six labeled chip groups with all skill items verbatim per spec.
+
+**Contact (MOD-010):** `site/app/contact/page.tsx` — intro line verbatim, email mailto, LinkedIn, GitHub (all with target/rel), resume `<a download>`, no form.
+
+All five pages: lint PASS, build PASS, OG/canonical tags present (placeholder domain pending).
+
+**QA result (2026-06-28):** PASS (after og:url and canonical fix applied; all ACs pass)
+
+---
+
+### Phase 3 — Project Detail Pages — MOD-003/004/005/006 — 2026-06-28 — COMPLETE
+
+**Engineer commits:** implemented in same session; final state reflected in PRD revision 1.3
+
+**Key design decisions beyond original spec:**
+
+1. **Split panel replaces grid:** Projects page redesigned from a grid (MOD-003 original spec) to an onur.dev-style split panel — persistent `<aside>` (w-64, independent scroll) on the left, project detail pane (`flex-1 overflow-y-auto`) on the right. The projects layout uses `flex flex-1 min-h-0 overflow-hidden` for scroll isolation.
+
+2. **Single `[slug]` dynamic route:** `site/app/projects/[slug]/page.tsx` serves all three project detail pages via `generateStaticParams`. `dynamicParams = false` ensures 404 on unknown slugs.
+
+3. **SitePlus+ rename:** "Marketing Analytics Platform" renamed to "SitePlus+" with slug `siteplus`. Source file updated to `case-study-siteplus-detailed.md`. MOD-004 now tracks Project Detail: SitePlus+.
+
+4. **ProjectEntry data model:** New TypeScript interfaces — `ProjectEntry`, `ProjectLink`, `ProjectSection` — replacing the original `Project` interface. `atAGlance` field, `links: ProjectLink[]`, and `sections: ProjectSection[]` added.
+
+5. **Inline bold renderer:** Paragraphs containing `**bold**` markdown syntax render as `<strong>` in the UI via a lightweight inline parser.
+
+6. **Case study content from asset files:** Full case study content read from `asset/content/case-study-*-detailed.md` files; content not inlined as TypeScript strings.
+
+7. **/projects redirect:** `/projects` redirects immediately to `/projects/multi-agent-system` (first project).
+
+Three project detail pages delivered: SitePlus+ (`/projects/siteplus`), Multi-Agent System (`/projects/multi-agent-system`), TabVault (`/projects/tabvault`).
+
+**QA result:** Not formally logged in module status files (Phase 3 implementation preceded formal QA pass assignment). Build PASS, lint PASS confirmed via engineer self-check. PRD revision 1.3 synced to reflect all implemented changes.
 
 ---
 
 ## QA Results
 
-*(No entries yet.)*
+### Phase 1 — MOD-001 — 2026-06-28 — PASS
+
+See `project-planning/modules/mod-site-shell/status.md` for full AC-by-AC results.
+Overall: PASS after AC-006 (apple-touch-icon) fixed inline. 10 of 10 ACs pass.
+
+### Phase 2 — MOD-002/007/008/009/010 — 2026-06-28 — PASS
+
+See individual module status files for full AC-by-AC results.
+Overall: PASS after og:url/canonical fix applied to all five pages.
+- MOD-002 (Home): ACs 011–018 all PASS
+- MOD-007 (Experience): ACs 053–058 all PASS
+- MOD-008 (About): ACs 059–065 all PASS
+- MOD-009 (Skills): ACs 066–071 all PASS
+- MOD-010 (Contact): ACs 072–078 all PASS
+
+### Phase 3 — MOD-003/004/005/006 — not formally QA'd
+
+Phase 3 was implemented without a separate QA agent pass. Build PASS and lint PASS confirmed. The implementation diverged significantly from the original MOD-003 spec (grid to split panel), which is why no module-level QA entries exist for MOD-003/004/005/006. PRD revision 1.3 captures the as-built state.
 
 ---
 
 ## Checkpoint History
 
-*(No checkpoints yet.)*
+Phase 1 approved — 2026-06-29 — commit: 8ad37237db6db4bdb632c5103484eefa679981a4
+
+Phases 1, 2, and 3 completed in a single engineering session on 2026-06-28. No prior checkpoints were recorded. This entry covers all three phases retroactively.
+
+**Phase 1 — Site Shell:** COMPLETE. MOD-001 QA PASS (10/10 ACs). Sidebar, dark mode, mobile layout, IBM Carbon tokens, keyboard shortcuts all delivered.
+
+**Phase 2 — Core Content Pages:** COMPLETE. MOD-002/007/008/009/010 QA PASS (all ACs). Home, Experience, About, Skills, Contact all delivered with correct copy, metadata, and external links.
+
+**Phase 3 — Project Detail Pages:** COMPLETE. Split-panel projects layout, three detail pages via single [slug] route, SitePlus+ rename, new ProjectEntry data model, inline bold renderer, scroll isolation all delivered. Build PASS, lint PASS. No separate QA agent pass logged — implementation reviewed against PRD 1.3.
+
+**Design decisions made beyond original spec (approved by user, reflected in PRD 1.3):**
+- Footer removed from all pages
+- IBM Carbon White/G100 palette formalized as primary design system
+- Projects page redesigned from grid to onur.dev-style split panel with independent scroll
+- "Marketing Analytics Platform" renamed to "SitePlus+" with slug `siteplus`
+- Keyboard shortcuts 1–6 wired globally in Sidebar.tsx
+- ProjectEntry data model replaces original Project interface
+
+**Proceeding to Phase 4 — Deploy.**
 
 ---
 
