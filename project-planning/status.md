@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: qa-mod-project-multi-agent
+agent: qa-mod-project-tabvault
 mode: regression
-module: mod-project-multi-agent
+module: mod-project-tabvault
 result: success
-commit: 3f788d6413973478cf86e8ff81095516882f7c6d
+commit: cc22e151366a0a55b365004ff16000b72aa7b49e
 timestamp: 2026-06-29T00:00:00Z
 ```
 
@@ -279,12 +279,20 @@ Phase 3 was implemented without a separate QA agent pass. Build PASS and lint PA
 See `project-planning/modules/mod-projects-grid/status.md` for full AC-by-AC results.
 Overall: PASS. All 8 ACs (AC-019 through AC-026) verified. Build clean.
 
-### MOD-006 — Project Detail: TabVault — 2026-06-29 — FAIL
+### MOD-006 — Project Detail: TabVault — 2026-06-29 — FAIL (QA Run 1)
 
 3 ACs failing. See `project-planning/modules/mod-project-tabvault/status.md` for full details.
 - AC-055 FAIL: Tags wrong — 11 chips instead of 8; wrong chip labels (spec: "Java 21 / Spring Boot" as 1 chip; data: "Java 21" + "Spring Boot 3.3" as 2 chips; spec: "React / TypeScript PWA" as 1 chip; data: "React" + "TypeScript" + "PWA" as 3 chips; spec: "Chrome Extension (MV3)"; data: "Chrome Extension MV3" missing parentheses)
 - AC-058 FAIL: "Architecture" section entirely missing; only 7 sections instead of 8; section 3 heading has spurious comma ("How it works, end to end" vs "How it works end to end"); section 7 heading has spurious comma ("What I learned, and what I would improve" vs "What I learned and what I would improve")
 - AC-064 FAIL: generateMetadata returns only title and description; OG tags (og:title, og:description, og:url, og:type, og:images), Twitter card tags, and canonical URL all absent
+
+### MOD-006 — Project Detail: TabVault — 2026-06-29 — PASS (QA Run 2 — Regression)
+
+All 3 previously failing ACs now fixed. No regressions in any previously passing ACs. All 12 ACs pass.
+- AC-055 REGRESSION PASS: tags array now exactly 8 combined-chip labels per spec with parentheses around "MV3" restored
+- AC-058 REGRESSION PASS: 8 sections in correct order, "Architecture" section added at position 4, spurious commas removed from headings 3 and 8
+- AC-064 REGRESSION PASS: generateMetadata now returns full OG block (title, description, type, url, images), Twitter card block (card, title, description, images), and alternates.canonical
+See `project-planning/modules/mod-project-tabvault/status.md` QA Run 2 for full AC-by-AC results.
 
 ### MOD-005 — Project Detail: Multi-Agent System — 2026-06-29 — PASS
 

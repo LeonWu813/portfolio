@@ -113,3 +113,115 @@ PASS. `spec.md` contains no HTML template comments (`<!-- ... -->`).
 **Overall result: FAIL — 3 ACs failing (AC-055, AC-058, AC-064)**
 
 All failures are implementation bugs. Route to Engineer.
+
+---
+
+## QA Run 2 — Regression — 2026-06-29
+
+**QA Agent:** qa-mod-project-tabvault
+**Workflow:** regression-test (re-verification after bug fix)
+**Date:** 2026-06-29
+**Spec revision:** PRD 1.3 (spec.md last synced 2026-06-29)
+**Re-verifying:** AC-055, AC-058, AC-064 (all three previously failing ACs)
+
+### Automated Test Suite
+
+Exit code 127 — no automated test suite defined for this static Next.js site (test command is a literal placeholder string, same as QA Run 1). Automated suite result: N/A. All verification is manual via source code inspection.
+
+### Re-verification of Previously Failing ACs
+
+**REGRESSION PASS AC-055: tag chips — original failure resolved**
+
+Input: tabvault `tags` array in `projects-data.ts` line 185.
+Previous actual: 11 chips with split labels and missing parentheses.
+Current actual: `["Java 21 / Spring Boot", "React / TypeScript PWA", "Chrome Extension (MV3)", "PostgreSQL", "Redis", "Quartz", "Claude API", "AWS ECS Fargate"]` — exactly 8 chips, combined labels with slash notation, parentheses around "MV3".
+Expected per spec: same 8 chips verbatim.
+Result: FIXED. Exact match on all 8 chip labels, count, and parentheses formatting.
+
+**REGRESSION PASS AC-058: 8 sections in exact order — original failure resolved**
+
+Input: tabvault `sections` array in `projects-data.ts` starting at line 194.
+Previous actual: 7 sections; "Architecture" missing; spurious commas in headings 3 and 8.
+Current actual (8 sections in order):
+1. "The problem"
+2. "My role"
+3. "How it works end to end"
+4. "Architecture"
+5. "Key engineering decisions"
+6. "Challenges and how I resolved them"
+7. "Impact"
+8. "What I learned and what I would improve"
+Expected per spec: same 8 headings in same order, no commas.
+Result: FIXED. All 8 sections present, "Architecture" now at position 4, no spurious commas in any heading.
+
+**REGRESSION PASS AC-064: generateMetadata OG, Twitter card, canonical URL — original failure resolved**
+
+Input: `generateMetadata` in `page.tsx` lines 11-36.
+Previous actual: returned only `{ title, description }` — all OG, Twitter, and canonical fields absent.
+Current actual: returns:
+- `title: "${project.title} — Leon Wu"` — correct
+- `description: project.description` — correct
+- `openGraph.title`, `openGraph.description`, `openGraph.type: "website"`, `openGraph.url`, `openGraph.images` — all present
+- `twitter.card: "summary_large_image"`, `twitter.title`, `twitter.description`, `twitter.images` — all present
+- `alternates.canonical` — present
+Expected per spec: all of the above.
+Result: FIXED. All required metadata fields now present. OG url and canonical use placeholder domain `https://your-domain.com/...` which is consistent with the acknowledged AMBIGUITY in spec.md and production.md (domain not yet confirmed; values cannot be finalized until domain is provided by PM).
+
+### Re-verification of Previously Passing ACs
+
+**AC-053: H1 "TabVault"**
+PASS (no regression). `page.tsx` renders `{project.title}` in `<h1>`; tabvault record `title: "TabVault"` unchanged.
+
+**AC-054: atAGlance line — muted style below H1**
+PASS (no regression). `page.tsx` renders `{project.atAGlance}` with `text-sm text-[var(--text-muted)]`; atAGlance value unchanged and matches spec verbatim.
+
+**AC-056: Two external links — exact labels, hrefs, target, rel**
+PASS (no regression). tabvault links array unchanged; `page.tsx` template unchanged; both links render as plain `<a>` with `target="_blank" rel="noopener noreferrer"`, no ↗ icon.
+
+**AC-057: Description pull-quote with border-l-2 accent styling**
+PASS (no regression). `page.tsx` pull-quote element unchanged (`border-l-2 border-[var(--accent)] pl-4`); description text unchanged and matches spec verbatim.
+
+**AC-059: InlineBold helper renders **bold** as `<strong>`**
+PASS (no regression). `InlineBold` implementation unchanged; tabvault sections still contain `**...**` syntax; helper applied to every paragraph.
+
+**AC-060: Content from structured TypeScript data — no fs.readFileSync**
+PASS (no regression). No `fs` import or `readFileSync` call in `page.tsx`; content from `@/data/projects-data` unchanged.
+
+**AC-061: params typed as Promise<{slug:string}>, awaited in both page and generateMetadata**
+PASS (no regression). Both `generateMetadata` and `ProjectDetailPage` still declare `params: Promise<{ slug: string }>` and await it. The fix to `generateMetadata` only extended the return value; it did not change the params signature or await pattern.
+
+**AC-062: dynamicParams = false**
+PASS (no regression). `export const dynamicParams = false` at line 5 unchanged.
+
+**AC-063: generateStaticParams iterates data array — no hard-coded slug strings**
+PASS (no regression). `return projects.map((p) => ({ slug: p.slug }))` unchanged.
+
+**Server Component (no 'use client'):**
+PASS (no regression). No `'use client'` directive in `page.tsx`.
+
+**No gold-plating:**
+PASS. The fix to `generateMetadata` added exactly the fields required by spec. No features added beyond spec requirements. The `InlineBold` function definition remains unchanged. The page template remains unchanged.
+
+**Spec template comments:**
+PASS. `spec.md` contains no HTML template comments.
+
+---
+
+### Summary — QA Run 2
+
+| AC | QA Run 1 | QA Run 2 | Notes |
+|----|----------|----------|-------|
+| AC-053 | PASS | PASS | No regression |
+| AC-054 | PASS | PASS | No regression |
+| AC-055 | FAIL | REGRESSION PASS | 8 combined chips, correct labels, parentheses fixed |
+| AC-056 | PASS | PASS | No regression |
+| AC-057 | PASS | PASS | No regression |
+| AC-058 | FAIL | REGRESSION PASS | 8 sections, "Architecture" added, commas removed |
+| AC-059 | PASS | PASS | No regression |
+| AC-060 | PASS | PASS | No regression |
+| AC-061 | PASS | PASS | No regression |
+| AC-062 | PASS | PASS | No regression |
+| AC-063 | PASS | PASS | No regression |
+| AC-064 | FAIL | REGRESSION PASS | OG, Twitter card, canonical all present |
+
+**Overall result: PASS — all 12 ACs pass. No regressions. All 3 previously failing ACs are now fixed.**
