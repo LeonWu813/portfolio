@@ -1,6 +1,31 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projects } from "@/data/projects-data";
+import { projects, type SectionItem } from "@/data/projects-data";
+
+type ItemGroup =
+  | { type: "text"; value: string; key: number }
+  | { type: "images"; srcs: string[]; key: number };
+
+function groupItems(items: SectionItem[]): ItemGroup[] {
+  const groups: ItemGroup[] = [];
+  let i = 0;
+  while (i < items.length) {
+    const item = items[i];
+    if (typeof item === "string") {
+      groups.push({ type: "text", value: item, key: i });
+      i++;
+    } else {
+      const start = i;
+      const srcs: string[] = [];
+      while (i < items.length && typeof items[i] !== "string") {
+        srcs.push((items[i] as { image: string }).image);
+        i++;
+      }
+      groups.push({ type: "images", srcs, key: start });
+    }
+  }
+  return groups;
+}
 
 export const dynamicParams = false;
 
@@ -57,7 +82,7 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   return (
-    <article className="px-8 py-12 max-w-2xl">
+    <article className="px-8 py-12 max-w-4xl">
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-[28px] font-semibold leading-9 text-[var(--text)] mb-2">
@@ -81,15 +106,14 @@ export default async function ProjectDetailPage({
         {project.links.length > 0 && (
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             {project.links.map((link) => (
-              <a
-                key={link.href}
+              <p key={link.href} className="text-sm">{link.name}<a
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[var(--accent)] hover:underline"
               >
                 {link.label}
-              </a>
+              </a></p>
             ))}
           </div>
         )}
@@ -100,6 +124,15 @@ export default async function ProjectDetailPage({
         {project.description}
       </p>
 
+      {/* Feature image */}
+      {project.featureImage && (
+        <img
+          src={project.featureImage}
+          alt=""
+          className="w-full rounded-lg border border-[var(--border)] mb-10"
+        />
+      )}
+
       {/* Sections */}
       <div className="flex flex-col gap-10">
         {project.sections.map((section) => (
@@ -108,11 +141,31 @@ export default async function ProjectDetailPage({
               {section.heading}
             </h2>
             <div className="flex flex-col gap-4">
-              {section.paragraphs.map((paragraph, i) => (
-                <p key={i} className="text-base leading-7 text-[var(--text-muted)]">
-                  <InlineBold text={paragraph} />
-                </p>
-              ))}
+              {groupItems(section.items).map((group) =>
+                group.type === "text" ? (
+                  <p key={group.key} className="text-base leading-7 text-[var(--text-muted)]">
+                    <InlineBold text={group.value} />
+                  </p>
+                ) : group.srcs.length === 1 ? (
+                  <img
+                    key={group.key}
+                    src={group.srcs[0]}
+                    alt=""
+                    className="w-full rounded-lg border border-[var(--border)]"
+                  />
+                ) : (
+                  <div key={group.key} className="grid grid-cols-2 gap-3">
+                    {group.srcs.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt=""
+                        className="w-full rounded-lg border border-[var(--border)]"
+                      />
+                    ))}
+                  </div>
+                )
+              )}
             </div>
           </section>
         ))}

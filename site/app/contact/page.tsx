@@ -30,7 +30,7 @@ export default function ContactPage() {
           Contact
         </h1>
         <p className="text-base text-[var(--text-muted)] max-w-prose">
-          Looking for a Summer 2026 internship in full-stack, frontend, or
+          Looking for a 2026/ 2027 internship in full-stack, frontend, or
           backend engineering. If you&apos;re working on something interesting,
           I&apos;d love to hear about it.
         </p>
