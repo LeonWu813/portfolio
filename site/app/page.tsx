@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Home — Leon Wu",
     description:
-      "Full-stack engineer and CS master's student at Northeastern, seeking a Summer 2026 software engineering internship.",
+      "Full-stack engineer and CS master's student at Northeastern, seeking a 2026/2027 software engineering internship.",
     type: "website",
     url: "https://your-domain.com/",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Home — Leon Wu",
     description:
-      "Full-stack engineer and CS master's student at Northeastern, seeking a Summer 2026 software engineering internship.",
+      "Full-stack engineer and CS master's student at Northeastern, seeking a 2026/2027 software engineering internship.",
     images: ["/og-image.png"],
   },
 };
@@ -37,13 +37,13 @@ export default function HomePage() {
 
         <p className="text-base leading-7 text-[var(--text)]">
           I&apos;m a full-stack engineer and CS master&apos;s student at Northeastern. I build
-          production systems by hand — from the database schema to the cloud
-          deployment — and I design multi-agent systems that plan, implement, and
+          production systems by hand. From the database schema to the cloud
+          deployment. And I design multi-agent systems that plan, implement, and
           ship software end to end.
         </p>
 
         <p className="text-base leading-7 text-[var(--text-muted)]">
-          Currently seeking a Summer 2026 software engineering internship across
+          Currently seeking a 2026/2027 software engineering internship across
           full-stack, frontend, or backend roles.
         </p>
 

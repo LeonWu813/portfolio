@@ -130,6 +130,7 @@ export default async function ProjectDetailPage({
           src={project.featureImage}
           alt=""
           className="w-full rounded-lg border border-[var(--border)] mb-10"
+          height="500px"
         />
       )}
 

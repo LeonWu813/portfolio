@@ -31,6 +31,7 @@ export const projects: ProjectEntry[] = [
     year: "2025",
     date: "03/01",
     title: "Multi-Agent Software Development System",
+    featureImage: "/multi-agent.png",
     tech: "Harness Engineering · AI Agents · Systems Design · Claude Code",
     tags: ["Claude Code", "Bash", "Git", "Multi-agent", "Systems Design"],
     atAGlance:
@@ -111,13 +112,14 @@ export const projects: ProjectEntry[] = [
     date: "09/01",
     title: "SitePlus+",
     tech: "Full-Stack · Java/Spring Boot · React · AWS",
+    featureImage: "/siteplusplus-home.jpg",
     tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"],
     atAGlance:
       "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%",
     description:
       "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent.",
     links: [
-      { name: "Live: ", label: "siteplusplus.space", href: "https://www.siteplusplus.space" },
+      { name: "Demo Video: ", label: "link", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" },
       { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" },
     ],
     sections: [
@@ -139,6 +141,13 @@ export const projects: ProjectEntry[] = [
         items: [
           "A site owner registers their website and receives an auto-generated tracking snippet, pre-filled with a unique site code, ready to paste into their page head. That snippet is a small self-contained script that captures page views, clicks, and form submissions and sends each one to a public ingest endpoint. The backend accepts the event without authentication, enriches it server-side with the visitor's country using a local geolocation database, and stores it against the owner's site. When the owner later opens their dashboard, the front end requests their analytics through an authenticated, ownership-checked endpoint, and the backend returns aggregates: events over time, top pages, channels, and countries, with period-over-period comparison. The same site can also be run through the SEO auditor, which crawls the page, calls an external PageSpeed service, and stores a report the owner can email or have re-checked automatically a week later.",
           "That single path touches every interesting decision in the system: a public write with a private read, server-side enrichment, ownership scoping, and scheduled follow-up work.",
+        ],
+      },
+      {
+        heading: "Images",
+        items: [
+          { image: "/siteplusplus-reports.jpeg" },
+          { image: "/siteplusplus-sites.jpeg" },
         ],
       },
       {

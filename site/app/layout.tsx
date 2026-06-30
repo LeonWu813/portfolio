@@ -37,7 +37,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="h-screen overflow-hidden flex flex-col font-sans antialiased bg-[var(--bg)] text-[var(--text)]">
+      <body className="h-screen overflow-hidden flex flex-col font-sans antialiased bg-[var(--bg)] text-[var(--text)]" suppressHydrationWarning>
         <Sidebar />
         {/* Mobile top-bar spacer */}
         <div className="md:hidden flex-shrink-0 h-12" />

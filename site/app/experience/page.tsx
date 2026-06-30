@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { experience, education } from "@/data/experience-data";
+import { experience, education, type ExperienceEntry, type EducationEntry } from "@/data/experience-data";
 
 export const metadata: Metadata = {
   title: "Experience — Leon Wu",
@@ -21,6 +21,29 @@ export const metadata: Metadata = {
   },
 };
 
+const MONTHS: Record<string, number> = {
+  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+};
+
+function parseSortDate(date: string): number {
+  const [mon, year] = date.split(" ");
+  return parseInt(year) * 12 + (MONTHS[mon] ?? 0);
+}
+
+type TimelineItem =
+  | { kind: "work"; data: ExperienceEntry }
+  | { kind: "education"; data: EducationEntry };
+
+const timeline: TimelineItem[] = [
+  ...experience.map((e): TimelineItem => ({ kind: "work", data: e })),
+  ...education.map((e): TimelineItem => ({ kind: "education", data: e })),
+].sort((a, b) => {
+  const startA = a.kind === "work" ? a.data.startDate : a.data.startDate;
+  const startB = b.kind === "work" ? b.data.startDate : b.data.startDate;
+  return parseSortDate(startB) - parseSortDate(startA);
+});
+
 export default function ExperiencePage() {
   return (
     <div className="px-8 py-16 max-w-2xl mx-auto w-full flex flex-col gap-12">
@@ -28,118 +51,88 @@ export default function ExperiencePage() {
         Experience
       </h1>
 
-      {/* Work timeline */}
-      <section aria-label="Work experience">
+      <section aria-label="Timeline">
         <ul className="flex flex-col">
-          {experience.map((role, i) => (
-            <li
-              key={`${role.company}-${role.startDate}`}
-              className="grid grid-cols-[9rem_1fr]"
-            >
-              {/* Left: date */}
-              <div className="pt-1 pr-6 text-right">
-                <p className="text-xs text-[var(--text-muted)] leading-5">
-                  {role.startDate} – {role.endDate}
-                </p>
-              </div>
+          {timeline.map((item, i) => {
+            const isLast = i === timeline.length - 1;
+            const isWork = item.kind === "work";
 
-              {/* Right: content with dot + line */}
-              <div
-                className={`relative pl-7 ${
-                  i < experience.length - 1 ? "pb-10" : ""
-                }`}
-              >
-                {/* Vertical line (all but last entry) */}
-                {i < experience.length - 1 && (
-                  <div className="absolute left-[4px] top-4 bottom-0 w-px bg-[var(--border)]" />
-                )}
-                {/* Circle dot */}
-                <div className="absolute left-0 top-[5px] w-[9px] h-[9px] rounded-full border-2 border-[var(--text-muted)] bg-[var(--bg)]" />
+            const startDate = item.data.startDate;
+            const endDate = isWork ? item.data.endDate : item.data.endDate;
+            const key = isWork
+              ? `${item.data.company}-${startDate}`
+              : `${item.data.institution}-${startDate}`;
 
-                {/* Role + company */}
-                <h2 className="text-base font-semibold text-[var(--text)] leading-6 mb-1">
-                  {role.title}
-                  <span className="text-[var(--text-muted)] font-normal">
-                    {" "}· {role.company}
-                  </span>
-                </h2>
-                <p className="text-xs text-[var(--text-muted)] mb-3">
-                  {role.location}
-                </p>
-
-                {/* Bullets */}
-                <ul className="flex flex-col gap-2 mb-4">
-                  {role.bullets.map((bullet, j) => (
-                    <li
-                      key={j}
-                      className="text-sm leading-7 text-[var(--text-muted)] flex gap-2"
-                    >
-                      <span className="shrink-0 mt-0.5 text-[var(--text-muted)]">
-                        –
-                      </span>
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Tech tags */}
-                <div className="flex flex-wrap gap-1.5">
-                  {role.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-2 py-0.5 rounded bg-[var(--surface)] text-[var(--text-muted)] border border-[var(--border)]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+            return (
+              <li key={key} className="grid grid-cols-[9rem_1fr]">
+                {/* Left: date */}
+                <div className="pt-1 pr-6 text-right">
+                  <p className="text-xs text-[var(--text-muted)] leading-5">
+                    {startDate} – {endDate}
+                  </p>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
 
-      {/* Education */}
-      <section aria-label="Education">
-        <h2 className="text-xl font-semibold text-[var(--text)] mb-6">
-          Education
-        </h2>
-        <ul className="flex flex-col">
-          {education.map((entry, i) => (
-            <li
-              key={entry.institution}
-              className="grid grid-cols-[9rem_1fr]"
-            >
-              {/* Left: period */}
-              <div className="pt-1 pr-6 text-right">
-                <p className="text-xs text-[var(--text-muted)] leading-5">
-                  {entry.period}
-                </p>
-              </div>
+                {/* Right: content with dot + line */}
+                <div className={`relative pl-7 ${!isLast ? "pb-10" : ""}`}>
+                  {!isLast && (
+                    <div className="absolute left-[4px] top-4 bottom-0 w-px bg-[var(--border)]" />
+                  )}
+                  <div className={`absolute left-0 top-[5px] w-[9px] h-[9px] rounded-full border-2 ${
+                    endDate.startsWith("Expected") || endDate === "Present"
+                      ? "border-[var(--accent)] bg-[var(--accent)]"
+                      : "border-[var(--text-muted)] bg-[var(--bg)]"
+                  }`} />
 
-              {/* Right: content with dot + line */}
-              <div
-                className={`relative pl-7 ${
-                  i < education.length - 1 ? "pb-8" : ""
-                }`}
-              >
-                {i < education.length - 1 && (
-                  <div className="absolute left-[4px] top-4 bottom-0 w-px bg-[var(--border)]" />
-                )}
-                <div className="absolute left-0 top-[5px] w-[9px] h-[9px] rounded-full border-2 border-[var(--text-muted)] bg-[var(--bg)]" />
-
-                <h3 className="text-base font-semibold text-[var(--text)] leading-6 mb-0.5">
-                  {entry.degree}
-                  <span className="text-[var(--text-muted)] font-normal">
-                    {" "}· {entry.institution}
-                  </span>
-                </h3>
-                <p className="text-xs text-[var(--text-muted)]">
-                  {entry.location} · GPA {entry.gpa}
-                </p>
-              </div>
-            </li>
-          ))}
+                  {isWork ? (
+                    <>
+                      <h2 className="text-base font-semibold text-[var(--text)] leading-6 mb-1">
+                        {item.data.title}
+                        <span className="text-[var(--text-muted)] font-normal">
+                          {" "}· {item.data.company}
+                        </span>
+                      </h2>
+                      <p className="text-xs text-[var(--text-muted)] mb-3">
+                        {item.data.location}
+                      </p>
+                      <ul className="flex flex-col gap-2 mb-4">
+                        {item.data.bullets.map((bullet, j) => (
+                          <li
+                            key={j}
+                            className="text-sm leading-7 text-[var(--text-muted)] flex gap-2"
+                          >
+                            <span className="shrink-0 mt-0.5 text-[var(--text-muted)]">–</span>
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.data.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs px-2 py-0.5 rounded bg-[var(--surface)] text-[var(--text-muted)] border border-[var(--border)]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="text-base font-semibold text-[var(--text)] leading-6 mb-0.5">
+                        {item.data.degree}
+                        <span className="text-[var(--text-muted)] font-normal">
+                          {" "}· {item.data.institution}
+                        </span>
+                      </h2>
+                      <p className="text-xs text-[var(--text-muted)]">
+                        {item.data.location} · GPA {item.data.gpa}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </section>
     </div>

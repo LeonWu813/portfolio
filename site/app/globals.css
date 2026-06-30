@@ -71,12 +71,13 @@ body {
 
   main::after {
     content: '';
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     width: 120px;
     height: 80px;
     background: url("/Subject.png") no-repeat center / contain;
+    pointer-events: none;
   }
 }
 

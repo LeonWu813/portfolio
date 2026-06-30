@@ -92,22 +92,20 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
               <Link
                 href={href}
                 onClick={onClick}
-                className={`group flex items-center justify-between rounded-lg p-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${
-                  isActive
-                    ? "bg-[var(--text)] text-[var(--bg)]"
-                    : "text-[var(--text)] hover:bg-[var(--hover)]"
-                }`}
+                className={`group flex items-center justify-between rounded-lg p-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${isActive
+                  ? "bg-[var(--text)] text-[var(--bg)]"
+                  : "text-[var(--text)] hover:bg-[var(--hover)]"
+                  }`}
               >
                 <span className="flex items-center gap-2 font-medium">
                   {icon}
                   {label}
                 </span>
                 <span
-                  className={`hidden size-5 place-content-center rounded-sm border text-xs font-medium lg:grid ${
-                    isActive
-                      ? "border-[var(--text-muted)] bg-[var(--bg)] text-[var(--text-muted)] opacity-60"
-                      : "border-[var(--border)] bg-[var(--bg)] text-[var(--text-muted)] group-hover:border-[var(--text-muted)]"
-                  }`}
+                  className={`hidden size-5 place-content-center rounded-sm border text-xs font-medium lg:grid ${isActive
+                    ? "border-[var(--text-muted)] bg-[var(--bg)] text-[var(--text-muted)]"
+                    : "border-[var(--border)] bg-[var(--bg)] text-[var(--text-muted)] group-hover:border-[var(--text-muted)] opacity-80"
+                    }`}
                   title={`Shortcut key: ${shortcut}`}
                 >
                   {shortcut}
@@ -155,9 +153,11 @@ function ProfileSection() {
       href="/"
       className="flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-[var(--hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)]"
     >
-      <div className="w-10 h-10 rounded-full bg-[var(--accent)] text-[var(--bg)] text-xs font-semibold flex items-center justify-center flex-shrink-0 select-none border border-[var(--border)]">
-        LW
-      </div>
+      <img
+        src="/head.png"
+        alt="Leon Wu"
+        className="w-10 h-10 rounded-full flex-shrink-0 object-cover border border-[var(--border)]"
+      />
       <div className="flex flex-col min-w-0">
         <span className="text-sm font-semibold tracking-tight text-[var(--text)] leading-tight truncate">
           Leon Wu
@@ -231,9 +231,8 @@ export default function Sidebar() {
 
       {/* Mobile drawer */}
       <aside
-        className={`md:hidden fixed top-12 left-0 bottom-0 z-40 w-64 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col gap-4 p-3 transition-transform duration-200 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`md:hidden fixed top-12 left-0 bottom-0 z-40 w-64 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col gap-4 p-3 transition-transform duration-200 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         aria-label="Site navigation"
       >
         <ProfileSection />

@@ -12,7 +12,8 @@ export interface EducationEntry {
   degree: string;
   institution: string;
   gpa: string;
-  period: string;
+  startDate: string;
+  endDate: string;
   location: string;
 }
 
@@ -50,14 +51,16 @@ export const education: EducationEntry[] = [
     degree: "MS in Computer Science",
     institution: "Northeastern University",
     gpa: "3.9 / 4.0",
-    period: "Expected Dec 2027",
+    startDate: "Sep 2025",
+    endDate: "Expected Dec 2027",
     location: "Seattle, WA",
   },
   {
     degree: "BA in International Business",
     institution: "National Chengchi University",
     gpa: "3.5 / 4.0",
-    period: "Completed",
+    startDate: "Sep 2017",
+    endDate: "Jun 2021",
     location: "Taipei, Taiwan",
   },
 ];
