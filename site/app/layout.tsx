@@ -14,6 +14,15 @@ export const metadata: Metadata = {
   title: "Leon Wu — Software Engineer",
   description:
     "Portfolio of Tsan-Yu (Leon) Wu — full-stack engineer and CS master's student at Northeastern University.",
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png" }],
+  },
+  manifest: "/site.webmanifest",
 };
 
 const themeScript = `

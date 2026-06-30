@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: "Experience — Leon Wu",
     description: "Professional experience and education of Tsan-Yu (Leon) Wu.",
     type: "website",
-    url: "https://your-domain.com/experience",
+    url: "https://www.leon-wu.com/experience",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
-  alternates: { canonical: "https://your-domain.com/experience" },
+  alternates: { canonical: "https://www.leon-wu.com/experience" },
   twitter: {
     card: "summary_large_image",
     title: "Experience — Leon Wu",

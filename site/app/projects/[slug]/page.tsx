@@ -48,7 +48,7 @@ export async function generateMetadata({
       title: `${project.title} — Leon Wu`,
       description: project.description,
       type: "website",
-      url: `https://your-domain.com/projects/${slug}`,
+      url: `https://www.leon-wu.com/projects/${slug}`,
       images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     },
     twitter: {
@@ -57,7 +57,7 @@ export async function generateMetadata({
       description: project.description,
       images: ["/og-image.png"],
     },
-    alternates: { canonical: `https://your-domain.com/projects/${slug}` },
+    alternates: { canonical: `https://www.leon-wu.com/projects/${slug}` },
   };
 }
 

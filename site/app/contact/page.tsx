@@ -8,11 +8,11 @@ export const metadata: Metadata = {
     title: "Contact — Leon Wu",
     description: "Get in touch with Tsan-Yu (Leon) Wu.",
     type: "website",
-    url: "https://your-domain.com/contact",
+    url: "https://www.leon-wu.com/contact",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   alternates: {
-    canonical: "https://your-domain.com/contact",
+    canonical: "https://www.leon-wu.com/contact",
   },
   twitter: {
     card: "summary_large_image",
