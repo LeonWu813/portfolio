@@ -8,23 +8,30 @@ export default function ProjectMobileNav({ projects }: { projects: ProjectEntry[
   const pathname = usePathname();
 
   return (
-    <div className="lg:hidden sticky top-0 z-20 flex gap-2 overflow-x-auto px-4 py-2 border-b border-[var(--border)] bg-[var(--surface)]">
-      {projects.map((project) => {
-        const isActive = pathname === `/projects/${project.slug}` || pathname === `/projects/${project.slug}/`;
-        return (
-          <Link
-            key={project.slug}
-            href={`/projects/${project.slug}`}
-            className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-              isActive
-                ? "bg-[var(--text)] text-[var(--bg)] border-[var(--text)]"
-                : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-muted)]"
-            }`}
-          >
-            {project.title}
-          </Link>
-        );
-      })}
-    </div>
+    <>
+      {/* Fixed bar — top-12 on mobile (below h-12 hamburger), top-0 on md (no hamburger, sidebar takes left side) */}
+      <div className="lg:hidden fixed top-12 md:top-0 left-0 md:left-64 right-0 z-30 flex gap-2 overflow-x-auto px-4 py-2 border-b border-[var(--border)] bg-[var(--surface)]">
+        {projects.map((project) => {
+          const isActive =
+            pathname === `/projects/${project.slug}` ||
+            pathname === `/projects/${project.slug}/`;
+          return (
+            <Link
+              key={project.slug}
+              href={`/projects/${project.slug}`}
+              className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                isActive
+                  ? "bg-[var(--text)] text-[var(--bg)] border-[var(--text)]"
+                  : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-muted)]"
+              }`}
+            >
+              {project.title}
+            </Link>
+          );
+        })}
+      </div>
+      {/* Spacer so content doesn't hide under the fixed bar */}
+      <div className="lg:hidden flex-shrink-0 h-11" />
+    </>
   );
 }
