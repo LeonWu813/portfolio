@@ -8,6 +8,27 @@ export default function ProjectList({ projects }: { projects: ProjectEntry[] }) 
   const pathname = usePathname();
 
   return (
+    <>
+      {/* Mobile: horizontal scrollable project nav */}
+      <div className="lg:hidden flex-shrink-0 flex gap-2 overflow-x-auto px-4 py-2 border-b border-[var(--border)] bg-[var(--surface)]">
+        {projects.map((project) => {
+          const isActive = pathname === `/projects/${project.slug}` || pathname === `/projects/${project.slug}/`;
+          return (
+            <Link
+              key={project.slug}
+              href={`/projects/${project.slug}`}
+              className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                isActive
+                  ? "bg-[var(--text)] text-[var(--bg)] border-[var(--text)]"
+                  : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-muted)]"
+              }`}
+            >
+              {project.title}
+            </Link>
+          );
+        })}
+      </div>
+
     <aside className="hidden lg:flex lg:flex-col w-64 xl:w-72 flex-shrink-0 border-r border-[var(--border)] bg-[var(--surface)] overflow-y-auto">
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-[var(--border)] bg-[var(--surface)] px-5 py-3 flex items-center justify-between">
@@ -46,5 +67,6 @@ export default function ProjectList({ projects }: { projects: ProjectEntry[] }) 
         })}
       </div>
     </aside>
+    </>
   );
 }

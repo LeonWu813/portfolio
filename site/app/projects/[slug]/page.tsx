@@ -155,7 +155,7 @@ export default async function ProjectDetailPage({
                     className="w-full rounded-lg border border-[var(--border)]"
                   />
                 ) : (
-                  <div key={group.key} className="grid grid-cols-2 gap-3">
+                  <div key={group.key} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {group.srcs.map((src, i) => (
                       <img
                         key={i}

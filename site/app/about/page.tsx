@@ -39,9 +39,9 @@ export default function AboutPage() {
             Moved to Seattle for Master degree 🇺🇸 <br></br>
             Have a 3-year-old cat called 方勇吉 🐱
           </p>
-          <div className="flex gap-3 h-80 w-full overflow-hidden">
-            <img className="rounded-sm" src="/IMG_6605.jpg" alt="" />
-            <img className="rounded-sm" src="/IMG_6591.jpg" alt="" />
+          <div className="flex flex-col sm:flex-row gap-3 sm:h-80 w-full">
+            <img className="rounded-sm object-cover w-full sm:w-auto sm:flex-1 sm:min-w-0" src="/IMG_6605.jpg" alt="" />
+            <img className="rounded-sm object-cover w-full sm:w-auto sm:flex-1 sm:min-w-0" src="/IMG_6591.jpg" alt="" />
           </div>
         </section>
         <section className="flex flex-col gap-3">
@@ -49,15 +49,15 @@ export default function AboutPage() {
           <p className="text-base leading-relaxed text-[var(--text)]">
             Ski ⛷️ Snowboard 🏂
           </p>
-          <div className="flex gap-3 h-80 w-full overflow-hidden">
-            <img className="rounded-sm" src="/IMG_6353.jpg" alt="" />
-            <img className="rounded-sm" src="/IMG_6875.JPG" alt="" />
+          <div className="flex flex-col sm:flex-row gap-3 sm:h-80 w-full">
+            <img className="rounded-sm object-cover w-full sm:w-auto sm:flex-1 sm:min-w-0" src="/IMG_6353.jpg" alt="" />
+            <img className="rounded-sm object-cover w-full sm:w-auto sm:flex-1 sm:min-w-0" src="/IMG_6875.JPG" alt="" />
           </div>
           <p className="text-base leading-relaxed text-[var(--text)]">
             Bouldering 🧗
           </p>
-          <div className="flex gap-3 h-80 w-full overflow-hidden">
-            <img className="rounded-sm" src="/4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG" alt="" />
+          <div className="flex flex-col sm:flex-row gap-3 sm:h-80 w-full">
+            <img className="rounded-sm object-cover w-full sm:w-auto sm:flex-1 sm:min-w-0" src="/4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG" alt="" />
           </div>
         </section>
         <section className="flex flex-col gap-3">

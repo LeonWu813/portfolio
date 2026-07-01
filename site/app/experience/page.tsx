@@ -64,9 +64,9 @@ export default function ExperiencePage() {
               : `${item.data.institution}-${startDate}`;
 
             return (
-              <li key={key} className="grid grid-cols-[9rem_1fr]">
+              <li key={key} className="grid grid-cols-1 justify-items-start md:grid-cols-[9rem_1fr]">
                 {/* Left: date */}
-                <div className="pt-1 pr-6 text-right">
+                <div className="pt-1 pr-6 text-left md:text-right">
                   <p className="text-xs text-[var(--text-muted)] leading-5">
                     {startDate} – {endDate}
                   </p>
