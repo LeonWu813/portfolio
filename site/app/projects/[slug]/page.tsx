@@ -82,7 +82,7 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   return (
-    <article className="px-8 py-12 max-w-4xl">
+    <article className="px-8 py-12 pt-[88px] lg:pt-12 max-w-4xl">
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-[28px] font-semibold leading-9 text-[var(--text)] mb-2">
