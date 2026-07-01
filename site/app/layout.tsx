@@ -42,7 +42,7 @@ export default function RootLayout({
         {/* Mobile top-bar spacer */}
         <div className="md:hidden flex-shrink-0 h-12" />
         <div className="md:ml-64 flex-1 flex flex-col min-h-0">
-          <main className="flex-1 flex flex-col overflow-y-auto">
+          <main className="flex-1 flex flex-col overflow-y-auto pb-16 md:pb-0">
             {children}
           </main>
         </div>
