@@ -47,7 +47,7 @@ const timeline: TimelineItem[] = [
 export default function ExperiencePage() {
   return (
     <div className="px-8 py-16 max-w-2xl mx-auto w-full flex flex-col gap-12">
-      <h1 className="text-[30px] font-semibold leading-9 text-[var(--text)]">
+      <h1 className="text-[30px] font-semibold leading-9 text-[var(--text)] mt-5 md:mt-0">
         Experience
       </h1>
 
