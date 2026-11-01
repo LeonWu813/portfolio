@@ -4,11 +4,11 @@
 
 ## Last Action
 
-agent: qa-mod-projects-grid
+agent: qa-mod-project-multi-agent
 mode: regression
-module: mod-projects-grid
-result: success
-next: claude --agent qa-mod-contact "regression" (remaining QA regression runs for rev 1.5/1.6; then the coordinator runs /pstack:thermos and claude --agent tech-lead "phase-end integration review" once every module passes)
+module: mod-project-multi-agent
+result: needs-signoff
+next: the human runs the AC-091 375px test script in project-planning/modules/mod-project-multi-agent/status.md (QA Run 3), then `claude --agent qa-mod-project-multi-agent "ui-results: <what you observed>"`
 timestamp: 2026-11-01T00:00:00Z
 
 ## PM Updates

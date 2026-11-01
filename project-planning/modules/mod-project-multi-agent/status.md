@@ -236,3 +236,35 @@ All 12 ACs pass. Module verified PASS.
 - Deleted site/public/multi-agent.png (git rm). featureImage is /multi-agent-horizontal.png.
 - Build (site/): pass, /projects/multi-agent-system prerendered. Lint (site/): 0 errors, 9 pre-existing warnings.
 - No ACs changed.
+
+## QA Run 3 — Regression after PRD rev 1.5/1.6 — 2026-11-01
+
+**Workflow:** regression (record-file cutover + horizontal feature image; chosen because prior QA Results exist and Engineer spec-update entries are newer)
+**Verdict:** all ACs PASS except AC-091 mobile (375px) part, which needs a human check. Result: needs-signoff.
+
+Evidence: `npm run build` in site/ passes (/projects/multi-agent-system prerendered); `npm run lint` 0 errors, 9 pre-existing warnings. Real HTML fetched from `next start` on a local port; headless Chrome screenshots at 1280 and 375.
+
+- AC-041 PASS: H1 in served HTML.
+- AC-042 PASS: atAGlance (with "+ coordinator" and ProjectDay clause) is in a muted `<p>` under H1.
+- AC-043 PASS: 6 chips: Claude Code, Bash, Python, Git, Multi-agent, Systems Design.
+- AC-044 PASS: three `<p>` with prefix text then `<a>` containing only the label; hrefs correct; target=_blank rel="noopener noreferrer".
+- AC-045 PASS: description in `border-l-2 border-[var(--accent)]` paragraph.
+- AC-046 PASS: 8 h2 in spec order. Headings carry commas ("How it works, end to end"; "What I learned, and what I would improve"), matching spec Sections list and source file.
+- AC-047 PASS: `<strong>` rendered in Design principles and Decisions sections.
+- AC-048 PASS: page.tsx has no fs/marked; data from record file via projects-data.ts import.
+- AC-049/050/051 PASS: unchanged page.tsx (params awaited, dynamicParams=false, generateStaticParams maps projects). /projects/nope returns 404.
+- AC-052 PASS: title, og:title/description/url/type/image, twitter card tags, canonical https://www.leon-wu.com/projects/multi-agent-system all present in HTML.
+- AC-092 PASS: script compared the 31 headings and paragraph blocks on the page against the source md (bold markers stripped): 0 differences, no extras; "Feature image:" editor line absent; caption matches.
+- AC-091 PARTIAL: PASS for image src /multi-agent-horizontal.png (3080x1560, served 200), exact alt text, caption directly below in a figure, and the 1280px screenshot shows the full diagram uncropped, full column width. Old /multi-agent.png returns 404 (deleted, no references). The 375px check is NOT concluded: headless Chrome screenshot at 375 shows content clipped on the right, which looks like a headless minimum-viewport artifact (not conclusive). CSS is `w-full` with no fixed height or object-fit, so no crop is expected, but a human must confirm.
+
+### Human test script (AC-091 at 375px)
+1. Run `npm run build && npx next start` in site/, open /projects/multi-agent-system in a browser.
+2. Use device toolbar at 375px wide (or a phone).
+3. Verify: the whole diagram is visible edge to edge within the column (no clipped edges, no horizontal page scroll), the caption is directly below it, the alt text is present (inspect the img).
+4. Reply with PASS or the observed problem.
+
+### Integration notes (for Tech Lead)
+- og:image and twitter:image resolve to http://localhost:3000/og-image.png in built HTML (no metadataBase set); shared metadata, outside this module's files (MOD-001/003 area).
+
+### Open items
+- [ ] AC-091 needs-signoff — 375px visual check pending human (2026-11-01)
