@@ -4,12 +4,12 @@
 
 ## Last Action
 
-agent: qa-mod-home
+agent: qa-mod-contact
 mode: regression
-module: mod-home
-result: needs-signoff
-next: the human runs the AC-017 above-the-fold script in project-planning/modules/mod-home/status.md (Human sign-off script), then `claude --agent qa-mod-home "ui-results: <what you observed>"`. Previous action still open: AC-091 375px script for mod-project-multi-agent.
-timestamp: 2026-11-01T15:00:00Z
+module: mod-contact
+result: success
+next: QA passed mod-contact (AC-072..078 verified in served HTML). No human check needed. Previous action still open: AC-017 script for mod-home and AC-091 375px script for mod-project-multi-agent.
+timestamp: 2026-11-01T16:00:00Z
 
 ## PM Updates
 

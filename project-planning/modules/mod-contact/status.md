@@ -48,3 +48,27 @@ No contact form on the `/contact` page. No `<form>` or `<input>` elements detect
 **External links target/rel:** PASS — LinkedIn and GitHub both have `target="_blank" rel="noopener noreferrer"`.
 **No next/link for PDF:** PASS — plain `<a>` element used for PDF download.
 **No gold-plating:** PASS — no features beyond spec requirements detected.
+
+---
+
+## QA Results — 2026-11-01 (regression, PRD rev 1.5/1.6, AC-072 intro "2026/2027")
+
+Workflow: regression — prior QA all PASS; Engineer spec-update changed AC-072 only (commit 9396456).
+Lint (site/): PASS, 0 errors (9 pre-existing warnings elsewhere). Build (site/): PASS, /contact static.
+Evidence: real HTML from `next start` on port 3917, curl of /contact.
+
+- AC-072: PASS — `<h1>Contact</h1>`; intro "Looking for a 2026/2027 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it." (apostrophes as &#x27;); no stray space.
+- AC-073: PASS — `<a href="mailto:leon.wu.tsan.yu@gmail.com">leon.wu.tsan.yu@gmail.com</a>`.
+- AC-074: PASS — LinkedIn href/text/target/rel correct.
+- AC-075: PASS — GitHub href/text/target/rel correct.
+- AC-076: PASS — `<a href="/Leon_cv.pdf" download="Leon_Wu_Resume.pdf">Download resume (PDF)</a>`; /Leon_cv.pdf returns HTTP 200.
+- AC-077: PASS — 0 `<form>`, 0 `<input>`.
+- AC-078: PASS — title "Contact — Leon Wu"; canonical and og:url https://www.leon-wu.com/contact (the earlier placeholder domain is gone); og and twitter tags present.
+
+Human sign-off: not needed (text-only copy change).
+
+### Integration notes (for Tech Lead)
+- og:image / twitter:image resolve to http://localhost:3000/og-image.png because no metadataBase is set (build warning). Not a MOD-010 AC, but affects social previews in production.
+
+### Open items
+- (none)
