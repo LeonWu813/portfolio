@@ -4,11 +4,11 @@
 
 ## Last Action
 
-agent: engineer-mod-contact
-mode: spec-update
-module: mod-contact
+agent: qa-mod-projects-grid
+mode: regression
+module: mod-projects-grid
 result: success
-next: claude --agent qa-mod-contact "regression"
+next: claude --agent qa-mod-contact "regression" (remaining QA regression runs for rev 1.5/1.6; then the coordinator runs /pstack:thermos and claude --agent tech-lead "phase-end integration review" once every module passes)
 timestamp: 2026-11-01T00:00:00Z
 
 ## PM Updates

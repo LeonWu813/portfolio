@@ -89,3 +89,34 @@ No features implemented beyond spec. Extra styling (border-r, bg-[var(--surface)
 ### Overall Result
 
 **QA PASS** — All 8 acceptance criteria (AC-019 through AC-026) verified. Build clean. No regressions, no gold-plating, no spec violations.
+
+---
+
+## QA Results — regression (2026-11-01)
+
+**Workflow:** regression (prior QA PASS on rev 1.3; Engineer commits cdec492 and f95eb9d changed the module for rev 1.5/1.6). Spec rev verified: 1.6. Checked against the production build served with `next start` and the real HTML. No UI-only AC needed a human.
+
+- `npm run build` (site/): PASS. Static pages include /projects/multi-agent-system, projectday, siteplus, tabvault. `eslint .`: 0 errors, 9 pre-existing img warnings. self-check.sh not run (root package.json issue, as instructed).
+- Record files: all four exist (siteplus, multi-agent-system, tabvault, projectday); each has one `import type { ProjectEntry }` line and one named export (CONV-005). `projects-data.ts` holds only the interfaces and `projects = [multiAgentSystem, projectday, siteplus, tabvault]` (CONV-001/002/005). MOD-004/005/006/011 status files each confirm their record file.
+
+**PASS AC-019**: GET /projects returns 307 with `location: /projects/multi-agent-system`.
+**PASS AC-020**: project aside is `w-64 xl:w-72` on all four slugs.
+**PASS AC-021**: the aside shows title and tech on each of the four rows (HTML checked).
+**PASS AC-022**: exactly one row has `bg-[var(--text)] text-[var(--bg)]` on each slug page, and it is the matching slug.
+**PASS AC-023**: right panel `flex-1 overflow-y-auto` wraps children.
+**PASS AC-024**: layout class is `flex flex-col flex-1 min-h-0 overflow-hidden lg:flex-row`. It contains the required classes; flex-col and lg:flex-row are the as-built mobile-nav addition, which is not a violation. Body class unchanged since prior QA.
+**PASS AC-025**: aside is `hidden lg:flex`.
+**PASS AC-026**: ProjectList, layout and page iterate `projects` with no hard-coded slugs. `generateStaticParams` is data-driven.
+**PASS AC-086**: ProjectDay is row 2 (title "ProjectDay", tech "Mobile · React Native · Supabase · AWS") and is active on /projects/projectday.
+**PASS AC-089 (template side)**: projectday renders no `<figure>` and no broken image. Feature images are `w-full` with no fixed height or object-fit, so there is no cropping at any width (checked from classes and HTML, not rendered at 1280/375).
+**PASS AC-091 (template side)**: /projects/multi-agent-system renders `<figure>` with `/multi-agent-horizontal.png`, the exact proposed alt text, and the caption in `<figcaption>` directly below. `height="500px"` is absent on all pages.
+**PASS AC-092 (frame side)**: links render as plain prefix plus `<a>` label only ("GitHub: <a>TabVault repo</a>"). The "Feature image:" editor's line does not appear. Word-for-word content belongs to MOD-005 and was not verified here.
+**PASS** projectday renders no links row (links empty). `ProjectMobileNav` iterates `projects` in the same order.
+
+Non-blocking observation: siteplus and tabvault feature images render with `alt=""` because those records have no `featureImageAlt`. The spec does not require alt for them, so this is not a failure. It is an accessibility note for MOD-004 and MOD-006.
+
+### Integration notes (for Tech Lead)
+None. scan-integration.sh was not run (build/HTML verification only).
+
+### Open items
+- none
