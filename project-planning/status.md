@@ -5,13 +5,13 @@
 ## Last Action
 
 ```
-agent: tech-lead
-mode: change-review
+agent: pm
+mode: change
 module: n/a
-next: Leon answers D1-D4 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.4 cross-module)", then claude --agent pm "change: rev 1.5 — Source Paths for the shared project files and PRD records of the as-built site, per Tech Lead review 2026-11-01 and Leon's answers" (proposal pass). Do not run the MOD-005/003/002/011 engineers until that change is synced.
 result: needs-human
-timestamp: 2026-11-01T14:00:00Z
-Previous action: doc-sync delta for PRD rev 1.4 (8fb7253).
+next: show project-planning/pm-proposals/2026-11-01-rev-1-5-as-built-and-source-paths.md to Leon; on approval (with the P1-P6 values pasted per Q2) run claude --agent pm "apply 2026-11-01-rev-1-5-as-built-and-source-paths.md" with his exact words quoted. Do not run the MOD-005/003/002/011 engineers until rev 1.5 is synced.
+timestamp: 2026-11-01T15:00:00Z
+Previous action: tech-lead change-review (f7de263), D1-D4 answered by Leon.
 ```
 
 ---
