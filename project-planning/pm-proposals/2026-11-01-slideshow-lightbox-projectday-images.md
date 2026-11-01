@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: interview Slideshow (menu and project tracks), image overlay, ProjectDay screenshots, Experience page per the CV, TabVault no longer live
 
