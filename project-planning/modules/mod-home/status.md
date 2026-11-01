@@ -46,3 +46,9 @@ Spec requires all hero content to be visible above-the-fold on a standard laptop
 **No blog card:** PASS — no blog content detected.
 **Server Component:** PASS — no `'use client'` directive in `site/app/page.tsx`.
 **No gold-plating:** PASS — no features beyond spec requirements detected.
+
+### 2026-11-01 — spec-update (E1 = A2 step 5): no-change verification
+- No code change to site/app/page.tsx. Verified against spec (PRD 4.1 rev 1.5/1.6): AC-011..018 and AC-087 met; copy untouched.
+- Projects list renders from `projects` array: Multi-Agent, ProjectDay (2nd), SitePlus+, TabVault; each links /projects/<slug>, title + tech, no date. ProjectDay: /projects/projectday, "Mobile · React Native · Supabase · AWS".
+- `npm run lint` in site/: 0 errors (9 pre-existing img warnings, other modules). `npm run build`: pass, all four project routes prerendered.
+- Self-check items: build pass, lint pass, Server Component pass, no new deps pass, no hardcoded config pass.
