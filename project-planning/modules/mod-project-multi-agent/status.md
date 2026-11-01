@@ -230,3 +230,9 @@ No `fs.readFileSync`, `marked`, or filesystem import in page.tsx. Import remains
 | AC-052 | FAIL | REGRESSION PASS — fixed |
 
 All 12 ACs pass. Module verified PASS.
+
+### Engineer run: spec-update, E1 = A2 step 4 (delete legacy image)
+- grep for "multi-agent.png" in site (excl. node_modules, .next): no references.
+- Deleted site/public/multi-agent.png (git rm). featureImage is /multi-agent-horizontal.png.
+- Build (site/): pass, /projects/multi-agent-system prerendered. Lint (site/): 0 errors, 9 pre-existing warnings.
+- No ACs changed.

@@ -4,11 +4,11 @@
 
 ## Last Action
 
-agent: engineer-mod-projects-grid
+agent: engineer-mod-project-multi-agent
 mode: spec-update
-module: mod-projects-grid
+module: mod-project-multi-agent
 result: success
-next: claude --agent qa-mod-projects-grid \"regression\"
+next: claude --agent qa-mod-project-multi-agent "regression"
 timestamp: 2026-11-01T00:00:00Z
 
 ## PM Updates
