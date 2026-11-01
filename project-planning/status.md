@@ -4,12 +4,12 @@
 
 ## Last Action
 
-agent: qa-mod-project-marketing
+agent: qa-mod-project-tabvault
 mode: regression
-module: mod-project-marketing
+module: mod-project-tabvault
 result: success
-next: all ACs pass for mod-project-marketing. Previous action still open: the human runs the AC-091 375px script in project-planning/modules/mod-project-multi-agent/status.md (QA Run 3), then `claude --agent qa-mod-project-multi-agent "ui-results: <what you observed>"`. After that, the coordinator runs /pstack:thermos on the phase's changes, then `claude --agent tech-lead "phase-end integration review"` if every module in the phase passes.
-timestamp: 2026-11-01T13:00:00Z
+next: all ACs pass for mod-project-tabvault. Previous action still open: the human runs the AC-091 375px script in project-planning/modules/mod-project-multi-agent/status.md (QA Run 3), then `claude --agent qa-mod-project-multi-agent "ui-results: <what you observed>"`. After every module in the phase passes, the coordinator runs /pstack:thermos, then `claude --agent tech-lead "phase-end integration review"`.
+timestamp: 2026-11-01T14:00:00Z
 
 ## PM Updates
 

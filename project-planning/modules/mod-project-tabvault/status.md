@@ -231,3 +231,35 @@ PASS. `spec.md` contains no HTML template comments.
 | AC-064 | FAIL | REGRESSION PASS | OG, Twitter card, canonical all present |
 
 **Overall result: PASS — all 12 ACs pass. No regressions. All 3 previously failing ACs are now fixed.**
+
+---
+
+## QA Run 3 — Regression (PRD 1.5/1.6 record-file cutover) — 2026-11-01
+
+**Workflow:** regression (record file site/data/projects/tabvault.ts created 501fd95; MOD-003 cutover f95eb9d). Spec rev 1.6.
+**Evidence:** `npm run build` in site/ passes (/projects/tabvault SSG); `npm run lint` 0 errors, 9 pre-existing warnings; `next start` on :3917, real HTML fetched with curl. No automated test suite (static site). `.claude/skills/verify` not used.
+
+| AC | Result | Evidence |
+|----|--------|----------|
+| AC-053 | PASS | HTML `<h1>TabVault` |
+| AC-054 | PASS | atAGlance text matches verbatim (record file), muted style unchanged |
+| AC-055 | PASS | 8 tags in record; labels incl. "Chrome Extension (MV3)" in HTML |
+| AC-056 | PASS | HTML: `Live: <a href="https://tab-vault.com" target="_blank" rel="noopener noreferrer">tab-vault.com</a>`; `GitHub: <a href="https://github.com/LeonWu813/tab-management" ...>tab-management</a>`; prefix outside the anchor |
+| AC-057 | PASS | `<p ... border-l-2 border-[var(--accent)] pl-4>` description |
+| AC-058 | PASS | h2s in order: The problem, My role, How it works, end to end, Images, Architecture, Key engineering decisions, Challenges and how I resolved them, Impact, What I learned, and what I would improve. Images section items = `/tabvault-mobile.jpeg`, `/tabvault-plugin.png` in order, no paragraphs; all other sections have paragraphs. (Spec says "nine" and lists nine headings; matches.) Feature image /tabvault-home.png renders before sections; files exist in site/public. |
+| AC-059 | PASS | 8 `<strong>` in HTML (e.g. "Scheduled jobs that survive ephemeral infrastructure.") |
+| AC-060 | PASS | Content from site/data/projects/tabvault.ts (type-only import of ProjectEntry, one export `tabvault`); imported in projects-data.ts and in `projects` array; no fs/readFileSync in page.tsx |
+| AC-061 | PASS | unchanged page.tsx (awaits params) ; build OK |
+| AC-062 | PASS | /projects/nope returns 404 |
+| AC-063 | PASS | generateStaticParams maps projects; build lists tabvault |
+| AC-064 | PASS | title "TabVault — Leon Wu"; og:title/description/url/type/image, twitter:card/title/description/image, canonical `https://www.leon-wu.com/projects/tabvault` all present |
+
+Other: no 'use client'; no gold-plating; spec has no template comments; CONV-005 shape satisfied. Images alt="" (spec defines no alt for section images; not a failure).
+
+### Integration notes (for Tech Lead)
+- og:image / twitter:image render as `http://localhost:3000/og-image.png` in the local build (relative URL resolved against default metadataBase). Not MOD-006 (page-level template, MOD-003/MOD-001); verify metadataBase is set for production deploy.
+
+**Overall: PASS — all 12 ACs. No human sign-off needed.**
+
+### Open items
+- (none)
