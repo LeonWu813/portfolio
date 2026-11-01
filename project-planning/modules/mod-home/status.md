@@ -52,3 +52,30 @@ Spec requires all hero content to be visible above-the-fold on a standard laptop
 - Projects list renders from `projects` array: Multi-Agent, ProjectDay (2nd), SitePlus+, TabVault; each links /projects/<slug>, title + tech, no date. ProjectDay: /projects/projectday, "Mobile · React Native · Supabase · AWS".
 - `npm run lint` in site/: 0 errors (9 pre-existing img warnings, other modules). `npm run build`: pass, all four project routes prerendered.
 - Self-check items: build pass, lint pass, Server Component pass, no new deps pass, no hardcoded config pass.
+
+### 2026-11-01 — QA regression (spec rev 1.6; replaces the 2026-06-28 results above)
+**Workflow:** regression — spec updated for PRD rev 1.5/1.6, engineer no-change verification (bd95835), MOD-003 cutover (f95eb9d) changed the rendered array. Checked against real HTML from `next start` (port 3107) after build.
+**Lint:** PASS (0 errors, 9 pre-existing img warnings in other modules). **Build:** PASS (13 static pages, all 4 project routes prerendered).
+
+- AC-011: PASS — HTML `<h1>Hey, I&#x27;m Leon 👋</h1>`.
+- AC-012: PASS — no subtitle in `<main>` after the H1 (the "Full-Stack Engineer" text is only in the Sidebar, MOD-001).
+- AC-013: PASS — bio verbatim in HTML (sentence form with periods per spec).
+- AC-014: PASS — status line verbatim ("2026/2027 ... internship").
+- AC-015: PASS — "Connect on LinkedIn", href linkedin.com/in/leon-wu-tsan-yu/, target=_blank, rel="noopener noreferrer".
+- AC-016: PASS — "Reach out" href="/contact".
+- Tertiary CTA: PASS — "Download CV" href=/Leon_cv.pdf download=Leon_Wu_Resume.pdf.
+- AC-017: PENDING HUMAN — needs a browser render at laptop viewport (not verifiable from HTML).
+- AC-018: PASS — title "Home — Leon Wu"; og:title/description/image/url/type; twitter:card/title/description/image; canonical and og:url = https://www.leon-wu.com/.
+- AC-087: PASS — projects list order Multi-Agent, ProjectDay, SitePlus+, TabVault; ProjectDay href=/projects/projectday, "Mobile · React Native · Supabase · AWS", no date; all entries link to /projects/<slug>, title + tech, no dates.
+- Other: no headshot, no blog content, Server Component (no 'use client'), no gold-plating. PASS.
+
+### Integration notes (for Tech Lead)
+- `og:image` and `twitter:image` render as `http://localhost:3000/og-image.png` because no `metadataBase` is set (build warning). Spec does not require an absolute domain for images, so not a failure, but social previews in production would point at localhost. Also `asset/og-image.png` is untracked at repo root; check `site/public/og-image.png` exists.
+
+### Human sign-off script (AC-017)
+1. `cd site && npm run build && npx next start`, open http://localhost:3000/ at about 1280x800.
+2. Without scrolling, confirm H1, bio, status line and all three buttons (Connect on LinkedIn, Reach out, Download CV) are visible.
+3. Click Download CV: file saves as Leon_Wu_Resume.pdf.
+
+### Open items
+- [ ] AC-017 needs-signoff — above-the-fold check at laptop viewport needs a human (2026-11-01)
