@@ -1,316 +1,353 @@
 # Interview Deck (Slideshow page)
 
-Editor's note (not page copy): this deck is built from the interview-slides guide the user supplied on 2026-11-01. Every slide title is a full sentence, so reading only the titles tells the story. Body text stays under about 50 words per slide. Speaker notes are for the presenter only and are never shown on the slide.
+Editor's note (not page copy): built from the interview-slides guide the user supplied on 2026-11-01, revised the same day with the user's notes. Slide-copy rules: titles state the point in about 7 words; bullets are about 6 words, 3 to 4 per slide; a content slide carries about 30 words; everything else goes in the speaker notes, which never show on screen.
 
-Editor's note (not page copy): structure, revised 2026-11-01 at the user's request. The deck is one intro slide, one project menu, four project tracks, and one closing slide. In each interview the presenter picks one track from the menu, so a 10-minute talk is: Intro, Menu, one track, Thank you.
+Editor's note (not page copy): structure. Three "about me" slides, then a project menu. The presenter picks one project; each project starts with three big numbers, then a short intro, then role and tech stack, then the story. After a project's last slide the menu comes back, so the presenter can show another project or stop there. There is no Thank-you slide; contact links sit in the menu's footer.
 
 ```
-Intro → Menu ─┬─ A Multi-Agent System (7 slides) ─┐
-              ├─ B ProjectDay         (7 slides) ─┤
-              ├─ C SitePlus+          (7 slides) ─┼→ Thank you
-              └─ D TabVault           (4 slides) ─┘
+Hi, I'm Leon → Timeline → Life in Seattle → Menu ─┬─ Multi-Agent System (7) ─┐
+                                                  ├─ ProjectDay         (7) ─┤
+                 ┌────────────────────────────────┼─ SitePlus+          (7) ─┤
+                 └─ Menu again (pick another) ←───┴─ TabVault           (5) ─┘
 ```
 
-Editor's note (not page copy): tailoring. The intro's top line uses a default that the URL can override, for example `/slideshow?role=Backend%20Intern&company=Acme`. Without parameters it reads "Applying for Software Engineering Intern roles". A `project` parameter (`multi-agent`, `projectday`, `siteplus`, `tabvault`) pre-selects a track, so after the menu the next key press enters that track.
+Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projectday`, `siteplus`, `tabvault`) pre-selects a project, so the next key press on the menu enters it.
 
 ---
 
-## Slide 1: Intro
+## About me
 
-**Top line:** Leon Wu / Applying for {role} at {company}
-(default: "Leon Wu / Applying for Software Engineering Intern roles")
+### 1: Hi, I'm Leon
 
-**Claim:** I build production software end to end, and I build AI systems that ship software reliably.
+**Title:** Hi, I'm Leon
 
-**Proof points:**
-- **~60%** less recurring analytics work at the company that adopted SitePlus+, my full-stack platform
-- **2 products** shipped by my multi-agent system: TabVault (live) and ProjectDay (iOS, submitted to the App Store)
-- **3.9 GPA**, MS in Computer Science at Northeastern, after 4 years in industry, 2 as a front-end developer
+**Visual:** headshot (`head.png`).
 
-**Speaker notes:** Hi, I'm Leon. I'm a CS master's student at Northeastern, and before that I spent four years in industry in Taiwan, first in growth marketing, then as a front-end developer. I taught myself to code because I wanted to build the things I was responsible for. Today I work across the stack, Java and Spring Boot, React and TypeScript, AWS, and I spend a lot of time on one question: how do you make AI agents produce software you can actually trust? Let me show you something I built.
+**Titles:**
+- Full-Stack Engineer
+- AI Systems Builder
+- MS Computer Science, Northeastern (3.9 GPA)
+
+**Speaker notes:** I'm a CS master's student at Northeastern in Seattle. I work across the stack, Java and Spring Boot, React and TypeScript, AWS, and I build AI agent systems that ship software. Today I'll show you one project in depth.
+
+### 2: Timeline
+
+**Title:** From marketing to engineering
+
+**Timeline:**
+- **2017 to 2021:** BA International Business, National Chengchi University, Taipei
+- **2021 to 2023:** Growth Marketer / Marketing PM, GoFreight, Taipei
+- **2023 to 2025:** Front-End Developer, Exascend, Taipei
+- **2025 to 2027:** MS Computer Science, Northeastern University, Seattle
+
+**Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 350%. Now I'm at Northeastern to deepen the fundamentals.
+
+### 3: Life in Seattle
+
+**Title:** Based in Seattle, usually on snow or a wall
+
+**Visual:** snowboarding photo (`IMG_6875.JPG`) and bouldering photo (`4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG`).
+
+**Captions:**
+- Snowboarding
+- Bouldering
+
+**Speaker notes:** Weekends in winter I'm snowboarding in the Cascades. The rest of the year I'm at a bouldering gym, which is where the idea for ProjectDay came from.
 
 ---
 
-## Slide 2: Project menu
+## Menu
 
-**Title:** Here are four things I've built. Which one would you like to see?
+### 4: Project menu
+
+**Title (first time):** Pick a project
+**Title (after a project):** Pick another project
 
 **Cards (click, or press 1 to 4):**
-1. **Multi-Agent System:** Six AI agents that plan, build and ship software
-2. **ProjectDay:** An iOS bouldering app my agent system built
-3. **SitePlus+:** A full-stack platform a real company uses in production
-4. **TabVault:** A live tab manager with three clients
+1. **Multi-Agent System:** An AI dev team with a human in charge
+2. **ProjectDay:** An iOS climbing app my agents built
+3. **SitePlus+:** Analytics a real company runs on
+4. **TabVault:** Save a tab now, find it later
 
-**Speaker notes:** Pick the track that matches the job description before the interview. If they ask about a second project at the end, press M to come back here.
+A project already shown in this session is marked "Shown".
+
+**Footer:** leon-wu.com · github.com/LeonWu813 · linkedin.com/in/leon-wu-tsan-yu · leon.wu.tsan.yu@gmail.com
+
+**Speaker notes:** Pick the project that best matches the job description before the interview.
 
 ---
 
-## Track A: Multi-Agent Software Development System
+## Track A: Multi-Agent Development System
 
-### A1: The pitch
+### A1: Numbers
 
-**Title:** My multi-agent system lets one developer ship real products with AI agents, without losing control of the code.
-
-**Visual:** TabVault home screenshot (`tabvault-home.png`).
-
-**Body:** Six specialized Claude Code agents plan, build and verify software. A human approves every handoff.
-
-**Speaker notes:** It's a development team made of AI agents: a PM, a Tech Lead, Engineers, QA, and two support roles. I'm the human in the loop. TabVault, on screen, is one of the two products it shipped.
-
-### A2: The problem
-
-**Title:** A single AI coding agent loses the plot on a real project.
-
-**Body:**
-- Context drifts over a long session
-- Earlier decisions get quietly overwritten
-- There is no clean way to review or undo a bad step
-
-**Speaker notes:** I hit this after building SitePlus+ on my own. The question was whether I needed a better prompt or a better system. I decided it was the system.
-
-### A3: The solution, shown
-
-**Title:** Six agents, each with one job, hand work to each other through documents and git.
-
-**Visual:** the horizontal workflow diagram (`multi-agent-horizontal.png`), full width.
-
-**Body:** PM writes requirements. Doc-Sync turns them into one spec per module. Engineer builds, QA verifies in the running app. Tech Lead reviews the whole phase.
-
-**Speaker notes:** Walk the diagram left to right. Point at the human approval on every arrow.
-
-### A4: How it works
-
-**Title:** I chose strict information boundaries over shared context, and accepted an extra sync step.
-
-**Body:**
-- **Least privilege:** each agent sees only its own files and spec.
-- **Trade-off:** Doc-Sync carries context forward. One more step, but each agent stays small enough to trust.
-- **Safety net:** every handoff is a git commit, so any step can be rolled back.
-
-**Speaker notes:** An Engineer never sees the full requirements, only its module spec. A scope check runs three times on every change. If they ask why not one big agent: a mistake stays contained in one module instead of spreading.
-
-### A5: The hardest part
-
-**Title:** The hardest part was making QA admit what it could not check.
-
-**Body:** Early QA runs passed code on reading alone. Now backend QA must hit a real running server, and UI checks a machine can't judge go to a person as a test script.
-
-**Speaker notes:** Nothing passes unless someone exercised it in the running app. This is the part I'm proudest of: the most trustworthy piece of the system is the one that says "I can't verify this, please check."
-
-### A6: The results
-
-**Title:** The system shipped two real products and caught its own failures.
+**Title:** Multi-Agent Development System
 
 **Big numbers:**
-- **2** products shipped: TabVault (live on AWS) and ProjectDay (iOS, submitted to the App Store)
-- **1,500+** commits on ProjectDay
-- **217** acceptance criteria verified
-- **88** integration-review items, each decided by a human
-- **18** improvement proposals from the first retrospective, now part of the framework
+- **3** products shipped
+- **6**-agent dev team
+- **6** skills created
 
-**Speaker notes:** Failures stayed inside one module instead of cascading. Every step is reviewable and reversible through git.
+**Speaker notes:** The three products are TabVault, ProjectDay, and this portfolio site. The six skills are the shared rulebooks the agents read: PRD format, doc sync, coding conventions, the engineer checklist, the QA checklist, and integration review.
 
-### A7: What I learned
+### A2: Intro
 
-**Title:** Reliable software comes from the system around the code, and that is what I bring to a team.
+**Title:** An AI dev team with a human in charge
 
-**Body:**
-- **Lesson:** most of my iterations went into boundaries and handoffs, not prompts.
-- **Next:** measure handoff success and time to ship, instead of judging by feel.
-- **For you:** clear specs, small reviewable changes and honest testing.
+**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with Retrospective feeding improvements back, and a bar under it reading "I approve every handoff".
 
-**Speaker notes:** I'm used to clear specs, small reviewable changes and honest testing, the same habits your team relies on. Name one problem from their job description or product that matches.
+**Speaker notes:** PM writes the requirements. Doc-Sync turns them into one spec per module. An Engineer builds each module and QA tests it in the running app. The Tech Lead reviews the whole phase. Retrospective proposes improvements to the system itself.
+
+### A3: Role and stack
+
+**Title:** My role and stack
+
+**Role:** Sole architect and builder
+
+**Stack:** Claude Code (subagents, skills, hooks) · Bash · Python · Git
+
+### A4: Problem
+
+**Title:** One AI agent loses the plot
+
+**Bullets:**
+- Context drifts over long sessions
+- Earlier decisions get overwritten
+- No clean way to undo
+
+**Speaker notes:** I hit this after building SitePlus+ on my own. The question was whether I needed a better prompt or a better system.
+
+### A5: Key decision
+
+**Title:** Strict boundaries over shared context
+
+**Bullets:**
+- Each agent sees only its spec
+- Scope check on every change
+- Every handoff is a git commit
+- Cost: one extra sync step
+
+**Speaker notes:** An Engineer never sees the full requirements. A mistake stays inside one module instead of spreading, and any step can be rolled back.
+
+### A6: Hardest part
+
+**Title:** Hardest part: making QA honest
+
+**Bullets:**
+- Early QA passed code by reading it
+- Now: real server, real requests
+- People check what machines can't
+
+**Speaker notes:** UI checks a machine can't judge go to a person as a written test script. Nothing passes unless someone exercised it in the running app.
+
+### A7: Lesson
+
+**Title:** The system matters more than the prompt
+
+**Bullets:**
+- Most fixes: boundaries, not prompts
+- Next: measure handoff success
+- For your team: clear specs, small changes, honest tests
+
+**Speaker notes:** On ProjectDay alone: over 1,500 commits, 217 acceptance criteria, 88 integration-review items each decided by a human, and 18 improvement proposals from the first retrospective.
 
 ---
 
 ## Track B: ProjectDay
 
-### B1: The pitch
+### B1: Numbers
 
-**Title:** ProjectDay helps climbers in Taiwan log a climb in seconds and find beta videos for the exact route.
+**Title:** ProjectDay
+
+**Big numbers:**
+- **12** modules
+- **13** gyms in Taipei
+- **1,500+** commits
+
+**Speaker notes:** Built with my multi-agent system and submitted to the App Store in October 2026.
+
+### B2: Intro
+
+**Title:** A climbing log for Taiwan's gyms
 
 **Visual:** the ProjectDay three-screen image (Home, Gyms, Route).
 
-**Body:** An iOS app built with React Native, Supabase and AWS. Submitted to the App Store in October 2026.
+**Bullets:**
+- Log a climb in 4 taps
+- Watch beta for that exact route
+- Submitted to the App Store
 
-**Speaker notes:** "Beta" is climbing slang for how to climb a route. The interface on screen is Traditional Chinese because the app is Taiwan-first; it also runs in English.
+**Speaker notes:** "Beta" is climbing slang for how to climb a route. The interface is Traditional Chinese because the app is Taiwan-first; it also runs in English.
 
-### B2: The problem
+### B3: Role and stack
 
-**Title:** Indoor climbers in Taiwan have no app built for their gyms.
+**Title:** My role and stack
 
-**Body:**
-- International apps focus on outdoor crags and are not localized
-- Beta videos live on PTT and Instagram, impossible to find again for one route
-- My targets: log a send in under 30 seconds, a video playable within 60 seconds of upload
+**Role:** Product owner; built with my multi-agent system
 
-**Speaker notes:** Indoor bouldering is growing fast in Taiwan. The only local app just logs sends.
+**Stack:** React Native / Expo · TypeScript · Supabase (Postgres, Auth, Edge Functions) · AWS (S3, MediaConvert, CloudFront, CDK) · EAS · GitHub Actions
 
-### B3: The solution, shown
+### B4: Problem
 
-**Title:** A climber logs a send in four taps, then watches beta for that exact route.
+**Title:** Taiwan's indoor climbers have no app
 
-**Visual:** Route, Route-beta and Profile screenshots side by side.
+**Bullets:**
+- Global apps target outdoor crags
+- Beta videos lost on Instagram
+- Local app only logs climbs
 
-**Body:** 13 gyms in Taipei and New Taipei, route lists by grade and hold color, follows, likes and push notifications. English and Traditional Chinese, light and dark.
+### B5: Key decision
 
-**Speaker notes:** Route data comes from climbers, so adding a route checks for duplicates first.
+**Title:** Video moved from Supabase to AWS
 
-### B4: How it works
+**Visual:** flow chips: Upload → S3 → MediaConvert → CloudFront.
 
-**Title:** I moved video from Supabase Storage to AWS, accepting a second cloud to manage.
+**Bullets:**
+- iPhone HDR looked overexposed
+- No CDN for playback
+- Cost: a second cloud to run
 
-**Body:** Uploads go straight to S3. MediaConvert makes one H.264 MP4 and maps iPhone HDR to SDR. CloudFront serves short-lived signed URLs. The database stores only a key, never a URL.
+**Speaker notes:** MediaConvert makes one H.264 MP4 and maps HDR to SDR. CloudFront serves short-lived signed URLs, and the database stores only a key, never a URL.
 
-**Speaker notes:** The first version stored originals in Supabase. HDR clips looked overexposed and there was no CDN, and a bigger Supabase plan fixed neither. Clips with no audio track failed in MediaConvert, so the job now retries them once as video-only.
+### B6: Hardest part
 
-### B5: The hardest part
+**Title:** Caught a privacy hole before launch
 
-**Title:** The hardest part was finding a privacy hole before launch.
+**Bullets:**
+- Backfill copied any storage path
+- Users could copy private videos
+- Fix: owner-prefix check
 
-**Body:** A security audit I ran before release found that the video backfill copied any storage path a user supplied, so one user could copy another's private video. An owner-prefix check closed it.
+**Speaker notes:** I ran an independent security audit before release. It also found a permission check copied into five places and starting to drift.
 
-**Speaker notes:** The same audit flagged a permission check copied into five places and starting to drift. Another hard lesson: the database migrations failed to replay from zero four times, so replaying from zero is now a CI step.
+### B7: Lesson
 
-### B6: The results
+**Title:** Mocked tests can lie
 
-**Title:** ProjectDay reached the App Store with every decision on the record.
-
-**Big numbers:**
-- **12** modules, built by my multi-agent system
-- **73** database migrations, replayed from zero in CI
-- **217** acceptance criteria verified
-- **88** integration-review items, each decided by me
-
-**Speaker notes:** Version 1.0.0 went through TestFlight and was submitted in October 2026. 1.0.1 is ready to follow.
-
-### B7: What I learned
-
-**Title:** Mocked tests can lie, so every module now gets a real native build before QA.
-
-**Body:**
-- **Lesson:** a native module passed every Jest test and still broke the iOS build.
-- **Next:** Android, an offline queue for logging sends, product analytics.
-- **For you:** I test against the real platform, not only mocks.
-
-**Speaker notes:** Code written outside the agent flow also needs a way in: a large design branch merged directly forced spec updates on nine modules, so the framework now has an intake path for outside code.
+**Bullets:**
+- Passed Jest, broke the iOS build
+- Now: native build before QA
+- Next: Android, offline logging
 
 ---
 
 ## Track C: SitePlus+
 
-### C1: The pitch
+### C1: Numbers
 
-**Title:** SitePlus+ lets a site owner track behavior, campaigns and SEO in one place, without weekly manual reports.
+**Title:** SitePlus+
+
+**Big numbers:**
+- **~60%** less analytics work
+- **2** availability zones
+- **0** code changes to scale out
+
+**Speaker notes:** Stateless JWT auth meant adding the second server needed no code changes.
+
+### C2: Intro
+
+**Title:** Analytics, campaigns and SEO in one place
 
 **Visual:** SitePlus+ home screenshot (`siteplusplus-home.jpg`).
 
-**Body:** A full-stack platform I designed, built and deployed on my own. A real company uses it in production.
+**Bullets:**
+- One snippet in, one dashboard out
+- Used in production by a real company
 
-**Speaker notes:** Java and Spring Boot, React and TypeScript, PostgreSQL and Redis, on AWS.
+### C3: Role and stack
 
-### C2: The problem
+**Title:** My role and stack
 
-**Title:** A small company spent hours every week assembling the same marketing numbers by hand.
+**Role:** Sole engineer, full stack and AWS
 
-**Body:** Page views, campaign results and SEO checks lived in separate places, so every report repeated the same manual gathering.
+**Stack:** Java 21 / Spring Boot · React / TypeScript · Redux · PostgreSQL · Redis · Docker · GitHub Actions · AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) · Cloudflare
 
-**Speaker notes:** I wanted something a site owner installs once and then relies on.
+### C4: Problem
 
-### C3: The solution, shown
+**Title:** Hours of manual reports, every week
 
-**Title:** Install one snippet, then read every number on one dashboard.
+**Visual:** SitePlus+ reports screenshot (`siteplusplus-reports.jpeg`).
 
-**Visual:** SitePlus+ reports and sites screenshots side by side.
+**Bullets:**
+- Data spread across tools
+- Same gathering every report
+- Goal: install once, rely on it
 
-**Body:** A tracking snippet captures views, clicks and form submissions. The dashboard shows events over time, top pages, channels and countries. The SEO auditor re-checks a page a week later and emails a comparison.
+### C5: Key decision
 
-### C4: How it works
+**Title:** Public writes, private reads
 
-**Title:** The tracking endpoint has to be public, so I moved security to the read side.
+**Bullets:**
+- Snippet can't carry a login
+- Anyone writes, only the owner reads
+- Redis rate limit shared by both servers
 
-**Body:** A visitor's browser has no credentials, so anyone can write an event, but only the site owner can read events back. A rate limit kept in Redis, shared by both servers, stops abuse of the open write path.
+**Speaker notes:** A per-server counter would have doubled the real limit behind the load balancer. Every resource hangs off a Site owned by a User, so one ownership check protects everything.
 
-**Speaker notes:** A per-server counter would have doubled the real limit behind the load balancer. Every resource hangs off a Site owned by a User, so one ownership lookup protects everything downstream.
+### C6: Hardest part
 
-### C5: The hardest part
+**Title:** A CORS bug my logs never saw
 
-**Title:** The hardest bug was a CORS failure that never reached my server.
+**Bullets:**
+- Cloudflare intercepted preflight requests
+- Fix: a Worker answers them
 
-**Body:** Cloudflare intercepted preflight requests before the load balancer, so the browser failed with nothing in my logs. I wrote a small Cloudflare Worker that answers preflights at the layer that was intercepting them.
+**Speaker notes:** When the logs are empty, the request is dying before it reaches you. Look at every layer in front of the app.
 
-**Speaker notes:** Lesson: when the logs are empty, the request is dying before it reaches you. Look at every layer in front of the app.
+### C7: Lesson
 
-### C6: The results
+**Title:** Real problems start where textbooks stop
 
-**Title:** SitePlus+ cut the company's recurring analytics work by about 60%.
-
-**Big numbers:**
-- **~60%** less recurring analytics work
-- **2** servers in 2 availability zones
-- **0** code changes to add the second server, thanks to stateless JWT auth
-- **1 GB** of RAM per server, with the JVM tuned to fit
-
-**Speaker notes:** CI tests every change against a live PostgreSQL container, then servers pick up new Docker images and redeploy within minutes, with no manual server access.
-
-### C7: What I learned
-
-**Title:** The interesting problems start where the textbook stops.
-
-**Body:**
-- **Lesson:** "authenticate every endpoint" fails for a tracking snippet, and a per-server rate limit breaks with two servers.
-- **Next:** a sliding-window rate limit and event-driven deploys.
-- **For you:** I've owned a system end to end in front of a real customer.
+**Bullets:**
+- Two servers broke a simple rate limit
+- Next: sliding window, event-driven deploys
+- For your team: I've owned production end to end
 
 ---
 
 ## Track D: TabVault
 
-### D1: The pitch
+### D1: Numbers
 
-**Title:** TabVault lets you save a tab in one click, close it, and find it again when it matters.
+**Title:** TabVault
+
+**Big numbers:**
+- **3** clients
+- **1** API
+- **Live** on AWS Fargate
+
+### D2: Intro
+
+**Title:** Save a tab now, find it later
 
 **Visual:** TabVault home screenshot (`tabvault-home.png`).
 
-**Body:** A Chrome extension, a React PWA and a Spring Boot API, with AI summaries and deadline reminders. Live at tab-vault.com, built by my multi-agent system.
+**Bullets:**
+- AI summaries and reminders
+- Live at tab-vault.com
 
-**Speaker notes:** I set the bar high on purpose: three clients, background jobs, an AI integration and a real cloud deploy, to prove the agent system could ship more than a toy.
+### D3: Role and stack
 
-### D2: How it works
+**Title:** My role and stack
 
-**Title:** Saving a tab never waits for the AI.
+**Role:** Orchestrator and reviewer; built by my multi-agent system
 
-**Body:** The save only queues a job and returns. A background worker extracts the page and asks the Claude API for a summary, category and deadlines. Content is trimmed to a token budget and repeat URLs are cached, so cost stays predictable.
+**Stack:** Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate
 
-**Speaker notes:** A database trigger updates full-text search when the summary lands, so search includes it. Jobs live in a table, not memory, so a restart drops nothing.
+### D4: Key decision
 
-### D3: The hardest part
+**Title:** Saving never waits for the AI
 
-**Title:** The hardest bugs only existed in the cloud.
+**Bullets:**
+- Save queues a job, returns instantly
+- A worker calls the Claude API
+- Token budget and URL cache cap cost
 
-**Body:** The health check sat behind login and returned 401, so the load balancer sent no traffic at all. An image built on Apple Silicon ran nowhere on x86 Fargate. Each fix became a standing deploy checklist item.
+### D5: Hardest part
 
-**Speaker notes:** I also lost hours to HTTPS failures that turned out to be my ISP blocking a new domain. Now I test from inside the cloud network first.
+**Title:** Bugs that only exist in the cloud
 
-### D4: The results
-
-**Title:** TabVault runs in production and proved my agent system can ship a real product.
-
-**Big numbers:**
-- **3** clients on **1** API
-- **15-minute** access tokens with single-use refresh tokens
-- Live on **AWS ECS Fargate** at tab-vault.com
-
-**Body:** Lesson: "done" means it survives restarts, deploys and real networks.
-
----
-
-## Slide 3 (last): Thank you
-
-**Title:** Thank you. I'd love to hear your questions.
-
-**Body:**
-- leon-wu.com
-- github.com/LeonWu813
-- linkedin.com/in/leon-wu-tsan-yu
-- leon.wu.tsan.yu@gmail.com
+**Bullets:**
+- Health check behind login: no traffic
+- ARM image on x86 servers
+- Each fix became a deploy checklist item
