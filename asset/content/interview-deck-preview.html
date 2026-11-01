@@ -43,6 +43,10 @@ ul.bl li::before{content:"";position:absolute;left:0;top:.5em;width:14px;height:
 .tl .job:hover{background:var(--surface)}
 .det{display:inline-flex;gap:8px;align-items:center;margin-top:14px;font-size:22px;font-weight:700;color:var(--accent);padding:0!important}
 .det kbd{font:inherit;font-size:18px;border:2px solid var(--accent);border-radius:4px;padding:0 6px}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:28px 64px}
+.team div{border-left:6px solid var(--accent);padding-left:24px}
+.team b{display:block;font-size:40px;margin-bottom:6px}
+.team span{font-size:32px;color:var(--muted)}
 .tl .now::before{background:var(--accent)}
 .life{display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;min-height:0}
 .life figure{margin:0;display:flex;flex-direction:column;min-height:0}
@@ -110,36 +114,41 @@ const jobs=[
  {cls:'cover',h:`<div class="eyebrow">Taipei · Jul 2021 to Mar 2023</div><h1>Marketing Project Manager at GoFreight</h1><div class="big3"><div><div class="n">670%</div><div class="d">higher conversion rate, from an A/B testing pipeline I coded</div></div><div><div class="n">$16.5K</div><div class="d">in MRR from a product launch I led</div></div></div>`}
 ];
 const pdThree=img(PD+'projectday-home.png','Home')+img(PD+'projectday-gyms.png','Gyms')+img(PD+'projectday-route.png','Route');
+const team=(t,rows)=>H(t)+`<div class="team">${rows.map(([k,v])=>`<div><b>${k}</b><span>${v}</span></div>`).join('')}</div>`;
 const tracks=[
  {name:'Multi-Agent System',desc:'An AI dev team with a human in charge',slides:[
   nums('Multi-Agent Development System',[['3','products shipped'],['6','agent dev team'],['6','skills created']]),
   {h:H('An AI dev team with a human in charge')+`<div class="wf"><div class="flow"><span class="s h">Requirements</span><span class="a">→</span><span class="s">PM</span><span class="a">→</span><span class="s">Doc-Sync</span><span class="a">→</span><span class="s">Engineer ⇄ QA</span><span class="a">→</span><span class="s">Tech Lead</span><span class="a">→</span><span class="s h">Shipped</span></div><div class="loop">↺ Retrospective feeds improvements back into the system</div><div class="bar">I approve every handoff</div></div>`},
   {h:role('Sole architect and builder',['Claude Code (subagents, skills, hooks)','Bash','Python','Git'])},
-  {h:bullets('One AI agent loses the plot',['Context drifts over long sessions','Earlier decisions get overwritten','No clean way to undo'])},
-  {h:bullets('Strict boundaries over shared context',['Each agent sees only its spec','Scope check on every change','Every handoff is a git commit','Cost: one extra sync step'])},
-  {h:bullets('Hardest part: making QA honest',['Early QA passed code by reading it','Now: real server, real requests',"People check what machines can't"])},
-  {h:bullets('The system matters more than the prompt',['Most fixes: boundaries, not prompts','Next: measure handoff success','For your team: clear specs, small changes, honest tests'])}]},
+  {h:bullets('It started with one AI agent losing the plot',['Context drifts over long sessions','Earlier decisions get overwritten','No clean way to undo'])},
+  {h:team('So I split it into six focused agents',[['PM','writes the requirements'],['Doc-Sync','one spec per module'],['Engineer','builds one module'],['QA','tests it in the running app'],['Tech Lead','reviews the whole phase'],['Retrospective','improves the system']])},
+  {h:bullets('Each agent sees only what it needs',['Only its own spec and files','Scope check on every change','Every handoff is a git commit','Cost: one extra sync step'])},
+  {h:bullets('Then QA passed code it never ran',['Early QA only read the code','Fix: real server, real requests',"People check what machines can't"])},
+  {h:bullets('The system matters more than the prompt',['Most fixes: boundaries, not prompts','Result: 3 products, every step reviewable','For your team: clear specs, small changes, honest tests'])}]},
  {name:'ProjectDay',desc:'An iOS climbing app my agents built',slides:[
   nums('ProjectDay',[['12','modules'],['13','gyms in Taipei'],['1,500+','commits']]),
   {h:side("A climbing log for Taiwan's gyms",['Log a climb in 4 taps','Watch beta for that exact route','Submitted to the App Store'],pdThree,'phones')},
   {h:role('Product owner; built with my multi-agent system',['React Native / Expo','TypeScript','Supabase (Postgres, Auth, Edge Functions)','AWS (S3, MediaConvert, CloudFront, CDK)','EAS','GitHub Actions'])},
-  {h:bullets("Taiwan's indoor climbers have no app",['Global apps target outdoor crags','Beta videos lost on Instagram','Local app only logs climbs'])},
-  {h:H('Video moved from Supabase to AWS')+flow(['Upload','S3','MediaConvert','CloudFront'])+BL(['iPhone HDR looked overexposed','No CDN for playback','Cost: a second cloud to run'])},
-  {h:bullets('Caught a privacy hole before launch',['Backfill copied any storage path','Users could copy private videos','Fix: owner-prefix check'])},
-  {h:bullets('Mocked tests can lie',['Passed Jest, broke the iOS build','Now: native build before QA','Next: Android, offline logging'])}]},
+  {h:bullets("I climb, and Taiwan's gyms had no app",['Global apps target outdoor crags','Beta videos lost on Instagram','Local app only logs climbs'])},
+  {h:side('So I put logging, beta and gyms in one app',['Log a send in 4 taps','Beta videos tied to each route','Route lists for 13 gyms'],img(PD+'projectday-route.png','Route')+img(PD+'projectday-route-beta.png','Route beta')+img(PD+'projectday-profile.png','Profile'),'phones')},
+  {h:H('Beta videos needed a real video pipeline')+flow(['Upload','S3','MediaConvert','CloudFront'])+BL(['iPhone HDR looked overexposed','Supabase had no CDN','So I moved video to AWS','Cost: a second cloud to run'])},
+  {h:bullets('Moving the videos hid a privacy hole',['Backfill copied old videos to S3','It trusted any path a user sent','My audit caught it: owner-prefix check'])},
+  {h:bullets('Shipping to a real phone taught me mocks lie',['Passed Jest, broke the iOS build','Now: native build before QA','Next: Android, offline logging'])}]},
  {name:'SitePlus+',desc:'Analytics a real company runs on',slides:[
   nums('SitePlus+',[['~60%','less analytics work'],['3+','months in real use'],['10+','reports generated']]),
-  {h:side('Analytics, campaigns and SEO in one place',['One snippet in, one dashboard out','Used in production by a real company'],img(PUB+'siteplusplus-home.jpg','SitePlus+ home'))},
+  {h:side('Analytics, campaigns and SEO in one place',['Designed, built and deployed alone','Used by a real company'],img(PUB+'siteplusplus-home.jpg','SitePlus+ home'))},
   {h:role('Sole engineer, full stack and AWS',['Java 21 / Spring Boot','React / TypeScript','Redux','PostgreSQL','Redis','Docker','GitHub Actions','AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)','Cloudflare'])},
-  {h:side('Hours of manual reports, every week',['Data spread across tools','Same gathering every report','Goal: install once, rely on it'],img(PUB+'siteplusplus-reports.jpeg','Reports'))},
-  {h:bullets('Public writes, private reads',["Snippet can't carry a login",'Anyone writes, only the owner reads','Redis rate limit shared by both servers'])},
-  {h:bullets('A CORS bug my logs never saw',['Cloudflare intercepted preflight requests','Fix: a Worker answers them'])},
+  {h:bullets('A company lost hours to manual reports',['Data spread across tools','Same gathering every week','Goal: install once, rely on it'])},
+  {h:side('So I built one snippet and one dashboard',['Snippet captures views, clicks, forms','Dashboard: trends, pages, channels','SEO auditor re-checks weekly'],img(PUB+'siteplusplus-reports.jpeg','Reports'))},
+  {h:bullets("But the snippet's endpoint had to be public",['Visitors have no login','Anyone writes, only the owner reads','Shared Redis rate limit stops abuse'])},
+  {h:bullets('Going live behind Cloudflare broke CORS',['Preflights never reached my server','My logs showed nothing','Fix: a Worker answers them'])},
   {h:bullets('Real problems start where textbooks stop',['Two servers broke a simple rate limit','Next: sliding window, event-driven deploys',"For your team: I've owned production end to end"])}]},
  {name:'TabVault',desc:'Save a tab now, find it later',slides:[
   {h:side('Save a tab now, find it later',['AI summaries and reminders','Deployed on AWS, now offline'],img(PUB+'tabvault-home.png','TabVault home'))},
   {h:role('Orchestrator and reviewer; built by my multi-agent system',['Java 21 / Spring Boot','React / TypeScript PWA','Chrome Extension (MV3)','PostgreSQL','Redis','Quartz','Claude API','AWS ECS Fargate'])},
-  {h:bullets('Saving never waits for the AI',['Save queues a job, returns instantly','A worker calls the Claude API','Token budget and URL cache cap cost'])},
-  {h:bullets('Bugs that only exist in the cloud',['Health check behind login: no traffic','ARM image on x86 servers','Each fix became a deploy checklist item'])}]}
+  {h:bullets('Open tabs pile up, then get lost',['Tabs kept "for later" slow the browser','Closing them loses the content','I also needed a real test for my agents'])},
+  {h:bullets('So saving takes one click, and AI works after',['Extension saves and returns instantly','A worker asks Claude for summary and deadlines','Search and reminders build on that'])},
+  {h:bullets('Deploying to AWS exposed cloud-only bugs',['Health check behind login: no traffic','ARM image on x86 servers','Each fix became a deploy checklist item'])}]}
 ];
 const keyOf={'multi-agent':0,projectday:1,siteplus:2,tabvault:3};
 let picked=keyOf[q.get('project')]??null; const shown=new Set();

@@ -5,10 +5,10 @@ Editor's note (not page copy): built from the interview-slides guide the user su
 Editor's note (not page copy): structure. Three "about me" slides, then a project menu. The presenter picks one project; each project starts with three big numbers, then a short intro, then role and tech stack, then the story. After a project's last slide the menu comes back, so the presenter can show another project or stop there. There is no Thank-you slide; contact links sit in the menu's footer.
 
 ```
-Hi, I'm Leon → Timeline → Life in Seattle → Menu ─┬─ Multi-Agent System (7) ─┐
-                 │                                ├─ ProjectDay         (7) ─┤
-                 ├─ Exascend   (hidden)           ├─ SitePlus+          (7) ─┤
-                 └─ GoFreight  (hidden)           └─ TabVault           (4) ─┘
+Hi, I'm Leon → Timeline → Life in Seattle → Menu ─┬─ Multi-Agent System (8) ─┐
+                 │                                ├─ ProjectDay         (8) ─┤
+                 ├─ Exascend   (hidden)           ├─ SitePlus+          (8) ─┤
+                 └─ GoFreight  (hidden)           └─ TabVault           (5) ─┘
                                                   Menu again (pick another) ←┘
 ```
 
@@ -103,6 +103,8 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 ---
 
+Editor's note (not page copy): storyline, revised 2026-11-01 at the user's request ("some of the slide are jumping around without a story line"). After the numbers, intro and role slides, every track follows one chain, and each title hands off to the next: the problem, "so I built" the solution, the hard part that the solution created, how I solved it, and the lesson.
+
 ## Track A: Multi-Agent Development System
 
 ### A1: Numbers
@@ -120,9 +122,7 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 **Title:** An AI dev team with a human in charge
 
-**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with Retrospective feeding improvements back, and a bar under it reading "I approve every handoff".
-
-**Speaker notes:** PM writes the requirements. Doc-Sync turns them into one spec per module. An Engineer builds each module and QA tests it in the running app. The Tech Lead reviews the whole phase. Retrospective proposes improvements to the system itself.
+**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with "Retrospective feeds improvements back into the system" under it, and a bar reading "I approve every handoff".
 
 ### A3: Role and stack
 
@@ -134,48 +134,62 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 ### A4: Problem
 
-**Title:** One AI agent loses the plot
+**Title:** It started with one AI agent losing the plot
 
 **Bullets:**
 - Context drifts over long sessions
 - Earlier decisions get overwritten
 - No clean way to undo
 
-**Speaker notes:** I hit this after building SitePlus+ on my own. The question was whether I needed a better prompt or a better system.
+**Speaker notes:** I hit this after building SitePlus+ on my own. The question was whether I needed a better prompt or a better system. I decided it was the system.
 
-### A5: Key decision
+### A5: Solution
 
-**Title:** Strict boundaries over shared context
+**Title:** So I split it into six focused agents
+
+**Roles (two columns):**
+- **PM:** writes the requirements
+- **Doc-Sync:** one spec per module
+- **Engineer:** builds one module
+- **QA:** tests it in the running app
+- **Tech Lead:** reviews the whole phase
+- **Retrospective:** improves the system
+
+**Speaker notes:** Like a real team, each role has one job, one input and one output. They coordinate through documents and git, not shared memory.
+
+### A6: Key decision
+
+**Title:** Each agent sees only what it needs
 
 **Bullets:**
-- Each agent sees only its spec
+- Only its own spec and files
 - Scope check on every change
 - Every handoff is a git commit
 - Cost: one extra sync step
 
 **Speaker notes:** An Engineer never sees the full requirements. A mistake stays inside one module instead of spreading, and any step can be rolled back.
 
-### A6: Hardest part
+### A7: Hardest part
 
-**Title:** Hardest part: making QA honest
+**Title:** Then QA passed code it never ran
 
 **Bullets:**
-- Early QA passed code by reading it
-- Now: real server, real requests
+- Early QA only read the code
+- Fix: real server, real requests
 - People check what machines can't
 
 **Speaker notes:** UI checks a machine can't judge go to a person as a written test script. Nothing passes unless someone exercised it in the running app.
 
-### A7: Lesson
+### A8: Lesson
 
 **Title:** The system matters more than the prompt
 
 **Bullets:**
 - Most fixes: boundaries, not prompts
-- Next: measure handoff success
+- Result: 3 products, every step reviewable
 - For your team: clear specs, small changes, honest tests
 
-**Speaker notes:** On ProjectDay alone: over 1,500 commits, 217 acceptance criteria, 88 integration-review items each decided by a human, and 18 improvement proposals from the first retrospective.
+**Speaker notes:** On ProjectDay alone: over 1,500 commits, 217 acceptance criteria, 88 integration-review items each decided by a human, and 18 improvement proposals from the first retrospective. Next I'd measure handoff success rate instead of judging by feel.
 
 ---
 
@@ -215,40 +229,56 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 ### B4: Problem
 
-**Title:** Taiwan's indoor climbers have no app
+**Title:** I climb, and Taiwan's gyms had no app
 
 **Bullets:**
 - Global apps target outdoor crags
 - Beta videos lost on Instagram
 - Local app only logs climbs
 
-### B5: Key decision
+**Speaker notes:** Bouldering is my hobby, and that's where the idea came from. Indoor bouldering is growing fast in Taiwan.
 
-**Title:** Video moved from Supabase to AWS
+### B5: Solution
+
+**Title:** So I put logging, beta and gyms in one app
+
+**Visual:** Route, Route-beta and Profile screenshots side by side.
+
+**Bullets:**
+- Log a send in 4 taps
+- Beta videos tied to each route
+- Route lists for 13 gyms
+
+**Speaker notes:** My targets were under 30 seconds to log a send, and a beta video playable within 60 seconds of upload.
+
+### B6: Key decision
+
+**Title:** Beta videos needed a real video pipeline
 
 **Visual:** flow chips: Upload → S3 → MediaConvert → CloudFront.
 
 **Bullets:**
 - iPhone HDR looked overexposed
-- No CDN for playback
+- Supabase had no CDN
+- So I moved video to AWS
 - Cost: a second cloud to run
 
 **Speaker notes:** MediaConvert makes one H.264 MP4 and maps HDR to SDR. CloudFront serves short-lived signed URLs, and the database stores only a key, never a URL.
 
-### B6: Hardest part
+### B7: Hardest part
 
-**Title:** Caught a privacy hole before launch
+**Title:** Moving the videos hid a privacy hole
 
 **Bullets:**
-- Backfill copied any storage path
-- Users could copy private videos
-- Fix: owner-prefix check
+- Backfill copied old videos to S3
+- It trusted any path a user sent
+- My audit caught it: owner-prefix check
 
-**Speaker notes:** I ran an independent security audit before release. It also found a permission check copied into five places and starting to drift.
+**Speaker notes:** One user could have copied another user's private video into their own folder. I ran an independent security audit before release; it also found a permission check copied into five places and starting to drift.
 
-### B7: Lesson
+### B8: Lesson
 
-**Title:** Mocked tests can lie
+**Title:** Shipping to a real phone taught me mocks lie
 
 **Bullets:**
 - Passed Jest, broke the iOS build
@@ -268,7 +298,7 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 - **3+** months in real use
 - **10+** reports generated
 
-**Speaker notes:** It runs on two servers in two availability zones. Stateless JWT auth meant adding the second server needed no code changes.
+**Speaker notes:** It runs on two servers in two availability zones.
 
 ### C2: Intro
 
@@ -277,8 +307,8 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 **Visual:** SitePlus+ home screenshot (`siteplusplus-home.jpg`).
 
 **Bullets:**
-- One snippet in, one dashboard out
-- Used in production by a real company
+- Designed, built and deployed alone
+- Used by a real company
 
 ### C3: Role and stack
 
@@ -290,37 +320,47 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 ### C4: Problem
 
-**Title:** Hours of manual reports, every week
+**Title:** A company lost hours to manual reports
+
+**Bullets:**
+- Data spread across tools
+- Same gathering every week
+- Goal: install once, rely on it
+
+### C5: Solution
+
+**Title:** So I built one snippet and one dashboard
 
 **Visual:** SitePlus+ reports screenshot (`siteplusplus-reports.jpeg`).
 
 **Bullets:**
-- Data spread across tools
-- Same gathering every report
-- Goal: install once, rely on it
+- Snippet captures views, clicks, forms
+- Dashboard: trends, pages, channels
+- SEO auditor re-checks weekly
 
-### C5: Key decision
+### C6: Key decision
 
-**Title:** Public writes, private reads
+**Title:** But the snippet's endpoint had to be public
 
 **Bullets:**
-- Snippet can't carry a login
+- Visitors have no login
 - Anyone writes, only the owner reads
-- Redis rate limit shared by both servers
+- Shared Redis rate limit stops abuse
 
 **Speaker notes:** A per-server counter would have doubled the real limit behind the load balancer. Every resource hangs off a Site owned by a User, so one ownership check protects everything.
 
-### C6: Hardest part
+### C7: Hardest part
 
-**Title:** A CORS bug my logs never saw
+**Title:** Going live behind Cloudflare broke CORS
 
 **Bullets:**
-- Cloudflare intercepted preflight requests
+- Preflights never reached my server
+- My logs showed nothing
 - Fix: a Worker answers them
 
 **Speaker notes:** When the logs are empty, the request is dying before it reaches you. Look at every layer in front of the app.
 
-### C7: Lesson
+### C8: Lesson
 
 **Title:** Real problems start where textbooks stop
 
@@ -353,20 +393,33 @@ Editor's note (not page copy): TabVault has no numbers slide, at the user's requ
 
 **Stack:** Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate
 
-### D3: Key decision
+### D3: Problem
 
-**Title:** Saving never waits for the AI
+**Title:** Open tabs pile up, then get lost
 
 **Bullets:**
-- Save queues a job, returns instantly
-- A worker calls the Claude API
-- Token budget and URL cache cap cost
+- Tabs kept "for later" slow the browser
+- Closing them loses the content
+- I also needed a real test for my agents
 
-### D4: Hardest part
+### D4: Solution
 
-**Title:** Bugs that only exist in the cloud
+**Title:** So saving takes one click, and AI works after
+
+**Bullets:**
+- Extension saves and returns instantly
+- A worker asks Claude for summary and deadlines
+- Search and reminders build on that
+
+**Speaker notes:** The save only queues a job. Content is trimmed to a token budget and repeat URLs are cached, so AI cost stays predictable.
+
+### D5: Hardest part
+
+**Title:** Deploying to AWS exposed cloud-only bugs
 
 **Bullets:**
 - Health check behind login: no traffic
 - ARM image on x86 servers
 - Each fix became a deploy checklist item
+
+**Speaker notes:** Lesson: "done" means it survives restarts, deploys and real networks.
