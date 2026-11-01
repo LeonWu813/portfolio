@@ -1,14 +1,14 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
 
 ---
 
 ## Project Summary
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's three flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 **Goals:**
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
-2. Showcase three strong projects as full case studies, each reachable in one click from the projects grid.
+2. Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar.
 3. Make contact and resume access effortless from any page.
 4. Have the site itself serve as evidence of Leon's frontend, accessibility, and deployment skills by being fast, responsive, and WCAG-conscious.
 
@@ -17,8 +17,8 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 - Secondary: Engineers who may follow linked GitHub repos.
 
 **Success Criteria:**
-- The top three projects, each showing role and stack, are visible without scrolling on the Projects page.
-- Every project links to a working live demo and a GitHub repository.
+- All four projects are visible in the projects sidebar without scrolling on a standard laptop viewport.
+- Every project links to its GitHub repository when that repository is public and, where one exists, to a working live product (a website or an App Store listing).
 - The site loads fast, works well on mobile, and passes basic WCAG accessibility checks.
 - A visitor can reach Leon's email, LinkedIn, GitHub, and resume PDF from any page.
 
@@ -46,16 +46,17 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 | Route | Page |
 | --- | --- |
 | / | Home |
-| /projects | Projects grid |
-| /projects/marketing-analytics | Marketing Analytics detail |
+| /projects | Redirects to /projects/multi-agent-system |
+| /projects/siteplus | SitePlus+ detail |
 | /projects/multi-agent-system | Multi-Agent System detail |
 | /projects/tabvault | TabVault detail |
+| /projects/projectday | ProjectDay detail |
 | /experience | Experience |
 | /about | About |
 | /skills | Skills |
 | /contact | Contact |
 
-**Project detail pages:** Three project detail pages are collapsed into a single `app/projects/[slug]/page.tsx` dynamic route. `generateStaticParams` returns all three slugs from the data file. `dynamicParams = false` ensures unknown slugs return 404. `params` is `Promise<{ slug: string }>` and must be awaited.
+**Project detail pages:** Four project detail pages are collapsed into a single `app/projects/[slug]/page.tsx` dynamic route. `generateStaticParams` returns all four slugs from the data file. `dynamicParams = false` ensures unknown slugs return 404. `params` is `Promise<{ slug: string }>` and must be awaited.
 
 **Data files:** Project records, experience entries, and education entries are defined as TypeScript data files. Case study prose is read from markdown files on disk via `fs.readFileSync` and parsed with `marked`.
 
@@ -77,7 +78,9 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 | --- | --- |
 | Favicon files | `asset/favicon_io/` — copy `favicon.ico` and `apple-touch-icon.png` to `site/app/` |
 | Resume PDF | `asset/Leon_cv.pdf` — copy to `site/public/Leon_cv.pdf` |
-| Case study content | `asset/content/case-study-marketing-analytics.md`, `asset/content/case-study-multi-agent-system.md`, `asset/content/case-study-tabvault.md` |
+| Case study content | `asset/content/case-study-*-detailed.md` |
+| Multi-agent feature image | `asset/diagrams/multi-agent-horizontal.png` (source: `asset/diagrams/multi-agent-horizontal.html`) |
+| ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
 
@@ -143,3 +146,4 @@ Test:  (none — static site, no automated test suite defined)
 | MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, two body paragraphs verbatim from site-copy.md, and education block. |
 | MOD-009 | Skills Page | mod-skills | Technical skills listed by category as chip/badge elements, scannable at a glance. |
 | MOD-010 | Contact Page | mod-contact | Contact page with real email address, LinkedIn, GitHub links, and resume PDF download. |
+| MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content with header metadata and no external links. |

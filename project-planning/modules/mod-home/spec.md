@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -49,6 +49,8 @@ A single, short hero screen that orients the visitor immediately. Renders the gr
 - Page exports a canonical URL tag.
 - [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
 - Page is a Server Component (no `'use client'`).
+- Projects list (below bio, no dates): project title + tech string (e.g. "Full-Stack · Java/Spring Boot · React · AWS"); no year/date column shown; each entry links to its project detail page.
+- ProjectDay appears in the Home page projects list with its title and tech line, links to /projects/projectday, and shows no date.
 
 ## Input / Output Contract
 
@@ -79,3 +81,9 @@ A single, short hero screen that orients the visitor immediately. Renders the gr
 - AC-016: The system shall render a secondary CTA labeled "Reach out" linking to /contact.
 - AC-017: The system shall display all hero content above the fold (visible without scrolling) on a standard laptop viewport.
 - AC-018: The system shall export a metadata object with title "Home — Leon Wu" and Open Graph and Twitter card tags.
+- AC-087: ProjectDay appears in the Home page projects list with its title and tech line, links to /projects/projectday, and shows no date.
+
+## Integration Points
+
+### Integration with MOD-011 (Project Detail: ProjectDay)
+- AC-087: ProjectDay appears in the Home page projects list with its title and tech line, links to /projects/projectday, and shows no date.

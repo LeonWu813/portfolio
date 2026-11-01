@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: pm
-mode: change
+agent: doc-sync
+mode: delta
 module: n/a
 result: success
-next: claude --agent doc-sync (delta sync for PRD rev 1.4: new MOD-011 Project Detail: ProjectDay, MOD-005 content/image update, MOD-003 and MOD-002 list updates; read the notes in the 2026-11-01 PM Updates entry, including the out-of-framework site drift). The coordinator commits its own drafts (asset/content/case-study-multi-agent-detailed.md, asset/content/case-study-projectday-detailed.md, asset/diagrams/) before Doc-Sync runs.
-timestamp: 2026-11-01T12:00:00Z
+next: for each module whose spec changed: claude --agent engineer-mod-project-multi-agent "spec-update" (MOD-005, built), then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003), claude --agent engineer-mod-home "spec-update" (MOD-002), and claude --agent engineer-mod-project-projectday "implement" (MOD-011, new; if the new agents cannot be called yet, claude --continue reloads them). Before MOD-011 implement, Tech Lead should decide ownership of the shared projects-data.ts and [slug]/page.tsx (see the Sync Report note on Source Path).
+timestamp: 2026-11-01T13:00:00Z
 ```
 
 ---
@@ -464,6 +464,34 @@ All four Phase 3 modules passed dedicated QA agent verification on 2026-06-29. A
 **AMBIGUITY markers resolved:** none
 **CONFLICT markers added:** none
 **verify-sync.sh result:** Script requires prd.md inside the project-planning/ directory; prd.md is at the repo root. Manual verification performed: Check 1 (MOD-IDs) — PASS (PRD 1.3 has no MOD-IDs); Check 2 (orphan specs) — PASS (all 10 spec.md files map to Module Map entries); Check 3 (Tech Stack) — PASS (unchanged from revision 1.2 sync); Check 4 (US-IDs) — PASS (no US-IDs in PRD 1.3); Check 5 (AMBIGUITY markers) — PASS (domain/og:url ambiguity carried forward and logged); Check 6 (Phase names) — PASS (Phase Plan unchanged).
+
+---
+
+### Sync Report — Delta Sync — 2026-11-01
+**Sync type:** delta
+**PRD Revision:** 1.4
+**PM Update reference:** 2026-11-01 [SUBSTANTIVE] Add ProjectDay as a fourth project (MOD-011, /projects/projectday) and update the Multi-Agent System page content, tags, At-a-glance and feature image (MOD-005); PRD rev 1.4
+**Files modified:**
+- project-planning/production.md — Project Summary (four projects, sidebar, success criteria) per PRD section 1; routing table replaced with PRD section 6 table (adds /projects/projectday, fixes stale rows); "three" to "four" project detail pages; Assets rows (case-study-*-detailed.md, multi-agent feature image, ProjectDay case study); Module Index row MOD-011; revision header 1.4
+- project-planning/modules/mod-project-multi-agent/spec.md (MOD-005) — At-a-glance, tags (adds Python), description, feature image + caption, body-copy statement, section headings with PRD commas ("How it works, end to end"; "What I learned, and what I would improve"; AC-046 updated to match), removed "optional assets" lines (diagram now confirmed), four slugs, AC-091 and AC-092 added
+- project-planning/modules/mod-projects-grid/spec.md (MOD-003) — Goal/success-criterion quotes (four projects), project order (ProjectDay second), AC-086, Integration Points entry
+- project-planning/modules/mod-home/spec.md (MOD-002) — Projects list requirement (PRD 4.1), ProjectDay list requirement, AC-087, Integration Points entry
+**Files created:**
+- project-planning/modules/mod-project-projectday/spec.md (MOD-011, AC-079 to AC-090)
+- project-planning/modules/mod-project-projectday/status.md
+- .claude/agents/engineer-mod-project-projectday.md
+- .claude/agents/qa-mod-project-projectday.md
+**Module removals noted:** none
+**AMBIGUITY markers added:**
+- mod-project-projectday/spec.md: the existing domain/og:url ambiguity, carried into the new spec exactly as in every other page spec ("PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy."). It is the open item PM already tracks; no new question.
+**AMBIGUITY markers resolved:** none
+**CONFLICT markers added:** none
+**PM-noted open point resolved by the source file:** the ProjectDay source file no longer carries the "No public links yet" header line; its remaining editor lines ("Editor's note (not page copy)" and "Suggested listing fields") are labeled as not page copy, and PRD AC-082 and AC-084 already say no links and no editor's notes render. No marker placed.
+**Notes for PM / Tech Lead (not written into specs):**
+- Module Map has no Source Path column. The MOD-011 wrapper quotes PM's proposed source path (ProjectDay record in site/data/projects-data.ts plus site/public/projectday-*). Ownership of the shared data file and shared [slug]/page.tsx is for the Tech Lead; the multi-agent feature image copy into site/public is MOD-005 work.
+- Drift not covered by this change and left untouched (PM listed only MOD-002/003/005/011): PRD 4.3 and 4.5 section headings carry commas ("How it works, end to end"; "What I learned, and what I would improve") while MOD-004 and MOD-006 specs and ACs (AC-058, AC-046-style) have none; MOD-004 and MOD-006 specs still quote the "three strong projects" goal and say "all three project slugs"; production.md still carries rev 1.2 text for Design palette, Layout, data-file/markdown statements, and Module Index descriptions for MOD-003 and MOD-004.
+- site/data/projects-data.ts section headings for MOD-005 have no commas; the revised AC-046 and AC-092 require the PRD/source wording, so MOD-005 needs a spec-update.
+**verify-sync.sh result:** Script aborts at check 1 (set -e with grep finding no MOD-IDs in prd.md); same pre-existing failure mode as earlier syncs. Manual verification: Check 1 PASS (PRD has no MOD-IDs); Check 2 PASS (all 11 spec.md files map to Module Map rows); Check 3 PASS (Tech Stack unchanged); Check 4 PASS (no US-IDs); Check 5 PASS (the one new AMBIGUITY marker is logged above and is the already-tracked domain item); Check 6 N/A (no PRD phase section; Phase Plan unchanged, MOD-011 and MOD-005 join the current Phase 4 per PM). No HTML template comments remain.
 
 ---
 

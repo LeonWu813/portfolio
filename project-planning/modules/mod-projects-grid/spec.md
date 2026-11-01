@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.3 | **Last Updated**: 2026-06-29
+**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -12,7 +12,7 @@ Provide the /projects route and its persistent split-panel layout. The /projects
 
 ## Context
 
-**Business problem:** From PRD Goal 2: "Showcase three strong projects as full case studies, each reachable in one click from the projects sidebar." From PRD Success Criteria: "The top three projects are visible in the projects sidebar without scrolling on a standard laptop viewport." The split-panel layout gives recruiters a persistent project list on the left while the selected project case study fills the right panel, enabling fast switching between projects without losing context.
+**Business problem:** From PRD Goal 2: "Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar." From PRD Success Criteria: "All four projects are visible in the projects sidebar without scrolling on a standard laptop viewport." The split-panel layout gives recruiters a persistent project list on the left while the selected project case study fills the right panel, enabling fast switching between projects without losing context.
 
 **User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.2 govern this module:
 
@@ -24,6 +24,7 @@ Provide the /projects route and its persistent split-panel layout. The /projects
 - Scroll isolation: body is `h-screen overflow-hidden`; projects layout is `flex flex-1 min-h-0 overflow-hidden`; each panel scrolls independently.
 - Aside is hidden on screens smaller than lg.
 - Implementation: `app/projects/layout.tsx` renders ProjectList component + {children}; `app/projects/page.tsx` redirects to first project.
+- Project order: ProjectDay appears directly after Multi-Agent Software Development System in the project list. The order of the other projects does not change, and `/projects` still redirects to `/projects/multi-agent-system`.
 
 **Non-goals (from PRD section 8 — Out of Scope):**
 - No blog or blog infrastructure.
@@ -48,6 +49,7 @@ Provide the /projects route and its persistent split-panel layout. The /projects
 - Project data is read from `site/data/projects-data.ts` using the `ProjectEntry` TypeScript interface.
 - The ProjectList component iterates the projects array from the data file — no hard-coded titles or slugs.
 - All project routes are statically generated at build time via `generateStaticParams` in the `[slug]` page.
+- ProjectDay appears directly after Multi-Agent Software Development System in the project list. The order of the other projects does not change, and `/projects` still redirects to `/projects/multi-agent-system`.
 
 **ProjectEntry TypeScript interface (from PRD section 5):**
 ```typescript
@@ -69,8 +71,9 @@ interface ProjectEntry {
 
 **Project records order in aside (from PRD section 5):**
 1. Multi-Agent Software Development System (slug: multi-agent-system)
-2. SitePlus+ (slug: siteplus)
-3. TabVault (slug: tabvault)
+2. ProjectDay (slug: projectday)
+3. SitePlus+ (slug: siteplus)
+4. TabVault (slug: tabvault)
 
 ## Input / Output Contract
 
@@ -96,3 +99,9 @@ interface ProjectEntry {
 - AC-024: The system shall use `flex flex-1 min-h-0 overflow-hidden` on the projects layout so that both panels scroll independently and the window never scrolls.
 - AC-025: The system shall hide the aside on screens smaller than `lg`.
 - AC-026: The system shall populate the aside list by iterating the projects data array — no hard-coded titles or slugs in the layout component.
+- AC-086: ProjectDay appears in the projects side panel at the position set in section 4.2, showing its title and tech line. It is highlighted as active while /projects/projectday is open.
+
+## Integration Points
+
+### Integration with MOD-011 (Project Detail: ProjectDay)
+- AC-086: ProjectDay appears in the projects side panel at the position set in section 4.2, showing its title and tech line. It is highlighted as active while /projects/projectday is open.
