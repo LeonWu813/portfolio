@@ -8,9 +8,9 @@
 agent: pm
 mode: change
 module: n/a
-result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-projectday-and-multi-agent-update.md to the human (Leon); on approval run claude --agent pm "apply project-planning/pm-proposals/2026-11-01-projectday-and-multi-agent-update.md" with his exact words quoted
-timestamp: 2026-11-01T00:00:00Z
+result: success
+next: claude --agent doc-sync (delta sync for PRD rev 1.4: new MOD-011 Project Detail: ProjectDay, MOD-005 content/image update, MOD-003 and MOD-002 list updates; read the notes in the 2026-11-01 PM Updates entry, including the out-of-framework site drift). The coordinator commits its own drafts (asset/content/case-study-multi-agent-detailed.md, asset/content/case-study-projectday-detailed.md, asset/diagrams/) before Doc-Sync runs.
+timestamp: 2026-11-01T12:00:00Z
 ```
 
 ---
@@ -31,6 +31,18 @@ timestamp: 2026-11-01T00:00:00Z
 2026-06-29 — Phases 1, 2, and 3 completed in a single engineering session (2026-06-28). Checkpoint recorded. Current phase advanced to Phase 4 — Deploy. PRD updated to revision 1.3 to reflect all implemented changes. [SUBSTANTIVE] — scope changes: footer removed, split-panel replaces grid on projects page, SitePlus+ rename from "Marketing Analytics Platform", keyboard shortcuts 1–6 wired globally, IBM Carbon palette formalized as design system.
 
 2026-06-29 — Phase 2 and Phase 3 QA formally closed after dedicated QA agent passes. All Phase 2 modules (MOD-002/007/008/009/010) confirmed PASS. All Phase 3 modules (MOD-003/004/005/006) confirmed PASS after one bug-fix round. Project is ready for Phase 4 — Deploy. Blocking item remains: domain name not yet selected (required before Vercel domain config, canonical URLs, and OG tags can be finalized). [TRIVIAL]
+
+- 2026-11-01 [SUBSTANTIVE] Add ProjectDay as a fourth project (MOD-011, /projects/projectday) and update the Multi-Agent System page content, tags, At-a-glance and feature image (MOD-005); PRD rev 1.4
+  Approved by Leon in the coordinator session: "8. it stays private
+  
+  Approve all recommendations"
+  Proposal: project-planning/pm-proposals/2026-11-01-projectday-and-multi-agent-update.md
+  Answers applied: Q2 substantive; Q3 not architectural; Q4 App Store listing not live on 2026-11-01 (coordinator check: HTTP 404), so no App Store link, ProjectDay At-a-glance "Submitted to the App Store (Oct 2026)", multi-agent At-a-glance "Shipped TabVault (live) · ProjectDay submitted to the App Store"; Q5 designer collaborator stays unnamed; Q6 feature image = Leon's App Store Connect iPhone screenshots, files not yet supplied, non-blocking, page renders without them; Q7 ProjectDay directly after Multi-Agent, slug "projectday", year 2026, date 09/19; Q8 ProjectDay repo stays private, so both ProjectDay repo links are removed (multi-agent page keeps three links; ProjectDay page has no external links); Q9 add Python to multi-agent tags; Q10 multi-agent tech line unchanged; Q11 success criterion reworded (adjusted for Q8: "links to its GitHub repository when that repository is public"); Q12 PRD moved from repo-root prd.md to project-planning/prd.md (git mv); Q13 ProjectDay is section 4.6, Experience/About/Skills/Contact renumbered 4.7-4.10 (numbers only); Q14 work joins current Phase 4 — Deploy; Q15 diagram caption shown; Q16 diagram re-exported without em dashes (done by the coordinator); Q17 module name and directory confirmed; Q18 recording the SitePlus+ and TabVault screenshots in the PRD is a separate small change after this one.
+  Sections changed: 1 (three -> four projects; success criterion on links), 4.2 (project order), 4.4 (At-a-glance, tags, feature image + caption, body copy, AC-091, AC-092), new 4.6 ProjectDay (AC-079 to AC-090), 4.6-4.9 renumbered to 4.7-4.10, 5 (Record 2 updated, Record 4 added with links: []), 6 (routing row), 7 (assets).
+  Modules affected: MOD-005 (content, tags, At-a-glance, image), MOD-003 (one more item in the project list), MOD-002 (one more item in the Home projects list), new MOD-011.
+  Phase: MOD-011 and the MOD-005 update join the current phase, Phase 4 — Deploy. Current Phase unchanged.
+  Proposed source path for MOD-011 (no Source Path column in this Module Map): the ProjectDay record in the shared project data file, plus image files under site/public/ named projectday-*. The project detail modules share one data file and one [slug] page; ownership of those shared files is for the Tech Lead to decide.
+  Notes for Doc-Sync: the site changed outside the framework since the last checkpoint (commits 6fb90ad..29b3a16, including site/public/multi-agent.png and project screenshots in f3834eb); heading commas in the MOD-005 section list still differ between the PRD and the spec; the ProjectDay source file has a header note "No public links yet: the repo is private and the App Store listing is not live." that is not one of the six sections (AC-082 requires no links to render; whether that note shows is not specified by this change).
 
 ---
 
@@ -60,6 +72,7 @@ Test:  (none — static site, no automated test suite defined)
 | MOD-008 | mod-about                  | About Page                           |
 | MOD-009 | mod-skills                 | Skills Page                          |
 | MOD-010 | mod-contact                | Contact Page                         |
+| MOD-011 | mod-project-projectday     | Project Detail: ProjectDay           |
 
 ---
 

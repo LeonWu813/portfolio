@@ -1,7 +1,7 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.3
-**Date:** 2026-06-29
+**Revision:** 1.4
+**Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
 ---
@@ -17,10 +17,11 @@
    - 4.3 Project Detail: SitePlus+
    - 4.4 Project Detail: Multi-Agent Software Development System
    - 4.5 Project Detail: TabVault
-   - 4.6 Experience
-   - 4.7 About
-   - 4.8 Skills
-   - 4.9 Contact
+   - 4.6 Project Detail: ProjectDay
+   - 4.7 Experience
+   - 4.8 About
+   - 4.9 Skills
+   - 4.10 Contact
 5. Content Model
 6. Functional and Technical Requirements
 7. Assets Needed
@@ -32,12 +33,12 @@
 
 ### Purpose
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's three flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 ### Goals
 
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
-2. Showcase three strong projects as full case studies, each reachable in one click from the projects sidebar.
+2. Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar.
 3. Make contact and resume access effortless from any page.
 4. Have the site itself serve as evidence of Leon's frontend, accessibility, and deployment skills by being fast, responsive, and WCAG-conscious.
 
@@ -48,8 +49,8 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 
 ### Success Criteria
 
-- The top three projects are visible in the projects sidebar without scrolling on a standard laptop viewport.
-- Every project links to a working live demo and a GitHub repository.
+- All four projects are visible in the projects sidebar without scrolling on a standard laptop viewport.
+- Every project links to its GitHub repository when that repository is public and, where one exists, to a working live product (a website or an App Store listing).
 - The site loads fast, works well on mobile, and passes basic WCAG accessibility checks.
 - A visitor can reach Leon's email, LinkedIn, GitHub, and resume PDF from any page.
 
@@ -214,6 +215,8 @@ The footer has been removed. No bottom bar or copyright line appears on any page
 
 The aside panel is hidden on screens smaller than `lg`. On mobile, projects are accessible via normal navigation.
 
+**Project order:** ProjectDay appears directly after Multi-Agent Software Development System in the project list. The order of the other projects does not change, and `/projects` still redirects to `/projects/multi-agent-system`.
+
 ---
 
 ### 4.3 Project Detail: SitePlus+
@@ -257,11 +260,13 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 | Element | Value |
 |---|---|
 | Project name (H1) | Multi-Agent Software Development System |
-| At-a-glance | Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live) |
-| Tags | Claude Code · Bash · Git · Multi-agent · Systems Design |
+| At-a-glance | Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store |
+| Tags | Claude Code · Bash · Python · Git · Multi-agent · Systems Design |
 | Link 1 | Built by the system: tab-vault.com — https://tab-vault.com |
 | Link 2 | System repo — https://github.com/LeonWu813/multi-agent-software-development-system |
 | Link 3 | TabVault repo — https://github.com/LeonWu813/tab-management |
+| Feature image | `asset/diagrams/multi-agent-horizontal.png` (landscape, 3080x1560). It replaces the current portrait diagram in the same position on the page. Editable source: `asset/diagrams/multi-agent-horizontal.html`. |
+| Feature image caption | Human approval sits on every arrow. The coordinator runs the next step only after the human says yes. |
 
 **Case study sections (in order):**
 1. The problem
@@ -272,6 +277,12 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 6. Decisions worth calling out
 7. Impact
 8. What I learned, and what I would improve
+
+**Body copy:** Section paragraphs match `asset/content/case-study-multi-agent-detailed.md` as of revision 1.4 (6 agents plus a coordinator, PM two-pass approval, scope check, pstack reviews, integration review, repeat-failure escalation, and an Impact section covering TabVault and ProjectDay).
+
+**Acceptance criteria (added in revision 1.4):**
+- AC-091: On /projects/multi-agent-system, the feature image is the landscape diagram from `asset/diagrams/multi-agent-horizontal.png`, not the earlier portrait diagram. It fills the width of the content column with no cropping on desktop (1280px wide) and mobile (375px wide). It has alt text describing the workflow (proposed: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."), and the caption above appears directly below it.
+- AC-092: The At-a-glance line, tags, three links, description pull-quote, and every section paragraph on /projects/multi-agent-system match revision 1.4 and the source file word for word. The editor's line "Feature image: ..." from the source file does not appear on the page.
 
 ---
 
@@ -303,7 +314,49 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 ---
 
-### 4.6 Experience
+### 4.6 Project Detail: ProjectDay
+
+**Route:** /projects/projectday
+
+**Source file:** `asset/content/case-study-projectday-detailed.md`
+
+**Header area:**
+
+| Element | Value |
+|---|---|
+| Project name (H1) | ProjectDay |
+| At-a-glance | Product owner + orchestrator · 12 modules, built by my multi-agent system · Supabase + AWS video pipeline · Submitted to the App Store (Oct 2026) |
+| Tags | TypeScript · React Native / Expo · Supabase (Postgres, Auth, Edge Functions) · AWS (S3, MediaConvert, CloudFront, CDK) · EAS · i18next · GitHub Actions |
+| Links | None. The GitHub repository stays private, and the App Store listing is not live yet. |
+| Feature image | Leon's iPhone screenshots from the App Store Connect submission. The files are not supplied yet (see section 7); until they are, the page renders without a feature image. |
+
+**Case study sections (in order):**
+1. The problem
+2. My role
+3. How it works end to end
+4. Notable technical decisions
+5. Impact and status
+6. What I learned and what I'd improve
+
+**Inline bold:** Paragraphs may contain `**bold text**` markdown, which renders as `<strong>` in the UI.
+
+**Acceptance criteria:**
+- AC-079: /projects/projectday renders the H1 "ProjectDay".
+- AC-080: The At-a-glance line below the H1 reads exactly as in the header table, in the same muted style as the other project pages.
+- AC-081: Exactly seven tag chips render, with the labels in the header table, in that order.
+- AC-082: No external links render on /projects/projectday, and no empty links row appears. No GitHub link renders while the repository is private, and no App Store link renders until the listing is confirmed live.
+- AC-083: The description pull-quote reads exactly as Record 4's `description`, in the same style as the other project pages.
+- AC-084: Six sections render in the order listed, with exactly those headings. Every paragraph matches the source file word for word. The editor's notes "(confirm it is live before publishing)" and "Suggested listing fields: ..." do not appear anywhere on the page.
+- AC-085: Text written as `**bold**` in the source renders as bold, and no literal asterisks show.
+- AC-086: ProjectDay appears in the projects side panel at the position set in section 4.2, showing its title and tech line. It is highlighted as active while /projects/projectday is open.
+- AC-087: ProjectDay appears in the Home page projects list with its title and tech line, links to /projects/projectday, and shows no date.
+- AC-088: The page title is "ProjectDay — Leon Wu". The page has a description meta tag, Open Graph and Twitter card tags, and a canonical URL, like the other project pages.
+- AC-089: Once the screenshots are supplied, the feature image renders with meaningful alt text and no cropping on desktop (1280px wide) and mobile (375px wide). Until then, the page renders without an empty image slot or a broken image.
+- AC-090: /projects/projectday is generated at build time. /projects/siteplus, /projects/multi-agent-system and /projects/tabvault still render, and an unknown slug under /projects still returns 404.
+
+---
+
+### 4.7 Experience
 
 **Route:** /experience
 
@@ -343,7 +396,7 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 ---
 
-### 4.7 About
+### 4.8 About
 
 **Route:** /about
 
@@ -359,7 +412,7 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 ---
 
-### 4.8 Skills
+### 4.9 Skills
 
 **Route:** /skills
 
@@ -384,7 +437,7 @@ Each category rendered as a labeled group with chip/badge elements per skill.
 
 ---
 
-### 4.9 Contact
+### 4.10 Contact
 
 **Route:** /contact
 
@@ -465,9 +518,9 @@ links:
 slug: "multi-agent-system"
 title: "Multi-Agent Software Development System"
 tech: "Harness Engineering · AI Agents · Systems Design · Claude Code"
-tags: ["Claude Code", "Bash", "Git", "Multi-agent", "Systems Design"]
-atAGlance: "Sole architect · 6 specialized agents · Human-approved at every handoff · Shipped TabVault (live)"
-description: "A team of six AI agents that plan, build, and QA software through a controlled, human-approved workflow. The system shipped a deployed full-stack app, TabVault, from start to finish."
+tags: ["Claude Code", "Bash", "Python", "Git", "Multi-agent", "Systems Design"]
+atAGlance: "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store"
+description: "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store."
 links:
   - { label: "Built by the system: tab-vault.com", href: "https://tab-vault.com" }
   - { label: "System repo", href: "https://github.com/LeonWu813/multi-agent-software-development-system" }
@@ -485,6 +538,19 @@ description: "A production full-stack tab manager spanning a Chrome extension, a
 links:
   - { label: "Live: tab-vault.com", href: "https://tab-vault.com" }
   - { label: "GitHub: tab-management", href: "https://github.com/LeonWu813/tab-management" }
+```
+
+**Record 4 — ProjectDay**
+```
+slug: "projectday"
+year: "2026"
+date: "09/19"
+title: "ProjectDay"
+tech: "Mobile · React Native · Supabase · AWS"
+tags: ["TypeScript", "React Native / Expo", "Supabase (Postgres, Auth, Edge Functions)", "AWS (S3, MediaConvert, CloudFront, CDK)", "EAS", "i18next", "GitHub Actions"]
+atAGlance: "Product owner + orchestrator · 12 modules, built by my multi-agent system · Supabase + AWS video pipeline · Submitted to the App Store (Oct 2026)"
+description: "An iOS app for indoor bouldering climbers in Taiwan: log a send in a few taps, watch beta videos tied to a specific route, and browse gym route lists. Built with my multi-agent development system and submitted to the App Store."
+links: []
 ```
 
 ### ExperienceEntry
@@ -537,6 +603,7 @@ All routes are statically generated at build time (`generateStaticParams` + `dyn
 | /projects/siteplus | SitePlus+ detail |
 | /projects/multi-agent-system | Multi-Agent System detail |
 | /projects/tabvault | TabVault detail |
+| /projects/projectday | ProjectDay detail |
 | /experience | Experience |
 | /about | About |
 | /skills | Skills |
@@ -611,6 +678,8 @@ Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
 | Case study content | `asset/content/case-study-*-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
+| Multi-agent feature image | `asset/diagrams/multi-agent-horizontal.png` (source: `asset/diagrams/multi-agent-horizontal.html`) |
+| ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
 
 ### Still needed — blocking
 
@@ -624,8 +693,9 @@ Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
 |---|---|---|
 | Social preview image (OG image) | All pages (og:image) | 1200×630px; affects link previews only |
 | Screenshot(s) of SitePlus+ dashboard | /projects/siteplus | Optional; provide later |
-| Diagram or demo clip of multi-agent system | /projects/multi-agent-system | Optional; provide later |
 | Screenshot(s) of TabVault PWA / Chrome extension | /projects/tabvault | Optional; provide later |
+| ProjectDay feature image / screenshots | /projects/projectday | Leon's iPhone screenshots from the App Store Connect submission; Leon supplies the files, which ones, and their order. The page renders without them until then. |
+| ProjectDay App Store link | /projects/projectday | Add once the App Store listing is live |
 
 ---
 

@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: add ProjectDay as a fourth project, update the Multi-Agent System page and its image
 
