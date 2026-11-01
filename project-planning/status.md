@@ -7,10 +7,10 @@
 agent: pm
 mode: change
 module: n/a
-result: success
-next: the coordinator runs /pstack:how on site/app/layout.tsx, site/components/Sidebar.tsx and site/app/projects/[slug]/page.tsx, saves the output to project-planning/pstack-findings/ and commits it, then claude --agent tech-lead "change review" (PRD rev 1.7). Then the coordinator runs the design team (/Users/tsan/Desktop/MacBookPro/design-team/: ux-researcher, ux-designer, ui-designer, motion-designer, then design-lead until PASS) on the MOD-012 slideshow, shows the result to Leon, and on his approval runs claude --agent pm "record slideshow design approval" with his exact words. Then claude --agent doc-sync.
-Previous action: human commit d8afeef (new CV in asset/Leon_cv.pdf; experience.md, deck and multi-agent case study aligned to it). Still open for the human: AC-017 sign-off script (mod-home) and AC-091 375px sign-off script (mod-project-multi-agent).
-timestamp: 2026-11-01T23:02:32Z
+result: needs-human
+next: show project-planning/pm-proposals/2026-11-01-cv-alignment-rev-1-8.md to the human (9 questions); on approval run claude --agent pm "apply project-planning/pm-proposals/2026-11-01-cv-alignment-rev-1-8.md" with their exact words quoted. After that apply pass: /pstack:how, then claude --agent tech-lead "change review" for PRD rev 1.7 and 1.8 together, then the MOD-012 design team and Leon's approval, then claude --agent doc-sync.
+Previous action: human commit e479e22 (source copy aligned with the updated CV). Rev 1.7 (9d6eb14) is applied but not yet reviewed or synced. Still open for the human: AC-017 sign-off (mod-home) and AC-091 375px sign-off (mod-project-multi-agent).
+timestamp: 2026-11-01T23:19:17Z
 
 ## PM Updates
 
