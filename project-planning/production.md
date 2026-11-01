@@ -1,10 +1,10 @@
-**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
 ## Project Summary
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 **Goals:**
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
@@ -32,14 +32,22 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 | Language | TypeScript | Throughout |
 | Styling | Tailwind CSS v4 | Class-based dark mode |
 | Font | Roboto | Via next/font/google; weights 400, 500, 700 |
-| Markdown parser | marked | For rendering case study .md files |
 | Deployment | Vercel | Standard Node.js server; no output: 'export' |
 
 ---
 
 ## Architecture
 
-**Layout:** Persistent slim left sidebar containing the wordmark "Leon", primary navigation links, and a "Connect" block with social/contact links. Main content area to the right of the sidebar: single column, comfortable line length (~65–75 characters), generous top and bottom padding between sections.
+**Layout:** Persistent slim left sidebar (w-64, fixed) containing:
+- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Engineer".
+- Primary navigation links with SVG icons and keyboard shortcut badges.
+- Horizontal rule separator.
+- "Online" block with social/contact links and external link icons.
+- Theme toggle at the bottom (desktop only).
+
+Main content area to the right of the sidebar (`md:ml-64`): each page controls its own max-width and padding. The root `<main>` has no padding or max-width of its own.
+
+**No footer.** The footer requirement has been removed.
 
 **Routing:** All routes are static or statically generated at build time. App Router file-based routing under `site/app/`.
 
@@ -56,21 +64,28 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 | /skills | Skills |
 | /contact | Contact |
 
-**Project detail pages:** Four project detail pages are collapsed into a single `app/projects/[slug]/page.tsx` dynamic route. `generateStaticParams` returns all four slugs from the data file. `dynamicParams = false` ensures unknown slugs return 404. `params` is `Promise<{ slug: string }>` and must be awaited.
+**Project detail pages:** Four project detail pages are collapsed into a single `app/projects/[slug]/page.tsx` dynamic route. `generateStaticParams` returns all four slugs from the `projects` array. `dynamicParams = false` ensures unknown slugs return 404. `params` is `Promise<{ slug: string }>` and must be awaited.
 
-**Data files:** Project records, experience entries, and education entries are defined as TypeScript data files. Case study prose is read from markdown files on disk via `fs.readFileSync` and parsed with `marked`.
+**Data files:** Project records, experience entries, and education entries are defined as TypeScript data files. Each project record is a `ProjectEntry` (PRD section 5: `ProjectLink` with `name`, `label` and `href`; `ProjectSection` with `items`; `featureImage`, `featureImageAlt` and `featureImageCaption`) in its own record file `site/data/projects/<slug>.ts`; the ordered `projects` array in `site/data/projects-data.ts` holds them (CONV-005).
 
 **Theme:** Class-based dark mode. `dark` class on `<html>` is the single source of truth. A blocking inline `<script>` in `layout.tsx` sets the class before React hydrates by reading `localStorage` and falling back to `prefers-color-scheme`. The ThemeToggle Client Component writes to `localStorage` and toggles the class on `document.documentElement`.
 
-**Color Palette:**
+**Design reference:** onur.dev layout and IBM Carbon Design System colors.
 
-| Token | Value | Usage |
-| --- | --- | --- |
-| Background | `#f2f0ef` | Off-white/cream background |
-| Primary accent | `#b2ac88` | CTA buttons, links, active nav state |
-| Secondary accent | `#4b6e48` | Status badges, hover states |
-| Muted | `#898989` | Secondary text, borders, muted elements |
-| Body text | `#1a1a1a` | Near-black body text |
+**Color Palette — IBM Carbon Design System:**
+
+| Token | Light (White theme) | Dark (G100 theme) | Role |
+| --- | --- | --- | --- |
+| `--bg` | `#ffffff` | `#161616` | Page background |
+| `--surface` | `#f4f4f4` | `#262626` | Sidebar, cards, chips |
+| `--text` | `#161616` | `#f4f4f4` | Primary text; also active nav bg |
+| `--text-muted` | `#525252` | `#c6c6c6` | Secondary text, dates, subtitles |
+| `--border` | `#e0e0e0` | `#393939` | Dividers, chip borders |
+| `--hover` | `#e8e8e8` | `#333333` | Nav/link hover background |
+| `--accent` | `#0f62fe` | `#78a9ff` | Links, focus rings, pull-quote border |
+| `--accent-hover` | `#0043ce` | `#a6c8ff` | Accent hover state |
+
+Active nav item: `bg-[var(--text)] text-[var(--bg)]` (dark bg, light text in light mode; inverted in dark mode).
 
 **Assets:**
 
@@ -83,10 +98,27 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 | ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
+| Domain | https://www.leon-wu.com |
+| SitePlus+ screenshots | Shown in the SitePlus+ Images section (PRD section 4.3) |
+| TabVault screenshots | Shown in the TabVault Images section (PRD section 4.5) |
 
 **SEO / Open Graph:** Every page exports a `metadata` object (Next.js Metadata API). Title format: `"{Page Name} — Leon Wu"`. Every page includes `description`, `og:title`, `og:description`, `og:image`, `og:url`, `og:type`, `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`, and a canonical URL tag.
 
-[AMBIGUITY: PRD section 6 lists a social preview OG image (1200x630px) as a still-needed asset with no confirmed value — canonical URL and og:image values cannot be fully populated until the domain name and OG image are confirmed. PM must provide the domain and OG image before production deploy.]
+Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
+
+Social preview image: [ASSET NEEDED — 1200×630px]
+
+**Deployment:** Vercel. Zero-config deploys, automatic HTTPS, global CDN. Connect GitHub repo to Vercel; every push to `main` triggers production deploy. Domain: www.leon-wu.com. Configure via Vercel domain settings.
+
+**Still needed — blocking:** None.
+
+**Still needed — non-blocking:**
+
+| Asset | Used On | Notes |
+| --- | --- | --- |
+| Social preview image (OG image) | All pages (og:image) | 1200×630px; affects link previews only |
+| ProjectDay feature image / screenshots | /projects/projectday | Leon's iPhone screenshots from the App Store Connect submission; Leon supplies the files, which ones, and their order. The page renders without them until then. |
+| ProjectDay App Store link | /projects/projectday | Add once the App Store listing is live |
 
 ---
 
@@ -124,11 +156,18 @@ Test:  (none — static site, no automated test suite defined)
 
 - No `output: 'export'` in `next.config.ts` — standard Vercel Node server deployment. Leave `next.config.ts` as is or add only `reactStrictMode: true`.
 - No shadcn/ui — build sidebar from scratch with Tailwind + useState.
-- Case studies rendered from markdown files via `fs.readFileSync` (resolved via `path.join(process.cwd(), '../asset/content/', filename)`) and parsed with `marked`. Do not inline prose as TypeScript strings.
 - Favicon: copy `favicon.ico` and `apple-touch-icon.png` from `asset/favicon_io/` directly into `site/app/` — Next.js App Router generates correct `<link>` tags automatically. Do not place in `public/` with manual link tags.
 - Add `export const dynamicParams = false` in `app/projects/[slug]/page.tsx` to return 404 for unknown slugs.
 - Server Components by default; `use client` only for Sidebar toggle and ThemeToggle.
 - External links always get `target="_blank" rel="noopener noreferrer"`.
+
+**Adopted Conventions (PRD section 9, copied verbatim):**
+
+- CONV-001: The shared project frame belongs to MOD-003: `site/app/projects/`, `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and the interfaces and ordered `projects` array in `site/data/projects-data.ts`. Each project-detail module owns only its record file `site/data/projects/<slug>.ts` and its `site/public/<prefix>*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 and does not edit the template itself. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-002: A project record's position in `projects` is its display order everywhere: the side panel, the mobile switcher and the Home list. `projects[0]` is the `/projects` redirect target. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-005: A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (Tech Lead Reviews, 2026-11-01 change review, rev 1.5)
 
 ---
 
@@ -136,14 +175,14 @@ Test:  (none — static site, no automated test suite defined)
 
 | MOD-ID | Module Name | Directory | Description |
 | --- | --- | --- | --- |
-| MOD-001 | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) | mod-site-shell | Persistent layout shell: left sidebar with wordmark, navigation, and Connect block; footer; dark mode toggle with blocking inline script and localStorage persistence. |
-| MOD-002 | Home Page | mod-home | Hero screen with greeting headline, role subtitle, bio, current status line, and primary CTA linking to LinkedIn. |
-| MOD-003 | Projects Grid Page | mod-projects-grid | Grid of three project cards showing name, tagline, description, tags, status badge, and action links; responsive 1–3 column layout. |
-| MOD-004 | Project Detail: Marketing Analytics | mod-project-marketing | Detail page for the Marketing Analytics Platform at /projects/marketing-analytics; renders case study markdown with header metadata and links. |
-| MOD-005 | Project Detail: Multi-Agent System | mod-project-multi-agent | Detail page for the Multi-Agent Software Development System at /projects/multi-agent-system; renders case study markdown with header metadata and links. |
-| MOD-006 | Project Detail: TabVault | mod-project-tabvault | Detail page for TabVault at /projects/tabvault; renders case study markdown with header metadata and links. |
+| MOD-001 | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) | mod-site-shell | Persistent layout shell: left sidebar with profile section, navigation, and "Online" block; dark mode toggle with blocking inline script and localStorage persistence. No footer. |
+| MOD-002 | Home Page | mod-home | Hero screen with greeting headline, bio, current status line, primary CTA linking to LinkedIn, secondary CTA "Reach out", tertiary CTA "Download CV", and a projects list. |
+| MOD-003 | Projects Grid Page | mod-projects-grid | /projects route and persistent split-panel layout: scrollable project list aside (title and tech string, active item highlighted) beside the active project detail; /projects redirects to /projects/multi-agent-system. Owns the shared project frame (CONV-001). |
+| MOD-004 | Project Detail: Marketing Analytics | mod-project-marketing | Detail page for SitePlus+ at /projects/siteplus; header with H1, At-a-glance, tags, links, description pull-quote, and nine case study sections including Images. Owns site/data/projects/siteplus.ts. |
+| MOD-005 | Project Detail: Multi-Agent System | mod-project-multi-agent | Detail page for the Multi-Agent Software Development System at /projects/multi-agent-system; header with H1, At-a-glance, tags, three links, description pull-quote, feature image with alt text and caption, and eight case study sections. Owns site/data/projects/multi-agent-system.ts. |
+| MOD-006 | Project Detail: TabVault | mod-project-tabvault | Detail page for TabVault at /projects/tabvault; header with H1, At-a-glance, tags, links, description pull-quote, and nine case study sections including Images. Owns site/data/projects/tabvault.ts. |
 | MOD-007 | Experience Page | mod-experience | Reverse-chronological list of professional roles and education entries. |
-| MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, two body paragraphs verbatim from site-copy.md, and education block. |
+| MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, two body paragraphs; no photo and no education block on this page. |
 | MOD-009 | Skills Page | mod-skills | Technical skills listed by category as chip/badge elements, scannable at a glance. |
 | MOD-010 | Contact Page | mod-contact | Contact page with real email address, LinkedIn, GitHub links, and resume PDF download. |
-| MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content with header metadata and no external links. |
+| MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content with header metadata and no external links. Owns site/data/projects/projectday.ts. |

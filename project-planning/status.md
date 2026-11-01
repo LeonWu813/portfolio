@@ -5,13 +5,13 @@
 ## Last Action
 
 ```
-agent: pm
-mode: change
+agent: doc-sync
+mode: delta
 module: n/a
 result: success
-next: claude --agent doc-sync (syncs PRD rev 1.5 and 1.6 together with the Project files line); then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003 step 1 of the E1 = A2 sequence)
-timestamp: 2026-11-01T18:00:00Z
-Previous action: pm proposal pass project-files-line (6ed3557), approved by Leon.
+next: claude --agent engineer-mod-projects-grid "spec-update" (MOD-003 step 1 of the E1 = A2 sequence: add featureImageAlt and featureImageCaption, render the feature image with its caption, drop height="500px"; no data-file split yet). Then, in any order, engineer-mod-project-multi-agent "spec-update", engineer-mod-project-marketing "spec-update", engineer-mod-project-tabvault "spec-update", engineer-mod-project-projectday "implement" (each writes only its own site/data/projects/<slug>.ts); then engineer-mod-projects-grid "spec-update" again (cutover, ProjectDay at index 1); then engineer-mod-project-multi-agent "spec-update" (delete site/public/multi-agent.png); engineer-mod-home "spec-update" (verification only); engineer-mod-contact "spec-update" (AC-072 intro line, any time). New and regenerated agents load with claude --continue if they cannot be called yet. QA after the cutover.
+timestamp: 2026-11-01T19:00:00Z
+Previous action: pm change PRD rev 1.6 (fa72269).
 ```
 
 ---
@@ -665,6 +665,55 @@ All four Phase 3 modules passed dedicated QA agent verification on 2026-06-29. A
 - Drift not covered by this change and left untouched (PM listed only MOD-002/003/005/011): PRD 4.3 and 4.5 section headings carry commas ("How it works, end to end"; "What I learned, and what I would improve") while MOD-004 and MOD-006 specs and ACs (AC-058, AC-046-style) have none; MOD-004 and MOD-006 specs still quote the "three strong projects" goal and say "all three project slugs"; production.md still carries rev 1.2 text for Design palette, Layout, data-file/markdown statements, and Module Index descriptions for MOD-003 and MOD-004.
 - site/data/projects-data.ts section headings for MOD-005 have no commas; the revised AC-046 and AC-092 require the PRD/source wording, so MOD-005 needs a spec-update.
 **verify-sync.sh result:** Script aborts at check 1 (set -e with grep finding no MOD-IDs in prd.md); same pre-existing failure mode as earlier syncs. Manual verification: Check 1 PASS (PRD has no MOD-IDs); Check 2 PASS (all 11 spec.md files map to Module Map rows); Check 3 PASS (Tech Stack unchanged); Check 4 PASS (no US-IDs); Check 5 PASS (the one new AMBIGUITY marker is logged above and is the already-tracked domain item); Check 6 N/A (no PRD phase section; Phase Plan unchanged, MOD-011 and MOD-005 join the current Phase 4 per PM). No HTML template comments remain.
+
+
+---
+
+### Sync Report — Delta Sync — 2026-11-01 (rev 1.5 + rev 1.6)
+**Sync type:** delta (rev 1.5 [SUBSTANTIVE] [ARCHITECTURAL] and rev 1.6 [SUBSTANTIVE], synced together)
+**PRD Revision:** 1.6
+**PM Update reference:** 2026-11-01 [SUBSTANTIVE] Module Map Project files line becomes the folder site/public/ (E2), and PRD 9 adopts CONV-005; PRD rev 1.6 (also covers the 2026-11-01 [SUBSTANTIVE] [ARCHITECTURAL] rev 1.5 entry before it)
+**Files modified:**
+- project-planning/production.md — rev header 1.6; Project Summary 2026/2027; removed the `marked` Tech Stack row and the "case studies rendered from markdown" convention (rev 1.2 drift; PRD 5 content model); Layout and Color Palette replaced with PRD 2 text (IBM Carbon tokens, no footer); Data files paragraph now describes record files; Assets rows (Domain, SitePlus+ and TabVault screenshots); domain statement, OG image, Deployment and non-blocking assets from PRD 6 and 7 replace the old AMBIGUITY marker; CONV-001 to CONV-005 copied verbatim under Shared Conventions; Module Index descriptions for MOD-001, 002, 003, 004, 005, 006, 008, 011
+- modules/mod-home/spec.md (MOD-002) — Home copy per PRD 4.1: H1 with emoji, no subtitle, CTA labels, tertiary CTA "Download CV", bio, status line; AC-011, AC-012, AC-013 and AC-014 follow (AC-013/014 text refers to PRD 4.1, which the Requirements now carry), AC-015 label; domain line
+- modules/mod-projects-grid/spec.md (MOD-003) — ProjectEntry interfaces per PRD 5; CONV-001, CONV-002, CONV-005 as Requirements; link prefix + label, section items, feature image alt/caption requirements; Integration Points for MOD-011 (AC-089 added) and MOD-005 (AC-091, AC-092)
+- modules/mod-project-marketing/spec.md (MOD-004) — "four projects"; nine sections with PRD commas and Images; links as prefix + label (Demo Video, GitHub); Record 1 with `name` and featureImage; interfaces per PRD 5; record file site/data/projects/siteplus.ts and CONV-001/CONV-005 lines; AC-032, AC-034, AC-036; removed the screenshots-optional non-goal; domain line
+- modules/mod-project-tabvault/spec.md (MOD-006) — same set as MOD-004 for TabVault (nine sections, Images, links, Record 3, record file tabvault.ts); AC-056, AC-058, AC-060
+- modules/mod-project-multi-agent/spec.md (MOD-005) — links as prefix + label, Record 2 with featureImageAlt and featureImageCaption, alt text requirement, interfaces per PRD 5, record file multi-agent-system.ts and CONV lines, AC-044, AC-048, AC-092 per PRD 4.4, new Integration Points (MOD-003, AC-091); domain line
+- modules/mod-project-projectday/spec.md (MOD-011) — record file projectday.ts and CONV lines, interfaces per PRD 5, Integration Points gains AC-089; domain line
+- modules/mod-contact/spec.md (MOD-010) — intro line "2026/2027" (Context, Requirements; AC-072 refers to it); PRD section numbers 4.9 to 4.10; domain line
+- modules/mod-experience/spec.md, modules/mod-about/spec.md, modules/mod-skills/spec.md — domain line; PRD section numbers (4.6 to 4.7, 4.7 to 4.8, 4.8 to 4.9)
+- .claude/agents/engineer-<dir>.md and qa-<dir>.md for all 11 modules — regenerated from the current templates (tools and model copied unchanged; body verbatim); each now carries its Module Map Source Path; MOD-001 also carries the Project files line; dependencies aligned with the specs (MOD-004/005/006 now MOD-001 and MOD-003 only; the old "MOD-004 creates [slug]/page.tsx" wording is gone, since CONV-001 gives the template to MOD-003); MOD-003 also gets read access to the MOD-004/005/006/011 status files for the cutover; descriptions normalised
+- project-planning/status.md — Last Action; this report
+**Files created:** none
+**Module removals noted:** none
+**AMBIGUITY markers added:** none
+**AMBIGUITY markers resolved:** the domain/og:url marker in the specs of MOD-002, 004, 005, 006, 007, 008, 009, 010, 011 and in production.md (PRD 6 and 7: https://www.leon-wu.com). The OG image stays an open non-blocking item (PRD 7), written into production.md as the PRD says it, without a marker.
+**CONFLICT markers added:** none
+**Drift fixed that the PM entry listed:** MOD-004 and MOD-006 commas ("How it works, end to end"; "What I learned, and what I would improve") and "four projects"; production.md palette, layout, data-file/markdown statements, Module Index text for MOD-003 and MOD-004. Also fixed in production.md because they contradict the PRD the same way (not listed by PM): MOD-001 "footer", MOD-002 "role subtitle", MOD-005/006 "renders case study markdown", MOD-008 "education block".
+
+**Spec-update scope per module (ACs changed; CONV-004 limits each engineer to these)**
+- MOD-003 (mod-projects-grid): no AC text changed. New Requirements: ProjectEntry fields featureImageAlt/featureImageCaption, feature image caption directly below, link prefix + label, items. Integration Points carry AC-089, AC-091, AC-092.
+- MOD-005 (mod-project-multi-agent): AC-044, AC-048, AC-092 changed; AC-091 unchanged (alt, caption, landscape image); new Requirements: record file, alt text, CONV-001/005.
+- MOD-004 (mod-project-marketing): AC-032, AC-034, AC-036 changed.
+- MOD-006 (mod-project-tabvault): AC-056, AC-058, AC-060 changed.
+- MOD-011 (mod-project-projectday): no AC text changed; Requirements add the record file and CONV-001/005; AC-089 added to Integration Points.
+- MOD-002 (mod-home): AC-011, AC-012, AC-013 (via Requirements), AC-014 (via Requirements), AC-015 changed. Per Tech Lead review the code already matches the new copy: verification only, no code change expected.
+- MOD-010 (mod-contact): AC-072 (intro line now 2026/2027). The code already says it.
+
+**Engineer sequence (source: Tech Lead Reviews 2026-11-01 change review, db8a1ba, and Decisions E1 = A2; these are Tech Lead decisions, not PRD text, so they are recorded here and not written into the specs)**
+1. MOD-003 step 1: add `featureImageAlt?` and `featureImageCaption?` to `ProjectEntry`; in `[slug]/page.tsx` render the feature image as `<figure><img alt={project.featureImageAlt ?? ""} ...>{caption && <figcaption>}</figure>` and remove `height="500px"`; do not split the data file and do not change the array yet.
+2. Record files, any order, each only its own file under CONV-005 (one named export annotated `ProjectEntry`, `import type` only): MOD-005 `multiAgentSystem` with `featureImage: "/multi-agent-horizontal.png"` plus alt and caption, and copy `asset/diagrams/multi-agent-horizontal.png` to `site/public/multi-agent-horizontal.png` (do not delete `multi-agent.png` yet); MOD-004 `siteplus` copied from `projects-data.ts` plus the delta; MOD-006 `tabvault` likewise; MOD-011 `projectday` with `links: []` and no `featureImage`. These files are not imported until step 3, so each engineer checks build and lint only and records "renders after the MOD-003 cutover".
+3. MOD-003 step 2 (cutover): replace the three inline records with imports of the four record files, array order `[multiAgentSystem, projectday, siteplus, tabvault]` (ProjectDay at index 1, so `/projects` still redirects to multi-agent-system); `projects-data.ts` keeps only interfaces and the array; build must produce four `/projects/[slug]` pages.
+4. MOD-005 finishing run: delete `site/public/multi-agent.png` (skip if Leon keeps the file until the Phase 4 integration review).
+5. MOD-002: verification only. 6. MOD-010: any time. 7. QA after step 3.
+Every step keeps `npm run build` passing and lint at 0 errors (baseline 9 `no-img-element` warnings). The rev 1.4 preservation list in the Tech Lead review still applies in full.
+
+**Noted, not changed (no PM Updates entry lists them; nothing was invented):**
+- The MOD-001, MOD-007, MOD-008 and MOD-009 specs were last synced at PRD 1.2 and still differ from the PRD (MOD-001: footer, old palette `#f2f0ef`, "Connect" block; MOD-008: education block; others not checked line by line). MOD-001 will run only for a future og-image copy (E3); run a PM-triggered delta first if that matters.
+- MOD-010 AC-076 and the Requirement allow the label "Download resume"; PRD 4.10 now says "Download CV" or "Resume (PDF)". The code reads "Download resume (PDF)". Left as is.
+- The PRD 4.1 "Layout notes" (outer wrapper classes) are not in the MOD-002 spec; no AC asks for them.
+**verify-sync.sh result:** the script passes checks 1 to 3 and then aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual checks: Check 4 PASS (the PRD has no US-IDs); Check 5 PASS (no AMBIGUITY markers remain in any spec or production.md); Check 6 N/A (no PRD phase section; Phase Plan and Current Phase unchanged, Phase 4). No HTML template comments in any spec or production.md.
 
 ---
 

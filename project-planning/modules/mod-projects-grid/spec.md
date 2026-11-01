@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -47,24 +47,44 @@ Provide the /projects route and its persistent split-panel layout. The /projects
 - Each panel (aside and right panel) scrolls independently; the window never scrolls.
 - Aside is hidden on screens smaller than lg (`hidden lg:block` or equivalent).
 - Project data is read from `site/data/projects-data.ts` using the `ProjectEntry` TypeScript interface.
+- The shared project frame belongs to MOD-003: `site/app/projects/`, `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and the interfaces and ordered `projects` array in `site/data/projects-data.ts`. Each project-detail module owns only its record file `site/data/projects/<slug>.ts` and its `site/public/<prefix>*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 and does not edit the template itself. (CONV-001)
+- A project record's position in `projects` is its display order everywhere: the side panel, the mobile switcher and the Home list. `projects[0]` is the `/projects` redirect target. (CONV-002)
+- A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (CONV-005)
+- Each link in a project's header shows its plain-text prefix (`ProjectLink.name`) followed by the linked label (`ProjectLink.label`); only the label is a link. No links row appears when `links` is empty.
+- A section's `items` are rendered in order: a string is a paragraph (may contain `**bold**`), an `{ image }` item is an image.
+- `featureImage` is the image shown after the pull-quote and before the sections. `featureImageAlt` is its alt text. `featureImageCaption` is the caption shown directly below the feature image. The feature image renders with no cropping on desktop (1280px wide) and mobile (375px wide). When a record has no `featureImage`, the page renders without an empty image slot or a broken image.
 - The ProjectList component iterates the projects array from the data file — no hard-coded titles or slugs.
 - All project routes are statically generated at build time via `generateStaticParams` in the `[slug]` page.
 - ProjectDay appears directly after Multi-Agent Software Development System in the project list. The order of the other projects does not change, and `/projects` still redirects to `/projects/multi-agent-system`.
 
 **ProjectEntry TypeScript interface (from PRD section 5):**
 ```typescript
-interface ProjectLink { label: string; href: string; }
-interface ProjectSection { heading: string; paragraphs: string[]; }
+interface ProjectLink {
+  name: string;    // plain-text prefix shown before the link, e.g. "GitHub: "
+  label: string;   // the linked text
+  href: string;
+}
+
+type SectionItem = string | { image: string };   // a paragraph (may contain **bold**) or an image
+
+interface ProjectSection {
+  heading: string;
+  items: SectionItem[];
+}
+
 interface ProjectEntry {
-  slug: string;
+  slug: string;           // URL slug, e.g. "siteplus"
   year: string;
-  date: string;
+  date: string;           // "MM/DD" format
   title: string;
-  tech: string;
-  tags: string[];
-  atAGlance: string;
-  description: string;
-  links: ProjectLink[];
+  tech: string;           // single string shown in sidebar and home list
+  tags: string[];         // chip labels shown on detail page header
+  atAGlance: string;      // one-line summary shown under title
+  description: string;    // pull-quote shown above sections
+  links: ProjectLink[];   // external links shown in detail header; no links row when empty
+  featureImage?: string;        // image shown after the pull-quote, before the sections
+  featureImageAlt?: string;     // alt text for the feature image
+  featureImageCaption?: string; // caption shown directly below the feature image
   sections: ProjectSection[];
 }
 ```
@@ -78,7 +98,7 @@ interface ProjectEntry {
 ## Input / Output Contract
 
 **Input:**
-- Project data array from `site/data/projects-data.ts`, typed against the `ProjectEntry` interface.
+- Project data array from `site/data/projects-data.ts`, typed against the `ProjectEntry` interface. The array holds the records exported by the record files `site/data/projects/<slug>.ts` (CONV-005).
 - Current URL path — used to determine the active project in the aside.
 
 **Output:**
@@ -105,3 +125,8 @@ interface ProjectEntry {
 
 ### Integration with MOD-011 (Project Detail: ProjectDay)
 - AC-086: ProjectDay appears in the projects side panel at the position set in section 4.2, showing its title and tech line. It is highlighted as active while /projects/projectday is open.
+- AC-089: Once the screenshots are supplied, the feature image renders with meaningful alt text and no cropping on desktop (1280px wide) and mobile (375px wide). Until then, the page renders without an empty image slot or a broken image.
+
+### Integration with MOD-005 (Project Detail: Multi-Agent System)
+- AC-091: On /projects/multi-agent-system, the feature image is the landscape diagram from `asset/diagrams/multi-agent-horizontal.png`, not the earlier portrait diagram. It fills the width of the content column with no cropping on desktop (1280px wide) and mobile (375px wide). It has alt text describing the workflow (proposed: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."), and the caption above appears directly below it.
+- AC-092: The At-a-glance line, tags, three links, description pull-quote, and every section paragraph on /projects/multi-agent-system match this section and the source file word for word. Each link shows its plain-text prefix followed by the linked label, as in the header table, and only the label is a link. The editor's line "Feature image: ..." from the source file does not appear on the page.

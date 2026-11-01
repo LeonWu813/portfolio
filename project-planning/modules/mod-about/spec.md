@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -12,13 +12,13 @@ Short, human narrative about Leon's pivot story at route /about. Renders two bod
 
 ## Context
 
-**Business problem:** From PRD section 4.7: "A short, human narrative plus a photo. Tells Leon's pivot story and frames it as a differentiator." The About page humanizes the portfolio and provides context for Leon's non-traditional path into engineering — from International Business to full-stack development. The PRD notes: "The pivot is the point." This page differentiates Leon from CS graduates by framing his marketing and product background as an asset.
+**Business problem:** From PRD section 4.8: "A short, human narrative plus a photo. Tells Leon's pivot story and frames it as a differentiator." The About page humanizes the portfolio and provides context for Leon's non-traditional path into engineering — from International Business to full-stack development. The PRD notes: "The pivot is the point." This page differentiates Leon from CS graduates by framing his marketing and product background as an asset.
 
-**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.7 govern this module:
+**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.8 govern this module:
 
 - Route: /about
 - Page heading: "About"
-- No photo (not included per PRD section 4.7).
+- No photo (not included per PRD section 4.8).
 - Two body paragraphs verbatim from site-copy.md.
 - Education block included here (can appear here or on Experience per PRD; default for this module is to include it).
 
@@ -28,7 +28,7 @@ Short, human narrative about Leon's pivot story at route /about. Renders two bod
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.7.
+- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.8.
 
 ## Requirements
 
@@ -45,13 +45,13 @@ Short, human narrative about Leon's pivot story at route /about. Renders two bod
 - Page exports a `metadata` object with title "About — Leon Wu" and a page-specific description.
 - Page exports Open Graph tags and Twitter card tags.
 - Page exports a canonical URL tag.
-- [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
+- Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 - Page is a Server Component (no `'use client'`).
 
 ## Input / Output Contract
 
 **Input:**
-- No dynamic data inputs — all copy is static, drawn verbatim from PRD section 4.7 (sourced from site-copy.md).
+- No dynamic data inputs — all copy is static, drawn verbatim from PRD section 4.8 (sourced from site-copy.md).
 
 **Output:**
 - Rendered page at route `/about` inside the Site Shell layout (MOD-001).
@@ -67,8 +67,8 @@ Short, human narrative about Leon's pivot story at route /about. Renders two bod
 ## Acceptance Criteria
 
 - AC-059: The system shall render the page heading "About" on the /about route.
-- AC-060: The system shall render the first body paragraph verbatim: "My path into engineering did not start in a computer science classroom..." (full text as specified in PRD section 4.7).
-- AC-061: The system shall render the second body paragraph verbatim: "The pivot is the point..." (full text as specified in PRD section 4.7).
+- AC-060: The system shall render the first body paragraph verbatim: "My path into engineering did not start in a computer science classroom..." (full text as specified in PRD section 4.8).
+- AC-061: The system shall render the second body paragraph verbatim: "The pivot is the point..." (full text as specified in PRD section 4.8).
 - AC-062: The system shall render the education block with Northeastern University (MS in Computer Science, GPA 3.9/4.0, expected Dec 2027, Seattle WA) and National Chengchi University (BA in International Business, GPA 3.5/4.0, Taipei Taiwan).
 - AC-063: The system shall not include a photo or headshot on the /about page.
 - AC-064: The system shall contain no em dashes in any rendered copy.

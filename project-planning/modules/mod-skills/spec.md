@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -14,7 +14,7 @@ Technical skills listed by category at route /skills, scannable at a glance. Eac
 
 **Business problem:** From PRD Goal 1: "Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page." The Skills page gives recruiters a quick, scannable inventory of Leon's technical toolkit, organized by category so they can find the specific technologies they care about at a glance.
 
-**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.8 govern this module:
+**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.9 govern this module:
 
 - Route: /skills
 - Page heading: "Skills"
@@ -27,14 +27,14 @@ Technical skills listed by category at route /skills, scannable at a glance. Eac
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.8.
+- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.9.
 
 ## Requirements
 
 - Page route: `/skills`
 - Page heading: "Skills"
 - Intro line (verbatim): "Languages, frameworks, and tools I work with."
-- Six skill groups rendered in the following order with the following contents (from PRD section 4.8):
+- Six skill groups rendered in the following order with the following contents (from PRD section 4.9):
 
   | Category | Skills |
   | --- | --- |
@@ -50,7 +50,7 @@ Technical skills listed by category at route /skills, scannable at a glance. Eac
 - Page exports a `metadata` object with title "Skills — Leon Wu" and a page-specific description.
 - Page exports Open Graph tags and Twitter card tags.
 - Page exports a canonical URL tag.
-- [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
+- Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 - Page is a Server Component (no `'use client'`).
 
 ## Input / Output Contract
@@ -73,6 +73,6 @@ Technical skills listed by category at route /skills, scannable at a glance. Eac
 - AC-066: The system shall render the page heading "Skills" and intro line "Languages, frameworks, and tools I work with." on the /skills route.
 - AC-067: The system shall render six skill groups in the order: Languages, Backend, Frontend, Databases and Cloud, DevOps and Tools, Analytics and Design.
 - AC-068: The system shall render each skill item as a chip/badge element within its category group.
-- AC-069: The system shall render all skill items verbatim as specified in PRD section 4.8, with no additions or omissions.
+- AC-069: The system shall render all skill items verbatim as specified in PRD section 4.9, with no additions or omissions.
 - AC-070: The system shall read skills data from a TypeScript data file rather than hardcoding values in the component.
 - AC-071: The system shall export a metadata object with title "Skills — Leon Wu" and Open Graph and Twitter card tags.

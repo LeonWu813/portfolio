@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.4 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -8,7 +8,7 @@ MOD-011: Project Detail: ProjectDay
 
 ## Purpose
 
-Detail page for ProjectDay at route /projects/projectday. Source file: `asset/content/case-study-projectday-detailed.md`. Renders a header area with H1 project name, At-a-glance line (muted, below title), tag chips, and description as a pull-quote, and then six sections from structured TypeScript data (each section: h2 heading + paragraphs with inline bold). Content is stored as Record 4 (a `ProjectEntry`) in the projects data file, `site/data/projects-data.ts`. The page has no external links and, until the screenshots are supplied, no feature image.
+Detail page for ProjectDay at route /projects/projectday. Source file: `asset/content/case-study-projectday-detailed.md`. Renders a header area with H1 project name, At-a-glance line (muted, below title), tag chips, and description as a pull-quote, and then six sections from structured TypeScript data (each section: h2 heading + items: paragraphs with inline bold). Content is stored as Record 4 (a `ProjectEntry`) in the record file `site/data/projects/projectday.ts`. The page has no external links and, until the screenshots are supplied, no feature image.
 
 Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic route file `app/projects/[slug]/page.tsx`. The slug for this module is "projectday".
 
@@ -30,12 +30,14 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.4. Requirements are drawn directly from PRD sections 4.6, 5, and 6.
+- No formal US-IDs defined in PRD revision 1.6. Requirements are drawn directly from PRD sections 4.6, 5, and 6.
 
 ## Requirements
 
 - Page route: `/projects/projectday` (served via `app/projects/[slug]/page.tsx`, slug = "projectday").
 - All routes are statically generated at build time (`generateStaticParams` + `dynamicParams = false`).
+- This module owns only its record file `site/data/projects/projectday.ts` and its `site/public/projectday-*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 and does not edit the template itself. (CONV-001)
+- A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (CONV-005)
 - Header area elements:
   - H1: "ProjectDay"
   - At-a-glance: "Product owner + orchestrator · 12 modules, built by my multi-agent system · Supabase + AWS video pipeline · Submitted to the App Store (Oct 2026)"
@@ -51,7 +53,7 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
   6. What I learned and what I'd improve
 - Inline bold: paragraphs may contain `**bold text**` markdown, which renders as `<strong>` in the UI.
 - Every page must include: `<title>`: `"{Page Name} — Leon Wu"`; `<meta name="description">`; Open Graph and Twitter card tags; canonical URL tag.
-- [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
+- Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 
 **ProjectDay ProjectEntry record (Record 4, from PRD section 5):**
 ```
@@ -68,18 +70,32 @@ links: []
 
 **ProjectEntry TypeScript interface (from PRD section 5):**
 ```typescript
-interface ProjectLink { label: string; href: string; }
-interface ProjectSection { heading: string; paragraphs: string[]; }
+interface ProjectLink {
+  name: string;    // plain-text prefix shown before the link, e.g. "GitHub: "
+  label: string;   // the linked text
+  href: string;
+}
+
+type SectionItem = string | { image: string };   // a paragraph (may contain **bold**) or an image
+
+interface ProjectSection {
+  heading: string;
+  items: SectionItem[];
+}
+
 interface ProjectEntry {
-  slug: string;
+  slug: string;           // URL slug, e.g. "siteplus"
   year: string;
-  date: string;
+  date: string;           // "MM/DD" format
   title: string;
-  tech: string;
-  tags: string[];
-  atAGlance: string;
-  description: string;
-  links: ProjectLink[];
+  tech: string;           // single string shown in sidebar and home list
+  tags: string[];         // chip labels shown on detail page header
+  atAGlance: string;      // one-line summary shown under title
+  description: string;    // pull-quote shown above sections
+  links: ProjectLink[];   // external links shown in detail header; no links row when empty
+  featureImage?: string;        // image shown after the pull-quote, before the sections
+  featureImageAlt?: string;     // alt text for the feature image
+  featureImageCaption?: string; // caption shown directly below the feature image
   sections: ProjectSection[];
 }
 ```
@@ -88,7 +104,7 @@ interface ProjectEntry {
 
 **Input:**
 - `params` for the `[slug]` route, with slug "projectday".
-- Record 4 (`ProjectEntry`) from the projects data file, looked up by slug.
+- Record 4 (`ProjectEntry`) from the record file `site/data/projects/projectday.ts`, looked up by slug in the `projects` array.
 - Source file `asset/content/case-study-projectday-detailed.md`.
 
 **Output:**
@@ -121,6 +137,7 @@ interface ProjectEntry {
 
 ### Integration with MOD-003 (Projects Split Panel)
 - AC-086: ProjectDay appears in the projects side panel at the position set in section 4.2, showing its title and tech line. It is highlighted as active while /projects/projectday is open.
+- AC-089: Once the screenshots are supplied, the feature image renders with meaningful alt text and no cropping on desktop (1280px wide) and mobile (375px wide). Until then, the page renders without an empty image slot or a broken image.
 - Position (section 4.2): ProjectDay appears directly after Multi-Agent Software Development System in the project list. The order of the other projects does not change, and `/projects` still redirects to `/projects/multi-agent-system`.
 
 ### Integration with MOD-002 (Home Page)

@@ -19,8 +19,8 @@ You are the QA agent. Your single responsibility is to verify one assigned modul
 - Module: MOD-011 Project Detail: ProjectDay
 - Directory: mod-project-projectday
 - Spec: `project-planning/modules/mod-project-projectday/spec.md` (the only module spec you may read)
-- Source Path: no Source Path column exists in the status.md Module Map. PM's proposal (status.md PM Updates, 2026-11-01): the ProjectDay record in the shared project data file (`site/data/projects-data.ts`), plus image files under `site/public/` named `projectday-*`. Ownership of the shared data file and the shared `app/projects/[slug]/page.tsx` is for the Tech Lead to decide. You never edit source; this tells you where to look.
-- Dependencies (read access to their status files only): `project-planning/modules/mod-projects-grid/status.md` (MOD-003), `project-planning/modules/mod-home/status.md` (MOD-002). Read these to confirm their state before you start.
+- Source Path: site/data/projects/projectday.ts, site/public/projectday-*
+- Dependencies to read (status only): `project-planning/modules/mod-projects-grid/status.md` (MOD-003), `project-planning/modules/mod-home/status.md` (MOD-002). You never edit source; the Source Path tells you where to look.
 </assigned_module>
 
 <run_modes>

@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.2 | **Last Updated**: 2026-06-28
+**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -12,13 +12,13 @@ Contact page at route /contact that makes contact effortless. Shows a real email
 
 ## Context
 
-**Business problem:** From PRD Goal 3: "Make contact and resume access effortless from any page." From PRD Success Criteria: "A visitor can reach Leon's email, LinkedIn, GitHub, and resume PDF from any page." The contact page is the dedicated destination for recruiters and engineers to take action. From PRD section 4.9: "Showing a real email address (not only a contact form) is required. Forms can break silently; a visible email address always works."
+**Business problem:** From PRD Goal 3: "Make contact and resume access effortless from any page." From PRD Success Criteria: "A visitor can reach Leon's email, LinkedIn, GitHub, and resume PDF from any page." The contact page is the dedicated destination for recruiters and engineers to take action. From PRD section 4.10: "Showing a real email address (not only a contact form) is required. Forms can break silently; a visible email address always works."
 
-**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.9 govern this module:
+**User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.10 govern this module:
 
 - Route: /contact
 - Page heading: "Contact"
-- Intro line (verbatim): "Looking for a Summer 2026 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it."
+- Intro line (verbatim): "Looking for a 2026/2027 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it."
 - Three contact methods required: Email (mailto link), LinkedIn, GitHub.
 - Resume download: `<a href="/Leon_cv.pdf" download="Leon_Wu_Resume.pdf">`.
 - A visible real email address is required — not hidden behind a form.
@@ -30,13 +30,13 @@ Contact page at route /contact that makes contact effortless. Shows a real email
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.9.
+- No formal US-IDs defined in PRD revision 1.2. Requirements are drawn directly from PRD section 4.10.
 
 ## Requirements
 
 - Page route: `/contact`
 - Page heading: "Contact"
-- Intro line (verbatim): "Looking for a Summer 2026 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it."
+- Intro line (verbatim): "Looking for a 2026/2027 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it."
 - Email: display text "leon.wu.tsan.yu@gmail.com" as a `mailto:leon.wu.tsan.yu@gmail.com` link.
 - LinkedIn: display text "linkedin.com/in/leon-wu-tsan-yu" linking to https://www.linkedin.com/in/leon-wu-tsan-yu/ with `target="_blank" rel="noopener noreferrer"`.
 - GitHub: display text "github.com/LeonWu813" linking to https://github.com/LeonWu813 with `target="_blank" rel="noopener noreferrer"`.
@@ -46,13 +46,13 @@ Contact page at route /contact that makes contact effortless. Shows a real email
 - Page exports a `metadata` object with title "Contact — Leon Wu" and a page-specific description.
 - Page exports Open Graph tags and Twitter card tags.
 - Page exports a canonical URL tag.
-- [AMBIGUITY: PRD lists domain name as a still-needed blocking asset — og:url and canonical URL values cannot be populated until the domain is confirmed. PM must provide the domain before production deploy.]
+- Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 - Page is a Server Component (no `'use client'`).
 
 ## Input / Output Contract
 
 **Input:**
-- No dynamic data inputs — all contact information is static, drawn from PRD section 4.9.
+- No dynamic data inputs — all contact information is static, drawn from PRD section 4.10.
 - Static file at `public/Leon_cv.pdf` (copied from `asset/Leon_cv.pdf` before deploy) served by Next.js at the path `/Leon_cv.pdf`.
 
 **Output:**
