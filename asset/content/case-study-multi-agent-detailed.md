@@ -1,11 +1,11 @@
 # Multi-Agent Software Development System
 
-**A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store.**
+**A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped three products: TabVault, a full-stack web app deployed to AWS; ProjectDay, an iOS app submitted to the App Store; and this portfolio site.**
 
-**At a glance:** Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store
+**At a glance:** Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site
 
 `Claude Code (subagents, skills, hooks)` · `Bash` · `Python` · `Git`
-[Built by the system: tab-vault.com](https://tab-vault.com) · [System repo](https://github.com/LeonWu813/multi-agent-software-development-system) · [TabVault repo](https://github.com/LeonWu813/tab-management)
+[System repo](https://github.com/LeonWu813/multi-agent-software-development-system) · [TabVault repo](https://github.com/LeonWu813/tab-management)
 
 ---
 
@@ -65,7 +65,7 @@ The Engineer and QA roles are base templates. Doc-Sync generates a thin wrapper 
 
 ## Impact
 
-The system has shipped two products. TabVault is a full-stack tab and notes manager with three clients, live in production on AWS. ProjectDay is an iOS bouldering app with 12 modules, a Supabase backend and an AWS video pipeline, submitted to the App Store in October 2026. In both, the agents wrote the code while I reviewed and approved each handoff.
+The system has shipped three products. TabVault is a full-stack tab and notes manager with three clients, deployed to production on AWS and now offline. ProjectDay is an iOS bouldering app with 12 modules, a Supabase backend and an AWS video pipeline, submitted to the App Store in October 2026. The third is this portfolio site. In each, the agents wrote the code while I reviewed and approved each handoff.
 
 The second project tested the system at a much larger scale: over 1,500 commits, 217 acceptance criteria, and 88 integration-review items, each decided by a human. Failures stayed contained to one module instead of cascading, and every step can be reviewed and rolled back through git.
 

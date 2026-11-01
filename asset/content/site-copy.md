@@ -49,16 +49,16 @@ Order is fixed as below. Each card shows a name, a one-line tagline that leads w
 
 ### 2. Multi-Agent Software Development System
 - **Tagline:** Six AI agents that plan, build, and ship full-stack software
-- **Description:** A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped a deployed full-stack app, TabVault, end to end.
+- **Description:** A development team of specialized Claude Code agents that coordinate through files and version control, with a human approving every handoff. It shipped three products end to end: TabVault, ProjectDay and this site.
 - **Tags:** AI Agents · Systems Design · Claude Code
 - **Status:** Live in production
 - **See also:** TabVault below — the product this system built ↓
-- **Links:** GitHub · Built by the system: tab-vault.com
+- **Links:** GitHub
 
 ### 3. TabVault
-- **Tagline:** A live full-stack PWA, built by my multi-agent system
+- **Tagline:** A full-stack PWA, built by my multi-agent system
 - **Description:** A production tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend with an AI content-analysis pipeline. I produced it by running my agent system and reviewing every step.
 - **Tags:** Full-Stack · PWA · AI · AWS
-- **Status:** Live in production
+- **Status:** Deployed to AWS, now offline
 - **Built by:** ↑ Multi-Agent Software Development System above
-- **Links:** Live: tab-vault.com · GitHub
+- **Links:** GitHub

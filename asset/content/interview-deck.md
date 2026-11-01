@@ -6,10 +6,13 @@ Editor's note (not page copy): structure. Three "about me" slides, then a projec
 
 ```
 Hi, I'm Leon → Timeline → Life in Seattle → Menu ─┬─ Multi-Agent System (7) ─┐
-                                                  ├─ ProjectDay         (7) ─┤
-                 ┌────────────────────────────────┼─ SitePlus+          (7) ─┤
-                 └─ Menu again (pick another) ←───┴─ TabVault           (5) ─┘
+                 │                                ├─ ProjectDay         (7) ─┤
+                 ├─ Exascend   (hidden)           ├─ SitePlus+          (7) ─┤
+                 └─ GoFreight  (hidden)           └─ TabVault           (4) ─┘
+                                                  Menu again (pick another) ←┘
 ```
+
+Editor's note (not page copy): hidden slides. The two work-experience cards on the Timeline slide open a detail slide each (Exascend, GoFreight). These slides are never reached by Next or Previous from anywhere else; only a click (or key 1 or 2) on the Timeline card opens them. Next or Previous on a detail slide returns to the Timeline.
 
 Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projectday`, `siteplus`, `tabvault`) pre-selects a project, so the next key press on the menu enters it.
 
@@ -21,12 +24,10 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 
 **Title:** Hi, I'm Leon
 
-**Visual:** headshot (`head.png`).
-
 **Titles:**
 - Full-Stack Engineer
 - AI Systems Builder
-- MS Computer Science, Northeastern (3.9 GPA)
+- MS Computer Science, Northeastern
 
 **Speaker notes:** I'm a CS master's student at Northeastern in Seattle. I work across the stack, Java and Spring Boot, React and TypeScript, AWS, and I build AI agent systems that ship software. Today I'll show you one project in depth.
 
@@ -36,11 +37,38 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 
 **Timeline:**
 - **2017 to 2021:** BA International Business, National Chengchi University, Taipei
-- **2021 to 2023:** Growth Marketer / Marketing PM, GoFreight, Taipei
-- **2023 to 2025:** Front-End Developer, Exascend, Taipei
+- **2021 to 2023:** Marketing Project Manager, GoFreight, Taipei (opens the GoFreight detail slide)
+- **2023 to 2025:** Front-End Developer, Exascend, Taipei (opens the Exascend detail slide)
+
+The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens Exascend.
 - **2025 to 2027:** MS Computer Science, Northeastern University, Seattle
 
 **Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 350%. Now I'm at Northeastern to deepen the fundamentals.
+
+### 2a (hidden): Exascend
+
+**Title:** Front-End Developer at Exascend
+
+**Subtitle:** Taipei · Sep 2023 to Aug 2025
+
+**Big numbers:**
+- **70%** less manual reporting, from an event-tracking system I built
+- **350%** more monthly active users on two sites I built from scratch
+- **48.8%** more page views after SEO and accessibility audits
+
+**Speaker notes:** The tracking system posted structured user interactions to the CRM and GA4 APIs. Both websites were plain HTML, CSS and JavaScript, from requirements to launch.
+
+### 2b (hidden): GoFreight
+
+**Title:** Marketing Project Manager at GoFreight
+
+**Subtitle:** Taipei · Jul 2021 to Mar 2023
+
+**Big numbers:**
+- **670%** higher conversion rate, from an A/B testing pipeline I coded
+- **$16.5K** in MRR from a product launch I led
+
+**Speaker notes:** This is where I taught myself to code: I built and maintained the front-end codebase so I could run the experiments myself, with variant logic and event tracking.
 
 ### 3: Life in Seattle
 
@@ -68,8 +96,6 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 2. **ProjectDay:** An iOS climbing app my agents built
 3. **SitePlus+:** Analytics a real company runs on
 4. **TabVault:** Save a tab now, find it later
-
-A project already shown in this session is marked "Shown".
 
 **Footer:** leon-wu.com · github.com/LeonWu813 · linkedin.com/in/leon-wu-tsan-yu · leon.wu.tsan.yu@gmail.com
 
@@ -239,10 +265,10 @@ A project already shown in this session is marked "Shown".
 
 **Big numbers:**
 - **~60%** less analytics work
-- **2** availability zones
-- **0** code changes to scale out
+- **3+** months in real use
+- **10+** reports generated
 
-**Speaker notes:** Stateless JWT auth meant adding the second server needed no code changes.
+**Speaker notes:** It runs on two servers in two availability zones. Stateless JWT auth meant adding the second server needed no code changes.
 
 ### C2: Intro
 
@@ -307,16 +333,9 @@ A project already shown in this session is marked "Shown".
 
 ## Track D: TabVault
 
-### D1: Numbers
+Editor's note (not page copy): TabVault has no numbers slide, at the user's request. It is not live; it was deployed to AWS and is offline now.
 
-**Title:** TabVault
-
-**Big numbers:**
-- **3** clients
-- **1** API
-- **Live** on AWS Fargate
-
-### D2: Intro
+### D1: Intro
 
 **Title:** Save a tab now, find it later
 
@@ -324,9 +343,9 @@ A project already shown in this session is marked "Shown".
 
 **Bullets:**
 - AI summaries and reminders
-- Live at tab-vault.com
+- Deployed on AWS, now offline
 
-### D3: Role and stack
+### D2: Role and stack
 
 **Title:** My role and stack
 
@@ -334,7 +353,7 @@ A project already shown in this session is marked "Shown".
 
 **Stack:** Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate
 
-### D4: Key decision
+### D3: Key decision
 
 **Title:** Saving never waits for the AI
 
@@ -343,7 +362,7 @@ A project already shown in this session is marked "Shown".
 - A worker calls the Claude API
 - Token budget and URL cache cap cost
 
-### D5: Hardest part
+### D4: Hardest part
 
 **Title:** Bugs that only exist in the cloud
 
