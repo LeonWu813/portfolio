@@ -8,7 +8,7 @@ This file covers the home hero and bio, the About paragraph, and the short tease
 
 **Greeting headline:** Hey, I'm Leon
 
-**Title / role:** Full-Stack Engineer
+**Title / role:** Full-Stack Software Engineer
 
 **Primary CTA button:** View my work (links to Projects)
 
@@ -31,8 +31,8 @@ My path into engineering did not start in a computer science classroom. I studie
 The pivot is the point. I learned to engineer by shipping software that people actually use, and I bring that same bias toward real, working results to everything I build, whether that is a production analytics platform or a system of AI agents that ships software on its own.
 
 **Optional education block (can live here or on the Experience page):**
-- Northeastern University, MS in Computer Science, GPA 3.9 / 4.0, expected Dec 2027, Seattle, WA
-- National Chengchi University, BA in International Business, GPA 3.5 / 4.0, Taipei, Taiwan
+- Northeastern University, Master of Science in Computer Science, GPA 3.9 / 4.0, Jul 2025 to Dec 2027 (Expected), Seattle, WA
+- National Chengchi University, Bachelor of International Business, GPA 3.5 / 4.0, Taipei, Taiwan
 
 ---
 
@@ -45,7 +45,7 @@ Order is fixed as below. Each card shows a name, a one-line tagline that leads w
 - **Description:** A full-stack platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Designed, built, and deployed end to end by myself on a multi-AZ AWS setup.
 - **Tags:** Full-Stack · Java/Spring Boot · React · AWS
 - **Status:** Live in production
-- **Links:** Live demo · GitHub
+- **Links:** Demo · GitHub
 
 ### 2. Multi-Agent Software Development System
 - **Tagline:** Six AI agents that plan, build, and ship full-stack software

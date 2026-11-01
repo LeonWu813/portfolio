@@ -101,12 +101,12 @@ const role=(r,stack)=>H('My role and stack')+`<div class="rs"><div class="k">Rol
 const flow=a=>`<div class="flow">${a.map((s,i)=>(i?'<span class="a">→</span>':'')+`<span class="s">${s}</span>`).join('')}</div>`;
 
 const about=[
- {h:`<div class="hello"><div><h1>Hi, I'm Leon</h1><div class="tags"><span>Full-Stack Engineer</span><span>AI Systems Builder</span><span>MS Computer Science, Northeastern</span></div></div></div>`},
+ {h:`<div class="hello"><div><h1>Hi, I'm Leon</h1><div class="tags"><span>Full-Stack Software Engineer</span><span>AI Systems Builder</span><span>MSCS Candidate, Northeastern University</span></div></div></div>`},
  {h:H('From marketing to engineering')+`<div class="tl">
-  <div><div class="y">2017 – 2021</div><div class="r">BA International Business</div><div class="o">National Chengchi University, Taipei</div></div>
+  <div><div class="y">2017 – 2021</div><div class="r">Bachelor of International Business</div><div class="o">National Chengchi University, Taipei</div></div>
   <div class="job" data-j="1"><div class="y">2021 – 2023</div><div class="r">Marketing Project Manager</div><div class="o">GoFreight, Taipei</div><span class="det">Details <kbd>1</kbd></span></div>
   <div class="job" data-j="0"><div class="y">2023 – 2025</div><div class="r">Front-End Developer</div><div class="o">Exascend, Taipei</div><span class="det">Details <kbd>2</kbd></span></div>
-  <div class="now"><div class="y">2025 – 2027</div><div class="r">MS Computer Science</div><div class="o">Northeastern University, Seattle</div></div></div>`},
+  <div class="now"><div class="y">2025 – 2027</div><div class="r">Master of Science in Computer Science</div><div class="o">Northeastern University, Seattle</div></div></div>`},
  {h:H('Based in Seattle, usually on snow or a wall')+`<div class="life"><figure>${img(PUB+'IMG_6875.JPG','Snowboarding')}<figcaption>Snowboarding</figcaption></figure><figure>${img(PUB+'4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG','Bouldering')}<figcaption>Bouldering</figcaption></figure></div>`}
 ];
 const jobs=[
@@ -137,10 +137,10 @@ const tracks=[
  {name:'SitePlus+',desc:'Analytics a real company runs on',slides:[
   nums('SitePlus+',[['~60%','less analytics work'],['3+','months in real use'],['10+','reports generated']]),
   {h:side('Analytics, campaigns and SEO in one place',['Designed, built and deployed alone','Used by a real company'],img(PUB+'siteplusplus-home.jpg','SitePlus+ home'))},
-  {h:role('Sole engineer, full stack and AWS',['Java 21 / Spring Boot','React / TypeScript','Redux','PostgreSQL','Redis','Docker','GitHub Actions','AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)','Cloudflare'])},
+  {h:role('Sole engineer, full stack and AWS',['Java 21 / Spring Boot','Spring Security / JWT','React / TypeScript','Redux','PostgreSQL','Redis','Docker','GitHub Actions','AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)','Cloudflare'])},
   {h:bullets('A company lost hours to manual reports',['Data spread across tools','Same gathering every week','Goal: install once, rely on it'])},
   {h:side('So I built one snippet and one dashboard',['Snippet captures views, clicks, forms','Dashboard: trends, pages, channels','SEO auditor re-checks weekly'],img(PUB+'siteplusplus-reports.jpeg','Reports'))},
-  {h:bullets("But the snippet's endpoint had to be public",['Visitors have no login','Anyone writes, only the owner reads','Shared Redis rate limit stops abuse'])},
+  {h:bullets("But the snippet's endpoint had to be public",['Visitors have no login','Anyone writes, only the owner reads','50 req/min per IP, shared in Redis'])},
   {h:bullets('Going live behind Cloudflare broke CORS',['Preflights never reached my server','My logs showed nothing','Fix: a Worker answers them'])},
   {h:bullets('Real problems start where textbooks stop',['Two servers broke a simple rate limit','Next: sliding window, event-driven deploys',"For your team: I've owned production end to end"])}]},
  {name:'TabVault',desc:'Save a tab now, find it later',slides:[

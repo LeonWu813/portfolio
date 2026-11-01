@@ -25,9 +25,9 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 **Title:** Hi, I'm Leon
 
 **Titles:**
-- Full-Stack Engineer
+- Full-Stack Software Engineer
 - AI Systems Builder
-- MS Computer Science, Northeastern
+- MSCS Candidate, Northeastern University
 
 **Speaker notes:** I'm a CS master's student at Northeastern in Seattle. I work across the stack, Java and Spring Boot, React and TypeScript, AWS, and I build AI agent systems that ship software. Today I'll show you one project in depth.
 
@@ -36,12 +36,12 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 **Title:** From marketing to engineering
 
 **Timeline:**
-- **2017 to 2021:** BA International Business, National Chengchi University, Taipei
+- **2017 to 2021:** Bachelor of International Business, National Chengchi University, Taipei
 - **2021 to 2023:** Marketing Project Manager, GoFreight, Taipei (opens the GoFreight detail slide)
 - **2023 to 2025:** Front-End Developer, Exascend, Taipei (opens the Exascend detail slide)
 
 The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens Exascend.
-- **2025 to 2027:** MS Computer Science, Northeastern University, Seattle
+- **2025 to 2027:** Master of Science in Computer Science, Northeastern University, Seattle
 
 **Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 3.5x, from 12,000 to 41,350. Now I'm at Northeastern to deepen the fundamentals.
 
@@ -316,7 +316,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 
 **Role:** Sole engineer, full stack and AWS
 
-**Stack:** Java 21 / Spring Boot · React / TypeScript · Redux · PostgreSQL · Redis · Docker · GitHub Actions · AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) · Cloudflare
+**Stack:** Java 21 / Spring Boot · Spring Security / JWT · React / TypeScript · Redux · PostgreSQL · Redis · Docker · GitHub Actions · AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) · Cloudflare
 
 ### C4: Problem
 
@@ -345,7 +345,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 **Bullets:**
 - Visitors have no login
 - Anyone writes, only the owner reads
-- Shared Redis rate limit stops abuse
+- 50 req/min per IP, shared in Redis
 
 **Speaker notes:** A per-server counter would have doubled the real limit behind the load balancer. Every resource hangs off a Site owned by a User, so one ownership check protects everything.
 

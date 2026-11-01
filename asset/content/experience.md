@@ -1,6 +1,6 @@
 # Experience Content
 
-Editor's note (not page copy): aligned with the CV (`asset/Leon_cv.pdf`, replaced on 2026-11-01 by the user's newer `cv/fullstack/Leon_Wu_CV.pdf`) on 2026-11-01 at the user's request; the CV is the source of truth for titles, dates and bullets.
+Editor's note (not page copy): the 22.3% engagement figure is not on the CV; the user chose to keep true details that do not conflict with it. Otherwise aligned with the CV (`asset/Leon_cv.pdf`, replaced on 2026-11-01 by the user's newer `cv/fullstack/Leon_Wu_CV.pdf`) on 2026-11-01 at the user's request; the CV is the source of truth for titles, dates and bullets.
 
 ## Work Experience
 
@@ -9,7 +9,7 @@ Editor's note (not page copy): aligned with the CV (`asset/Leon_cv.pdf`, replace
 - **Dates:** Sep 2023 – Aug 2025
 - **Bullets:**
   - Built a custom JavaScript event-tracking system posting structured user interactions to CRM and GA4 APIs, cutting manual reporting 70%.
-  - Two customer-facing websites went from requirements to shipped product under my ownership (HTML, CSS, JavaScript), growing monthly active users 3.5x, from 12,000 to 41,350.
+  - Two customer-facing websites went from requirements to shipped product under my ownership (HTML, CSS, JavaScript), growing monthly active users 3.5x, from 12,000 to 41,350, and increasing average session engagement time by 22.3%.
   - Page views rose 48.8% after a round of technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) that I validated with A/B testing.
 - **Tags:** JavaScript · HTML · CSS · GA4 · SEO · Lighthouse · WCAG
 

@@ -4,8 +4,8 @@
 
 **At a glance:** Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%
 
-`Java 21 / Spring Boot 3.4` · `React / TypeScript` · `Redux Toolkit` · `PostgreSQL` · `Redis` · `Docker` · `GitHub Actions` · `AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)` · `Cloudflare`
-[Live demo](https://www.siteplusplus.space) · [GitHub: marketing-analytics](https://github.com/LeonWu813/marketing-analytics)
+`Java 21 / Spring Boot 3.4` · `Spring Security / JWT` · `React / TypeScript` · `Redux Toolkit` · `PostgreSQL` · `Redis` · `Docker` · `GitHub Actions` · `AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)` · `Cloudflare`
+[Demo](https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah) · [GitHub: marketing-analytics](https://github.com/LeonWu813/marketing-analytics)
 
 ---
 
@@ -63,7 +63,7 @@ Because everything is scoped to a Site, ownership is verified with a single look
 
 ## Key engineering decisions
 
-**Securing an endpoint that has to be public.** The tracking snippet runs in a visitor's browser with no credentials, so the event-ingest endpoint cannot require authentication. Rather than weaken security, I moved the guarantee to the read side: anyone can write an event, but only the authenticated site owner can read events back. To keep the open write path from being abused, I rate-limit it per IP so an attacker can be throttled but never mine the data. This split of a public write from a strictly private read is the heart of the design.
+**Securing an endpoint that has to be public.** The tracking snippet runs in a visitor's browser with no credentials, so the event-ingest endpoint cannot require authentication. Rather than weaken security, I moved the guarantee to the read side: anyone can write an event, but only the authenticated site owner can read events back. To keep the open write path from being abused, I rate-limit writes to 50 requests per minute per IP, so an attacker can be throttled but never mine the data. This split of a public write from a strictly private read is the heart of the design.
 
 **Rate limiting that stays correct across multiple servers.** The platform runs on two instances behind a load balancer. An in-memory counter on each instance would have effectively doubled the real limit, since an attacker could alternate between them. I keep the counter in Redis instead, giving all instances one shared source of truth so the limit holds no matter which server answers a request. Reasoning about state across a distributed deployment, rather than a single box, was what made this correct.
 
@@ -75,7 +75,7 @@ Because everything is scoped to a Site, ownership is verified with a single look
 
 **Data-safety choices that prevent silent corruption.** Two small decisions guard the data over time. Campaigns are soft-deleted rather than removed, because a hard delete would orphan every event that references them and destroy historical reporting. And the site code is immutable, because it is baked into every installed snippet; if it could change, every existing installation would break without warning. I also store enums by name rather than by ordinal position, so reordering a list of constants in code can never quietly remap existing rows.
 
-**Resilience on purpose.** The two instances sit in different availability zones, so a single zone failure leaves the survivor serving all traffic automatically.
+**Resilience on purpose.** The two instances sit in different availability zones, so if one zone goes down, the load balancer fails over 100% of traffic to the survivor automatically.
 
 **Getting real work out of small hardware.** Running on t3.micro instances forced careful JVM tuning. I constrained the heap, metaspace, code cache, and thread stack size, and reduced the web server and database connection pools to fit comfortably alongside Docker and the auto-deploy agent inside one gigabyte of RAM. It taught me a lot about where a JVM actually spends memory.
 
