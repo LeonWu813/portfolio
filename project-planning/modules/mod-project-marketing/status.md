@@ -177,3 +177,27 @@ All required fields are now present. Placeholder domain (`https://your-domain.co
 | AC-040 | FAIL | REGRESSION PASS |
 
 **Overall result: PASS — All 12 ACs pass. 4 previously failing ACs now fixed. No regressions introduced. No new failures found.**
+
+
+### QA Run (regression, 2026-11-01) — PRD rev 1.5/1.6 record-file cutover
+Workflow: regression, because the record file site/data/projects/siteplus.ts was created and wired in (65e9d15, f95eb9d) after earlier QA passes.
+Build (`npm run build` in site/): PASS, /projects/siteplus prerendered. Lint: 0 errors, 9 warnings (img element, pre-existing). Checked against real HTML from `next start` on port 3457.
+
+- AC-029: PASS — h1 "SitePlus+".
+- AC-030: PASS — atAGlance text matches, muted style.
+- AC-031: PASS — ten tag chips in spec order.
+- AC-032: PASS — HTML is `<p>Demo Video: <a href=".../cmosxfpu96m3ew9doctdnhtah" target="_blank" rel="noopener noreferrer">link</a></p>` and `<p>GitHub: <a href="https://github.com/LeonWu813/marketing-analytics" ...>marketing-analytics</a></p>`. Only the label is a link.
+- AC-033: PASS — pull-quote has `border-l-2 border-[var(--accent)]`, text matches.
+- AC-034: PASS — nine h2 headings in spec order, with the commas ("How it works, end to end", "What I learned, and what I would improve"). Images section has only the two img tags (reports then sites), no `<p>`. Other sections have paragraphs. Images, feature image and /public assets all return 200.
+- AC-035: PASS — 7 `<strong>` elements; no literal `**` in visible HTML.
+- AC-036: PASS — content comes from site/data/projects/siteplus.ts. No readFileSync or markdown parsing in the page or data files. Record file exports one `ProjectEntry` constant and imports only the type (CONV-005).
+- AC-037: PASS — params is awaited (unchanged page.tsx).
+- AC-038: PASS — /projects/nope returns 404.
+- AC-039: PASS — generateStaticParams iterates `projects`; build output lists all four slugs.
+- AC-040: PASS — title "SitePlus+ — Leon Wu", canonical and og:url are https://www.leon-wu.com/projects/siteplus, twitter:card summary_large_image.
+- Images section, Demo Video link and CONV-001 ownership: PASS.
+
+Result: all 12 ACs PASS. No human sign-off needed for this module. No failures. No dependency blockers (MOD-001, MOD-003 passed).
+
+### Open items
+- none
