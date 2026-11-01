@@ -5,13 +5,13 @@
 ## Last Action
 
 ```
-agent: pm
-mode: change
+agent: tech-lead
+mode: change-review
 module: n/a
-result: success
-next: the coordinator runs /pstack:how on site/app/projects/, site/data/projects-data.ts and site/components/Project*.tsx and saves the output to project-planning/pstack-findings/, then claude --agent tech-lead "change review" (rev 1.5 Source Paths and as-built records), then claude --agent doc-sync
-timestamp: 2026-11-01T16:00:00Z
-Previous action: pm proposal pass (f1da965); Leon approved rev 1.5 in the coordinator session.
+next: Leon answers E1-E3 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.5 ...)"; then claude --agent pm "change" (trivial: Project files line per E2, proposal pass), then claude --agent doc-sync, then claude --agent engineer-mod-projects-grid "spec-update" (step 1 of the E1 sequence)
+result: needs-human
+timestamp: 2026-11-01T17:00:00Z
+Previous action: pm change rev 1.5 (bb741bd); coordinator /pstack:how findings (47aafe3).
 ```
 
 ---
@@ -255,6 +255,75 @@ pstack input: none. No findings file exists for this review, and none was named 
 - Proposed Convention: A project record's position in `projects` is its display order everywhere (the side panel, the mobile switcher and the Home list). `projects[0]` is the `/projects` redirect target.
 - Proposed Convention: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render.
 - Proposed Convention: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress, not changed.
+
+### Review — 2026-11-01 — change (rev 1.5: Source Paths, record-file split, engineering sequence)
+
+pstack input: project-planning/pstack-findings/2026-11-01-how-project-pages.md (47aafe3). I re-ran the scope checks myself at 47aafe3 with `module_scope.py` (`check` and `paths`, plus a walk over `git ls-files`), and read `[slug]/page.tsx:127-135`, `site/tsconfig.json` and the importers of `@/data/projects-data`.
+- **F1 accepted.** `check mod-projects-grid site/data/projects/siteplus.ts` returns 1 (owned by mod-project-marketing), `projectday.ts` returns 1 (mod-project-projectday), and `site/data/projects/index.ts` returns 1 (unowned). Failure scenario: MOD-003 runs the split that my rev 1.4 order gave it, and pstack-guard blocks its first Write. If MOD-003 uses Bash instead, handoff `changed` fails it. Also accepted: no step in that order adds `projectday` to the array after MOD-011 runs, so `/projects/projectday` would return 404 (`dynamicParams = false`) and AC-086, AC-087 and AC-090 would fail. My rev 1.4 order is superseded by the sequence below.
+- **F2 accepted.** `paths mod-site-shell` prints junk entries (`site/public/ files no module pattern matches (favicons`, `Subject.png)`), and bare names like `head.png` match only at the repo root. 23 tracked files under `site/public/` have no owner: every favicon, `favicon_io/*`, `site.webmanifest`, `Leon_cv.pdf`, the five About photos, `head.png` and `Subject.png`. Only the five `*.svg` files resolve to mod-site-shell. `site/public/og-image.png` is referenced in the metadata of `app/page.tsx`, `about`, `contact`, `experience` and `projects/[slug]`, but the file does not exist and has no owner. Failure scenario: the moment anyone has to change `Leon_cv.pdf` or a favicon, no engineer can write it.
+- **F3 accepted.** `projects[0]` is the redirect target (CONV-002). Index 1 keeps the redirect on multi-agent-system.
+- **F4 accepted, with an added rule.** Records use `import type` only. The types stay in `projects-data.ts`, because `types.ts` and `index.ts` would have no owner.
+- **F5 accepted.** `[slug]/page.tsx:129-134` renders `alt=""` and `height="500px"`, and `ProjectEntry` has no alt or caption field. Under CONV-001 only MOD-003 may change these, so this supersedes the part of my rev 1.4 review that let MOD-005 drop the attribute.
+- **F6 accepted as information only.** The MOD-003 Source Path already uses the folder form `site/app/projects/`. The Edit/Write-only guard is covered by `changed` at handoff. No action needed.
+- **Open question 1:** answered by the sequence below (E1 for Leon).
+- **Open question 2:** answered under E2 and E3 below.
+- **Open question 3 rejected for this change.** AC-089 and AC-091 name only the feature image. Section-image alt text (`alt=""` at `[slug]/page.tsx:154,163`) is a real accessibility gap against the PRD goal "WCAG-conscious", but adding it is a new requirement. It belongs in a later PM change (`SectionItem` image gains `alt?`, owned by MOD-003, then each record fills in its own). It is not part of this sequence.
+- **Open question 4 rejected for this change.** Passing only `{slug, title, tech}` to the nav components is an optimization that no AC asks for. Under CONV-004 a spec-update must not add it. I will consider it at the Phase 4 integration review.
+
+**Concerns** (must address before proceeding):
+- **Record files cannot be created in one step by anyone inside the framework (F1, PM Note A).** Under rev 1.5 each record file belongs to its detail module, the array belongs to MOD-003, and importing a file that does not exist breaks the build. So the split has to be staged: owners create their files first, then MOD-003 cuts over. Leon chooses how (E1).
+- **The type change must land before any record uses the new fields (F5).** `featureImageAlt` and `featureImageCaption` in a record annotated `ProjectEntry` fail the excess-property check until MOD-003 adds them to the interface. MOD-005's AC-091 depends on this.
+- **The `Project files:` line has to be fixed before Doc-Sync carries it into specs (F2).** This is a Module Map change, so it goes through PM. Without the fix, mod-site-shell cannot write any favicon, the CV or `og-image.png`.
+
+**Recommendations** (suggested improvements):
+- **Record-file contract (cross-module; MOD-003 depends on it):**
+  - Each file `site/data/projects/<slug>.ts` contains only `import type { ProjectEntry } from "@/data/projects-data";` and one named export annotated with the type: `export const multiAgentSystem: ProjectEntry = {...}`, `siteplus`, `tabvault`, `projectday`.
+  - The annotation is required, because it makes the build check each record's shape while the file is not yet imported. `tsconfig` includes `**/*.ts`, so the unimported file is still type-checked.
+  - Records never import a value from `projects-data.ts`, which avoids the cycle in F4.
+  - `projects-data.ts` keeps only the interfaces and `export const projects: ProjectEntry[] = [multiAgentSystem, projectday, siteplus, tabvault];`. It contains no helpers or constants.
+- **Engineering sequence, recommended E1 = A2 (each owner writes its own record once, one cutover).** Every step must keep `npm run build` passing and lint at 0 errors (baseline: 9 `no-img-element` warnings). The rev 1.4 preservation list still applies in full.
+  0. **PM trivial change:** fix the `Project files:` line (E2). Then **`claude --agent doc-sync`** syncs rev 1.5 and the fixed line into the specs and `production.md`.
+  1. **`claude --agent engineer-mod-projects-grid "spec-update"` (MOD-003, step 1 of 2).** Scope:
+     - Add `featureImageAlt?: string` and `featureImageCaption?: string` to `ProjectEntry`.
+     - In `[slug]/page.tsx`, render the feature image as `<figure><img alt={project.featureImageAlt ?? ""} .../>{caption && <figcaption>}</figure>` and remove `height="500px"`.
+     - Do not split the data file and do not change the array yet.
+     - Visible result: none, because no record sets the new fields.
+  2. **Record files.** These four runs are independent of each other and can run in any order. Each creates only its own file, under the contract above, with the content its rev 1.5 spec requires. While a file is not imported, it does not render. Each engineer therefore checks it with build/lint only, and records "renders after the MOD-003 cutover" in Engineering Progress.
+     - `engineer-mod-project-multi-agent "spec-update"` (MOD-005): the record with the rev 1.4/1.5 content, tags, At-a-glance, links, `featureImage: "/multi-agent-horizontal.png"` plus alt and caption. Copy `asset/diagrams/multi-agent-horizontal.png` to `site/public/`. Do not delete `site/public/multi-agent.png` yet, because the inline record still uses it until the cutover.
+     - `engineer-mod-project-marketing "spec-update"` (MOD-004): the SitePlus+ record copied from `projects-data.ts`, plus its rev 1.5 delta (commas per D4, "four projects").
+     - `engineer-mod-project-tabvault "spec-update"` (MOD-006): the same for TabVault.
+     - `engineer-mod-project-projectday "implement"` (MOD-011): the new ProjectDay record, with `links: []` and no `featureImage`.
+  3. **`claude --agent engineer-mod-projects-grid "spec-update"` (MOD-003, step 2 of 2: cutover).**
+     - Replace the three inline records with imports of the four record files, in the order `[multiAgentSystem, projectday, siteplus, tabvault]`.
+     - Verify that the build produces four `/projects/[slug]` pages and that `/projects` still redirects to multi-agent-system.
+     - MOD-003 touches only `projects-data.ts`.
+  4. **`engineer-mod-project-multi-agent "spec-update"`, a short finishing run (MOD-005):** delete `site/public/multi-agent.png`, which is now unreferenced. Skip this step if Leon prefers to keep the orphaned file until the Phase 4 integration review.
+  5. **`engineer-mod-home "spec-update"` (MOD-002):** verification only, with no code change expected. ProjectDay appears in the Home list from the array.
+  6. **`engineer-mod-contact "spec-update"` (MOD-010):** change the intro to 2026/2027. This step is independent and can run any time after step 0.
+  7. **QA, after step 3**, for MOD-003, 005, 011, 004, 006, then MOD-002 and MOD-010. QA failures go back to the owning engineer, who by then edits a live file.
+  - **Why A2 over (a), "owners copy verbatim first":** (a) needs three extra copy runs, a third MOD-003 run to add ProjectDay, and separate MOD-004/006 spec-updates later. That is about 10 engineer runs, against 7 for A2. The cost of A2 is that steps 2 and 3 are one "big bang": nothing from step 2 is visible until step 3. In both options, two copies of the SitePlus+ and TabVault records exist for a short time. A2 keeps that window short and ends it at step 3, which deletes the inline copies.
+  - **Option (b), Leon makes a `human:` commit for the mechanical split** (three verbatim files plus the import array). `changed` ignores that commit. It saves no engineer runs compared with A2, because A2 already folds the copy into each owner's single run. It is also one more change made outside the framework, which is exactly the kind of drift rev 1.5 just cleaned up. MOD-003 step 1, all of step 2 except the copy, and a MOD-003 run to add `projectday` at index 1 are still needed.
+  - **Option (c), PM widens MOD-003's Source Path for the split.** This is not recommended, because it is a second PRD change to undo the first.
+- **E2, the `Project files:` line. Recommended: `Project files: mod-site-shell | .gitignore, site/package.json, site/package-lock.json, site/next.config.ts, site/tsconfig.json, site/eslint.config.mjs, site/postcss.config.mjs, site/.gitignore, site/AGENTS.md, site/CLAUDE.md, site/README.md, site/public/`.**
+  - Longest-prefix matching keeps `site/public/siteplus*`, `multi-agent*`, `tabvault-*` and `projectday-*` with their modules. Their literal prefix is 20 or more characters, against 11 for `site/public`.
+  - Everything else under `site/public/`, including the About photos (Decision Q5) and `og-image.png`, goes to mod-site-shell. That is what the line already means in words.
+  - The risk is small and visible. A mis-named project asset (for example `pd-home.png`) is assigned to mod-site-shell, so the MOD-011 engineer is blocked with exit 1. It is never silently written by the wrong module.
+  - Alternative: full paths (`site/public/favicon*`, `site/public/favicon_io/`, `site/public/android-chrome-*`, `site/public/apple-touch-icon.png`, `site/public/site.webmanifest`, `site/public/Leon_cv.pdf`, `site/public/*.svg`, `site/public/IMG_*`, `site/public/4D0BDA8A-*`, `site/public/head.png`, `site/public/Subject.png`, `site/public/og-image.png`). This is more precise, but every new shell asset then needs another Module Map change.
+  - Either way, PM writes it (Module Map), and the line must not contain parentheses or words inside the comma list.
+- **E3, `og-image.png`.** The owner is mod-site-shell (by E2). The file is a Leon-supplied asset (PRD 7, 1200×630). Until it exists, every page's og:image returns 404. That does not break the build and does not block this sequence. Once Leon supplies it in `asset/`, run `engineer-mod-site-shell` to copy it to `site/public/og-image.png`. This works only after E2.
+
+**Approved**:
+- The rev 1.5 Source Paths for MOD-001 to MOD-011 resolve correctly, apart from the Project files line. Specifically: `check mod-projects-grid site/data/projects-data.ts` returns 0, `check mod-project-marketing site/data/projects/siteplus.ts` returns 0, and the asset patterns match the existing `siteplusplus-*`, `tabvault-*` and `multi-agent*` files.
+- CONV-001 to CONV-004 as written in PRD section 9.
+- MOD-002 needs no code change. `app/page.tsx` imports only `projects`.
+
+**Proposed Shared Conventions**:
+- Proposed Convention: A project record file exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `projects-data.ts` holds only the interfaces and the ordered `projects` array.
+
+**Asking Leon (needs-human):**
+- **E1, how the record files get created.** A2 (recommended): MOD-003 adds the alt/caption fields first, then MOD-005, MOD-004, MOD-006 and MOD-011 each write their own record file once with their updated content, then a single MOD-003 cutover adds all four, with ProjectDay second. This takes 7 engineer runs, and nothing new shows on the site until the cutover. (a): each owner first copies its record unchanged, MOD-003 cuts over, then the updates follow. This takes about 10 runs, and the site changes step by step. (b): you make one `human:` commit that splits the file unchanged, and the engineers do the rest. This also takes about 7 runs, because the copy work is folded into A2's runs anyway, so it saves no runs and it puts a source change outside the framework. Which?
+- **E2, the `Project files:` line.** Replace the descriptive part with the folder `site/public/` (recommended; every unclaimed public file, including og-image.png, goes to site-shell)? Or with the full list of paths? Either way PM makes it as a trivial Module Map change before Doc-Sync.
+- **E3, OG image.** Will you supply the 1200×630 `og-image.png` now, so that `engineer-mod-site-shell` copies it in during this change? Or should it stay an open, non-blocking item (every page's og:image returns 404 until then)?
 
 ---
 
