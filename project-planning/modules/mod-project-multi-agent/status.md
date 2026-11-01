@@ -4,6 +4,13 @@
 
 *(No entries yet.)*
 
+### Engineer run: spec-update (E1 = A2 step 2), 2026-11-01
+- Created site/data/projects/multi-agent-system.ts (CONV-005: type-only import, one named export `multiAgentSystem: ProjectEntry`) with rev 1.6 content: atAGlance, tags incl. Python, description, 3 prefix+label links, featureImage /multi-agent-horizontal.png with alt and caption, 8 sections from case-study-multi-agent-detailed.md. Touches ACs 041-048, 091, 092 (data side).
+- Copied asset/diagrams/multi-agent-horizontal.png to site/public/multi-agent-horizontal.png. site/public/multi-agent.png kept until cutover.
+- projects-data.ts not edited; record file is not imported yet (MOD-003 cutover).
+- Self-check: git scope PASS. Build PASS and lint PASS (0 errors, 9 pre-existing warnings), run manually in site/ because self-check.sh runs from repo root and fails with exit 254 / "none" test command (script/layout mismatch, not a code failure).
+- Judgment items: no hardcoded config, no new deps, no comments needed, content strings match source verbatim (generated from the md).
+
 ## QA Results
 
 **QA Agent:** qa-mod-project-multi-agent
