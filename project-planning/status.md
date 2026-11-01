@@ -8,9 +8,9 @@ agent: pm
 mode: change
 module: n/a
 result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-slideshow-lightbox-projectday-images.md to the human (19 questions); on approval run claude --agent pm "apply 2026-11-01-slideshow-lightbox-projectday-images.md" with their exact words quoted
-Previous action: qa-mod-contact passed mod-contact (AC-072..078). Still open for the human: AC-017 sign-off script (mod-home) and AC-091 375px sign-off script (mod-project-multi-agent).
-timestamp: 2026-11-01T17:00:00Z
+next: show project-planning/pm-proposals/2026-11-01-slideshow-lightbox-projectday-images.md (version 2) to the human (20 questions); on approval run claude --agent pm "apply 2026-11-01-slideshow-lightbox-projectday-images.md" with their exact words quoted
+Previous action: human commits 68bdd5f..8f6568d (deck restructured, Experience per CV, TabVault offline, deck preview). Still open for the human: AC-017 sign-off script (mod-home) and AC-091 375px sign-off script (mod-project-multi-agent).
+timestamp: 2026-11-01T23:00:00Z
 
 ## PM Updates
 
