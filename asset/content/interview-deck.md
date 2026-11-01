@@ -43,7 +43,7 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens Exascend.
 - **2025 to 2027:** MS Computer Science, Northeastern University, Seattle
 
-**Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 350%. Now I'm at Northeastern to deepen the fundamentals.
+**Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 3.5x, from 12,000 to 41,350. Now I'm at Northeastern to deepen the fundamentals.
 
 ### 2a (hidden): Exascend
 
@@ -53,7 +53,7 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 **Big numbers:**
 - **70%** less manual reporting, from an event-tracking system I built
-- **350%** more monthly active users on two sites I built from scratch
+- **3.5x** monthly active users on two sites I built from scratch
 - **48.8%** more page views after SEO and accessibility audits
 
 **Speaker notes:** The tracking system posted structured user interactions to the CRM and GA4 APIs. Both websites were plain HTML, CSS and JavaScript, from requirements to launch.
@@ -65,7 +65,7 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 **Subtitle:** Taipei · Jul 2021 to Mar 2023
 
 **Big numbers:**
-- **670%** higher conversion rate, from an A/B testing pipeline I coded
+- **67%** higher conversion rate, from an A/B testing pipeline I coded
 - **$16.5K** in MRR from a product launch I led
 
 **Speaker notes:** This is where I taught myself to code: I built and maintained the front-end codebase so I could run the experiments myself, with variant logic and event tracking.
@@ -201,7 +201,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 
 **Big numbers:**
 - **12** modules
-- **13** gyms in Taipei
+- **13** gyms in greater Taipei
 - **1,500+** commits
 
 **Speaker notes:** Built with my multi-agent system and submitted to the App Store in October 2026.

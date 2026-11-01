@@ -23,7 +23,7 @@ I decided it was the system. So I built one: a development team of specialized a
 
 ## My role
 
-I was the sole architect and builder. I designed the agent roles, the information boundaries between them, the skill layer, the hooks, and the git-backed handoff mechanism. I drafted the full architecture up front in a single design document. Then I hardened it by running five end-to-end simulations and two real products through the system, and fixing whatever broke along the way.
+I was the sole architect and builder. I designed the agent roles, the information boundaries between them, the skill layer, the hooks, and the git-backed handoff mechanism. I drafted the full architecture up front in a single design document. Then I hardened it by running five end-to-end simulations and three real products through the system, and fixing whatever broke along the way.
 
 ## How it works, end to end
 

@@ -83,7 +83,7 @@ ul.bl li::before{content:"";position:absolute;left:0;top:.5em;width:14px;height:
 </style></head><body>
 <div id="stage"><div id="frame"></div></div>
 <div id="hud"><b>PREVIEW</b> (not the real site)<br>
-Space / ↓ / → next · ↑ / ← back · click right or left half<br>
+Space / ↓ / → or click: next · ↑ / ← back<br>
 On the menu: <b>1–4</b> or click a card · <b>M</b> menu · <b>Home</b> first slide<br>
 <b>F</b> full screen · <b>T</b> light/dark · <b>Esc</b> exit · <b>H</b> show/hide this box (hides on first key)</div>
 <div id="toast"></div>
@@ -110,8 +110,8 @@ const about=[
  {h:H('Based in Seattle, usually on snow or a wall')+`<div class="life"><figure>${img(PUB+'IMG_6875.JPG','Snowboarding')}<figcaption>Snowboarding</figcaption></figure><figure>${img(PUB+'4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG','Bouldering')}<figcaption>Bouldering</figcaption></figure></div>`}
 ];
 const jobs=[
- {cls:'cover',h:`<div class="eyebrow">Taipei · Sep 2023 to Aug 2025</div><h1>Front-End Developer at Exascend</h1><div class="big3"><div><div class="n">70%</div><div class="d">less manual reporting, from an event-tracking system I built</div></div><div><div class="n">350%</div><div class="d">more monthly active users on two sites I built from scratch</div></div><div><div class="n">48.8%</div><div class="d">more page views after SEO and accessibility audits</div></div></div>`},
- {cls:'cover',h:`<div class="eyebrow">Taipei · Jul 2021 to Mar 2023</div><h1>Marketing Project Manager at GoFreight</h1><div class="big3"><div><div class="n">670%</div><div class="d">higher conversion rate, from an A/B testing pipeline I coded</div></div><div><div class="n">$16.5K</div><div class="d">in MRR from a product launch I led</div></div></div>`}
+ {cls:'cover',h:`<div class="eyebrow">Taipei · Sep 2023 to Aug 2025</div><h1>Front-End Developer at Exascend</h1><div class="big3"><div><div class="n">70%</div><div class="d">less manual reporting, from an event-tracking system I built</div></div><div><div class="n">3.5x</div><div class="d">monthly active users on two sites I built from scratch</div></div><div><div class="n">48.8%</div><div class="d">more page views after SEO and accessibility audits</div></div></div>`},
+ {cls:'cover',h:`<div class="eyebrow">Taipei · Jul 2021 to Mar 2023</div><h1>Marketing Project Manager at GoFreight</h1><div class="big3"><div><div class="n">67%</div><div class="d">higher conversion rate, from an A/B testing pipeline I coded</div></div><div><div class="n">$16.5K</div><div class="d">in MRR from a product launch I led</div></div></div>`}
 ];
 const pdThree=img(PD+'projectday-home.png','Home')+img(PD+'projectday-gyms.png','Gyms')+img(PD+'projectday-route.png','Route');
 const team=(t,rows)=>H(t)+`<div class="team">${rows.map(([k,v])=>`<div><b>${k}</b><span>${v}</span></div>`).join('')}</div>`;
@@ -126,7 +126,7 @@ const tracks=[
   {h:bullets('Then QA passed code it never ran',['Early QA only read the code','Fix: real server, real requests',"People check what machines can't"])},
   {h:bullets('The system matters more than the prompt',['Most fixes: boundaries, not prompts','Result: 3 products, every step reviewable','For your team: clear specs, small changes, honest tests'])}]},
  {name:'ProjectDay',desc:'An iOS climbing app my agents built',slides:[
-  nums('ProjectDay',[['12','modules'],['13','gyms in Taipei'],['1,500+','commits']]),
+  nums('ProjectDay',[['12','modules'],['13','gyms in greater Taipei'],['1,500+','commits']]),
   {h:side("A climbing log for Taiwan's gyms",['Log a climb in 4 taps','Watch beta for that exact route','Submitted to the App Store'],pdThree,'phones')},
   {h:role('Product owner; built with my multi-agent system',['React Native / Expo','TypeScript','Supabase (Postgres, Auth, Edge Functions)','AWS (S3, MediaConvert, CloudFront, CDK)','EAS','GitHub Actions'])},
   {h:bullets("I climb, and Taiwan's gyms had no app",['Global apps target outdoor crags','Beta videos lost on Instagram','Local app only logs climbs'])},
@@ -196,7 +196,7 @@ addEventListener('keydown',e=>{
   else if(k==='h'||k==='H')hud.classList.toggle('hide');
   else if(k==='Escape')toast('On the real site, Esc returns to the page you came from');
 });
-document.getElementById('stage').addEventListener('click',e=>{hud.classList.add('hide');if(e.target.closest('.card'))return;(e.clientX>innerWidth/2?next:prev)()});
+document.getElementById('stage').addEventListener('click',e=>{hud.classList.add('hide');if(e.target.closest('.card'))return;next()});
 function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);frame.style.transform=`scale(${s})`}
 addEventListener('resize',fit);fit();
 if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark');
