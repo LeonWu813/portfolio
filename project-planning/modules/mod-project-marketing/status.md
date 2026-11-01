@@ -2,7 +2,12 @@
 
 ## Engineering Progress
 
-*(No entries yet.)*
+### spec-update (rev 1.5, E1 = A2 step 2), 2026-11-01
+
+- Created site/data/projects/siteplus.ts (CONV-005: `import type { ProjectEntry }`, named export `siteplus`). Content copied from the as-built record in projects-data.ts, including Images section and Demo Video link; featureImage "/siteplusplus-home.jpg"; links in prefix + label form.
+- Spec ACs changed: AC-034 (PRD heading commas: "How it works, end to end", "What I learned, and what I would improve").
+- projects-data.ts not edited; MOD-003 imports the new file in the cutover (the record is temporarily duplicated until then).
+- Self-check (run in site/): build pass; lint 0 errors (9 pre-existing warnings); no new deps; no hardcoded config. self-check.sh not run at root (known package.json-in-site/ failure).
 
 ## QA Results
 
