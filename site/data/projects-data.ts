@@ -22,6 +22,8 @@ export interface ProjectEntry {
   description: string;
   links: ProjectLink[];
   featureImage?: string;
+  featureImageAlt?: string;
+  featureImageCaption?: string;
   sections: ProjectSection[];
 }
 

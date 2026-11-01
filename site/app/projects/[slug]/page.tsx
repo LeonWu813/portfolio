@@ -126,12 +126,18 @@ export default async function ProjectDetailPage({
 
       {/* Feature image */}
       {project.featureImage && (
-        <img
-          src={project.featureImage}
-          alt=""
-          className="w-full rounded-lg border border-[var(--border)] mb-10"
-          height="500px"
-        />
+        <figure className="mb-10">
+          <img
+            src={project.featureImage}
+            alt={project.featureImageAlt ?? ""}
+            className="w-full rounded-lg border border-[var(--border)]"
+          />
+          {project.featureImageCaption && (
+            <figcaption className="mt-2 text-sm text-[var(--text-muted)]">
+              {project.featureImageCaption}
+            </figcaption>
+          )}
+        </figure>
       )}
 
       {/* Sections */}

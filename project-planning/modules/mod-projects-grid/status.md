@@ -2,7 +2,12 @@
 
 ## Engineering Progress
 
-*(No entries yet.)*
+**spec-update (E1 = A2 step 1), 2026-11-01.** Added `featureImageAlt?` and `featureImageCaption?` to `ProjectEntry`. Detail page renders the feature image as `<figure>` with alt text and a `<figcaption>` when a caption exists; `height="500px"` removed. No data split or reorder (later run). Rev 1.4 preservation list untouched.
+- Build (`npm run build` in site/): pass
+- Lint (`eslint .` in site/): pass, 0 errors (9 pre-existing warnings)
+- self-check.sh: could not run meaningfully (script runs at repo root, package.json is in site/; exit 254/127 are environment, not code)
+- Tests: none for this module
+
 
 ## QA Results
 
