@@ -2,6 +2,9 @@
 
 ## Engineering Progress
 
+- spec-update (E1 = A2 cutover): projects-data.ts now holds only the interfaces, imports the four record files, and exports projects = [multiAgentSystem, projectday, siteplus, tabvault] (ProjectDay at index 1, so /projects still redirects to multi-agent-system). Inline records deleted. Only projects-data.ts changed.
+- Build (site/): pass, /projects/projectday among the static pages. Lint: 0 errors, 9 warnings (pre-existing img warnings). self-check.sh not run (known root package.json issue).
+
 **spec-update (E1 = A2 step 1), 2026-11-01.** Added `featureImageAlt?` and `featureImageCaption?` to `ProjectEntry`. Detail page renders the feature image as `<figure>` with alt text and a `<figcaption>` when a caption exists; `height="500px"` removed. No data split or reorder (later run). Rev 1.4 preservation list untouched.
 - Build (`npm run build` in site/): pass
 - Lint (`eslint .` in site/): pass, 0 errors (9 pre-existing warnings)
