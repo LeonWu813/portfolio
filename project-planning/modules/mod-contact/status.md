@@ -9,6 +9,11 @@
 
 **Self-check:** lint PASS, build PASS
 
+### 2026-11-01 — spec-update (AC-072, PRD rev 1.5, Doc-Sync dabc190)
+- Changed AC-072 only: intro in site/app/contact/page.tsx read "2026/ 2027" (stray space); now "2026/2027" verbatim. No other copy touched.
+- npm run lint (site/): PASS, 0 errors (9 pre-existing warnings elsewhere). npm run build (site/): PASS.
+- self-check.sh not run (fails at repo root, per instruction).
+
 ## QA Results
 
 **Date:** 2026-06-28
