@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: fix the Module Map `Project files:` line (E2) and record E1 = A2
 

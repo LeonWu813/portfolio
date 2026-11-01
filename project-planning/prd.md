@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.5
+**Revision:** 1.6
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -742,3 +742,4 @@ Conventions proposed by the Tech Lead and approved by Leon. Doc-Sync copies them
 - CONV-002: A project record's position in `projects` is its display order everywhere: the side panel, the mobile switcher and the Home list. `projects[0]` is the `/projects` redirect target. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-005: A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (Tech Lead Reviews, 2026-11-01 change review, rev 1.5)

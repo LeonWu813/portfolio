@@ -8,10 +8,10 @@
 agent: pm
 mode: change
 module: n/a
-result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-project-files-line.md to Leon (Q1-Q4); on approval run claude --agent pm "apply project-planning/pm-proposals/2026-11-01-project-files-line.md" with his exact words quoted; then claude --agent doc-sync; then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003 step 1 of the E1 = A2 sequence)
-timestamp: 2026-11-01T17:30:00Z
-Previous action: tech-lead change-review rev 1.5 (db8a1ba), E1-E3 for Leon.
+result: success
+next: claude --agent doc-sync (syncs PRD rev 1.5 and 1.6 together with the Project files line); then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003 step 1 of the E1 = A2 sequence)
+timestamp: 2026-11-01T18:00:00Z
+Previous action: pm proposal pass project-files-line (6ed3557), approved by Leon.
 ```
 
 ---
@@ -57,6 +57,15 @@ Previous action: tech-lead change-review rev 1.5 (db8a1ba), E1-E3 for Leon.
   Notes for Doc-Sync: also fix the drift your 2026-11-01 Sync Report listed, which this entry triggers: the MOD-004 and MOD-006 specs drop commas the PRD has (D4: each page matches its own source file), and still say "three strong projects" and "all three project slugs"; production.md still has rev 1.2 text for the design palette, layout, data-file/markdown statements, and the Module Index descriptions for MOD-003 and MOD-004. Copy section 9 CONV-001 to CONV-004 into production.md.
   Notes for Tech Lead (change review): engineering order and the preservation list are in your 2026-11-01 review (option A order). Note A in the proposal: the Source Paths give site/data/projects/siteplus.ts to MOD-004, multi-agent-system.ts to MOD-005 and tabvault.ts to MOD-006, while option A has MOD-003 create them in the split; settle who creates each record file. The Project files line names some site/public/ files by description ("files no module pattern matches"), not by path; check that module_scope.py reads it as intended.
 
+- 2026-11-01 [SUBSTANTIVE] Module Map Project files line becomes the folder site/public/ (E2), and PRD 9 adopts CONV-005, the project record-file contract; PRD rev 1.6
+  Approved by Leon in the coordinator session: "Approve as written (Recommended)" (Q1, multiple-choice; question: "Approve the `Project files:` line (ending in `site/public/`, so mod-site-shell owns every unclaimed public file incl. og-image.png) and the two Decisions lines (E1 = A2; og-image.png stays open and non-blocking) exactly as written?"); Q4 "Yes, adopt (Recommended)" (option text: "PRD rev 1.6, substantive, not architectural. Puts the contract in production.md where the engineers read it."); Q2 substantive and Q3 not architectural follow from that Q4 option text.
+  Proposal: project-planning/pm-proposals/2026-11-01-project-files-line.md
+  Answers Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.5: Source Paths, record-file split, engineering sequence)" (db8a1ba): E2 "site/public/ (Recommended)"; E1 "A2 (Recommended)", recorded in Decisions; E3 not answered, the OG image stays open and non-blocking (Leon separately asked the coordinator to draft an OG image for his approval; it stays open until he approves a file in asset/); Proposed Convention (record-file contract) adopted as CONV-005.
+  Sections changed: header (Revision 1.6), 9 (CONV-005 added).
+  No module added, removed or renamed; no Source Path in the table changed. Current Phase unchanged (Phase 4 — Deploy).
+  Modules affected: MOD-001 (mod-site-shell now owns every unclaimed site/public/ file, including og-image.png); MOD-003, MOD-004, MOD-005, MOD-006, MOD-011 (CONV-005 governs the record files and projects-data.ts).
+  Notes for Doc-Sync: rev 1.5 has not been synced yet. Sync rev 1.5 and 1.6 together with this Project files line. Copy CONV-005 into production.md.
+
 ---
 
 ## Build Config
@@ -74,6 +83,8 @@ Test:  (none — static site, no automated test suite defined)
 ## Decisions
 
 - 2026-11-01 Q5 (rev 1.5): the unmatched images in site/public/ are not project screenshots. IMG_6353.jpg, IMG_6591.jpg, IMG_6605.jpg, IMG_6875.JPG and 4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG are About photos, head.png is used by the Sidebar, and Subject.png by globals.css. All seven stay with mod-site-shell as project files. Leon: "mod-site-shell".
+- 2026-11-01 E1 (rev 1.5 change review): record files are created by option A2. MOD-003 adds featureImageAlt and featureImageCaption first; MOD-005, MOD-004, MOD-006 and MOD-011 each write their own record file once, with updated content; then one MOD-003 cutover imports all four, with ProjectDay second. 7 engineer runs. Leon: "A2 (Recommended)".
+- 2026-11-01 E3 (rev 1.5 change review): og-image.png not answered yet; it stays an open, non-blocking item (PRD 7). Owner when supplied: mod-site-shell (by E2). Until then every page's og:image returns 404.
 
 ---
 
@@ -93,7 +104,7 @@ Test:  (none — static site, no automated test suite defined)
 | MOD-010 | mod-contact                | Contact Page                         | site/app/contact/ |
 | MOD-011 | mod-project-projectday     | Project Detail: ProjectDay           | site/data/projects/projectday.ts, site/public/projectday-* |
 
-Project files: mod-site-shell | .gitignore, site/package.json, site/package-lock.json, site/next.config.ts, site/tsconfig.json, site/eslint.config.mjs, site/postcss.config.mjs, site/.gitignore, site/AGENTS.md, site/CLAUDE.md, site/README.md, site/public/ files no module pattern matches (favicons, favicon_io/, android-chrome-*, apple-touch-icon.png, site.webmanifest, Leon_cv.pdf, *.svg, IMG_6353.jpg, IMG_6591.jpg, IMG_6605.jpg, IMG_6875.JPG, 4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG, head.png, Subject.png)
+Project files: mod-site-shell | .gitignore, site/package.json, site/package-lock.json, site/next.config.ts, site/tsconfig.json, site/eslint.config.mjs, site/postcss.config.mjs, site/.gitignore, site/AGENTS.md, site/CLAUDE.md, site/README.md, site/public/
 
 ---
 
