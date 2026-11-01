@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: PRD rev 1.5, Source Paths for the shared project files and PRD records of the as-built site
 

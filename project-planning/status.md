@@ -8,10 +8,10 @@
 agent: pm
 mode: change
 module: n/a
-result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-rev-1-5-as-built-and-source-paths.md to Leon; on approval (with the P1-P6 values pasted per Q2) run claude --agent pm "apply 2026-11-01-rev-1-5-as-built-and-source-paths.md" with his exact words quoted. Do not run the MOD-005/003/002/011 engineers until rev 1.5 is synced.
-timestamp: 2026-11-01T15:00:00Z
-Previous action: tech-lead change-review (f7de263), D1-D4 answered by Leon.
+result: success
+next: the coordinator runs /pstack:how on site/app/projects/, site/data/projects-data.ts and site/components/Project*.tsx and saves the output to project-planning/pstack-findings/, then claude --agent tech-lead "change review" (rev 1.5 Source Paths and as-built records), then claude --agent doc-sync
+timestamp: 2026-11-01T16:00:00Z
+Previous action: pm proposal pass (f1da965); Leon approved rev 1.5 in the coordinator session.
 ```
 
 ---
@@ -45,6 +45,18 @@ Previous action: tech-lead change-review (f7de263), D1-D4 answered by Leon.
   Proposed source path for MOD-011 (no Source Path column in this Module Map): the ProjectDay record in the shared project data file, plus image files under site/public/ named projectday-*. The project detail modules share one data file and one [slug] page; ownership of those shared files is for the Tech Lead to decide.
   Notes for Doc-Sync: the site changed outside the framework since the last checkpoint (commits 6fb90ad..29b3a16, including site/public/multi-agent.png and project screenshots in f3834eb); heading commas in the MOD-005 section list still differ between the PRD and the spec; the ProjectDay source file has a header note "No public links yet: the repo is private and the App Store listing is not live." that is not one of the six sections (AC-082 requires no links to render; whether that note shows is not specified by this change).
 
+- 2026-11-01 [SUBSTANTIVE] [ARCHITECTURAL] Source Paths for every module with the shared project files split per D1=A, and the PRD records the as-built site (content model, links, Images sections, Demo Video, domain, Home copy); PRD rev 1.5
+  Approved by Leon in the coordinator session: "Approve as written (Recommended)" (multiple-choice answer to Q1/Q2/Q6/Q7; option text: "Values P1–P6 as shown above; substantive; architectural (adds /pstack:how + Tech Lead change review before Doc-Sync)."); Q3 "(a) Update both (Recommended)"; Q4 "Yes (Recommended)"; Q5 "mod-site-shell"
+  Proposal: project-planning/pm-proposals/2026-11-01-rev-1-5-as-built-and-source-paths.md
+  As-built values P1-P6 pasted by the coordinator from the code at f7de263 and shown to Leon before he approved; written to PRD 4.1, 4.3, 4.5 and 5 exactly as pasted.
+  Answers Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.4 cross-module: shared project files, out-of-framework drift)" (f7de263): D1 "A: split files (Recommended)"; D2 "Keep as-built (Recommended)" (also confirms the SitePlus+ Demo Video link, the Images sections, and www.leon-wu.com); D3 "Keep mine (Recommended)"; D4 "Per source file (Recommended)".
+  Sections changed: header, ToC, 1 (Summer 2026 -> 2026/2027), 4.1 (Home copy: H1 emoji, no subtitle, CTA labels, bio, status line), 4.3 and 4.5 (links as prefix + linked label, Images section as section 4 of 9), 4.4 (links, AC-092), 4.10 (Contact intro 2026/2027), 5 (ProjectLink, SectionItem/ProjectSection, ProjectEntry featureImage/featureImageAlt/featureImageCaption, Records 1-3), 6 (canonical domain, Deployment domain), 7 (assets), new 9 Adopted Conventions CONV-001 to CONV-004.
+  Module Map: Source Path column and Project files line added (owner mod-site-shell; Q5: the About photos, head.png and Subject.png stay with mod-site-shell). No module added, removed or renamed. Current Phase unchanged (Phase 4 — Deploy).
+  Markers resolved: the domain/og:url AMBIGUITY marker in every page spec ("PRD lists domain name as a still-needed blocking asset ...") is resolved by PRD 6 and 7: https://www.leon-wu.com.
+  Modules affected: MOD-002 (AC-011 to AC-015 follow the live Home copy, so the spec changes and the code does not), MOD-003 (owns the shared frame; splits projects-data.ts into one record file per project; adds feature-image alt and caption to the template), MOD-004 and MOD-006 (links, Images section, comma headings, "four projects"), MOD-005 (links form for AC-044 and AC-092), MOD-011 (record file and content model), MOD-010 (Contact intro line now says 2026/2027: spec-update), every page spec (domain).
+  Notes for Doc-Sync: also fix the drift your 2026-11-01 Sync Report listed, which this entry triggers: the MOD-004 and MOD-006 specs drop commas the PRD has (D4: each page matches its own source file), and still say "three strong projects" and "all three project slugs"; production.md still has rev 1.2 text for the design palette, layout, data-file/markdown statements, and the Module Index descriptions for MOD-003 and MOD-004. Copy section 9 CONV-001 to CONV-004 into production.md.
+  Notes for Tech Lead (change review): engineering order and the preservation list are in your 2026-11-01 review (option A order). Note A in the proposal: the Source Paths give site/data/projects/siteplus.ts to MOD-004, multi-agent-system.ts to MOD-005 and tabvault.ts to MOD-006, while option A has MOD-003 create them in the split; settle who creates each record file. The Project files line names some site/public/ files by description ("files no module pattern matches"), not by path; check that module_scope.py reads it as intended.
+
 ---
 
 ## Build Config
@@ -59,21 +71,29 @@ Test:  (none — static site, no automated test suite defined)
 
 ---
 
+## Decisions
+
+- 2026-11-01 Q5 (rev 1.5): the unmatched images in site/public/ are not project screenshots. IMG_6353.jpg, IMG_6591.jpg, IMG_6605.jpg, IMG_6875.JPG and 4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG are About photos, head.png is used by the Sidebar, and Subject.png by globals.css. All seven stay with mod-site-shell as project files. Leon: "mod-site-shell".
+
+---
+
 ## Module Map
 
-| MOD-ID  | Directory                  | Module Name                          |
-|---------|----------------------------|--------------------------------------|
-| MOD-001 | mod-site-shell             | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) |
-| MOD-002 | mod-home                   | Home Page                            |
-| MOD-003 | mod-projects-grid          | Projects Grid Page                   |
-| MOD-004 | mod-project-marketing      | Project Detail: SitePlus+            |
-| MOD-005 | mod-project-multi-agent    | Project Detail: Multi-Agent System   |
-| MOD-006 | mod-project-tabvault       | Project Detail: TabVault             |
-| MOD-007 | mod-experience             | Experience Page                      |
-| MOD-008 | mod-about                  | About Page                           |
-| MOD-009 | mod-skills                 | Skills Page                          |
-| MOD-010 | mod-contact                | Contact Page                         |
-| MOD-011 | mod-project-projectday     | Project Detail: ProjectDay           |
+| MOD-ID  | Directory                  | Module Name                          | Source Path |
+|---------|----------------------------|--------------------------------------|-------------|
+| MOD-001 | mod-site-shell             | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) | site/app/layout.tsx, site/app/globals.css, site/app/favicon.ico, site/app/apple-touch-icon.png, site/components/Sidebar.tsx, site/components/ThemeToggle.tsx, site/components/TopNav.tsx |
+| MOD-002 | mod-home                   | Home Page                            | site/app/page.tsx |
+| MOD-003 | mod-projects-grid          | Projects Grid Page                   | site/app/projects/, site/components/ProjectList.tsx, site/components/ProjectMobileNav.tsx, site/data/projects-data.ts |
+| MOD-004 | mod-project-marketing      | Project Detail: SitePlus+            | site/data/projects/siteplus.ts, site/public/siteplus* |
+| MOD-005 | mod-project-multi-agent    | Project Detail: Multi-Agent System   | site/data/projects/multi-agent-system.ts, site/public/multi-agent* |
+| MOD-006 | mod-project-tabvault       | Project Detail: TabVault             | site/data/projects/tabvault.ts, site/public/tabvault-* |
+| MOD-007 | mod-experience             | Experience Page                      | site/app/experience/, site/data/experience-data.ts |
+| MOD-008 | mod-about                  | About Page                           | site/app/about/ |
+| MOD-009 | mod-skills                 | Skills Page                          | site/app/skills/, site/data/skills-data.ts |
+| MOD-010 | mod-contact                | Contact Page                         | site/app/contact/ |
+| MOD-011 | mod-project-projectday     | Project Detail: ProjectDay           | site/data/projects/projectday.ts, site/public/projectday-* |
+
+Project files: mod-site-shell | .gitignore, site/package.json, site/package-lock.json, site/next.config.ts, site/tsconfig.json, site/eslint.config.mjs, site/postcss.config.mjs, site/.gitignore, site/AGENTS.md, site/CLAUDE.md, site/README.md, site/public/ files no module pattern matches (favicons, favicon_io/, android-chrome-*, apple-touch-icon.png, site.webmanifest, Leon_cv.pdf, *.svg, IMG_6353.jpg, IMG_6591.jpg, IMG_6605.jpg, IMG_6875.JPG, 4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG, head.png, Subject.png)
 
 ---
 

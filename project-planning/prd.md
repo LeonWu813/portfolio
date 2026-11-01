@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.4
+**Revision:** 1.5
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -26,6 +26,7 @@
 6. Functional and Technical Requirements
 7. Assets Needed
 8. Out of Scope
+9. Adopted Conventions
 
 ---
 
@@ -33,7 +34,7 @@
 
 ### Purpose
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a Summer 2026 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 ### Goals
 
@@ -177,19 +178,20 @@ The footer has been removed. No bottom bar or copyright line appears on any page
 
 | Element | Copy |
 |---|---|
-| Greeting headline (H1) | Hey, I'm Leon |
-| Title / role (H2 or subtitle) | Full-Stack Engineer |
-| Primary CTA | Connect me on LinkedIn |
+| Greeting headline (H1) | Hey, I'm Leon 👋 |
+| Primary CTA | Connect on LinkedIn |
 | Secondary CTA | Reach out (links to /contact) |
-| Tertiary CTA | Download CV (links to /Leon_cv.pdf) |
+| Tertiary CTA | Download CV (links to /Leon_cv.pdf; the file downloads as Leon_Wu_Resume.pdf) |
+
+No title/role subtitle appears under the H1.
 
 **Bio (body text):**
 
-> I'm a full-stack engineer and CS master's student at Northeastern. I build production systems by hand, from the database schema to the cloud deployment, and I design multi-agent systems that plan, implement, and ship software end to end. What I care about most is the engineering that makes software hold up in the real world, not just in a demo.
+> I'm a full-stack engineer and CS master's student at Northeastern. I build production systems by hand. From the database schema to the cloud deployment. And I design multi-agent systems that plan, implement, and ship software end to end.
 
 **Current status line:**
 
-> Currently pursuing my MS in Computer Science at Northeastern and looking for a Summer 2026 software engineering internship across full-stack, frontend, or backend roles.
+> Currently seeking a 2026/2027 software engineering internship across full-stack, frontend, or backend roles.
 
 **Projects list** (below bio, no dates):
 - Project title + tech string (e.g. "Full-Stack · Java/Spring Boot · React · AWS")
@@ -232,18 +234,23 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 | Project name (H1) | SitePlus+ |
 | At-a-glance | Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60% |
 | Tags | Full-Stack · Java/Spring Boot · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS |
-| Link 1 | Live demo — https://www.siteplusplus.space |
-| Link 2 | GitHub — https://github.com/LeonWu813/marketing-analytics |
+| Link 1 | "Demo Video: " followed by the linked label "link" — https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah |
+| Link 2 | "GitHub: " followed by the linked label "marketing-analytics" — https://github.com/LeonWu813/marketing-analytics |
+
+Each link shows its plain-text prefix followed by the linked label; only the label is a link.
 
 **Case study sections (in order):**
 1. The problem
 2. My role
 3. How it works, end to end
-4. Architecture
-5. Key engineering decisions
-6. Challenges and how I resolved them
-7. Impact
-8. What I learned, and what I would improve
+4. Images
+5. Architecture
+6. Key engineering decisions
+7. Challenges and how I resolved them
+8. Impact
+9. What I learned, and what I would improve
+
+The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs.
 
 **Inline bold:** Paragraphs may contain `**bold text**` markdown which renders as `<strong>` in the UI.
 
@@ -262,9 +269,9 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 | Project name (H1) | Multi-Agent Software Development System |
 | At-a-glance | Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store |
 | Tags | Claude Code · Bash · Python · Git · Multi-agent · Systems Design |
-| Link 1 | Built by the system: tab-vault.com — https://tab-vault.com |
-| Link 2 | System repo — https://github.com/LeonWu813/multi-agent-software-development-system |
-| Link 3 | TabVault repo — https://github.com/LeonWu813/tab-management |
+| Link 1 | "Built by the system: " followed by the linked label "tab-vault.com" — https://tab-vault.com |
+| Link 2 | "GitHub: " followed by the linked label "System repo" — https://github.com/LeonWu813/multi-agent-software-development-system |
+| Link 3 | "GitHub: " followed by the linked label "TabVault repo" — https://github.com/LeonWu813/tab-management |
 | Feature image | `asset/diagrams/multi-agent-horizontal.png` (landscape, 3080x1560). It replaces the current portrait diagram in the same position on the page. Editable source: `asset/diagrams/multi-agent-horizontal.html`. |
 | Feature image caption | Human approval sits on every arrow. The coordinator runs the next step only after the human says yes. |
 
@@ -282,7 +289,7 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 **Acceptance criteria (added in revision 1.4):**
 - AC-091: On /projects/multi-agent-system, the feature image is the landscape diagram from `asset/diagrams/multi-agent-horizontal.png`, not the earlier portrait diagram. It fills the width of the content column with no cropping on desktop (1280px wide) and mobile (375px wide). It has alt text describing the workflow (proposed: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."), and the caption above appears directly below it.
-- AC-092: The At-a-glance line, tags, three links, description pull-quote, and every section paragraph on /projects/multi-agent-system match revision 1.4 and the source file word for word. The editor's line "Feature image: ..." from the source file does not appear on the page.
+- AC-092: The At-a-glance line, tags, three links, description pull-quote, and every section paragraph on /projects/multi-agent-system match this section and the source file word for word. Each link shows its plain-text prefix followed by the linked label, as in the header table, and only the label is a link. The editor's line "Feature image: ..." from the source file does not appear on the page.
 
 ---
 
@@ -299,18 +306,23 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 | Project name (H1) | TabVault |
 | At-a-glance | Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate |
 | Tags | Java 21 / Spring Boot · React / TypeScript PWA · Chrome Extension (MV3) · PostgreSQL · Redis · Quartz · Claude API · AWS ECS Fargate |
-| Link 1 | Live: tab-vault.com — https://tab-vault.com |
-| Link 2 | GitHub — https://github.com/LeonWu813/tab-management |
+| Link 1 | "Live: " followed by the linked label "tab-vault.com" — https://tab-vault.com |
+| Link 2 | "GitHub: " followed by the linked label "tab-management" — https://github.com/LeonWu813/tab-management |
+
+Each link shows its plain-text prefix followed by the linked label; only the label is a link.
 
 **Case study sections (in order):**
 1. The problem
 2. My role
 3. How it works, end to end
-4. Architecture
-5. Key engineering decisions
-6. Challenges and how I resolved them
-7. Impact
-8. What I learned, and what I would improve
+4. Images
+5. Architecture
+6. Key engineering decisions
+7. Challenges and how I resolved them
+8. Impact
+9. What I learned, and what I would improve
+
+The Images section shows the TabVault screenshots (`/tabvault-mobile.jpeg`, `/tabvault-plugin.png`, in order) and has no paragraphs.
 
 ---
 
@@ -443,7 +455,7 @@ Each category rendered as a labeled group with chip/badge elements per skill.
 
 **Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`.
 
-**Intro line:** Looking for a Summer 2026 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it.
+**Intro line:** Looking for a 2026/2027 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it.
 
 **Contact methods:**
 
@@ -467,7 +479,8 @@ A real email address (not only a contact form) is required. Forms can break sile
 
 ```typescript
 interface ProjectLink {
-  label: string;
+  name: string;    // plain-text prefix shown before the link, e.g. "GitHub: "
+  label: string;   // the linked text
   href: string;
 }
 ```
@@ -475,9 +488,11 @@ interface ProjectLink {
 ### ProjectSection
 
 ```typescript
+type SectionItem = string | { image: string };   // a paragraph (may contain **bold**) or an image
+
 interface ProjectSection {
   heading: string;
-  paragraphs: string[];   // may contain **bold** markdown syntax
+  items: SectionItem[];
 }
 ```
 
@@ -493,7 +508,10 @@ interface ProjectEntry {
   tags: string[];         // chip labels shown on detail page header
   atAGlance: string;      // one-line summary shown under title
   description: string;    // pull-quote shown above sections
-  links: ProjectLink[];   // external links shown in detail header
+  links: ProjectLink[];   // external links shown in detail header; no links row when empty
+  featureImage?: string;        // image shown after the pull-quote, before the sections
+  featureImageAlt?: string;     // alt text for the feature image
+  featureImageCaption?: string; // caption shown directly below the feature image
   sections: ProjectSection[];
 }
 ```
@@ -509,8 +527,9 @@ tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit",
 atAGlance: "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%"
 description: "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent."
 links:
-  - { label: "Live demo", href: "https://www.siteplusplus.space" }
-  - { label: "GitHub: marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
+  - { name: "Demo Video: ", label: "link", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
+  - { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
+featureImage: "/siteplusplus-home.jpg"
 ```
 
 **Record 2 — Multi-Agent Software Development System**
@@ -522,9 +541,12 @@ tags: ["Claude Code", "Bash", "Python", "Git", "Multi-agent", "Systems Design"]
 atAGlance: "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store"
 description: "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store."
 links:
-  - { label: "Built by the system: tab-vault.com", href: "https://tab-vault.com" }
-  - { label: "System repo", href: "https://github.com/LeonWu813/multi-agent-software-development-system" }
-  - { label: "TabVault repo", href: "https://github.com/LeonWu813/tab-management" }
+  - { name: "Built by the system: ", label: "tab-vault.com", href: "https://tab-vault.com" }
+  - { name: "GitHub: ", label: "System repo", href: "https://github.com/LeonWu813/multi-agent-software-development-system" }
+  - { name: "GitHub: ", label: "TabVault repo", href: "https://github.com/LeonWu813/tab-management" }
+featureImage: the landscape diagram in section 4.4 (a copy of asset/diagrams/multi-agent-horizontal.png; file name and location are the Tech Lead's call)
+featureImageAlt: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."
+featureImageCaption: "Human approval sits on every arrow. The coordinator runs the next step only after the human says yes."
 ```
 
 **Record 3 — TabVault**
@@ -536,8 +558,9 @@ tags: ["Java 21 / Spring Boot", "React / TypeScript PWA", "Chrome Extension (MV3
 atAGlance: "Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate"
 description: "A production full-stack tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend, with an AI content-analysis pipeline. I produced it by running my own multi-agent development system, reviewing and approving every step."
 links:
-  - { label: "Live: tab-vault.com", href: "https://tab-vault.com" }
-  - { label: "GitHub: tab-management", href: "https://github.com/LeonWu813/tab-management" }
+  - { name: "Live: ", label: "tab-vault.com", href: "https://tab-vault.com" }
+  - { name: "GitHub: ", label: "tab-management", href: "https://github.com/LeonWu813/tab-management" }
+featureImage: "/tabvault-home.png"
 ```
 
 **Record 4 — ProjectDay**
@@ -641,6 +664,7 @@ Every page must include:
 - `<meta name="description">`: page-specific description
 - Open Graph and Twitter card tags
 - Canonical URL tag
+- Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 
 Social preview image: [ASSET NEEDED — 1200×630px]
 
@@ -653,7 +677,7 @@ Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
 
 - **Host:** Vercel. Zero-config deploys, automatic HTTPS, global CDN.
 - **Deploy:** Connect GitHub repo to Vercel; every push to `main` triggers production deploy.
-- **Domain:** Custom domain [ASSET NEEDED]. Configure via Vercel domain settings.
+- **Domain:** www.leon-wu.com. Configure via Vercel domain settings.
 
 ### Repository Maintenance (pre-launch checklist)
 
@@ -680,20 +704,19 @@ Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
 | Experience content | `asset/content/experience.md` |
 | Multi-agent feature image | `asset/diagrams/multi-agent-horizontal.png` (source: `asset/diagrams/multi-agent-horizontal.html`) |
 | ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
+| Domain | https://www.leon-wu.com |
+| SitePlus+ screenshots | Shown in the SitePlus+ Images section (section 4.3) |
+| TabVault screenshots | Shown in the TabVault Images section (section 4.5) |
 
 ### Still needed — blocking
 
-| Asset | Used On | Notes |
-|---|---|---|
-| Preferred domain name | Deployment, canonical URLs, OG tags | Configure in Vercel at deploy time |
+None.
 
 ### Still needed — non-blocking
 
 | Asset | Used On | Notes |
 |---|---|---|
 | Social preview image (OG image) | All pages (og:image) | 1200×630px; affects link previews only |
-| Screenshot(s) of SitePlus+ dashboard | /projects/siteplus | Optional; provide later |
-| Screenshot(s) of TabVault PWA / Chrome extension | /projects/tabvault | Optional; provide later |
 | ProjectDay feature image / screenshots | /projects/projectday | Leon's iPhone screenshots from the App Store Connect submission; Leon supplies the files, which ones, and their order. The page renders without them until then. |
 | ProjectDay App Store link | /projects/projectday | Add once the App Store listing is live |
 
@@ -708,3 +731,14 @@ The following are explicitly not part of this build.
 - **Internationalization (i18n):** English only.
 - **Footer:** Removed. No bottom bar or copyright line on any page.
 - **Analytics:** GA4 is deferred. Not implemented in current revision.
+
+---
+
+## 9. Adopted Conventions
+
+Conventions proposed by the Tech Lead and approved by Leon. Doc-Sync copies them into production.md.
+
+- CONV-001: The shared project frame belongs to MOD-003: `site/app/projects/`, `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and the interfaces and ordered `projects` array in `site/data/projects-data.ts`. Each project-detail module owns only its record file `site/data/projects/<slug>.ts` and its `site/public/<prefix>*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 and does not edit the template itself. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-002: A project record's position in `projects` is its display order everywhere: the side panel, the mobile switcher and the Home list. `projects[0]` is the `/projects` redirect target. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
