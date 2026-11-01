@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interview Deck Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--surface:#f4f4f4;--text:#161616;--muted:#525252;--border:#e0e0e0;--accent:#0f62fe;--stage:#e8e8e8}
+:root.dark{--bg:#161616;--surface:#262626;--text:#f4f4f4;--muted:#c6c6c6;--border:#393939;--accent:#78a9ff;--stage:#000}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--stage);color:var(--text);font-family:Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
+#stage{position:fixed;inset:0;display:grid;place-items:center}
+#frame{width:1600px;height:900px;background:var(--bg);position:relative;transform-origin:center;padding:84px 104px 96px;display:flex;flex-direction:column}
+h1{font-size:64px;line-height:1.12;font-weight:700;margin:0 0 48px;letter-spacing:-.015em}
+b{font-weight:700}
+ul.bl{list-style:none;padding:0;margin:0;font-size:38px;line-height:1.3}
+ul.bl li{padding-left:40px;position:relative;margin:0 0 26px}
+ul.bl li::before{content:"";position:absolute;left:0;top:.5em;width:14px;height:14px;background:var(--accent)}
+.row{display:flex;gap:64px;flex:1;min-height:0;align-items:center}
+.row .txt{flex:0 0 560px}
+.row .vis{flex:1;min-width:0;height:100%;display:flex;gap:20px;align-items:center;justify-content:center}
+.vis img{max-width:100%;max-height:100%;object-fit:contain;border:1px solid var(--border);border-radius:6px;background:#fff}
+.phones img{max-height:600px;border-radius:22px;min-width:0}
+.cover{justify-content:center}
+.eyebrow{font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.cover h1{font-size:76px;margin-bottom:80px}
+.big3{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;border-top:3px solid var(--text);padding-top:44px}
+.big3 .n{font-size:112px;font-weight:700;line-height:1;color:var(--accent);letter-spacing:-.02em}
+.big3 .d{font-size:34px;margin-top:16px}
+.hello{display:flex;gap:88px;align-items:center;flex:1}
+.hello img{width:400px;height:400px;border-radius:50%;object-fit:cover;flex:none}
+.hello h1{font-size:96px;margin-bottom:40px}
+.tags{display:flex;flex-direction:column;gap:18px}
+.tags span{font-size:38px;border-left:6px solid var(--accent);padding-left:24px}
+.tl{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:40px}
+.tl::before{content:"";position:absolute;left:0;right:0;top:15px;height:3px;background:var(--border)}
+.tl div{position:relative;padding-top:56px}
+.tl>div::before{content:"";position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;background:var(--bg);border:5px solid var(--accent)}
+.tl .y{font-size:30px;font-weight:700;color:var(--accent);padding:0}
+.tl .r{font-size:32px;font-weight:700;margin:14px 0 8px;line-height:1.2;padding:0}
+.tl .o{font-size:26px;color:var(--muted);line-height:1.35;padding:0}
+.tl .job{cursor:pointer;border-radius:8px;margin:-12px;padding:68px 12px 16px;transition:background .15s}
+.tl .job::before{left:12px;top:16px}
+.tl .job:hover{background:var(--surface)}
+.det{display:inline-flex;gap:8px;align-items:center;margin-top:14px;font-size:22px;font-weight:700;color:var(--accent);padding:0!important}
+.det kbd{font:inherit;font-size:18px;border:2px solid var(--accent);border-radius:4px;padding:0 6px}
+.tl .now::before{background:var(--accent)}
+.life{display:grid;grid-template-columns:1fr 1fr;gap:32px;flex:1;min-height:0}
+.life figure{margin:0;display:flex;flex-direction:column;min-height:0}
+.life img{flex:1;min-height:0;width:100%;object-fit:cover;border-radius:8px}
+.life figcaption{font-size:34px;font-weight:700;margin-top:16px}
+.rs{display:grid;grid-template-columns:240px 1fr;gap:36px 40px;font-size:38px;align-items:baseline}
+.rs .k{font-size:26px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:14px}
+.chips span{font-size:30px;border:2px solid var(--border);border-radius:999px;padding:8px 22px}
+.flow{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;margin:8px 0 48px}
+.flow .s{font-size:30px;font-weight:700;border:3px solid var(--text);border-radius:8px;padding:16px 22px;background:var(--bg);white-space:nowrap}
+.flow .a{font-size:34px;color:var(--muted)}
+.wf{flex:1;display:flex;flex-direction:column;justify-content:center;gap:36px}
+.wf .flow{margin:0;justify-content:center}
+.wf .s.h{background:var(--accent);border-color:var(--accent);color:#fff}
+.wf .loop{font-size:28px;color:var(--muted);text-align:center}
+.wf .bar{font-size:34px;font-weight:700;text-align:center;background:var(--surface);border-radius:8px;padding:20px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;flex:1;min-height:0}
+.card{border:2px solid var(--border);border-radius:10px;padding:32px 36px;cursor:pointer;display:flex;gap:28px;align-items:flex-start;background:var(--bg);color:var(--text);text-align:left;font:inherit;position:relative}
+.card:hover,.card:focus-visible{border-color:var(--accent);outline:none}
+.card.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.key{flex:0 0 56px;height:56px;border:2px solid var(--muted);border-radius:8px;display:grid;place-items:center;font-size:30px;font-weight:700;color:var(--muted)}
+.card .nm{font-size:40px;font-weight:700;margin-bottom:12px}
+.card .ds{font-size:30px;line-height:1.3;color:var(--muted)}
+.card .seen{position:absolute;right:28px;top:28px;font-size:22px;font-weight:700;color:var(--accent);border:2px solid var(--accent);border-radius:999px;padding:4px 14px}
+.mfoot{font-size:24px;color:var(--muted);margin-top:28px}
+.chip{position:absolute;right:48px;bottom:34px;font-size:22px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{position:absolute;left:104px;bottom:34px;font-size:22px;color:var(--muted)}
+#hud{position:fixed;left:12px;top:12px;font:13px/1.5 Roboto,sans-serif;color:#fff;background:rgba(22,22,22,.88);padding:10px 14px;border-radius:6px;max-width:380px;z-index:5}
+#hud.hide{display:none}
+#hud b{color:#a6c8ff}
+#toast{position:fixed;left:50%;top:24px;transform:translateX(-50%);background:#161616;color:#fff;padding:10px 18px;border-radius:6px;font-size:15px;opacity:0;transition:opacity .2s;z-index:6}
+#toast.on{opacity:1}
+</style></head><body>
+<div id="stage"><div id="frame"></div></div>
+<div id="hud"><b>PREVIEW</b> (not the real site)<br>
+Space / ↓ / → next · ↑ / ← back · click right or left half<br>
+On the menu: <b>1–4</b> or click a card · <b>M</b> menu · <b>Home</b> first slide<br>
+<b>F</b> full screen · <b>T</b> light/dark · <b>Esc</b> exit · <b>H</b> show/hide this box (hides on first key)</div>
+<div id="toast"></div>
+<script>
+const PUB='file:///Users/tsan/Desktop/MacBookPro/portfolio/site/public/';
+const PD='file:///Users/tsan/Desktop/MacBookPro/portfolio/asset/screenshots/projectday/';
+const img=(p,a)=>`<img src="${p}" alt="${a}">`;
+const q=new URLSearchParams(location.search);
+const H=t=>`<h1>${t}</h1>`;
+const BL=a=>`<ul class="bl">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+const bullets=(t,a)=>H(t)+BL(a);
+const side=(t,a,v,cls='')=>H(t)+`<div class="row"><div class="txt">${BL(a)}</div><div class="vis ${cls}">${v}</div></div>`;
+const nums=(name,arr)=>({cls:'cover',h:`<div class="eyebrow">Project</div><h1>${name}</h1><div class="big3">${arr.map(([n,d])=>`<div><div class="n">${n}</div><div class="d">${d}</div></div>`).join('')}</div>`});
+const role=(r,stack)=>H('My role and stack')+`<div class="rs"><div class="k">Role</div><div>${r}</div><div class="k">Stack</div><div class="chips">${stack.map(s=>`<span>${s}</span>`).join('')}</div></div>`;
+const flow=a=>`<div class="flow">${a.map((s,i)=>(i?'<span class="a">→</span>':'')+`<span class="s">${s}</span>`).join('')}</div>`;
+
+const about=[
+ {h:`<div class="hello"><div><h1>Hi, I'm Leon</h1><div class="tags"><span>Full-Stack Engineer</span><span>AI Systems Builder</span><span>MS Computer Science, Northeastern</span></div></div></div>`},
+ {h:H('From marketing to engineering')+`<div class="tl">
+  <div><div class="y">2017 – 2021</div><div class="r">BA International Business</div><div class="o">National Chengchi University, Taipei</div></div>
+  <div class="job" data-j="1"><div class="y">2021 – 2023</div><div class="r">Marketing Project Manager</div><div class="o">GoFreight, Taipei</div><span class="det">Details <kbd>1</kbd></span></div>
+  <div class="job" data-j="0"><div class="y">2023 – 2025</div><div class="r">Front-End Developer</div><div class="o">Exascend, Taipei</div><span class="det">Details <kbd>2</kbd></span></div>
+  <div class="now"><div class="y">2025 – 2027</div><div class="r">MS Computer Science</div><div class="o">Northeastern University, Seattle</div></div></div>`},
+ {h:H('Based in Seattle, usually on snow or a wall')+`<div class="life"><figure>${img(PUB+'IMG_6875.JPG','Snowboarding')}<figcaption>Snowboarding</figcaption></figure><figure>${img(PUB+'4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG','Bouldering')}<figcaption>Bouldering</figcaption></figure></div>`}
+];
+const jobs=[
+ {cls:'cover',h:`<div class="eyebrow">Taipei · Sep 2023 to Aug 2025</div><h1>Front-End Developer at Exascend</h1><div class="big3"><div><div class="n">70%</div><div class="d">less manual reporting, from an event-tracking system I built</div></div><div><div class="n">350%</div><div class="d">more monthly active users on two sites I built from scratch</div></div><div><div class="n">48.8%</div><div class="d">more page views after SEO and accessibility audits</div></div></div>`},
+ {cls:'cover',h:`<div class="eyebrow">Taipei · Jul 2021 to Mar 2023</div><h1>Marketing Project Manager at GoFreight</h1><div class="big3"><div><div class="n">670%</div><div class="d">higher conversion rate, from an A/B testing pipeline I coded</div></div><div><div class="n">$16.5K</div><div class="d">in MRR from a product launch I led</div></div></div>`}
+];
+const pdThree=img(PD+'projectday-home.png','Home')+img(PD+'projectday-gyms.png','Gyms')+img(PD+'projectday-route.png','Route');
+const tracks=[
+ {name:'Multi-Agent System',desc:'An AI dev team with a human in charge',slides:[
+  nums('Multi-Agent Development System',[['3','products shipped'],['6','agent dev team'],['6','skills created']]),
+  {h:H('An AI dev team with a human in charge')+`<div class="wf"><div class="flow"><span class="s h">Requirements</span><span class="a">→</span><span class="s">PM</span><span class="a">→</span><span class="s">Doc-Sync</span><span class="a">→</span><span class="s">Engineer ⇄ QA</span><span class="a">→</span><span class="s">Tech Lead</span><span class="a">→</span><span class="s h">Shipped</span></div><div class="loop">↺ Retrospective feeds improvements back into the system</div><div class="bar">I approve every handoff</div></div>`},
+  {h:role('Sole architect and builder',['Claude Code (subagents, skills, hooks)','Bash','Python','Git'])},
+  {h:bullets('One AI agent loses the plot',['Context drifts over long sessions','Earlier decisions get overwritten','No clean way to undo'])},
+  {h:bullets('Strict boundaries over shared context',['Each agent sees only its spec','Scope check on every change','Every handoff is a git commit','Cost: one extra sync step'])},
+  {h:bullets('Hardest part: making QA honest',['Early QA passed code by reading it','Now: real server, real requests',"People check what machines can't"])},
+  {h:bullets('The system matters more than the prompt',['Most fixes: boundaries, not prompts','Next: measure handoff success','For your team: clear specs, small changes, honest tests'])}]},
+ {name:'ProjectDay',desc:'An iOS climbing app my agents built',slides:[
+  nums('ProjectDay',[['12','modules'],['13','gyms in Taipei'],['1,500+','commits']]),
+  {h:side("A climbing log for Taiwan's gyms",['Log a climb in 4 taps','Watch beta for that exact route','Submitted to the App Store'],pdThree,'phones')},
+  {h:role('Product owner; built with my multi-agent system',['React Native / Expo','TypeScript','Supabase (Postgres, Auth, Edge Functions)','AWS (S3, MediaConvert, CloudFront, CDK)','EAS','GitHub Actions'])},
+  {h:bullets("Taiwan's indoor climbers have no app",['Global apps target outdoor crags','Beta videos lost on Instagram','Local app only logs climbs'])},
+  {h:H('Video moved from Supabase to AWS')+flow(['Upload','S3','MediaConvert','CloudFront'])+BL(['iPhone HDR looked overexposed','No CDN for playback','Cost: a second cloud to run'])},
+  {h:bullets('Caught a privacy hole before launch',['Backfill copied any storage path','Users could copy private videos','Fix: owner-prefix check'])},
+  {h:bullets('Mocked tests can lie',['Passed Jest, broke the iOS build','Now: native build before QA','Next: Android, offline logging'])}]},
+ {name:'SitePlus+',desc:'Analytics a real company runs on',slides:[
+  nums('SitePlus+',[['~60%','less analytics work'],['3+','months in real use'],['10+','reports generated']]),
+  {h:side('Analytics, campaigns and SEO in one place',['One snippet in, one dashboard out','Used in production by a real company'],img(PUB+'siteplusplus-home.jpg','SitePlus+ home'))},
+  {h:role('Sole engineer, full stack and AWS',['Java 21 / Spring Boot','React / TypeScript','Redux','PostgreSQL','Redis','Docker','GitHub Actions','AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)','Cloudflare'])},
+  {h:side('Hours of manual reports, every week',['Data spread across tools','Same gathering every report','Goal: install once, rely on it'],img(PUB+'siteplusplus-reports.jpeg','Reports'))},
+  {h:bullets('Public writes, private reads',["Snippet can't carry a login",'Anyone writes, only the owner reads','Redis rate limit shared by both servers'])},
+  {h:bullets('A CORS bug my logs never saw',['Cloudflare intercepted preflight requests','Fix: a Worker answers them'])},
+  {h:bullets('Real problems start where textbooks stop',['Two servers broke a simple rate limit','Next: sliding window, event-driven deploys',"For your team: I've owned production end to end"])}]},
+ {name:'TabVault',desc:'Save a tab now, find it later',slides:[
+  {h:side('Save a tab now, find it later',['AI summaries and reminders','Deployed on AWS, now offline'],img(PUB+'tabvault-home.png','TabVault home'))},
+  {h:role('Orchestrator and reviewer; built by my multi-agent system',['Java 21 / Spring Boot','React / TypeScript PWA','Chrome Extension (MV3)','PostgreSQL','Redis','Quartz','Claude API','AWS ECS Fargate'])},
+  {h:bullets('Saving never waits for the AI',['Save queues a job, returns instantly','A worker calls the Claude API','Token budget and URL cache cap cost'])},
+  {h:bullets('Bugs that only exist in the cloud',['Health check behind login: no traffic','ARM image on x86 servers','Each fix became a deploy checklist item'])}]}
+];
+const keyOf={'multi-agent':0,projectday:1,siteplus:2,tabvault:3};
+let picked=keyOf[q.get('project')]??null; const shown=new Set();
+let pos={k:'a',i:0};
+{const h=location.hash.slice(1);if(h==='menu')pos={k:'menu'};else if(h==='menu2'){pos={k:'menu'};shown.add(0)}else if(/^j\d$/.test(h))pos={k:'job',j:+h[1]};else if(/^a\d$/.test(h))pos={k:'a',i:+h[1]};else if(/^\d-\d+$/.test(h)){const[a,b]=h.split('-').map(Number);pos={k:'t',t:a,i:b};picked=a}}
+const frame=document.getElementById('frame');
+function menu(){return H(shown.size?'Pick another project':'Pick a project')+`<div class="cards">${tracks.map((t,i)=>`<button class="card${picked===i&&!shown.has(i)?' sel':''}" data-t="${i}"><span class="key">${i+1}</span><span><div class="nm">${t.name}</div><div class="ds">${t.desc}</div></span></button>`).join('')}</div><div class="mfoot">leon-wu.com · github.com/LeonWu813 · linkedin.com/in/leon-wu-tsan-yu · leon.wu.tsan.yu@gmail.com</div>`}
+function render(){
+  let s,chip='';
+  if(pos.k==='job')s=jobs[pos.j];
+  else if(pos.k==='a')s=about[pos.i];
+  else if(pos.k==='menu')s={h:menu()};
+  else{const tr=tracks[pos.t];s=tr.slides[pos.i];chip=`<span class="track">${tr.name}</span><span class="chip">${pos.i+1} / ${tr.slides.length}</span>`}
+  frame.className=s.cls||'';frame.innerHTML=s.h+chip;
+  frame.querySelectorAll('.job').forEach(c=>c.onclick=e=>{e.stopPropagation();pos={k:'job',j:+c.dataset.j};render()});
+  frame.querySelectorAll('.card').forEach(c=>c.onclick=e=>{e.stopPropagation();enter(+c.dataset.t)});
+}
+function enter(t){picked=t;pos={k:'t',t,i:0};render()}
+function next(){
+  if(pos.k==='job'){pos={k:'a',i:1};render();return}
+  if(pos.k==='a'){pos=pos.i<about.length-1?{k:'a',i:pos.i+1}:{k:'menu'}}
+  else if(pos.k==='menu'){if(picked===null||shown.has(picked)){toast('Pick a project: press 1 to 4 or click a card');return}enter(picked);return}
+  else{if(pos.i<tracks[pos.t].slides.length-1)pos.i++;else{shown.add(pos.t);picked=null;pos={k:'menu'}}}
+  render();
+}
+function prev(){
+  if(pos.k==='job'){pos={k:'a',i:1};render();return}
+  if(pos.k==='a'){if(!pos.i)return;pos.i--}
+  else if(pos.k==='menu')pos={k:'a',i:about.length-1};
+  else{pos.i>0?pos.i--:pos={k:'menu'}}
+  render();
+}
+let tt;function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),1800)}
+const hud=document.getElementById('hud');if(location.hash)hud.classList.add('hide');
+addEventListener('keydown',e=>{
+  const k=e.key;if(k!=='h'&&k!=='H')hud.classList.add('hide');
+  if([' ','ArrowDown','ArrowRight','PageDown','Enter'].includes(k)){e.preventDefault();next()}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(k)){e.preventDefault();prev()}
+  else if(pos.k==='menu'&&/^[1-4]$/.test(k))enter(+k-1);
+  else if(pos.k==='a'&&pos.i===1&&(k==='1'||k==='2')){pos={k:'job',j:k==='1'?1:0};render()}
+  else if(k==='m'||k==='M'){if(pos.k==='t')shown.add(pos.t);pos={k:'menu'};render()}
+  else if(k==='Home'){pos={k:'a',i:0};render()}
+  else if(k==='f'||k==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  else if(k==='t'||k==='T')document.documentElement.classList.toggle('dark');
+  else if(k==='h'||k==='H')hud.classList.toggle('hide');
+  else if(k==='Escape')toast('On the real site, Esc returns to the page you came from');
+});
+document.getElementById('stage').addEventListener('click',e=>{hud.classList.add('hide');if(e.target.closest('.card'))return;(e.clientX>innerWidth/2?next:prev)()});
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);frame.style.transform=`scale(${s})`}
+addEventListener('resize',fit);fit();
+if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark');
+render();
+</script></body></html>
