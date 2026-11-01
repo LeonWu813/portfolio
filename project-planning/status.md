@@ -5,13 +5,13 @@
 ## Last Action
 
 ```
-agent: tech-lead
-mode: change-review
+agent: pm
+mode: change
 module: n/a
-next: Leon answers E1-E3 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.5 ...)"; then claude --agent pm "change" (trivial: Project files line per E2, proposal pass), then claude --agent doc-sync, then claude --agent engineer-mod-projects-grid "spec-update" (step 1 of the E1 sequence)
 result: needs-human
-timestamp: 2026-11-01T17:00:00Z
-Previous action: pm change rev 1.5 (bb741bd); coordinator /pstack:how findings (47aafe3).
+next: show project-planning/pm-proposals/2026-11-01-project-files-line.md to Leon (Q1-Q4); on approval run claude --agent pm "apply project-planning/pm-proposals/2026-11-01-project-files-line.md" with his exact words quoted; then claude --agent doc-sync; then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003 step 1 of the E1 = A2 sequence)
+timestamp: 2026-11-01T17:30:00Z
+Previous action: tech-lead change-review rev 1.5 (db8a1ba), E1-E3 for Leon.
 ```
 
 ---
