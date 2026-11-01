@@ -2,6 +2,12 @@
 
 ## Engineering Progress
 
+### spec-update (rev 1.5/1.6, E1 = A2 step 2)
+- Created site/data/projects/tabvault.ts (CONV-005): type-only import, one named export `tabvault: ProjectEntry`, copied from the inline record with as-built content (Images section, prefix+label links, featureImage "/tabvault-home.png").
+- ACs changed: section headings now "How it works, end to end" and "What I learned, and what I would improve" (PRD heading commas).
+- site/data/projects-data.ts not edited; MOD-003 imports the file at cutover.
+- Self-check: build pass, lint 0 errors (9 pre-existing warnings), run in site/ (self-check.sh not run, package.json in site/).
+
 *(No entries yet.)*
 
 ## QA Results
