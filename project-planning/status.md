@@ -5,12 +5,13 @@
 ## Last Action
 
 ```
-agent: doc-sync
-mode: delta
+agent: tech-lead
+mode: change-review
 module: n/a
-result: success
-next: for each module whose spec changed: claude --agent engineer-mod-project-multi-agent "spec-update" (MOD-005, built), then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003), claude --agent engineer-mod-home "spec-update" (MOD-002), and claude --agent engineer-mod-project-projectday "implement" (MOD-011, new; if the new agents cannot be called yet, claude --continue reloads them). Before MOD-011 implement, Tech Lead should decide ownership of the shared projects-data.ts and [slug]/page.tsx (see the Sync Report note on Source Path).
-timestamp: 2026-11-01T13:00:00Z
+next: Leon answers D1-D4 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.4 cross-module)", then claude --agent pm "change: rev 1.5 — Source Paths for the shared project files and PRD records of the as-built site, per Tech Lead review 2026-11-01 and Leon's answers" (proposal pass). Do not run the MOD-005/003/002/011 engineers until that change is synced.
+result: needs-human
+timestamp: 2026-11-01T14:00:00Z
+Previous action: doc-sync delta for PRD rev 1.4 (8fb7253).
 ```
 
 ---
@@ -162,6 +163,78 @@ Infrastructure verified against live scaffold at `site/`.
 **`project-planning/setup.md` created:** step-by-step runbook covering runtime requirements, repository layout, dependency install, dev server, production build, lint, scaffold cleanup checklist, and asset locations.
 
 Environment is ready for MOD-001. Engineer may begin immediately.
+
+### Review — 2026-11-01 — change (rev 1.4 cross-module: shared project files, out-of-framework drift)
+
+pstack input: none. No findings file exists for this review, and none was named in the invocation.
+
+**Baseline checked at 8fb7253:** `npm run build` passes (12 static pages; /projects/[slug] builds multi-agent-system, siteplus, tabvault). `npm run lint` shows 0 errors and 9 `@next/next/no-img-element` warnings, all from Leon's `<img>` tags. Engineers must leave lint at 0 errors. They should not switch to `next/image` as part of this change, because that would be scope creep.
+
+**Concerns** (must address before proceeding):
+
+- **The PRD and specs describe a content model the code no longer uses.** Leon's commits a8b292e..29b3a16 changed `site/data/projects-data.ts`. `ProjectSection` now has `items: SectionItem[]` (`string | { image: string }`) instead of `paragraphs`. `ProjectLink` gained a `name` prefix field, and `ProjectEntry` gained `featureImage?`. The SitePlus+ and TabVault records also gained "Images" sections. PRD section 5 and the MOD-003, MOD-005 and MOD-011 specs still quote the old interface. Failure scenario: the MOD-005 or MOD-011 engineer follows its spec literally and writes `paragraphs: [...]`. That fails TypeScript. Or the engineer "fixes" the interface back to the spec, which breaks the MOD-004 and MOD-006 records and the image grid in `[slug]/page.tsx`. That would revert Leon's screenshots without anyone noticing. Leon must decide (D2) before MOD-005 or MOD-011 run.
+- **AC-044 and AC-092 cannot pass on the current link layout without reverting Leon's change.** The multi-agent links render as plain text plus a link: "Built by the system: " + `<a>tab-vault.com</a>`, then "GitHub: " + `<a>System repo</a>`, then "GitHub: " + `<a>TabVault repo</a>` (`[slug]/page.tsx` lines 108-116). The spec expects the link text to be "Built by the system: tab-vault.com", "System repo" and "TabVault repo". Leon decides (D2).
+- **AC-091 needs a change to the shared template.** The feature image in `site/app/projects/[slug]/page.tsx` (line 127-134) renders `alt=""` and has no caption. A meaningful alt text and the caption directly below the image need two new optional `ProjectEntry` fields (proposed: `featureImageAlt`, `featureImageCaption`), rendered as `<figure>`/`<figcaption>`. MOD-011's AC-089 needs the same alt support later. This edits the file that four modules share, so ownership has to be settled first (D1).
+- **The MOD-002 spec-update will collide with Leon's Home edits.** The current `site/app/page.tsx` H1 reads "Hey, I'm Leon 👋", and there is no "Full-Stack Engineer" subtitle. The bio has different wording and no em dashes. The status line and metadata say "2026/2027" where the PRD says "Summer 2026", and the CTA reads "Connect on LinkedIn" where the PRD says "Connect me on LinkedIn". So AC-011 to AC-015 already fail against the PRD. A `spec-update` run "updates the code to match" and would rewrite Leon's copy. The QA re-verify that follows would fail those ACs either way. Leon decides (D3).
+- **Nothing in the framework can enforce ownership of the shared files right now.** The Module Map has no Source Path column, so `module_scope.py` returns 3 and both the hook and the self-check skip the scope check. The older wrappers (MOD-005, MOD-003, MOD-002) carry no Source Path at all. Ownership is also file-level only, so one shared `projects-data.ts` cannot express "each module edits only its own record". Adding a Source Path column is a PRD-level change (PM, then Doc-Sync).
+
+**Recommendations** (suggested improvements):
+
+- **Ownership (Q1), recommended option A.** MOD-003 (Projects split panel) owns the shared frame: `site/app/projects/` (layout.tsx, page.tsx, [slug]/page.tsx), `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and `site/data/projects-data.ts`. MOD-003 is the module that already owns the /projects route and every consumer of the list. In A, `projects-data.ts` keeps only the interfaces and the ordered `projects` array, which imports one record file per project:
+  - `site/data/projects/multi-agent-system.ts` (MOD-005), plus assets `site/public/multi-agent*`
+  - `site/data/projects/siteplus.ts` (MOD-004), plus assets `site/public/siteplus*` (this pattern also matches Leon's existing `siteplusplus-*` files)
+  - `site/data/projects/tabvault.ts` (MOD-006), plus assets `site/public/tabvault-*`
+  - `site/data/projects/projectday.ts` (MOD-011), plus assets `site/public/projectday-*`
+  
+  MOD-002 only reads the data. With this split, ownership becomes file-level, so the hook can enforce it, and no two engineers edit the same file. The split itself does not change behavior, and MOD-003 makes it together with the template extension above. Option B (lighter): keep one file and record an interim rule that each detail module edits only its own record and assets, with MOD-005 allowed a one-time change to the template. B adds no step, but nothing enforces it and it breaks the "one owner" rule for the template. Leon decides (D1).
+- **Content model (D2), recommended: the PRD follows the as-built code.** The PRD section 5 interfaces would become `items: (string | { image: string })[]`, `ProjectLink { name, label, href }`, `featureImage?`, plus the new `featureImageAlt?` and `featureImageCaption?`. AC-044 and AC-092 would state the "prefix + link" form, for example "Built by the system: tab-vault.com" with only "tab-vault.com" linked. The other possibility is that Leon wants the PRD link text, in which case MOD-005 changes only its own record.
+- **Same PM change: record what else Leon changed.** The PRD does not yet describe these items:
+  - the SitePlus+ link "Demo Video: link" (supademo URL), where PRD 4.3 says "Live demo" (siteplusplus.space)
+  - the "Images" H2 sections in SitePlus+ and TabVault, which make 9 sections where PRD 4.3 and 4.5 list 8
+  - the hard-coded domain `https://www.leon-wu.com` in every canonical URL and og:url, while PRD section 7 still lists the domain as "[ASSET NEEDED]" and every spec carries the domain AMBIGUITY marker
+  
+  PM should ask Leon to confirm each one. The edits are not part of this change's scope, but leaving them out lets MOD-004 and MOD-006 QA revert them later.
+- **Heading commas (Q3).** The source files for Multi-Agent, SitePlus+ and TabVault use commas ("How it works, end to end"; "What I learned, and what I would improve"). The ProjectDay source does not. PRD 4.3 to 4.5 already carry the commas. The code has none because the QA run of 2026-06-29 failed commas against the rev 1.2/1.3 specs. Recommended: each page matches its own source file. The MOD-004 and MOD-006 spec gap is Doc-Sync drift, not a requirements change, so it needs no new PRD decision. It does need a PM Update entry to trigger the Doc-Sync delta. Fold it into the rev 1.5 change, together with the production.md rev 1.2 drift (palette, layout, data-file/markdown statements, Module Index text). MOD-004 and MOD-006 spec-updates for commas can run after MOD-011, any time before the Phase 4 checkpoint. Until then, the Multi-Agent page will have commas and SitePlus+ and TabVault will not. That is visible but harmless. Leon may instead want no commas anywhere, in which case PM changes PRD 4.3 to 4.5 and the MOD-005 spec (D4).
+- **Engineering order (Q4), changed.** MOD-003 and MOD-002 have nothing to change until the ProjectDay record exists, because both lists iterate `projects` in array order. If either runs before MOD-011, it would have to add the record itself, which is outside its scope.
+  - With A: PM rev 1.5, then Doc-Sync, then `engineer-mod-projects-grid "spec-update"` (split the data file and extend the template with alt/caption), then `engineer-mod-project-multi-agent "spec-update"`, then `engineer-mod-project-projectday "implement"`, then `engineer-mod-home "spec-update"`. MOD-002 should be verification only; no code change is expected.
+  - With B: PM rev 1.5, then Doc-Sync, then MOD-005, then MOD-011, then MOD-003, then MOD-002.
+  - Both orders: insert ProjectDay at index 1 of `projects`, never index 0, so that `/projects` still redirects to multi-agent-system (`app/projects/page.tsx` uses `projects[0]`).
+- **Multi-agent image (Q4).** Copy `asset/diagrams/multi-agent-horizontal.png` (3080x1560, 296 KB) to the new file `site/public/multi-agent-horizontal.png`. Point the record's `featureImage` at it, and delete `site/public/multi-agent.png` (2998x7775 portrait, 988 KB, referenced only by that record) in the same commit. A new name keeps the source and the copy traceable to each other and rules out any stale cache of the old URL. Deleting the old file means no orphaned asset is left behind. The image keeps its current position (after the pull-quote, before the sections), which satisfies "same position". Tailwind preflight sets `height: auto`, so the `height="500px"` attribute does not distort the image. Still, MOD-005 or the template owner should drop that attribute, because AC-091 requires no cropping.
+- **What every engineer in this change must preserve (Q2): Leon's direct changes, 6fb90ad..29b3a16.**
+  - `[slug]/page.tsx`: the `groupItems` image grid, the link layout as `<p>{name}<a>{label}</a></p>`, the article padding `px-8 py-12 pt-16 lg:pt-12 max-w-4xl` (mobile nav and H1 margin fix), the conditional links row (AC-082 relies on it), the conditional feature image (AC-089 relies on it), and the metadata domain.
+  - `app/projects/layout.tsx`: `flex flex-col ... lg:flex-row` together with `ProjectMobileNav`. The MOD-003 spec does not mention ProjectMobileNav, but it is Leon's mobile project switcher, and ProjectDay appears in it automatically.
+  - `projects-data.ts`: the SitePlus+ and TabVault records as they are, including the "Images" sections, the "Demo Video" link and the `name` prefixes, and the record order.
+  - `app/page.tsx`: all hero copy, the emoji, `mt-5 md:mt-0`, the CTA labels and the metadata.
+  - All `site/public/` assets except `multi-agent.png`.
+  - Sidebar.tsx, globals.css, layout.tsx, and the about, experience, skills and contact pages are outside this change entirely.
+  
+  A spec-update changes only the ACs listed in the 2026-11-01 Sync Report (plus any rev 1.5 delta). It never "corrects" code that Leon changed directly.
+- **Asking Leon (needs-human):**
+  - **D1, ownership of the shared project files.** Option A (recommended): MOD-003 owns the shared frame, and each project gets its own record file plus asset pattern, enforced by a Source Path column. This adds one MOD-003 step. Option B: keep one data file, with an unenforced rule that each module edits only its own record, and MOD-005 makes the template change once. Which?
+  - **D2, content model and links.** Should the PRD and specs follow your as-built `projects-data.ts` model, with links shown as "GitHub: " + linked "System repo", image items in sections, and `featureImage` plus the new alt and caption? Or should the site go back to the PRD link text ("System repo", "Built by the system: tab-vault.com" as one link)?
+  - **D3, Home copy.** Your Home page differs from PRD 4.1:
+    - the H1 has the 👋 emoji
+    - there is no "Full-Stack Engineer" subtitle
+    - the bio wording differs
+    - the page says "2026/2027" internship, not "Summer 2026"
+    - the CTA reads "Connect on LinkedIn"
+    
+    Keep your version, so that PM updates PRD 4.1 and AC-011 to AC-015, or restore the PRD copy?
+  - **D4, section-heading commas.** Should each page match its own source file, which gives Multi-Agent, SitePlus+ and TabVault commas and ProjectDay none (recommended)? Or no commas on any page?
+  
+  The same PM change also needs your confirmation of the "Demo Video" link, the "Images" sections, and the www.leon-wu.com domain.
+
+**Approved**:
+- The single `[slug]` route with `generateStaticParams` over the data array, `dynamicParams = false` and awaited `params` (verified in the code). A fourth project needs no routing change. AC-090 is met once the record exists.
+- The conditional links row and the conditional feature image in the template already give AC-082 (no empty links row) and the "no image slot until screenshots" half of AC-089.
+- `ProjectList`, `ProjectMobileNav`, the Home list and the redirect all derive from the `projects` array. That makes AC-086 and AC-087 a matter of where the record sits in the array, not new UI work.
+- Leon's direct changes build cleanly and add no lint errors, so nothing in them blocks engineering technically. The blockers are the spec and PRD conflicts above.
+
+**Proposed Shared Conventions** (once the user approves, PM adds them to PRD section 9 Adopted Conventions; Doc-Sync carries them into production.md from there):
+- Proposed Convention: The shared project frame belongs to MOD-003: `site/app/projects/**`, `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and the interfaces and ordered array in `site/data/projects-data.ts`. Each project-detail module owns only its record file `site/data/projects/<slug>.ts` and its `site/public/<prefix>*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 rather than editing the template itself. (This applies if D1 = A.)
+- Proposed Convention: A project record's position in `projects` is its display order everywhere (the side panel, the mobile switcher and the Home list). `projects[0]` is the `/projects` redirect target.
+- Proposed Convention: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render.
+- Proposed Convention: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress, not changed.
 
 ---
 
