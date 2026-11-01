@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.7
+**Revision:** 1.8
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -64,11 +64,14 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 ### Layout
 
 Persistent slim left sidebar (w-64, fixed) containing:
-- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Engineer".
+- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Software Engineer".
 - Primary navigation links with SVG icons and keyboard shortcut badges.
 - Horizontal rule separator.
 - "Online" block with social/contact links and external link icons.
 - Theme toggle at the bottom (desktop only).
+
+**Acceptance criteria (added in revision 1.8):**
+- AC-124: The sidebar profile subtitle reads "Full-Stack Software Engineer" wherever the profile section shows (desktop sidebar, and the mobile drawer if it shows the profile), on one line, not truncated, at 1280px and at 375px wide.
 
 Main content area to the right of the sidebar (`md:ml-64`): each page controls its own max-width and padding. The root `<main>` has no padding or max-width of its own.
 
@@ -241,7 +244,7 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 **Route:** /projects/siteplus
 
-**Source file:** `asset/content/case-study-siteplus-detailed.md`
+**Source file:** `asset/content/case-study-siteplus-detailed.md` (as of commit e479e22). It was aligned with Leon's CV on 2026-11-01.
 
 **Header area:**
 
@@ -249,8 +252,8 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 |---|---|
 | Project name (H1) | SitePlus+ |
 | At-a-glance | Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60% |
-| Tags | Full-Stack · Java/Spring Boot · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS |
-| Link 1 | "Demo Video: " followed by the linked label "link" — https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah |
+| Tags | Full-Stack · Java/Spring Boot · Spring Security / JWT · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS |
+| Link 1 | "Demo: " followed by the linked label "interactive walkthrough" — https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah |
 | Link 2 | "GitHub: " followed by the linked label "marketing-analytics" — https://github.com/LeonWu813/marketing-analytics |
 
 Each link shows its plain-text prefix followed by the linked label; only the label is a link.
@@ -269,6 +272,9 @@ Each link shows its plain-text prefix followed by the linked label; only the lab
 The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs.
 
 **Inline bold:** Paragraphs may contain `**bold text**` markdown which renders as `<strong>` in the UI.
+
+**Acceptance criteria (added in revision 1.8):**
+- AC-120: On /projects/siteplus, every section heading and paragraph matches the source file at commit e479e22 word for word, as CONV-003 requires. In particular, "Key engineering decisions" includes the paragraph that starts "**Resilience on purpose.**" and ends "fails over 100% of traffic to the survivor automatically.", and the paragraph that starts "**Securing an endpoint that has to be public.**" says "50 requests per minute per IP". The tag chips match the Tags row above, in that order.
 
 ---
 
@@ -409,7 +415,7 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 - Tech chips: small `px-2 py-0.5 rounded` badges.
 - Outer wrapper: `px-8 py-16 max-w-2xl mx-auto w-full`.
 
-**Source file:** `asset/content/experience.md` (as of commit d8afeef). It was aligned with Leon's CV (`asset/Leon_cv.pdf`, replaced on 2026-11-01 with his newer CV) on 2026-11-01; the CV is the source of truth for titles, dates and bullets.
+**Source file:** `asset/content/experience.md` (as of commit e479e22). It was aligned with Leon's CV (`asset/Leon_cv.pdf`, replaced on 2026-11-01 with his newer CV, commit cfa3367) on 2026-11-01; the CV is the source of truth for titles, dates and bullets. One true detail that is not on the CV stays at Leon's choice: the 22.3% session-engagement figure on the Exascend bullet.
 
 **Entries (reverse-chronological):**
 
@@ -420,7 +426,7 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 - Tags: JavaScript · HTML · CSS · GA4 · SEO · Lighthouse · WCAG
 - Bullets:
   - Built a custom JavaScript event-tracking system posting structured user interactions to CRM and GA4 APIs, cutting manual reporting 70%.
-  - Two customer-facing websites went from requirements to shipped product under my ownership (HTML, CSS, JavaScript), growing monthly active users 3.5x, from 12,000 to 41,350.
+  - Two customer-facing websites went from requirements to shipped product under my ownership (HTML, CSS, JavaScript), growing monthly active users 3.5x, from 12,000 to 41,350, and increasing average session engagement time by 22.3%.
   - Page views rose 48.8% after a round of technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) that I validated with A/B testing.
 
 **Role 2: Marketing Project Manager**
@@ -440,8 +446,9 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 | Bachelor of International Business | National Chengchi University | 3.5 / 4.0 | Sep 2017 – Jun 2021 | Taipei, Taiwan |
 
 **Acceptance criteria (added in revision 1.7):**
-- AC-118: /experience shows Exascend first and GoFreight second. Each role's title, company, location, dates, every bullet and every tag chip match this section word for word, in the order listed. No other bullet or chip appears; in particular none of the earlier copy shows ("Growth Marketer", "22.3%", "0.38% to 2.55%", "Baidu Ads", "JCTrans", "350%", "670%").
+- AC-118: /experience shows Exascend first and GoFreight second. Each role's title, company, location, dates, every bullet and every tag chip match this section word for word, in the order listed. No other bullet or chip appears; in particular none of the earlier copy shows ("Growth Marketer", "0.38% to 2.55%", "Baidu Ads", "JCTrans", "350%", "670%"). (Changed in revision 1.8: the Exascend bullet keeps "22.3%", so it is no longer on this list.)
 - AC-119: The Education section shows the two entries in the table above, in that order, with degree, institution, GPA, period and location word for word.
+- AC-121 (added in revision 1.8): The /experience meta description is exactly "Professional experience and education of Tsan-Yu Wu (Leon): Front-End Developer at Exascend, Marketing Project Manager at GoFreight, Master of Science in Computer Science at Northeastern University." The Open Graph and Twitter descriptions are exactly "Professional experience and education of Tsan-Yu Wu (Leon)." No meta tag on /experience contains "Growth Marketer" or "MS in Computer Science".
 
 ---
 
@@ -471,18 +478,23 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 
 **Intro line:** Languages, frameworks, and tools I work with.
 
-**Skill groups:**
+**Source file:** `asset/content/skills.md` (as of commit e479e22). The first five groups are the CV's skills section, item for item and in the CV's order. The last group, "Also", keeps true skills from the site that the CV does not list (Leon's choice, 2026-11-01).
+
+**Skill groups (in this order):**
 
 | Category | Skills |
 |---|---|
-| Languages | Java, JavaScript, TypeScript, Python, SQL, C++, C, HTML, CSS |
-| Backend | Spring Boot, Spring Security, Spring Data JPA, Hibernate, JWT, REST APIs, JUnit, Mockito |
-| Frontend | React, Redux Toolkit, Vite, Axios, Recharts |
-| Databases and Cloud | PostgreSQL, Redis, AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) |
-| DevOps and Tools | Docker, GitHub Actions, Nginx, Git, Maven |
-| Analytics and Design | Figma, GA4, SEO, WCAG |
+| Languages | Java, TypeScript, JavaScript, Python, SQL, C++ |
+| Backend | Spring Boot, Spring Security, Spring Data JPA/Hibernate, JWT, PostgreSQL, Redis, REST APIs, JUnit/Mockito |
+| Frontend | React, Redux Toolkit/Zustand, TanStack Query, Tailwind CSS |
+| Infrastructure & DevOps | Git, Docker, CI/CD (GitHub Actions), AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront) |
+| AI & Agentic Development | Claude Code (subagents, skills, hooks), agentic workflow orchestration, LLM API integration |
+| Also | C, HTML, CSS, Vite, Axios, Recharts, Nginx, Maven, Quartz, AWS ECS Fargate, Claude API, Figma, GA4, SEO, WCAG |
 
 Each category rendered as a labeled group with chip/badge elements per skill.
+
+**Acceptance criteria (added in revision 1.8):**
+- AC-122: /skills shows exactly the six groups in the table above, in that order, with each category name and each skill chip word for word and in the order listed (one chip per comma-separated item; "AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)" and "Claude Code (subagents, skills, hooks)" are one chip each). No other group or chip appears. The intro line stays "Languages, frameworks, and tools I work with." The meta, Open Graph and Twitter descriptions are exactly "Technical skills of Tsan-Yu Wu (Leon): languages, backend, frontend, infrastructure and DevOps, and AI and agentic development."
 
 ---
 
@@ -508,13 +520,19 @@ Each category rendered as a labeled group with chip/badge elements per skill.
 
 A real email address (not only a contact form) is required. Forms can break silently; a visible email always works.
 
+Email is the only direct contact method. The email stays the Gmail address, not the CV's university address, and the site shows no phone number, although the CV lists one (Leon's choices, 2026-11-01).
+
+**Acceptance criteria (added in revision 1.8):**
+- AC-123: /contact lists, in this order, Email, LinkedIn, GitHub and Resume, each with the label and display text above, in the same style as each other. No other email address appears on the page, and the sidebar's Online block is unchanged.
+- AC-126: In the built HTML of every route, including /slideshow, no phone number appears: no `tel:` link, and neither "206-677-7544" nor "2066777544" nor any other phone number in text, links or meta tags. AC-126 does not cover the contents of the CV PDF served at /Leon_cv.pdf, which lists Leon's phone number (see section 6, Resume Hosting).
+
 ---
 
 ### 4.11 Slideshow
 
 **Route:** /slideshow
 
-**Source file:** `asset/content/interview-deck.md` (as of commit d8afeef). It is the word-for-word source of every slide's text.
+**Source file:** `asset/content/interview-deck.md` (as of commit e479e22). It is the word-for-word source of every slide's text.
 
 **Design:** The slideshow's visual and interaction design comes from the design team, not from a preview file. The UX Researcher, UX Designer, UI Designer and Motion Designer write it under `project-planning/design/ux-team/`. The Design Lead reviews it in `project-planning/design/ux-team/reviews/slideshow-review-<n>.md`, and Leon approves it after a PASS. The approved design is the set of files, at the commit, named in Leon's slideshow design approval in `status.md` Decisions; engineers and QA read it from those files. It sets each slide type's layout, text sizes, spacing, where the project name and position sit, the close button, the hints, focus styles, and the phone layout. It works inside this section: it does not change the on-screen text, the slides or their order, the controls, or the acceptance criteria below. A design that needs any of those changed needs a PRD change first. `asset/content/interview-deck-preview.html` was a content review aid; it is not the design reference and not site code.
 
@@ -637,11 +655,11 @@ interface ProjectEntry {
 slug: "siteplus"
 title: "SitePlus+"
 tech: "Full-Stack · Java/Spring Boot · React · AWS"
-tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]
+tags: ["Full-Stack", "Java/Spring Boot", "Spring Security / JWT", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]
 atAGlance: "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%"
 description: "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent."
 links:
-  - { name: "Demo Video: ", label: "link", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
+  - { name: "Demo: ", label: "interactive walkthrough", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
   - { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
 featureImage: "/siteplusplus-home.jpg"
 ```
@@ -782,6 +800,10 @@ Every page must include:
 - Open Graph and Twitter card tags
 - Canonical URL tag
 - Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
+- Wherever a page shows or describes Leon by his full name (page text and meta descriptions), it is written "Tsan-Yu Wu (Leon)", as on his CV. The short name "Leon Wu" in the sidebar, the mobile wordmark and page titles stays.
+
+**Acceptance criteria (added in revision 1.8):**
+- AC-125: In the built HTML of every route, the text "Tsan-Yu (Leon) Wu" does not appear, and every full-name mention reads "Tsan-Yu Wu (Leon)".
 
 Social preview image: [ASSET NEEDED — 1200×630px]
 
@@ -789,7 +811,7 @@ Social preview image: [ASSET NEEDED — 1200×630px]
 
 Resume PDF served at `/Leon_cv.pdf`. Linked from Contact page and Home page CTA.
 **File:** `asset/Leon_cv.pdf` → copy to `public/Leon_cv.pdf` before deploying.
-On 2026-11-01 Leon replaced `asset/Leon_cv.pdf` with his newer CV (`cv/fullstack/Leon_Wu_CV.pdf`, commit d8afeef). The served file is replaced with the same file. This CV still names tab-vault.com under the multi-agent project; Leon chose it knowing that, so the PDF's contents are outside AC-117.
+On 2026-11-01 Leon replaced `asset/Leon_cv.pdf` with his newer CV (`cv/fullstack/Leon_Wu_CV.pdf`), and replaced it again the same day with a copy whose text is unchanged and whose multi-agent GitHub link is fixed (commit cfa3367). The served file is replaced with the file at commit cfa3367. This CV still names tab-vault.com under the multi-agent project; Leon chose it knowing that, so the PDF's contents are outside AC-117. The CV also lists Leon's phone number, which the site's pages do not show (AC-126); the PDF's contents are outside AC-126.
 
 ### Deployment
 
@@ -820,6 +842,7 @@ On 2026-11-01 Leon replaced `asset/Leon_cv.pdf` with his newer CV (`cv/fullstack
 | Case study content | `asset/content/case-study-*-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
+| Skills content | `asset/content/skills.md` |
 | Multi-agent feature image | `asset/diagrams/multi-agent-horizontal.png` (source: `asset/diagrams/multi-agent-horizontal.html`) |
 | ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
 | Domain | https://www.leon-wu.com |

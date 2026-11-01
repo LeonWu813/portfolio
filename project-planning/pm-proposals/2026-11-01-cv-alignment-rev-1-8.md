@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: align the site with the updated CV (PRD rev 1.8)
 
