@@ -6,11 +6,11 @@
 
 ```
 agent: tech-lead
-mode: integration-review
+mode: record-decisions
 module: n/a
-next: Leon decides every row in project-planning/integration-review.md (INT-001 to INT-011: approve, reject or defer; for INT-001 also whether to say "use the OG image"), then claude --agent tech-lead "decisions: INT-001 approve, INT-002 ..."; after decided fixes are QA'd, human-verified and confirmed closed: claude --agent pm "checkpoint"
-result: issues-found
-timestamp: 2026-11-02T07:08:39Z
+next: coordinator runs /pstack:blast-radius for INT-001, INT-002, INT-005 (rows say "blast-radius first"); then claude --agent engineer-mod-site-shell "integration-fix INT-001 INT-002 INT-010 INT-011" and claude --agent engineer-mod-projects-grid "integration-fix INT-003 INT-004 INT-005"; claude --agent engineer-mod-slideshow "integration-fix INT-006 INT-007" can run now; each followed by qa-mod-<name> "verify", Leon's verification, and claude --agent tech-lead "confirm-fix INT-..."; then claude --agent pm "checkpoint"
+result: success
+timestamp: 2026-11-02T08:18:28Z
 ```
 
 ## PM Updates
@@ -688,6 +688,17 @@ Other inputs:
 - Not measured: the Phase 4 milestone "Lighthouse score above 90" has no run on record. After INT-002, the PM checkpoint should include one (Chrome DevTools Lighthouse on `npm run build && npm run start` or the Vercel preview, mobile preset). That is runnable with what setup.md provides (Chrome, Node, build and start). I could not rebuild here (the sandbox blocks the Google Fonts fetch); QA's builds at 3cf21aa and earlier pass.
 
 Suggested grouping if approved (one engineer run per module, then QA, then Leon verifies): MOD-001: INT-001, INT-002, INT-010, INT-011. MOD-003: INT-003, INT-004, INT-005. MOD-012: INT-006, INT-007. Nothing has been pushed since b8395f1, and every push deploys, so push only after the checkpoint.
+
+### Record Decisions — Phase 4 integration review — 2026-11-02
+Leon, quoted by the coordinator: "all with recommend" (the coordinator showed him every row of project-planning/integration-review.md with the TL recommendation, and the three escalated items). The coordinator's reading below is also mine.
+- APPROVED: INT-001 part 1 only (metadataBase), INT-002, INT-003, INT-004 (low priority), INT-005, INT-006, INT-007 (together with INT-006, first option), INT-010, INT-011.
+- INT-001 part 2 (copy asset/og-image.png to site/public/) NOT approved: it had no recommendation and Leon has not said "use the OG image". Handling meanwhile: leave the og:image and twitter:image references in the seven page files as they are; after part 1 they resolve to https://www.leon-wu.com/og-image.png and 404, so link previews show no image. Removing them would take seven page-module runs that get undone once the file exists, so I do not recommend it. If Leon says "use the OG image" before the MOD-001 run, I record it and it joins that run.
+- DEFERRED: INT-008 (until after the first deploy), INT-009. Each is listed again in later phase reviews; DEFERRED does not pass the final checkpoint.
+- Escalated items: B-L2 and site-wide reduced motion, no change. SitePlus+ diagram and tree not decided (conditional recommendation); stays off, coordinator asks Leon separately. No PM change needed.
+- Assigned Module (from the Module Map Source Paths, as named in each row's fix text that Leon saw): mod-site-shell (MOD-001): INT-001, INT-002, INT-010, INT-011. mod-projects-grid (MOD-003): INT-003, INT-004, INT-005. mod-slideshow (MOD-012): INT-006, INT-007. No row splits. Leon did not confirm the assignments separately; if he disagrees with one, re-run me and I change it.
+- blast-radius first (coordinator runs /pstack:blast-radius before the engineer starts): INT-001 (root metadata inherited by every page module), INT-002 (images used by MOD-008 and MOD-012), INT-005 (SectionItem type used by the MOD-004, MOD-006 and MOD-011 records). If a report changes the plan, run me again with it as an on-demand-review.
+- Follow-up outside the engineer runs: after INT-010, PM and Doc-Sync drop site/components/TopNav.tsx from the MOD-001 Source Path.
+- Order: blast-radius for INT-001/002/005; then claude --agent engineer-mod-site-shell "integration-fix INT-001 INT-002 INT-010 INT-011", claude --agent engineer-mod-projects-grid "integration-fix INT-003 INT-004 INT-005", claude --agent engineer-mod-slideshow "integration-fix INT-006 INT-007" (MOD-012 needs no blast-radius and can start now; the three modules touch disjoint files). Each then QA for that module, Leon verifies each row, and claude --agent tech-lead "confirm-fix INT-..." closes it. Then Lighthouse and claude --agent pm "checkpoint". Push only after the checkpoint.
 
 ---
 
