@@ -5,11 +5,11 @@
 ## Last Action
 
 ```
-agent: doc-sync
-mode: delta
+agent: qa-mod-project-tabvault
+mode: verify
 module: mod-project-tabvault
 result: success
-next: claude --agent qa-mod-project-tabvault "verify" (re-verify MOD-006 against AC-133 and close QA Run 4's CONV-003 item as not a bug, PRD rev 1.12); then continue engineering in order: claude --agent engineer-mod-contact "spec-update" (MOD-010), claude --agent engineer-mod-slideshow "implement" (MOD-012), claude --agent engineer-mod-site-shell "spec-update" (MOD-001, last), each followed by its QA. No Engineer run for MOD-006: the page at c612306 is the reference and no code change is expected.
+next: continue engineering in order: claude --agent engineer-mod-contact "spec-update" (MOD-010), claude --agent engineer-mod-slideshow "implement" (MOD-012), claude --agent engineer-mod-site-shell "spec-update" (MOD-001, last), each followed by its QA. After MOD-012 exists, re-check AC-117 and AC-126 on /slideshow for MOD-006.
 timestamp: 2026-11-01T00:00:00Z
 ```
 

@@ -309,6 +309,26 @@ No 'use client'; no gold-plating; spec has no template comments; CONV-005 record
 ### Human script
 None required for this module (all ACs are verifiable in HTML). Optional glance: on /projects/tabvault click each of the three images, confirm the overlay opens and Esc closes it (feel is owned by MOD-003 sign-off).
 
+## QA Run 5 - Verify (spec rev 1.12, PRD 4.5 Body copy exception) - 2026-11-01
+
+**Workflow:** verify (spec updated to rev 1.12 by Doc-Sync 5cf9320; no engineer change, page still at c612306). **Evidence:** `npm run build` in site/ passes (13 pages); `next start -p 3961`, real HTML fetched with curl for all 9 routes; server stopped. `git diff c612306 HEAD -- site/data/projects/tabvault.ts` is empty (record unchanged). No automated suite (static site); project verify skill not present.
+
+| AC | Result | Evidence |
+|----|--------|----------|
+| AC-133 | PASS | Every paragraph (22, all over 60 chars) rendered on /projects/tabvault was found verbatim (bold markers stripped) in `git show c612306:site/data/projects/tabvault.ts`; 0 missing. Includes 'done' single quotes and em dashes in the last section. Page is not required to match the source file there |
+| AC-116 | PASS | atAGlance exact; one external link in the header (`GitHub: <a href=".../LeonWu813/tab-management" target="_blank" rel="noopener noreferrer">tab-management</a>`). "The problem" and "Impact" paragraphs: record unchanged since Run 4, which matched them word for word against the source file (not re-diffed this run) |
+| AC-053 to AC-064 | PASS | Regression: record and page.tsx unchanged since Run 4. h2s in the 9 specified order; Images section has the two images in order; 8 tags; /projects/nope 404; build lists /projects/tabvault via generateStaticParams |
+| AC-117 | PASS (slideshow not checkable) | grep of 9 fetched routes: no "tab-vault.com", no live-claim copy. /slideshow does not exist (MOD-012 not built) |
+| AC-126 | PASS (slideshow not checkable) | no tel: link or phone number in any fetched route |
+| AC-127 | PASS | Feature image and both Images-section images carry exactly the spec alt text, plus overlay copies with the same alt; the only other img is the shell avatar `/head.png` alt "Leon Wu" |
+
+### CONV-003 item from Run 4
+Closed as not a bug (PRD rev 1.12, Leon's choice "TabVault go with (b)", 2026-11-01). Replaced by AC-133, which passes.
+
+### Integration notes (for Tech Lead)
+- metadataBase not set: build warns; og:image resolves to http://localhost:3000 locally (not MOD-006).
+- /slideshow does not exist yet; re-run AC-117 and AC-126 for that route after MOD-012.
+
 ### Open items
-- [ ] CONV-003 bugs-found - paragraphs outside "The problem" and "Impact" not word for word with the source (details above) (2026-11-01)
+- [x] CONV-003 bugs-found - closed as not a bug, PRD rev 1.12 (2026-11-01)
 - [ ] AC-117 / AC-126 - /slideshow part not yet checkable until MOD-012 exists (2026-11-01)
