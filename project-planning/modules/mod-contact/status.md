@@ -2,6 +2,13 @@
 
 ## Engineering Progress
 
+### 2026-11-01 — spec-update (AC-123, AC-125, AC-126; PRD rev 1.11)
+
+- AC-125: name changed to "Leon Wu" in meta, Open Graph and Twitter descriptions (page.tsx:6,9,20); rest of text unchanged.
+- AC-076: resume link label set to "Resume (PDF)".
+- AC-123 / AC-126: already satisfied (order Email, LinkedIn, GitHub, Resume; no phone, no Location, no tel:). Built /contact HTML grep shows no tel:, no phone number, no old full name.
+- Self-check (run in site/): lint PASS (0 errors), build PASS.
+
 ### 2026-06-28 — implementation complete
 
 **Files created / modified:**

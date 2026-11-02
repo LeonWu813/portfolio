@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact — Leon Wu",
   description:
-    "Get in touch with Tsan-Yu (Leon) Wu — email, LinkedIn, GitHub, and resume.",
+    "Get in touch with Leon Wu — email, LinkedIn, GitHub, and resume.",
   openGraph: {
     title: "Contact — Leon Wu",
-    description: "Get in touch with Tsan-Yu (Leon) Wu.",
+    description: "Get in touch with Leon Wu.",
     type: "website",
     url: "https://www.leon-wu.com/contact",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Contact — Leon Wu",
-    description: "Get in touch with Tsan-Yu (Leon) Wu.",
+    description: "Get in touch with Leon Wu.",
     images: ["/og-image.png"],
   },
 };
@@ -86,7 +86,7 @@ export default function ContactPage() {
             download="Leon_Wu_Resume.pdf"
             className="text-base text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] rounded"
           >
-            Download resume (PDF)
+            Resume (PDF)
           </a>
         </li>
       </ul>
