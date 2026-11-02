@@ -306,7 +306,7 @@ function render(id,opts={}){
       <svg class="up" viewBox="0 0 24 50" preserveAspectRatio="none" aria-hidden="true"><path d="M12 48V4M4 12l8-8 8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
       <p class="retro">Retrospective feeds improvements back into the system</p>
       <div class="drops" aria-hidden="true">${[0,1,4].map(k=>`<i style="left:${arrows[k]}cqh"></i>`).join('')}</div>
-      <div class="bar">${CHECK}<span>I approve every handoff</span></div>
+      <div class="bar">${CHECK}<span>I approve the key handoffs</span></div>
     </div></div>`;break;}
    case 'flow':
     h=`<div class="content">${titleBlock(s.title)}<ol class="flow">${s.flow.map((c,i)=>`<li class="chip">${esc(c)}</li>${i<3?`<li aria-hidden="true" style="display:contents">${ARROW}</li>`:''}`).join('')}</ol><div class="body-gap">${bullets(s.bullets)}</div></div>`;break;

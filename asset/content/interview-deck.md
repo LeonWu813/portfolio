@@ -121,7 +121,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 
 **Title:** An AI dev team with a human in charge
 
-**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with "Retrospective feeds improvements back into the system" under it, and a bar reading "I approve every handoff". The approval bar connects to the handoffs into PM, Doc-Sync and Shipped only, not Doc-Sync to Engineer or Engineer to Tech Lead. The Retrospective line is separate: it takes improvements back to the system as a whole, not into PM (user, 2026-11-01).
+**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with "Retrospective feeds improvements back into the system" under it, and a bar reading "I approve the key handoffs". The approval bar connects to the handoffs into PM, Doc-Sync and Shipped only, not Doc-Sync to Engineer or Engineer to Tech Lead. The Retrospective line is separate: it takes improvements back to the system as a whole, not into PM (user, 2026-11-01).
 
 ### A3: Role and stack
 
