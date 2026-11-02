@@ -4,12 +4,13 @@
 
 ## Last Action
 
-agent: qa-mod-project-multi-agent
-mode: regression
-module: mod-project-multi-agent
+agent: pm
+mode: change
+module: n/a
 result: success
-next: all MOD-005 acceptance criteria now pass (AC-091 human-reported). Pending elsewhere: Leon's answers to the D1-D3 proposal (claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted). When every module in the phase passes: the coordinator runs /pstack:thermos, then claude --agent tech-lead "phase-end integration review".
-timestamp: 2026-11-01T13:30:00Z
+next: claude --agent doc-sync (sync PRD rev 1.7, 1.8, 1.9 and 1.10 together; the rev 1.10 PM Updates entry lists the spec notes). Then the engineers in the Tech Lead's order (b8395f1): MOD-003; MOD-005, MOD-006, MOD-004, MOD-011; MOD-007, MOD-008, MOD-009, MOD-010; MOD-012; MOD-001 last. Leon's UI sign-offs are done (AC-017 qa-mod-home 6847f0d, AC-091 qa-mod-project-multi-agent 4cb16ad); nothing else pending from him.
+Previous action: qa-mod-project-multi-agent regression pass (AC-091 human-reported).
+timestamp: 2026-11-02T04:51:13Z
 
 ---
 
@@ -108,6 +109,20 @@ timestamp: 2026-11-01T13:30:00Z
   Order of runs: the coordinator runs /pstack:how on the affected code (Sidebar key handler and slideshow entry, the [slug] image rendering), then claude --agent tech-lead "change review" (rule on L-2's change to CONV-006 and the design team's T1-T6 in slideshow-review-2.md section 4), then claude --agent doc-sync syncing rev 1.7, 1.8 and 1.9 together, then the engineers in the Tech Lead's order.
   Notes for Doc-Sync: rev 1.7 and 1.8 are not synced; sync 1.7, 1.8 and 1.9 together. The MOD-012 spec names the approved design files from status.md Decisions (2026-11-01, design approval) at ac1a07d, and Design Lead review 2 section 3 corrects UI 6.4 and 7.4. slideshow-ui.md section 14 is a MOD-001 input (AC-093). In the deck, slide 2's "(opens the ... detail slide)" annotations and the note under the timeline are not on-screen text (Tech Lead's Doc-Sync note).
   Notes for Tech Lead (change review): L-2 changes CONV-006's hint rule (Design Lead review 2: "Tech Lead review for L-2"); the design team's T1-T6 (edge colour within limit 3, ⇄ drawn in SVG with a hidden exact string, F-hint sizing, B2 dependency on MOD-011, WCAG 2.1.4 single-key risk, reduced motion site-wide later); UX hand-offs in slideshow-ux.md 14 (pointerType handling, touch-action, key/code matching, skip focus()). AC-127 needs MOD-003's alt field before MOD-004, 006 and 011 fill it (same staging as E1).
+- 2026-11-01 [SUBSTANTIVE] Answer Tech Lead D1-D3: CONV-006 `fs` field and hint timing (AC-096), single-key shortcuts as a known accessibility limitation, SectionItem alt stays optional; no feature branch; PRD rev 1.10
+  Approved by Leon in the coordinator session: "4. no need a branch
+  other go with recommend and approve" (D1 (a), D2 (a), D3 (a), no feature branch); proposal approval and classification (questions 1-3, recommendations yes, substantive, not architectural): "approve all recommendations"
+  Proposal: project-planning/pm-proposals/2026-11-01-d1-d3-hint-contract-rev-1-10.md
+  Answers Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.9: design approval, T1-T6 answers, "Leon Wu", CONV-006 hint rule, alts, Images cap, dialog keys, idle pointer, key repeat)" (b8395f1): D1 (a), D2 (a), D3 (a), the Proposed Convention (CONV-006 amendment), Q6.
+  Sections changed: header; 4.11 (Opening, AC-096); 8 (Turning keyboard shortcuts off); 9 (CONV-006).
+  Modules affected: MOD-001 (writes `fs` in the CONV-006 value); MOD-012 (hint timing from `fs`, AC-096; F and the hint target document.documentElement). MOD-003: no PRD change (D3 (a): alt stays optional). No module added, removed or renamed. Module Map unchanged. Current Phase unchanged (Phase 4 — Deploy).
+  Corrects the rev 1.9 entry: "AC-128 shrinks tabvault-mobile.jpeg" means the image shows smaller; MOD-006 has no image-file change and AC-128 belongs to MOD-003 only (Tech Lead Q4).
+  Order of runs: claude --agent doc-sync syncing rev 1.7, 1.8, 1.9 and 1.10 together; then the engineers in the Tech Lead's order (b8395f1): MOD-003; the record modules MOD-005, 006, 004, 011; the page modules MOD-007, 008, 009, 010; MOD-012; MOD-001 last. Work stays on main: every push deploys, so do not push between MOD-012 and MOD-001 unless both are in.
+  Notes for Doc-Sync (engineering rules from Tech Lead review b8395f1; specs only, not PRD text):
+    MOD-012 spec: read the CONV-006 key in an effect into a useRef on the slideshow component and remove it on first read, never a module-level variable (Q2); full-screen state from useSyncExternalStore with "in" read at subscribe time and server snapshot false, and only an "in" to "out" change counts as leaving, sharing one "already leaving" guard with the close button (section 1); the hint is <button type="button" tabIndex={-1} aria-keyshortcuts="F"> named by its visible text (Q8), calls preventDefault on mousedown and returns focus to the layer after its click, and the root pointer handler ignores events whose target is inside a button (section 1); keydown checks isComposing and modifiers, then e.repeat, before any branch (section 4, UX 14 note); the idle state has its own [data-idle] gate and ignores pointer moves with unchanged clientX/clientY (section 4); --ss-* tokens declared on the slideshow root, not in globals.css (T1); A2 "⇄" as aria-hidden SVG with a clip-based sr-only "Engineer ⇄ QA", QA checks the accessible name (T2); hint and frame both sized from 100dvh (T3); B2 uses /projectday-screens.webp from MOD-011 (T4); the UX 14 hand-offs (pointerType, touch-action: pinch-zoom on the layer, overscroll-behavior: none on the root, digits by key or code, F and M by key, skip focus() when the layer is already active). Design files: slideshow-motion.md line 16's "Details" cue is stale; review 2's L-3 row ("first Tab stop") is overridden by the PRD; UX 6.1's "about 500 ms" settle window is replaced by CONV-006.
+    MOD-003 spec: the overlay never closes the dialog from a keydown; it closes only via the cancel event (Esc: preventDefault, then history.back()) or a click (history.back()), and dialog.close() runs from popstate after the closing animation; digits do nothing in the overlay (Q7). Images cap: max-h-[640px] with w-auto max-w-full h-auto on the img, border and rounding on the img (Q5). AC-128 belongs here only (Q4). QA check for AC-127 on the build: grep -c 'alt=""' in site/.next/server/app/projects/*.html is 0 (Q3, D3).
+    MOD-001 spec: CONV-006 with fs; CONV-007 with both bails (/slideshow and dialog[open]) before the router.push in the number-key handler.
+    QA: AC-096's refused-request case needs a way to make the browser refuse the site's request; the MOD-012 QA spec states how (Tech Lead to supply if Doc-Sync cannot). Gotcha 11 (iframe without allow="fullscreen") is out of QA's scope: QA tests top-level only.
 
 ---
 
@@ -139,6 +154,10 @@ Test:  (none — static site, no automated test suite defined)
 - 2026-11-01 Q6 (rev 1.8) corrected. The rev 1.8 note "the root description stays" was wrong: layout.tsx:16 named "Tsan-Yu (Leon) Wu" (Tech Lead, 0051840). MOD-001 changes the name to "Leon Wu" and keeps the rest of the text.
 - 2026-11-01 The planned site/public/slideshow-* Module Map pattern (rev 1.7) is dropped: no image copies are needed (Tech Lead Q4). A future copy goes in site/app/slideshow/images/, already MOD-012's.
 - 2026-11-01 "Seattle, WA" on the Contact page: closed, stays off. Leon gave no answer in two rounds; it reopens only if he raises it.
+- 2026-11-01 D1 (rev 1.9 change review): the slideshow learns from MOD-001 whether a full-screen request was made: CONV-006 gains an `fs` field. Opening from the sidebar never flashes the "Press F" hint; a direct visit shows it at once; a refused request shows it within about 1.5 s. Leon: "other go with recommend and approve" (D1 (a)). PRD rev 1.10 (CONV-006, AC-096).
+- 2026-11-01 D2 (rev 1.9 change review, design T5): single-key shortcuts (site 1-7; slideshow F, M, digits) stay with no way to turn them off. Leon accepts the WCAG 2.1.4 risk as a known accessibility limitation (PRD 8). Leon: "other go with recommend and approve" (D2 (a)).
+- 2026-11-01 D3 (rev 1.9 change review): SectionItem.alt stays optional; QA checks the built project pages for empty alts (AC-127). "Make alt required" is a Phase 4 integration-review candidate, logged by Tech Lead (b8395f1). Leon: "other go with recommend and approve" (D3 (a)).
+- 2026-11-01 Branch: no feature branch for the rev 1.7-1.10 engineering; work stays on main. Leon: "4. no need a branch". Every push to main deploys, so do not push between MOD-012 and MOD-001 unless both are in (Tech Lead, b8395f1).
 
 ---
 

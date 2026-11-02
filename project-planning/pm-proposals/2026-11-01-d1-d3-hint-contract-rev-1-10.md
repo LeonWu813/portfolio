@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: D1-D3 answers, the CONV-006 `fs` field and hint timing, single-key shortcuts as a known limitation, no feature branch (PRD rev 1.10)
 
