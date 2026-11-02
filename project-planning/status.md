@@ -4,13 +4,14 @@
 
 ## Last Action
 
+
 ```
-agent: qa-mod-projects-grid
-mode: verify
-module: mod-projects-grid
+agent: qa-mod-project-multi-agent
+mode: regression
+module: mod-project-multi-agent
 result: needs-signoff
-next: the human runs the device/feel script in modules/mod-projects-grid/status.md (QA Results, 2026-11-01) and replies PASS or the failing step, then: claude --agent qa-mod-projects-grid "ui-results: <what you observed>"
-timestamp: 2026-11-01T22:30:00-08:00
+next: the human runs the MOD-005 overlay test script in modules/mod-project-multi-agent/status.md (QA Run 4) and replies PASS or the failing step, then `claude --agent qa-mod-project-multi-agent "ui-results: <what you observed>"`
+timestamp: 2026-11-01T21:30:00-05:00
 ```
 
 ## PM Updates

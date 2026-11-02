@@ -277,3 +277,42 @@ Evidence: `npm run build` in site/ passes (/projects/multi-agent-system prerende
 ### Human UI results (2026-11-01)
 Workflow: regression (ui-results continuation; same mode as the needs-signoff stop).
 AC-091 (375px): PASS — reported by the human 2026-11-01. Question asked: diagram fully visible, no clipped edges, no sideways scroll, caption right under it. Human's reply, quoted: "The two browser checks need you to actually look at the pages: both check and pass" (the first clause repeats the coordinator's heading; "both check and pass" covers AC-017 and AC-091). Recorded as the human's report, not as QA's own observation. All module ACs now PASS; verdict: PASS.
+
+## QA Run 4 — Regression after spec-update (rev 1.10/1.11) and MOD-003 overlay — 2026-11-01
+
+**Workflow:** regression (prior QA Results exist; Engineer spec-update 7b8d8cb and MOD-003 overlay f66a813 are newer). Dependencies: MOD-003 QA 17e339f (overlay ACs pass, device checks pending); MOD-001 status read (not blocking this module).
+**Verdict:** all ACs PASS in the built app, one overlay-interaction item left to the human. Result: needs-signoff.
+
+Evidence: `npm run build` in site/ passes; `next start` on port 3457; served HTML fetched for /, /about, /contact, /experience, /skills, /projects/{multi-agent-system,projectday,siteplus,tabvault}; headless Chrome screenshot at 1280 (feature image full column width, uncropped, caption directly under it, header shows two links with "GitHub: " prefixes). Server stopped afterwards. No project verify skill exists (.claude/skills/verify absent).
+
+- AC-041 PASS: H1 in served HTML.
+- AC-042 PASS: muted line reads "...Shipped 3 products: TabVault, ProjectDay and this site".
+- AC-043 PASS: 6 chips in order.
+- AC-044 PASS: two `<p>` with plain "GitHub: " prefix then `<a>` holding only the label ("System repo", "TabVault repo"); hrefs correct; target=_blank rel="noopener noreferrer"; no third link.
+- AC-045 PASS: pull-quote with border-l-2 accent; three-products text.
+- AC-046 PASS: 8 h2 in spec order (headings with commas, as in spec Sections list).
+- AC-047 PASS: 9 `<strong>` elements rendered.
+- AC-048/049/050/051 PASS (page.tsx unchanged from Run 3; /projects/nope returns 404).
+- AC-052 PASS: canonical and og:url https://www.leon-wu.com/projects/multi-agent-system.
+- AC-092 PASS: script compared every heading and paragraph block on the page to asset/content/case-study-multi-agent-detailed.md (bold markers stripped): the only block not in the source is the sidebar tech string (not page content). "Feature image:" editor line absent. No tab-vault.com link. TabVault described as "now offline".
+- AC-091 PASS (structure, desktop): image src /multi-agent-horizontal.png, exact spec alt, `w-full h-auto` (no crop), now inside `button.cursor-zoom-in`; caption in the figcaption directly below; 1280 screenshot confirms. 375px was human-passed in Run 3; layout classes are unchanged by the button wrap, but re-check under the overlay is in the script below.
+- AC-116/AC-117 PASS: no "tab-vault" text and no tab-vault.com link in the HTML of any fetched route; no copy says TabVault is live ("Live in production" in the RSC payload belongs to the Marketing project). NOTE: /slideshow returns 404 in this build (route not built yet), so "including /slideshow" cannot be checked; re-check when that route lands.
+- AC-126 PASS: no `tel:`, "206-677-7544", "2066777544" or phone-pattern text in any fetched route (including /projects/multi-agent-system).
+- AC-127 PASS: feature image alt equals the Record 2 text exactly; the dialog's aria-label equals that alt; no empty alt on any /projects/* page (empty alts exist only on /about decorative photos, not project images).
+- AC-125: not defined in this module's spec (only AC-126 is listed); nothing to verify here. Flagging for the coordinator in case it is meant to be in scope.
+
+Could not be judged by me: the overlay open/close motion on this image (headless scripted click harness would not run). MOD-003 QA covers the overlay mechanism in headless Chrome.
+
+### Human test script (MOD-005 under the overlay)
+1. `cd site && npm run build && npx next start`, open /projects/multi-agent-system at 1280px wide.
+2. Click the diagram: it should zoom to the center over a dimmed page; click anywhere or press Esc: it returns to the same spot, nothing on the page jumps.
+3. At 375px (device toolbar or phone): the whole diagram visible edge to edge before opening, no sideways scroll; tap it, the zoomed diagram fits the screen; tap to close.
+4. With VoiceOver, opening the image announces a dialog named by the diagram description.
+Reply with PASS or the step that failed.
+
+### Integration notes (for Tech Lead)
+- scan-integration.sh not run separately in this pass; no new leads beyond Run 3 note (metadataBase unset, og:image resolves to localhost:3000).
+- /slideshow route absent in the build; AC-117/AC-126 "every route including /slideshow" is untestable until it exists.
+
+### Open items
+- [ ] AC-091 needs-signoff — overlay zoom/close on the feature image at 1280 and 375 (2026-11-01)
