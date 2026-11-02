@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: record the slideshow design approval, apply Tech Lead T1-T6, the "Leon Wu" name rule and the design decisions (PRD rev 1.9)
 

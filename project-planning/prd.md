@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.8
+**Revision:** 1.9
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -157,7 +157,7 @@ Humanized and professional. First-person voice. No em dashes. Concise, concrete 
 
 Keyboard shortcuts fire on `keydown` with no modifier keys, and are suppressed when focus is on an `<input>`, `<textarea>`, or `contenteditable` element.
 
-The Slideshow item appears in the desktop sidebar and in the mobile drawer, with its own icon and shortcut badge like the other items. Selecting it opens the full-screen slideshow (section 4.11), not a normal page inside the sidebar layout.
+The Slideshow item appears in the desktop sidebar and in the mobile drawer, with its own icon and shortcut badge like the other items. Its icon is the one in the approved slideshow design (section 4.11, Design: `slideshow-ui.md` section 14). Selecting it opens the full-screen slideshow (section 4.11), not a normal page inside the sidebar layout.
 
 **Acceptance criteria (added in revision 1.7):**
 - AC-093: The desktop sidebar and the mobile drawer show a seventh item, "Slideshow", directly after Contact, with an icon and the shortcut badge "7", in the same style as the other six items. Selecting it opens /slideshow.
@@ -233,10 +233,18 @@ The aside panel is hidden on screens smaller than `lg`. On mobile, projects are 
 
 **Image overlay (every project page):** On every /projects/<slug> page, the feature image and every image in an Images section open in an overlay when clicked, tapped, or activated from the keyboard. The image grows from its place on the page to the center of the screen over a dimmed page, shown as large as fits in about 90% of the screen without cropping, and shrinks back to its place when the overlay closes. A click or tap anywhere, Esc, or the phone's Back closes it. The behaviour follows Notion's image zoom, which Leon recorded as the sample on 2026-11-01. Leon asked for it on the multi-agent diagram; it applies to every project image so that all of them behave the same way.
 
+**Images sections (every project page):** Each image in an Images section shows whole, with no cropping or distortion. At 1280x800 none is taller than 640px; at 375px wide each fits the column width. This is the ProjectDay rule (AC-111) applied to every project page, so the portrait TabVault phone screenshot shows smaller than before.
+
+**Alt text (every project page):** The feature image and every image in an Images section have the alt text given for them in their project's section (4.3 to 4.6) and record (section 5). The image overlay names its dialog by that alt text (AC-109).
+
 **Acceptance criteria (added in revision 1.7):**
 - AC-108: On every /projects/<slug> page, the feature image and each image in an Images section show a zoom-in pointer on hover, can be reached with Tab, and open with Enter or Space as well as with a click or tap. Opening dims the whole page, including the sidebar, and shows the image centered, scaled to fit within 90% of the viewport's width and height, without cropping or distortion, with a zoom-out pointer over the overlay. On /projects/multi-agent-system at 1280x800, the diagram in the overlay is wider than it is in the page.
 - AC-109: The overlay closes on a click or tap anywhere in it, including on the image, and on Esc. On a phone, the browser's Back button or Back gesture closes the overlay and the visitor stays on the same page. While the overlay is open, keyboard focus is inside it, Tab does not reach the page behind it, the page behind it does not scroll, and screen readers announce a dialog named by the image's alt text. When it closes, focus returns to the image that opened it.
 - AC-110: Opening, the image grows from its position in the page to the center, and closing, it shrinks back, each in at most 300ms. When the visitor's system is set to reduce motion, the overlay only fades in and out instead. Opening and closing the overlay shifts no other element on the page and does not change the image's size or position in the page, and AC-089 and AC-091 still pass at 1280px and 375px wide.
+
+**Acceptance criteria (added in revision 1.9):**
+- AC-127: On every /projects/<slug> page, the feature image and every image in an Images section have exactly the alt text given for them in sections 4.3 to 4.6 and 5, and no project image has an empty alt. The overlay dialog each one opens is named by that alt text.
+- AC-128: On every /projects/<slug> page, each image in an Images section shows whole, with no cropping or distortion. At 1280x800 no image in an Images section is taller than 640px; at 375px wide each fits the column width.
 
 ---
 
@@ -269,7 +277,12 @@ Each link shows its plain-text prefix followed by the linked label; only the lab
 8. Impact
 9. What I learned, and what I would improve
 
-The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs.
+The Images section shows the SitePlus+ screenshots below, in this order, and has no paragraphs. The feature image, `/siteplusplus-home.jpg`, has the alt text "Screenshot of the SitePlus+ home dashboard." (Record 1).
+
+| Screenshot | Alt text |
+|---|---|
+| `/siteplusplus-reports.jpeg` | Screenshot of the SitePlus+ reports page. |
+| `/siteplusplus-sites.jpeg` | Screenshot of the SitePlus+ Sites page, with a form to register a new site and a card for a registered test site. |
 
 **Inline bold:** Paragraphs may contain `**bold text**` markdown which renders as `<strong>` in the UI.
 
@@ -348,7 +361,12 @@ TabVault is not live. It was deployed to production on AWS and is offline now, s
 8. Impact
 9. What I learned, and what I would improve
 
-The Images section shows the TabVault screenshots (`/tabvault-mobile.jpeg`, `/tabvault-plugin.png`, in order) and has no paragraphs.
+The Images section shows the TabVault screenshots below, in this order, and has no paragraphs. The feature image, `/tabvault-home.png`, has the alt text "Screenshot of the TabVault web app home screen." (Record 3).
+
+| Screenshot | Alt text |
+|---|---|
+| `/tabvault-mobile.jpeg` | Screenshot of the TabVault web app on an iPhone, showing saved items grouped by category, with search and filters. |
+| `/tabvault-plugin.png` | Screenshot of the TabVault Chrome extension popup, with buttons to save the current tab, save all tabs or write a quick note, and a list of recent saves. |
 
 ---
 
@@ -366,7 +384,7 @@ The Images section shows the TabVault screenshots (`/tabvault-mobile.jpeg`, `/ta
 | At-a-glance | Product owner + orchestrator · 12 modules, built by my multi-agent system · Supabase + AWS video pipeline · Submitted to the App Store (Oct 2026) |
 | Tags | TypeScript · React Native / Expo · Supabase (Postgres, Auth, Edge Functions) · AWS (S3, MediaConvert, CloudFront, CDK) · EAS · i18next · GitHub Actions |
 | Links | None. The GitHub repository stays private, and the App Store listing is not live yet. |
-| Feature image | One wide image showing three of Leon's iPhone screenshots side by side, left to right: Home (`projectday-home.png`), Gyms (`projectday-gyms.png`), Route (`projectday-route.png`), from `asset/screenshots/projectday/`. Each screen is whole and uncropped, with even gaps and a transparent background. Who makes the image (Leon as an asset, or the MOD-011 engineer from the three files) and its file name under the `projectday-` prefix are the Tech Lead's call. |
+| Feature image | One wide image showing three of Leon's iPhone screenshots side by side, left to right: Home (`projectday-home.png`), Gyms (`projectday-gyms.png`), Route (`projectday-route.png`), from `asset/screenshots/projectday/`. Each screen is whole and uncropped, with even gaps and a transparent background. The MOD-011 engineer makes it from the three files and serves it as `/projectday-screens.webp` (Tech Lead, 2026-11-01). |
 | Feature image caption | ProjectDay's interface is in Traditional Chinese, for climbers in Taiwan. |
 
 **Case study sections (in order):**
@@ -378,12 +396,12 @@ The Images section shows the TabVault screenshots (`/tabvault-mobile.jpeg`, `/ta
 6. Impact and status
 7. What I learned and what I'd improve
 
-The Images section shows two screenshots from `asset/screenshots/projectday/`, in this order, and has no paragraphs. Its heading is not in the source file, as on SitePlus+ and TabVault. The screenshots show demo data and are cleared for publishing (Leon, 2026-11-01).
+The Images section shows two screenshots from `asset/screenshots/projectday/`, in this order, and has no paragraphs. Each is served as a web-sized file made by the MOD-011 engineer. Its heading is not in the source file, as on SitePlus+ and TabVault. The screenshots show demo data and are cleared for publishing (Leon, 2026-11-01).
 
-| Screenshot | Alt text |
+| Screenshot (source → served file) | Alt text |
 |---|---|
-| `projectday-route-beta.png` | ProjectDay route screen scrolled to the Beta videos section, showing the thumbnail of a climber's beta video for a V0 route. |
-| `projectday-profile.png` | ProjectDay profile screen with climbing stats: top grade V10, 10 sends, 9 climbing days, and a bar chart of sends per grade. |
+| `projectday-route-beta.png` → `/projectday-route-beta.webp` | ProjectDay route screen scrolled to the Beta videos section, showing the thumbnail of a climber's beta video for a V0 route. |
+| `projectday-profile.png` → `/projectday-profile.webp` | ProjectDay profile screen with climbing stats: top grade V10, 10 sends, 9 climbing days, and a bar chart of sends per grade. |
 
 **Inline bold:** Paragraphs may contain `**bold text**` markdown, which renders as `<strong>` in the UI.
 
@@ -401,7 +419,7 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 - AC-089: The feature image is the three-screen image described in the header table (Home, Gyms, Route, left to right), with Record 4's `featureImageAlt` as alt text. It shows whole, with no cropping, across the content column on desktop (1280px wide) and mobile (375px wide), and Record 4's `featureImageCaption` appears directly below it.
 - AC-090: /projects/projectday is generated at build time. /projects/siteplus, /projects/multi-agent-system and /projects/tabvault still render, and an unknown slug under /projects still returns 404.
 - AC-111: The Images section shows the screenshots listed in the table above, in that order, each whole with no cropping and with its alt text from the table. At 1280x800 no screenshot is taller than 640px; at 375px wide each fits the column width.
-- AC-112: Every ProjectDay image file the page loads is at most 300 KB. Each single screenshot is at least 1000 pixels tall, and the three-screen image is at least 1500 pixels wide, so they stay sharp at the size the image overlay shows them (AC-108).
+- AC-112: Every ProjectDay image file the page loads is at most 300 KB. Each single screenshot is at least 1000 pixels tall, and the three-screen image is at least 1500 pixels wide, so they stay sharp at the size the image overlay shows them (AC-108). The four ProjectDay files /slideshow loads (`/projectday-screens.webp`, `/projectday-route.webp`, `/projectday-route-beta.webp`, `/projectday-profile.webp`) together total at most 800,000 bytes.
 
 ---
 
@@ -448,7 +466,7 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 **Acceptance criteria (added in revision 1.7):**
 - AC-118: /experience shows Exascend first and GoFreight second. Each role's title, company, location, dates, every bullet and every tag chip match this section word for word, in the order listed. No other bullet or chip appears; in particular none of the earlier copy shows ("Growth Marketer", "0.38% to 2.55%", "Baidu Ads", "JCTrans", "350%", "670%"). (Changed in revision 1.8: the Exascend bullet keeps "22.3%", so it is no longer on this list.)
 - AC-119: The Education section shows the two entries in the table above, in that order, with degree, institution, GPA, period and location word for word.
-- AC-121 (added in revision 1.8): The /experience meta description is exactly "Professional experience and education of Tsan-Yu Wu (Leon): Front-End Developer at Exascend, Marketing Project Manager at GoFreight, Master of Science in Computer Science at Northeastern University." The Open Graph and Twitter descriptions are exactly "Professional experience and education of Tsan-Yu Wu (Leon)." No meta tag on /experience contains "Growth Marketer" or "MS in Computer Science".
+- AC-121 (added in revision 1.8, name changed in revision 1.9): The /experience meta description is exactly "Professional experience and education of Leon Wu: Front-End Developer at Exascend, Marketing Project Manager at GoFreight, Master of Science in Computer Science at Northeastern University." The Open Graph and Twitter descriptions are exactly "Professional experience and education of Leon Wu." No meta tag on /experience contains "Growth Marketer" or "MS in Computer Science".
 
 ---
 
@@ -494,7 +512,7 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 Each category rendered as a labeled group with chip/badge elements per skill.
 
 **Acceptance criteria (added in revision 1.8):**
-- AC-122: /skills shows exactly the six groups in the table above, in that order, with each category name and each skill chip word for word and in the order listed (one chip per comma-separated item; "AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)" and "Claude Code (subagents, skills, hooks)" are one chip each). No other group or chip appears. The intro line stays "Languages, frameworks, and tools I work with." The meta, Open Graph and Twitter descriptions are exactly "Technical skills of Tsan-Yu Wu (Leon): languages, backend, frontend, infrastructure and DevOps, and AI and agentic development."
+- AC-122: /skills shows exactly the six groups in the table above, in that order, with each category name and each skill chip word for word and in the order listed (one chip per comma-separated item; "AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)" and "Claude Code (subagents, skills, hooks)" are one chip each). No other group or chip appears. The intro line stays "Languages, frameworks, and tools I work with." The meta, Open Graph and Twitter descriptions are exactly "Technical skills of Leon Wu: languages, backend, frontend, infrastructure and DevOps, and AI and agentic development."
 
 ---
 
@@ -532,7 +550,7 @@ Email is the only direct contact method. The email stays the Gmail address, not 
 
 **Route:** /slideshow
 
-**Source file:** `asset/content/interview-deck.md` (as of commit e479e22). It is the word-for-word source of every slide's text.
+**Source file:** `asset/content/interview-deck.md` (as of commit ac1a07d). It is the word-for-word source of every slide's text.
 
 **Design:** The slideshow's visual and interaction design comes from the design team, not from a preview file. The UX Researcher, UX Designer, UI Designer and Motion Designer write it under `project-planning/design/ux-team/`. The Design Lead reviews it in `project-planning/design/ux-team/reviews/slideshow-review-<n>.md`, and Leon approves it after a PASS. The approved design is the set of files, at the commit, named in Leon's slideshow design approval in `status.md` Decisions; engineers and QA read it from those files. It sets each slide type's layout, text sizes, spacing, where the project name and position sit, the close button, the hints, focus styles, and the phone layout. It works inside this section: it does not change the on-screen text, the slides or their order, the controls, or the acceptance criteria below. A design that needs any of those changed needs a PRD change first. `asset/content/interview-deck-preview.html` was a content review aid; it is not the design reference and not site code.
 
@@ -547,10 +565,10 @@ Email is the only direct contact method. The email stays the Gmail address, not 
 Slide labels in the source file (such as "A3: Role and stack") do not show on screen.
 
 **On-screen text:** Every slide shows its Title and the copy fields under it in the source file (Titles, Timeline, Subtitle, Big numbers, Cards, Footer, Roles, Bullets, Role, Stack, Captions) word for word. Text may wrap or be split across lines (for example, a timeline entry's dates, role and place on separate lines), but words, numbers and punctuation do not change. Speaker notes, editor's notes, slide labels and "Visual:" lines never show. Two slides draw a small diagram from text, defined here (the arrangement follows the approved design):
-- A2: boxes reading "Requirements", "PM", "Doc-Sync", "Engineer ⇄ QA", "Tech Lead", "Shipped", in this order, joined by arrows; with them the line "Retrospective feeds improvements back into the system" and a bar reading "I approve every handoff".
+- A2: boxes reading "Requirements", "PM", "Doc-Sync", "Engineer ⇄ QA", "Tech Lead", "Shipped", in this order, joined by arrows; with them the line "Retrospective feeds improvements back into the system" and a bar reading "I approve the key handoffs". The bar connects only to the handoffs into PM, into Doc-Sync and into Shipped. The Retrospective line stands apart from the row of boxes and feeds the system as a whole, not one box.
 - B6: chips reading "Upload", "S3", "MediaConvert", "CloudFront", in this order, joined by arrows, shown with the bullets.
 
-The only other text on screen: the "Details" cue and key on the two work cards of slide 2, the key number on each menu card, the project name and position on project slides (see Look), the menu hint (see Menu), and the full-screen hint (see Opening).
+The only other text on screen: the key number on each menu card, the project name and position on project slides (see Look), the menu hint (see Menu), and the full-screen hint (see Opening). The field names in the source file (such as "Role" and "Stack") do not show. Where a timeline entry on slide 2 is split across lines, the colon after its dates and the comma after its role fall at the line breaks and are not drawn; no other punctuation changes.
 
 **Slide images:**
 
@@ -558,39 +576,42 @@ The only other text on screen: the "Details" cue and key on the two work cards o
 |---|---|---|
 | 3 | Snowboarding photo (`site/public/IMG_6875.JPG`, or a smaller copy), caption "Snowboarding" | Leon on a snowboard on a snowy slope, giving a peace sign, with forested mountains behind. |
 | 3 | Bouldering photo (`site/public/4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG`, or a smaller copy), caption "Bouldering" | Leon on an indoor bouldering wall, reaching for orange holds. |
-| B2 | The ProjectDay three-screen image (MOD-011 asset, section 4.6) | Record 4's `featureImageAlt` |
-| B5 | Three single ProjectDay screenshots side by side, left to right: Route (`projectday-route.png`), Route beta (`projectday-route-beta.png`), Profile (`projectday-profile.png`), as web-sized MOD-011 files | Route: "ProjectDay route screen showing a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button." Route beta and Profile: the alt texts in section 4.6. |
+| B2 | The ProjectDay three-screen image `/projectday-screens.webp` (MOD-011 asset, section 4.6) | Record 4's `featureImageAlt` |
+| B5 | Three single ProjectDay screenshots side by side, left to right: Route (`/projectday-route.webp`), Route beta (`/projectday-route-beta.webp`), Profile (`/projectday-profile.webp`), MOD-011 files | Route: "ProjectDay route screen showing a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button." Route beta and Profile: the alt texts in section 4.6. |
 | C2 | `/siteplusplus-home.jpg` (MOD-004 asset) | Screenshot of the SitePlus+ home dashboard. |
 | C5 | `/siteplusplus-reports.jpeg` (MOD-004 asset) | Screenshot of the SitePlus+ reports page. |
 | D1 | `/tabvault-home.png` (MOD-006 asset) | Screenshot of the TabVault web app home screen. |
 
-**Hidden job slides:** On slide 2, the two work cards (GoFreight, Exascend) each show the cue "Details" and a key: 1 for GoFreight, 2 for Exascend. A click or tap on a card, Enter or Space on a focused card, or its key on slide 2 opens that job's slide. On a job slide, Next or Previous (any control) returns to slide 2. Next and Previous never reach a job slide from any other slide.
+**Hidden job slides:** On slide 2, the two work cards (GoFreight, Exascend) show only their timeline text, with no "Details" cue and no key. A click or tap on a card, or Enter or Space on a focused card, opens that job's slide; a click or tap anywhere else on slide 2 works as listed under Controls (a mouse click goes to slide 3). On slide 2 the keys `1` (GoFreight) and `2` (Exascend) also open the job slides, as a shortcut that nothing on screen shows. On a job slide, Next or Previous (any control) returns to slide 2. Next and Previous never reach a job slide from any other slide.
 
 **Menu:**
-- The title reads "Pick a project" until a project has been finished (Next on its last slide) or left with M; from then on it reads "Pick another project".
+- The title always reads "Pick a project".
 - Four cards, in the order listed under Slides, each with its key number (1 to 4), name and one line from the source file. A click or tap on a card, Enter or Space on a focused card, or its number key starts that project at its first slide. The footer line shows as plain text, not as links.
-- Next on the menu starts the project pre-selected by a start link, if there is one and it has not been shown yet. Otherwise Next shows the hint "Pick a project: press 1 to 4 or click a card" for about 2 seconds and stays on the menu. Previous on the menu goes to slide 3.
+- Next on the menu starts the project pre-selected by a start link, if there is one and it has not been shown yet. A project counts as shown once any of its slides has been displayed, by any route. Otherwise Next shows the hint "Pick a project: press 1 to 4 or click a card" for about 2 seconds and stays on the menu. Previous on the menu goes to slide 3.
 - From a project: Next on its last slide, Previous on its first slide, or M on any slide returns to the menu.
 
-**Start link:** `/slideshow?project=<name>`, where `<name>` is `multi-agent`, `projectday`, `siteplus` or `tabvault`, still opens on slide 1. On the menu, that project's card is highlighted, and Next starts it. Any other value is ignored.
+**Start link:** `/slideshow?project=<name>`, where `<name>` is `multi-agent`, `projectday`, `siteplus` or `tabvault`, still opens on slide 1. On the menu, that project's card is highlighted and Next starts it, until that project has been shown (see Menu); from then on the card is no longer highlighted. Any other value is ignored.
 
-**Opening:** Selecting the Slideshow nav item or pressing `7` puts the browser in full screen, where the browser supports it, and shows slide 1. Where full screen is not available (for example on iPhone), the slideshow fills the browser window instead. A direct visit to /slideshow (a typed or shared link, a start link, or a reload) fills the browser window and shows the hint "Press F for full screen" until the first key press, click or tap. Pressing `F` enters full screen.
+**Opening:** Selecting the Slideshow nav item or pressing `7` puts the browser in full screen, where the browser supports it, and shows slide 1. Where full screen is not available (for example on iPhone), the slideshow fills the browser window instead. A direct visit to /slideshow (a typed or shared link, a start link, or a reload) fills the browser window. Whenever slide 1 shows in a browser window on a browser that supports full screen (after a direct visit, or when the browser refused the site's full-screen request), the hint "Press F for full screen" shows. It never shows in full screen or on a browser without full-screen support. It goes away for good on the first key press, click or tap, or when full screen starts. Pressing `F`, or clicking or tapping the hint, enters full screen; a click or tap on the hint never changes the slide. The hint is not a Tab stop: `F` is its keyboard equivalent. In full screen, `F` does nothing.
 
 **Controls:**
-- Next slide: Space, Right arrow, Down arrow, Page Down, Enter (when focus is not on a card); a mouse click anywhere on a slide; on a touchscreen, a tap on the right half of the screen or a swipe left or up.
+- Next slide: Space, Right arrow, Down arrow, Page Down, Enter; a mouse click anywhere on the screen, including the area around the 16:9 frame; on a touchscreen, a tap on the right half of the screen or a swipe left or up.
 - Previous slide: Shift+Space, Left arrow, Up arrow, Page Up; on a touchscreen, a tap on the left half of the screen or a swipe right or down. A mouse click never goes back.
-- A click or tap on a menu card or a slide-2 work card opens it, and a click or tap on the close button leaves the slideshow, instead of moving to another slide.
+- Space or Enter on a focused card opens it, and Space or Enter on the focused close button leaves the slideshow, instead of moving to another slide.
+- A click or tap on a menu card or a slide-2 work card opens it, a click or tap on the close button leaves the slideshow, and a click or tap on the full-screen hint enters full screen, instead of moving to another slide.
+- A pen works like touch. Two-finger gestures never change slides, so pinch-zoom keeps working on a phone.
+- A key held down acts once: its automatic repeats do nothing.
 - Number keys: on slide 2, `1` and `2` open the job slides; on the menu, `1` to `4` start the projects; on every other slide they do nothing.
 - M goes to the menu from any slide. Home goes to slide 1. Previous on slide 1 does nothing.
 - Leaving: Esc, or the close button in a corner of the screen, returns to the page the slideshow was opened from (Home after a direct visit). A single Esc press does this even in full screen. Leaving full screen any other way also returns to that page.
 
-**Look:** Each slide is a 16:9 frame, scaled to the largest size that fits the screen, with a plain background around it. Layouts follow the approved design (see Design). The slideshow uses the site's palette and Roboto, and follows the site's current light or dark theme. Slides change instantly, with no animation. On project slides, the project name and the position (for example "ProjectDay" and "3 / 8") show where the approved design places them. The about, job and menu slides show neither.
+**Look:** Each slide is a 16:9 frame, scaled to the largest size that fits the screen, with a plain background around it. Layouts follow the approved design (see Design). The slideshow uses the site's palette and Roboto, and follows the site's current light or dark theme. Slides change instantly, with no animation. On project slides, the project name and the position (for example "ProjectDay" and "3 / 8") show where the approved design places them. The about, job and menu slides show neither. In full screen, the mouse pointer hides after 3 seconds without movement, and card hover styles do not show while it is hidden; moving the mouse shows it again. It never hides in a browser window or for touch.
 
 **Acceptance criteria (added in revision 1.7):**
 - AC-095: Selecting the Slideshow nav item or pressing `7` shows slide 1 with the browser in full screen in desktop Chrome, Safari and Firefox. On a browser without full-screen support (iPhone Safari), the slideshow fills the window. In both cases no sidebar, top bar or other site element is visible.
-- AC-096: A direct visit to /slideshow, a start link, or a reload shows slide 1 filling the browser window, with the hint "Press F for full screen". The hint disappears after the first key press, click or tap. Pressing `F` enters full screen.
+- AC-096: Whenever slide 1 shows in a browser window on a browser with full-screen support (a direct visit, a start link, a reload, or an opening from the site whose full-screen request the browser refused), the hint "Press F for full screen" shows. It does not show in full screen or on iPhone Safari. It disappears for good after the first key press, click or tap, or when full screen starts. Pressing `F`, or a click or tap on the hint, enters full screen, and a click or tap on the hint does not change the slide. In full screen, `F` does nothing.
 - AC-097: The keyboard controls listed under Controls work exactly as listed on the about, job, menu and project slides. From slide 1, Next goes to slide 2, slide 3, then the menu; inside a project it goes through that project's slides in the order of the source file, then back to the menu.
-- AC-098: The mouse, tap and swipe controls listed under Controls work as listed with a mouse on desktop and with touch on a 375px-wide phone, including opening menu cards and slide-2 work cards. A mouse click anywhere on a slide other than a card or the close button goes to the next slide and never to the previous one. The close button is visible on every slide and can be reached and pressed from the keyboard.
+- AC-098: The mouse, tap, pen and swipe controls listed under Controls work as listed with a mouse on desktop and with touch on a 375px-wide phone, including opening menu cards and slide-2 work cards. A mouse click anywhere on the screen other than a card, the close button or the full-screen hint goes to the next slide and never to the previous one, and a mouse click on the area outside the 16:9 frame behaves exactly like a click on the slide. A pinch on a phone zooms and does not change the slide. The close button is visible on every slide and can be reached with Tab, and Enter or Space on it leaves the slideshow.
 - AC-099: Esc or the close button returns to the page the slideshow was opened from, or to Home after a direct visit, with one Esc press, including while in full screen. Leaving full screen through the browser's own controls also returns to that page. Back on the site, the sidebar and keyboard shortcuts work as before.
 - AC-100: Every slide's on-screen text matches `asset/content/interview-deck.md` word for word, as described under On-screen text, and the A2 and B6 diagrams read exactly as defined there. No speaker note, editor's note, slide label or "Visual:" line appears anywhere on /slideshow. There is no Thank-you slide, no "Shown" tag on menu cards, no avatar and no GPA. The copy contains no em dashes.
 - AC-102: At 1280x720, 1920x1080, 1440x900 and 375x667 (portrait and landscape), every slide shows whole, with no scrolling and no clipped text. Slide titles are at least 7% of the slide frame's height, bullet, Titles, Roles and Role text at least 4.2%, and all other text at least 2.4%. All slide text meets WCAG AA contrast in both themes.
@@ -599,9 +620,13 @@ The only other text on screen: the "Details" cue and key on the two work cards o
 - AC-105: After /slideshow has finished loading, with the network switched off, every slide, including every slide image, still shows.
 - AC-106: The slide images listed under Slide images load on their slides (no broken image), each with the alt text listed, and the captions "Snowboarding" and "Bouldering" show on slide 3. All the image files /slideshow loads together total at most 3 MB.
 - AC-107: /slideshow is generated at build time. Its title is "Slideshow — Leon Wu", and it has a description meta tag, Open Graph and Twitter card tags, and the canonical URL https://www.leon-wu.com/slideshow with no parameters. Every other route still builds and renders.
-- AC-113: The menu behaves as described under Menu: the title changes from "Pick a project" to "Pick another project" only as described, the four cards show in order with their key numbers, the footer line shows as plain text, Next with nothing pre-selected shows the hint and stays, and Previous goes to slide 3. Next on any project's last slide, Previous on its first slide, and M on any slide show the menu.
-- AC-114: On slide 2, the GoFreight card (key `1`) and the Exascend card (key `2`) each open their own job slide by click, tap, focused Enter or Space, or key. Next or Previous on a job slide returns to slide 2, and no sequence of Next or Previous from any other slide reaches a job slide.
-- AC-115: `/slideshow?project=projectday` opens on slide 1. On the menu the ProjectDay card is highlighted, and Next starts ProjectDay at B1. The same holds for `multi-agent`, `siteplus` and `tabvault`. Any other value, or no parameter, behaves as no start link.
+- AC-113: The menu behaves as described under Menu: its title is "Pick a project" every time it shows, and "Pick another project" never appears; the four cards show in order with their key numbers; the footer line shows as plain text; Next with nothing pre-selected, or with the pre-selected project already shown, shows the hint and stays; and Previous goes to slide 3. Next on any project's last slide, Previous on its first slide, and M on any slide show the menu.
+- AC-114: On slide 2, the GoFreight card (key `1`) and the Exascend card (key `2`) each open their own job slide by click, tap, focused Enter or Space, or key. Neither card shows a "Details" cue or a key, and a mouse click on slide 2 outside the cards goes to slide 3. Next or Previous on a job slide returns to slide 2, and no sequence of Next or Previous from any other slide reaches a job slide.
+- AC-115: `/slideshow?project=projectday` opens on slide 1. On the menu the ProjectDay card is highlighted, and Next starts ProjectDay at B1. Once any ProjectDay slide has been shown, by any route, the card is no longer highlighted and Next on the menu shows the hint. The same holds for `multi-agent`, `siteplus` and `tabvault`. Any other value, or no parameter, behaves as no start link.
+
+**Acceptance criteria (added in revision 1.9):**
+- AC-130: In full screen with a mouse, the pointer hides after 3 seconds without movement and card hover styles do not show while it is hidden; any mouse movement shows the pointer again. In a browser window, and with touch, the pointer never hides.
+- AC-131: Holding down any key that changes slides (for example Right arrow or Space) moves exactly one slide; the key's automatic repeats do nothing.
 
 ---
 
@@ -620,13 +645,15 @@ interface ProjectLink {
 ### ProjectSection
 
 ```typescript
-type SectionItem = string | { image: string };   // a paragraph (may contain **bold**) or an image
+type SectionItem = string | { image: string; alt?: string };   // a paragraph (may contain **bold**) or an image with its alt text
 
 interface ProjectSection {
   heading: string;
   items: SectionItem[];
 }
 ```
+
+`alt` is optional in the type only so that the shared template can gain it before the records fill it in; every image item on the site carries its alt text (AC-127).
 
 ### ProjectEntry
 
@@ -662,6 +689,7 @@ links:
   - { name: "Demo: ", label: "interactive walkthrough", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
   - { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
 featureImage: "/siteplusplus-home.jpg"
+featureImageAlt: "Screenshot of the SitePlus+ home dashboard."
 ```
 
 **Record 2 — Multi-Agent Software Development System**
@@ -691,6 +719,7 @@ description: "A production full-stack tab manager spanning a Chrome extension, a
 links:
   - { name: "GitHub: ", label: "tab-management", href: "https://github.com/LeonWu813/tab-management" }
 featureImage: "/tabvault-home.png"
+featureImageAlt: "Screenshot of the TabVault web app home screen."
 ```
 
 **Record 4 — ProjectDay**
@@ -704,7 +733,7 @@ tags: ["TypeScript", "React Native / Expo", "Supabase (Postgres, Auth, Edge Func
 atAGlance: "Product owner + orchestrator · 12 modules, built by my multi-agent system · Supabase + AWS video pipeline · Submitted to the App Store (Oct 2026)"
 description: "An iOS app for indoor bouldering climbers in Taiwan: log a send in a few taps, watch beta videos tied to a specific route, and browse gym route lists. Built with my multi-agent development system and submitted to the App Store."
 links: []
-featureImage: the three-screen image in section 4.6 (file name and location are the Tech Lead's call, under the projectday- prefix)
+featureImage: "/projectday-screens.webp" (the three-screen image in section 4.6)
 featureImageAlt: "Three ProjectDay screens in Traditional Chinese. Home shows saved gyms, a target route and new beta videos. Gyms lists climbing gyms with search and city filters. A route screen shows a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button."
 featureImageCaption: "ProjectDay's interface is in Traditional Chinese, for climbers in Taiwan."
 ```
@@ -791,6 +820,10 @@ Number keys `1`–`7` navigate to the corresponding nav item (`7` opens the slid
 - Focus is on `INPUT`, `TEXTAREA`, or `contenteditable` element
 - Any modifier key (`metaKey`, `ctrlKey`, `altKey`) is held
 - The slideshow is open (inside it, keys work as listed in section 4.11)
+- An image overlay is open on a project page (section 4.2): the keys do nothing until it closes
+
+**Acceptance criteria (added in revision 1.9):**
+- AC-129: While the image overlay (section 4.2) is open, pressing any of `1`–`7` does nothing: the overlay stays open and the page does not change.
 
 ### SEO and Open Graph
 
@@ -800,10 +833,10 @@ Every page must include:
 - Open Graph and Twitter card tags
 - Canonical URL tag
 - Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
-- Wherever a page shows or describes Leon by his full name (page text and meta descriptions), it is written "Tsan-Yu Wu (Leon)", as on his CV. The short name "Leon Wu" in the sidebar, the mobile wordmark and page titles stays.
+- The site names Leon "Leon Wu": in the sidebar, the mobile wordmark, page titles, and wherever page text or a meta tag gives his full name. The full-name forms "Tsan-Yu (Leon) Wu" and "Tsan-Yu Wu (Leon)" do not appear on the site. The CV PDF served at /Leon_cv.pdf is outside this rule.
 
 **Acceptance criteria (added in revision 1.8):**
-- AC-125: In the built HTML of every route, the text "Tsan-Yu (Leon) Wu" does not appear, and every full-name mention reads "Tsan-Yu Wu (Leon)".
+- AC-125 (changed in revision 1.9): In the built HTML of every route, neither "Tsan-Yu (Leon) Wu", "Tsan-Yu Wu (Leon)" nor "Tsan-Yu Wu" appears. Every meta description, Open Graph description and Twitter description that named Leon by his full name names him "Leon Wu" instead, with the rest of its text unchanged unless AC-121 or AC-122 gives the full text. For example, the root description reads "Portfolio of Leon Wu — full-stack engineer and CS master's student at Northeastern University." The LinkedIn URL and the email address, which contain "tsan-yu" and "tsan.yu", are unchanged.
 
 Social preview image: [ASSET NEEDED — 1200×630px]
 
@@ -851,12 +884,11 @@ On 2026-11-01 Leon replaced `asset/Leon_cv.pdf` with his newer CV (`cv/fullstack
 | ProjectDay screenshots | `asset/screenshots/projectday/` (five 1206x2622 iPhone screenshots of demo data, cleared for publishing; all five are used, see sections 4.6 and 4.11) |
 | Interview deck copy | `asset/content/interview-deck.md` |
 | Seattle photos for the slideshow | `site/public/IMG_6875.JPG` (snowboarding), `site/public/4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG` (bouldering) |
+| Slideshow design | `project-planning/design/ux-team/` at commit ac1a07d, approved by Leon on 2026-11-01 (`status.md` Decisions) |
 
 ### Still needed — blocking
 
-| Asset | Used On | Notes |
-|---|---|---|
-| Slideshow design | /slideshow (MOD-012) | Made by the design team, reviewed by the Design Lead (PASS) and approved by Leon (section 4.11, Design). Leon's approval and the approved files are recorded in `status.md` Decisions before Doc-Sync writes the MOD-012 spec. Blocks MOD-012 only. |
+None.
 
 ### Still needed — non-blocking
 
@@ -890,3 +922,5 @@ Conventions proposed by the Tech Lead and approved by Leon. Doc-Sync copies them
 - CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-005: A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (Tech Lead Reviews, 2026-11-01 change review, rev 1.5)
+- CONV-006: Slideshow entry contract between MOD-001 and MOD-012. When the site opens the slideshow (the Slideshow nav link or key `7`), MOD-001, in the same event handler and in this order: writes `sessionStorage["slideshow-return"] = JSON.stringify({ path: location.pathname, t: Date.now() })`; calls `document.documentElement.requestFullscreen()` if `document.fullscreenEnabled`, ignoring a rejection; and navigates client-side to `/slideshow`. MOD-012 reads and removes that key once on first mount. A value whose `path` starts with "/" and is not "/slideshow", and whose `t` is at most 10 seconds old, means "opened from the site": leaving returns to `path` with `router.replace`. Anything else means a direct visit: leaving goes to "/". The origin does not decide whether the "Press F for full screen" hint shows: MOD-012 shows it whenever slide 1 is in a browser window and `document.fullscreenEnabled` is true, once the opening full-screen request has settled (section 4.11 Opening, AC-096). (Tech Lead Reviews, 2026-11-01 change review rev 1.7 + 1.8; hint rule changed by Leon's design decision L-2)
+- CONV-007: The shell on /slideshow. On `/slideshow` the site shell renders nothing: Sidebar returns `null`, its number-key handler does nothing, and no shell image is requested (no `/head.png`, no `/Subject.png`, verified in DevTools Network). MOD-001 moves or guards the `main::after` decoration so it is not generated there. The slideshow root is a fixed full-viewport layer above the shell, owned by MOD-012. Sidebar's number-key handler also does nothing while a `dialog[open]` exists, and in-page overlays are native `<dialog>` elements opened with `showModal()`. (Tech Lead Reviews, 2026-11-01 change review rev 1.7 + 1.8; T1 (b), T3 (a), T6)
