@@ -40,7 +40,7 @@ Editor's note (not page copy): a `project` URL parameter (`multi-agent`, `projec
 - **2021 to 2023:** Marketing Project Manager, GoFreight, Taipei (opens the GoFreight detail slide)
 - **2023 to 2025:** Front-End Developer, Exascend, Taipei (opens the Exascend detail slide)
 
-The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens Exascend.
+The two work cards are clickable but show no "Details" text or key label (user, 2026-11-01: remove the "Details" text; clicking a card opens its detail slide, otherwise Next goes to slide 3). Keys 1 and 2 still open GoFreight and Exascend as a hidden shortcut.
 - **2025 to 2027:** Master of Science in Computer Science, Northeastern University, Seattle
 
 **Speaker notes:** I taught myself to code at GoFreight so I could build the experiments I was running. At Exascend I built two customer websites from scratch and grew monthly active users 3.5x, from 12,000 to 41,350. Now I'm at Northeastern to deepen the fundamentals.
@@ -88,8 +88,7 @@ The two work cards show a small "Details" cue. Keys: 1 opens GoFreight, 2 opens 
 
 ### 4: Project menu
 
-**Title (first time):** Pick a project
-**Title (after a project):** Pick another project
+**Title:** Pick a project (the same every time; user, 2026-11-01: "No need to use "Pick another project", "Pick a project would be fine")
 
 **Cards (click, or press 1 to 4):**
 1. **Multi-Agent System:** An AI dev team with a human in charge
@@ -113,7 +112,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 
 **Big numbers:**
 - **3** products shipped
-- **6**-agent dev team
+- **6** agents on the dev team
 - **6** skills created
 
 **Speaker notes:** The three products are TabVault, ProjectDay, and this portfolio site. The six skills are the shared rulebooks the agents read: PRD format, doc sync, coding conventions, the engineer checklist, the QA checklist, and integration review.
@@ -122,7 +121,7 @@ Editor's note (not page copy): storyline, revised 2026-11-01 at the user's reque
 
 **Title:** An AI dev team with a human in charge
 
-**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with "Retrospective feeds improvements back into the system" under it, and a bar reading "I approve every handoff".
+**Visual:** simplified workflow: Requirements → PM → Doc-Sync → Engineer ⇄ QA → Tech Lead → Shipped, with "Retrospective feeds improvements back into the system" under it, and a bar reading "I approve every handoff". The approval bar connects to the handoffs into PM, Doc-Sync and Shipped only, not Doc-Sync to Engineer or Engineer to Tech Lead. The Retrospective line is separate: it takes improvements back to the system as a whole, not into PM (user, 2026-11-01).
 
 ### A3: Role and stack
 
