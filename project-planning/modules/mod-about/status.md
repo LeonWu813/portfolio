@@ -9,6 +9,12 @@
 
 **Self-check:** lint PASS, build PASS
 
+### 2026-11-01 - spec-update (PRD 1.10/1.11)
+
+- Changed AC-125: about/page.tsx description, Open Graph description and Twitter description now read "About Leon Wu — ..." (rest unchanged).
+- AC-132, AC-126 (no tel/phone in page), AC-064: already satisfied by the existing page (Meeee/Hobbies/Background, five empty-alt photos, no phone, no education); no change.
+- Self-check (run in site/): lint PASS (0 errors, img warnings only), build PASS, grep of built /about for Tsan-Yu/phone: none.
+
 ## QA Results
 
 **Date:** 2026-06-28

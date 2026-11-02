@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About — Leon Wu",
   description:
-    "About Tsan-Yu (Leon) Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
+    "About Leon Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
   openGraph: {
     title: "About — Leon Wu",
     description:
-      "About Tsan-Yu (Leon) Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
+      "About Leon Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
     type: "website",
     url: "https://www.leon-wu.com/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About — Leon Wu",
     description:
-      "About Tsan-Yu (Leon) Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
+      "About Leon Wu — a full-stack engineer who learned to code by building products that real companies depend on.",
     images: ["/og-image.png"],
   },
 };
