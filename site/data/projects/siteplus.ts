@@ -7,13 +7,14 @@ export const siteplus: ProjectEntry = {
   title: "SitePlus+",
   tech: "Full-Stack · Java/Spring Boot · React · AWS",
   featureImage: "/siteplusplus-home.jpg",
-  tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"],
+  featureImageAlt: "Screenshot of the SitePlus+ home dashboard.",
+  tags: ["Full-Stack", "Java/Spring Boot", "Spring Security / JWT", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"],
   atAGlance:
     "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%",
   description:
     "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent.",
   links: [
-    { name: "Demo Video: ", label: "link", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" },
+    { name: "Demo: ", label: "interactive walkthrough", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" },
     { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" },
   ],
   sections: [
@@ -33,39 +34,46 @@ export const siteplus: ProjectEntry = {
     {
       heading: "How it works, end to end",
       items: [
-        "A site owner registers their website and receives an auto-generated tracking snippet, pre-filled with a unique site code, ready to paste into their page head. That snippet is a small self-contained script that captures page views, clicks, and form submissions and sends each one to a public ingest endpoint. The backend accepts the event without authentication, enriches it server-side with the visitor's country using a local geolocation database, and stores it against the owner's site. When the owner later opens their dashboard, the front end requests their analytics through an authenticated, ownership-checked endpoint, and the backend returns aggregates: events over time, top pages, channels, and countries, with period-over-period comparison. The same site can also be run through the SEO auditor, which crawls the page, calls an external PageSpeed service, and stores a report the owner can email or have re-checked automatically a week later.",
+        "The clearest way to understand the platform is to follow a single tracked event from a visitor's browser all the way to the owner's dashboard.",
+        "A site owner registers their website and receives an auto-generated tracking snippet, pre-filled with a unique site code, ready to paste into their page head. That snippet is a small self-contained script that captures page views, clicks, and form submissions and sends each one to a public ingest endpoint. The backend accepts the event without authentication (a browser visitor has no account), enriches it server-side with the visitor's country using a local geolocation database, and stores it against the owner's site. When the owner later opens their dashboard, the front end requests their analytics through an authenticated, ownership-checked endpoint, and the backend returns aggregates: events over time, top pages, channels, and countries, with period-over-period comparison. The same site can also be run through the SEO auditor, which crawls the page, calls an external PageSpeed service, and stores a report the owner can email or have re-checked automatically a week later.",
         "That single path touches every interesting decision in the system: a public write with a private read, server-side enrichment, ownership scoping, and scheduled follow-up work.",
       ],
     },
     {
       heading: "Images",
       items: [
-        { image: "/siteplusplus-reports.jpeg" },
-        { image: "/siteplusplus-sites.jpeg" },
+        { image: "/siteplusplus-reports.jpeg", alt: "Screenshot of the SitePlus+ reports page." },
+        { image: "/siteplusplus-sites.jpeg", alt: "Screenshot of the SitePlus+ Sites page, with a form to register a new site and a card for a registered test site." },
       ],
     },
     {
       heading: "Architecture",
       items: [
-        "The platform separates the static front end from the API so each can scale and deploy independently. The front end is built with Vite, stored in S3, and served from CloudFront edge locations over HTTPS, with Origin Access Control so only CloudFront can read the bucket. API traffic passes through Cloudflare for DDoS protection and CORS handling, then an Application Load Balancer that terminates TLS and health-checks each instance every thirty seconds, then on to two EC2 instances running the Spring Boot app in Docker. Both instances share one RDS PostgreSQL database and one ElastiCache Redis node.",
-        "The data model is deliberately simple and is the backbone of the platform's security: every resource hangs off a Site, which belongs to a User. Because everything is scoped to a Site, ownership is verified with a single lookup per request that finds the site by its code and the authenticated user. That one check protects every downstream resource, so there is no place where an authorization rule can be forgotten.",
+        "The platform separates the static front end from the API so each can scale and deploy independently.",
+        "The front end is built with Vite, stored in S3, and served from CloudFront edge locations over HTTPS, with Origin Access Control so only CloudFront can read the bucket. API traffic passes through Cloudflare for DDoS protection and CORS handling, then an Application Load Balancer that terminates TLS and health-checks each instance every thirty seconds, then on to two EC2 instances running the Spring Boot app in Docker. Both instances share one RDS PostgreSQL database and one ElastiCache Redis node.",
+        "The data model is deliberately simple and is the backbone of the platform's security: every resource hangs off a Site, which belongs to a User.",
+        "Because everything is scoped to a Site, ownership is verified with a single lookup per request that finds the site by its code and the authenticated user. That one check protects every downstream resource, so there is no place where an authorization rule can be forgotten.",
       ],
     },
     {
       heading: "Key engineering decisions",
       items: [
-        "**Securing an endpoint that has to be public.** The tracking snippet runs in a visitor's browser with no credentials, so the event-ingest endpoint cannot require authentication. Rather than weaken security, I moved the guarantee to the read side: anyone can write an event, but only the authenticated site owner can read events back. To keep the open write path from being abused, I rate-limit it per IP so an attacker can be throttled but never mine the data.",
-        "**Rate limiting that stays correct across multiple servers.** The platform runs on two instances behind a load balancer. An in-memory counter on each instance would have effectively doubled the real limit, since an attacker could alternate between them. I keep the counter in Redis instead, giving all instances one shared source of truth so the limit holds no matter which server answers a request.",
+        "**Securing an endpoint that has to be public.** The tracking snippet runs in a visitor's browser with no credentials, so the event-ingest endpoint cannot require authentication. Rather than weaken security, I moved the guarantee to the read side: anyone can write an event, but only the authenticated site owner can read events back. To keep the open write path from being abused, I rate-limit writes to 50 requests per minute per IP, so an attacker can be throttled but never mine the data. This split of a public write from a strictly private read is the heart of the design.",
+        "**Rate limiting that stays correct across multiple servers.** The platform runs on two instances behind a load balancer. An in-memory counter on each instance would have effectively doubled the real limit, since an attacker could alternate between them. I keep the counter in Redis instead, giving all instances one shared source of truth so the limit holds no matter which server answers a request. Reasoning about state across a distributed deployment, rather than a single box, was what made this correct.",
         "**Stateless auth that made scaling free.** I chose JWTs over server-side sessions so any instance can validate a request on its own. The payoff was concrete: adding the second instance behind the load balancer required zero code changes, because there was no shared session store to coordinate.",
-        "**Getting real work out of small hardware.** Running on t3.micro instances forced careful JVM tuning. I constrained the heap, metaspace, code cache, and thread stack size, and reduced the web server and database connection pools to fit comfortably alongside Docker and the auto-deploy agent inside one gigabyte of RAM.",
-        "**State that survives a restart.** The automated follow-up audits store their pending work as fields in the database rather than in server memory. A scheduled job picks up whatever is due. Because the intent lives in PostgreSQL, a restart never loses a follow-up.",
+        "**Choosing managed TLS over a self-managed certificate.** I terminate HTTPS at the load balancer with AWS Certificate Manager rather than running a web server with Let's Encrypt on each instance. The managed certificates renew silently, which removed a renewal cron job and the certificate compatibility issues I had hit with the self-managed approach. The load balancer also handles health checks and traffic distribution natively, so one component does three jobs.",
+        "**Locking the instances behind the load balancer.** The application port on each instance only accepts connections from the load balancer's security group, never the public internet. That makes the load balancer the single front door, so protections applied there cannot be bypassed by hitting a server directly.",
+        "**Data-safety choices that prevent silent corruption.** Two small decisions guard the data over time. Campaigns are soft-deleted rather than removed, because a hard delete would orphan every event that references them and destroy historical reporting. And the site code is immutable, because it is baked into every installed snippet; if it could change, every existing installation would break without warning. I also store enums by name rather than by ordinal position, so reordering a list of constants in code can never quietly remap existing rows.",
+        "**Resilience on purpose.** The two instances sit in different availability zones, so if one zone goes down, the load balancer fails over 100% of traffic to the survivor automatically.",
+        "**Getting real work out of small hardware.** Running on t3.micro instances forced careful JVM tuning. I constrained the heap, metaspace, code cache, and thread stack size, and reduced the web server and database connection pools to fit comfortably alongside Docker and the auto-deploy agent inside one gigabyte of RAM. It taught me a lot about where a JVM actually spends memory.",
+        "**State that survives a restart.** The automated follow-up audits, which re-run an SEO check a week later and email the owner a comparison, store their pending work as fields in the database rather than in server memory. A scheduled job picks up whatever is due. Because the intent lives in PostgreSQL, a restart never loses a follow-up.",
       ],
     },
     {
       heading: "Challenges and how I resolved them",
       items: [
         "**Preflight requests never reached the backend.** Putting Cloudflare in front of the API meant its proxy layer intercepted CORS preflight requests before they reached the load balancer, so the browser saw failures that did not correspond to anything in my application logs. I resolved it by writing a small Cloudflare Worker that answers preflight requests directly and appends the right headers to forwarded responses, which put CORS handling at the layer that was actually intercepting it.",
-        "**Preventing account enumeration at login.** A login form that says 'wrong password' for a real email and 'no such user' for a fake one quietly tells an attacker which emails are registered. I return the same error for both cases so the endpoint reveals nothing about which accounts exist.",
+        "**Preventing account enumeration at login.** A login form that says \"wrong password\" for a real email and \"no such user\" for a fake one quietly tells an attacker which emails are registered. I return the same error for both cases so the endpoint reveals nothing about which accounts exist.",
       ],
     },
     {

@@ -2,6 +2,11 @@
 
 ## Engineering Progress
 
+### spec-update (rev 1.10/1.11) - engineer-mod-project-marketing
+- Mode: spec-update. ACs changed: AC-031 (Spring Security / JWT tag), AC-032 (Demo: / interactive walkthrough link), AC-034 (Images alts), AC-120 (full word-for-word paragraphs incl. Resilience on purpose, 50 requests per minute per IP, plus split paragraphs and added source paragraphs), AC-127 (featureImageAlt + section-image alts).
+- Only site/data/projects/siteplus.ts changed. No image files touched.
+- Self-check (run via build+lint in site/): build pass, lint pass (0 errors; warnings pre-existing in other files).
+
 ### spec-update (rev 1.5, E1 = A2 step 2), 2026-11-01
 
 - Created site/data/projects/siteplus.ts (CONV-005: `import type { ProjectEntry }`, named export `siteplus`). Content copied from the as-built record in projects-data.ts, including Images section and Demo Video link; featureImage "/siteplusplus-home.jpg"; links in prefix + label form.
