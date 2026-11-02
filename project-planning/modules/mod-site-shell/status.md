@@ -2,6 +2,13 @@
 
 ## Engineering Progress
 
+### Bugfix (AC-003/AC-004, dark class stripped at hydration)
+- Mode: bugfix. Root cause was NOT the html className: ThemeToggle's useState initializer read document.documentElement.classList during hydration, so client render (dark) differed from server HTML (light) -> React error #418 -> root client re-render discarded the class the inline script had added. layout.tsx unchanged.
+- Fix: ThemeToggle.tsx now uses useSyncExternalStore (server snapshot false, client snapshot reads html.dark, MutationObserver on class). Toggle writes class + localStorage only; label/icon follow the DOM.
+- Headless Chrome (production build): stored dark /about and /slideshow -> dark, no #418; system dark no stored value -> dark; light default -> light; toggle then reload -> dark, label "Switch to light mode"; toggle back + reload -> light.
+- LinkedIn outline: sidebar link already uses focus-visible:outline-[var(--accent)]; rgb(22,22,22) seen only with programmatic focus() (outline-style none, not focus-visible), so not a defect. Home/contact page LinkedIn links belong to other modules.
+- Self-check: lint 0 errors, build passes.
+
 ### 2026-11-02 — spec-update (rev 1.11)
 
 ACs changed: AC-093 (7th Slideshow nav item, key 7, icon from slideshow-ui.md s14), CONV-006 entry in link click + key-7 handler (sessionStorage write, requestFullscreen, router.push; untrusted events not ignored), CONV-007/AC-094/AC-095/AC-129 (Sidebar returns null on /slideshow, key handler off there and while dialog[open]; main::after Subject.png removed from globals.css and replaced by a Sidebar-rendered fixed div so it is not emitted on /slideshow), AC-124 subtitle, AC-125 layout description "Leon Wu", AC-126 (built HTML has no tel:/phone), public/Leon_cv.pdf replaced from asset/Leon_cv.pdf (cfa3367).

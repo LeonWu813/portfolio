@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: qa-mod-site-shell
-mode: verify
+agent: engineer-mod-site-shell
+mode: bugfix
 module: mod-site-shell
-result: bugs-found
-next: claude --agent engineer-mod-site-shell "bugfix"  (AC-003/AC-004: dark class stripped from <html> at hydration; see QA Results in modules/mod-site-shell/status.md). Human script items (Safari/Firefox/iPhone, CV filename) are listed under Open items there.
-timestamp: 2026-11-02T00:00:00Z
+result: success
+next: claude --agent qa-mod-site-shell "regression"
+timestamp: 2026-11-02T01:00:00Z
 ```
 
 ## PM Updates
