@@ -4,13 +4,15 @@
 
 ## Last Action
 
-agent: pm
-mode: change
+agent: tech-lead
+mode: change-review
 module: n/a
-result: success
-next: the coordinator runs /pstack:how on the code this change affects (site/components/Sidebar.tsx key handler and slideshow entry, site/app/projects/[slug]/ image rendering) and saves it to project-planning/pstack-findings/, then claude --agent tech-lead "change review" (rev 1.9: L-2 change to CONV-006, design-team T1-T6 in slideshow-review-2.md section 4); then claude --agent doc-sync (syncs rev 1.7, 1.8 and 1.9 together); then engineers in the Tech Lead's order (MOD-003, record modules MOD-005/006/004/011, page modules MOD-007/008/009/010, MOD-012, MOD-001 last)
-Previous action: tech-lead change-review (0051840); design team revisions 1-2 and Design Lead review 2 PASS (ac1a07d). Still open for the human: AC-017 sign-off (mod-home), AC-091 375px sign-off (mod-project-multi-agent).
-timestamp: 2026-11-02T01:34:10Z
+next: Leon answers D1-D3 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.9 ...)". If D1 = (a) (or D2 = (b)): claude --agent pm "change" (CONV-006 amendment per Tech Lead D1, proposal pass then apply pass), then claude --agent doc-sync (syncs rev 1.7, 1.8, 1.9 and that change together). If D1 = (b) and D2, D3 = (a): claude --agent doc-sync (syncs rev 1.7, 1.8 and 1.9 together). Then engineers in the order in that review: MOD-003; MOD-005/006/004/011; MOD-007/008/009/010; MOD-012; MOD-001 last.
+result: needs-human
+Previous action: pm change rev 1.9 (6ca5be9); coordinator /pstack:how rev 1.9 deltas (fddbdd7). Still open for the human: AC-017 sign-off (mod-home), AC-091 375px sign-off (mod-project-multi-agent).
+timestamp: 2026-11-02T01:45:00Z
+
+---
 
 ## PM Updates
 
@@ -481,6 +483,87 @@ pstack input: project-planning/pstack-findings/2026-11-01-how-shell-slideshow-ov
   - (a) recommended: change only the name to "Tsan-Yu Wu (Leon)", which AC-125 already requires, and keep the rest of the text.
   - (b): also remove its em dash, and the em dashes in the About and Contact meta descriptions, which PRD 2 "No em dashes anywhere in site copy" may cover. This needs PM to say that meta descriptions count as site copy.
 - **T6, approve CONV-006 and CONV-007** (the slideshow entry contract and the shell on /slideshow) for PM to add to PRD 9? Recommended: yes. Without them, the two engineers have no shared written contract.
+
+### Review — 2026-11-01 — change (rev 1.9: design approval, T1-T6 answers, "Leon Wu", CONV-006 hint rule, alts, Images cap, dialog keys, idle pointer, key repeat)
+
+pstack input: project-planning/pstack-findings/2026-11-01-how-rev-1-9-deltas.md (fddbdd7). `site/` is unchanged since 9df3298 (`git diff --stat 9df3298 HEAD -- site/` is empty), so my rev 1.7 + 1.8 build and lint baseline still holds; I did not re-run them. I re-checked every cited location: `Sidebar.tsx:177-187` (no `/slideshow` or `dialog[open]` bail), `projects-data.ts:12` (`{ image: string }`, no alt), `[slug]/page.tsx` `groupItems` 5-28 carrying only `srcs` and `alt=""` at 160 and 169, the five-file name grep (13 lines, same owners), `.dark` on `document.documentElement` (`layout.tsx:24`, `ThemeToggle.tsx`), and `tabvault-mobile.jpeg` (1170x2532, 429,567 bytes; not a slideshow file).
+- **Accepted:**
+  - Section 1, hint timing: MOD-012 cannot see MOD-001's request or its promise; showing at mount can flash; a refusal (`fullscreenerror`) that fires before MOD-012 subscribes is lost. My answer is D1 below.
+  - Section 1, missed entry: if "was in full screen" starts from the render value (always false in the static prerender) and MOD-001's request completes between render and subscribe, the "in" is never seen and a later Esc is ignored. Failure scenario: Nav click → full screen → Esc → visitor stays on a windowed slideshow, AC-099 fails. Rule: read `document.fullscreenElement` at subscribe time (`useSyncExternalStore`, server snapshot `false`).
+  - Section 1, one-time read: my rev 1.7 Q3 wording ("cache the value in a module-level variable") was wrong. Module scope outlives the component across client navigations. Failure scenario: open from /about, leave, reach /slideshow again in the same document by a client-side link → it inherits `{path:"/about"}` within 10 s and leaves to /about instead of /. Corrected rule: read in an effect, keep the result in a `useRef` on the slideshow component, remove the key on the first read. Strict Mode's extra setup/cleanup keeps the ref. This corrects my own recommendation, not CONV-006's text ("reads and removes that key once on first mount" stands).
+  - Section 1, hint button: it must not let its event reach slide navigation, and must not keep focus (Chrome focuses a clicked button; a later Space would activate it again). Adopted with one change: instead of stopPropagation per control, the root pointer handler ignores any event whose target is inside a `button` (`closest("button")`). One guard covers cards, the close button and the hint. The hint calls `preventDefault` on `mousedown` (which is what stops click-focus; `pointerdown` alone is not reliable for that, unverified per browser), and after its click focus goes back to the layer. QA: in Chrome, click the hint, then press Space: exactly one slide change.
+  - Section 1: a refused hint request fires `fullscreenerror`, not `fullscreenchange`, so it cannot trigger leaving. Agreed.
+  - Section 2: `showModal()` inertness does not stop window listeners, so Sidebar needs the `dialog[open]` bail (CONV-007) plus the `/slideshow` bail, both before the `router.push` at line 183. The overlay closes only through `cancel` (Esc) or click → `history.back()` → `popstate`, so `open` is still set when the window listener sees a digit. `<Activity>`/`cacheComponents` is off; note only.
+  - Section 3: everything, including the order (the excess-property check rejects `alt` in a record until MOD-003 adds it), both render sites, `groupItems` carrying `{ src, alt }`, and the cap on the `<img>` box itself, not `w-full` + `object-contain` letterboxing (the overlay measures the img rectangle, my rev 1.7 Q6).
+  - Section 4: `if (e.repeat) return;` first in MOD-012's keydown; Strict Mode cleanup of every listener and timer; full-screen state from `useSyncExternalStore`; Tailwind `hover:` still matches under a hidden cursor, so the idle state needs its own gate (`[data-idle]`); ignore pointer moves with unchanged `clientX`/`clientY` (Chrome's zero-movement synthetic move, unverified, cheap to guard).
+  - Section 5: the name table (5 files, 13 lines). The LinkedIn URL (`leon-wu-tsan-yu`) and email (`leon.wu.tsan.yu`) do not contain any AC-125 string, even case-insensitively. prd.md:38 Purpose prose still says "Tsan-Yu Wu (Leon)"; it is not site code, so it is PM's call whether to change it.
+  - Gotcha 11 (iframe without `allow="fullscreen"`): QA test note. QA tests top-level only.
+- **Accepted as a device check (unverified):** `document.fullscreenEnabled` falsy on iPhone Safari. AC-096 already makes QA check it on a real iPhone.
+- **Rejected:**
+  - Q7 (b), Sidebar also checking `e.defaultPrevented`: not needed while every close path is async; it would add a second contract (the overlay must call `preventDefault` on keys it does not handle). The MOD-003 rule below is enough.
+  - Q8 (b), `aria-hidden` on the hint: a focusable-by-click button that is hidden from screen readers fails WCAG 4.1.2, and the hint is real text that the live region already announces.
+  - Q5 (b) and (c), `80vh` or `min(640px, 80vh)`: at "1280x800" with browser chrome the viewport is shorter than 800, so `80vh` gives a different cap on every machine and is harder to test. AC-128 names 640 px.
+
+**Concerns** (must address before proceeding):
+- **CONV-006's hint rule ("once the opening full-screen request has settled") has no channel from MOD-001 to MOD-012.** The design (UX 6.1) fills the gap with a heuristic: wait for the first `fullscreenchange`, or about 500 ms. Failure scenarios: (1) Safari or Chrome on macOS fires `fullscreenchange` after its full-screen animation; if that is later than 500 ms, a visitor who opened the deck from the sidebar sees "Press F for full screen" flash in front of an interviewer (PRD-compliant, but exactly what the design wanted to avoid); (2) every direct visit waits 500 ms + the 300 ms entrance delay for no reason, since no request exists. A one-field contract extension removes both: see D1. It changes what MOD-001 writes, so it is a CONV change through PM, not a spec detail.
+
+**Recommendations** (rulings on the pstack open questions, Q1-Q8):
+- **Q1, how MOD-012 knows the request settled:** D1 (a) below, recommended.
+- **Q2, one-time read:** (a) `useRef` guard (corrected above).
+- **Q3, `SectionItem.alt` once every record is filled:** (a) leave it optional (PRD 5 already says so). QA enforces AC-127 on the build: `grep -c 'alt=""'` in `site/.next/server/app/projects/*.html` must be 0. I log "make `alt` required" as a Phase 4 integration-review candidate; it costs one more MOD-003 run and changes no behaviour. D3 below.
+- **Q4, AC-128 and `tabvault-mobile.jpeg`:** (a) CSS cap in the template only (MOD-003). MOD-006 has no file change for AC-128. The rev 1.9 PM entry's "AC-128 shrinks tabvault-mobile.jpeg" means "shows smaller" (PRD 4.2's wording). Doc-Sync note: AC-128 belongs in the MOD-003 spec; the MOD-006 spec gets no image-file task.
+- **Q5, cap unit:** (a) `max-h-[640px]`, with `w-auto max-w-full h-auto` on the `<img>` and the border and rounding on the img. Arithmetic (not measured): `tabvault-mobile.jpeg` goes from about 714 px to 640 px tall (about 296 px wide) at 1280x800; nothing else currently in an Images section reaches 640 px; the ProjectDay singles (about 717 px uncapped) are capped by the same rule. At 375 px wide a portrait image hits 640 px before the column width; both AC-128 conditions still hold.
+- **Q6, the hint's full-screen target:** (a) `document.documentElement`, the same element as MOD-001 and MOD-012's F key (UX 6.4 already says so), so `document.fullscreenElement` means the same thing on every path. In CONV-006 under D1 (a); in the MOD-012 spec under D1 (b).
+- **Q7, AC-129:** (a). The `dialog[open]` bail in Sidebar, plus a MOD-003 rule: the overlay never closes the dialog synchronously from a `keydown`; it closes only via the `cancel` event (Esc, `preventDefault` then `history.back()`) or a click (`history.back()`), and `dialog.close()` runs from `popstate` after the closing animation. Digits do nothing in the overlay.
+- **Q8, hint accessibility:** (a) `<button type="button" tabIndex={-1} aria-keyshortcuts="F">` with its visible text as its name. Matches UX 4.1 and 6.3.
+- **Full-screen exit = leave:** count only a change from "in" to "out", with "in" read at subscribe time (above). The close button's own `exitFullscreen()` and the listener share one "already leaving" guard (my rev 1.7 Q3).
+
+**Rulings on the design team's T1-T6 (review 2 section 4):**
+- **T1, `--ss-edge: color-mix(in srgb, var(--text-muted) 65%, var(--bg))`: within limit 3. Accepted, with one placement rule.** It derives from existing variables with no new hex values. I re-computed the result: `#8f8f8f` on `#ffffff` is 3.23:1, `#888888` on `#161616` is 5.10:1, both above WCAG 1.4.11's 3:1. `color-mix` works in Chrome 111, Safari 16.2 and Firefox 113. Placement rule: MOD-012 declares `--ss-edge` and every other `--ss-*` token on its own slideshow root element, not in `globals.css` (MOD-001's file, limit 13). A custom property that uses `var()` is resolved where it is declared. The root sits under `<html class="dark">`, so it picks up the right theme. Declared anywhere above the `.dark` element, it would keep the light value in dark mode.
+- **T2, A2 "⇄" drawn as SVG with the exact text visually hidden: accepted** for AC-100 and AC-105. Conditions (UI 7.12 already says most of this): the visible "Engineer" and "QA" and the SVG are `aria-hidden`; the hidden span carries exactly "Engineer ⇄ QA" and is hidden with a clip-based sr-only class, not `display:none` or `visibility:hidden` (those remove it from the accessibility tree). U+21C4 is outside Roboto's latin subset, so drawing it also avoids a system-font fallback glyph. QA checks AC-100 for A2 on the accessible name and by eye, not on raw `textContent` (that has the words twice).
+- **T3, F-hint sizing (screen-anchored, `max(14px, 2.8% of frame height)`, em-based chip and gaps): confirmed.** It meets AC-102 (2.8% is above the 2.4% floor at every size; the 14 px floor only applies where 2.8% would be smaller). It meets limit 8's intent (placed from the screen corner, clear of the top edge, limit 5). It is an agreed exception to limit 7's "every size in frame units": its size follows the frame, and only its position is screen-based. One engineering note for the MOD-012 spec: UI 6.8 sizes the hint from `100dvh`, but UI 5 sizes the frame from `100vh` (UI 15 then says use `dvh` on iOS). Use `100dvh` for both so the hint and the frame scale from the same height on iPhone.
+- **T4, B2 three-screen image from MOD-011: tracked as a dependency, accepted.** `/projectday-screens.webp`: the three screens at the same height, left to right Home, Gyms, Route, gaps of 5% of one screen's width, no outer margin, transparent background, at least 1500 px wide (AC-112). At that ratio the file is about 1.43:1, not the mock's 1.5:1 stand-in. The B2 box uses `contain`, so any ratio works. Its bytes count toward MOD-011's 800,000-byte allocation. Order: MOD-011 before MOD-012 (unchanged).
+- **T5, WCAG 2.1.4 single-key shortcuts: technically acceptable; the risk acceptance is Leon's (D2).** The slideshow has no text input and owns the whole page. Its single-letter keys (F, M) and digits are the presenting interface the PRD requires. The PRD has no way to turn them off or remap them. So the "active only on focus" exception is arguable rather than clean. The site-wide `1`-`7` shortcuts (PRD 6, since rev 1.2) carry the same exposure today. The residual risk is speech-input users firing a shortcut by speaking a word.
+- **T6, reduced-motion pattern site-wide: not now. Agreed.** The image overlay already has its own reduced-motion rule (AC-110, MOD-003). Shared code between MOD-003 and MOD-012 would need an owner and buys nothing. A site-wide motion rule changes user-facing behaviour, so it would be a PRD change. I list it as a Phase 4 integration-review candidate only.
+
+**Design-file notes for Doc-Sync (where the approved files and the PRD differ, the PRD wins; Decisions already says review 2 section 3 wins for UI 6.4 and 7.4):**
+- `slideshow-motion.md` line 16 still lists the "Details" cue (removed in revision 2, PRD Hidden job slides). It is stale and must not enter the MOD-012 spec.
+- Review 2's L-3 row says the hint "becomes the first Tab stop on slide 1". UX 4.1 (revision 2) and PRD Opening say it is not a Tab stop. The PRD wins.
+- UX 6.1's "about 500 ms" settle window is replaced by the D1 rule if Leon picks (a).
+- UX 14's hand-offs to me are all accepted as engineering rules for the MOD-012 spec: navigation from pointer events by `pointerType`, with the synthetic `click` after a tap not firing Next again; `touch-action: pinch-zoom` on the layer and `overscroll-behavior: none` on the root; digits matched by `event.key` or `event.code` (Digit1-4, Numpad1-4), F and M by `event.key`; skip `focus()` when the layer is already `document.activeElement`. One addition: the `isComposing` and modifier checks run before the `e.repeat` check, and all three run before any branch.
+
+**Approved**:
+- The rev 1.9 PRD text: AC-096, 098, 113, 114, 115, 127, 128, 129, 130, 131, the reworded 4.11 sections, AC-112's 800,000-byte allocation and the MOD-011 file names match my rev 1.7 + 1.8 recommendations and the approved design. I found no contradiction between them.
+- AC-125 as rewritten. The module list (MOD-001, 007, 008, 009, 010) is complete. MOD-002 and the project pages contain no full name.
+- CONV-007 as adopted (the `dialog[open]` sentence included).
+- The design files at ac1a07d are buildable within limits 1-13 on Next.js 16.2.9, with no new dependency and no `next.config.ts` change. Revision 2 and the A2 wording were not re-reviewed by the Design Lead. I checked them only against the technical limits (no new image files, no new fonts, A2 still inline SVG, the timeline cards still `<button>`s): no breach.
+- Leon's pending UI sign-offs AC-017 (mod-home) and AC-091 (mod-project-multi-agent) are not blocked by this review. AC-091 can be signed off on the current build. MOD-003's overlay wraps the multi-agent feature image in a button, so QA re-checks AC-091 under AC-110 after step 1 below.
+
+**Phase 4 integration-review candidates (logged then, not now):** `SectionItem.alt` required (Q3); reduced-motion site-wide (T6); plus the rev 1.7 items (TopNav.tsx dead code, head.png 1.83 MB, Subject.png 1.39 MB).
+
+**Engineering order (final, after Doc-Sync; unchanged from rev 1.7 + 1.8 except where marked).** Every step keeps `npm run build` passing and lint at 0 errors. Every push to `main` deploys, so do not push between steps 4 and 5 unless both are in.
+1. `engineer-mod-projects-grid` (MOD-003): `SectionItem.alt?`; `groupItems` carries `{ src, alt }`; both render sites use `alt={item.alt ?? ""}`; the overlay as a native `<dialog>` (CONV-007, Q7 close rule); the 640 px Images cap on the `<img>` box (AC-128).
+2. Record modules, any order, after step 1: MOD-005 (rev 1.7 record; no rev 1.9 change); MOD-006 (offline copy and links, `featureImageAlt` and two item alts; no image-file change); MOD-004 (rev 1.8 copy, `featureImageAlt` and two item alts); MOD-011 (the four WebP files including the T4 composition, record fields, alts, 800,000 bytes for the four).
+3. Page modules, any time: MOD-007 (AC-118, 119, 121), MOD-008 (AC-125), MOD-009 (AC-122), MOD-010 (AC-123, 125, 126).
+4. `engineer-mod-slideshow` (MOD-012), after MOD-011. It can be built and checked by direct visit before the nav item exists. Under D1 (a), a missing `fs` field reads as "no request made".
+5. `engineer-mod-site-shell` (MOD-001), last: nav item 7 with the UI 14 icon, key `7`, CONV-006 (with `fs` under D1 (a)), CONV-007 (both bails), AC-124, AC-125 at `layout.tsx:16`, the CV at cfa3367, AC-126.
+6. MOD-002: no change.
+
+QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800 and 375 px, AC-091 re-check); MOD-012 and MOD-001 together after step 5 (AC-094, 095, 096, 099, 129, 130 and 131 need both).
+
+**Proposed Shared Conventions** (once the user approves, PM adds them to PRD section 9 Adopted Conventions; Doc-Sync carries them into production.md from there):
+- Proposed Convention (CONV-006 amendment, only if D1 = (a)): replace the hint sentence and extend the value. MOD-001 writes `{ path, t, fs }`, where `fs` is `true` when it is about to call `document.documentElement.requestFullscreen()` in the same handler (that is, when `document.fullscreenEnabled`), otherwise `false`. MOD-012 shows the "Press F for full screen" hint only while slide 1 is in a browser window and `document.fullscreenEnabled` is true. After an opening from the site with `fs: true`, it waits until full screen starts (the hint then never shows) or about 1.5 seconds pass with the browser still windowed. On any other opening it shows the hint at once, after its entrance delay. Every full-screen request the slideshow makes (F and the hint) targets `document.documentElement`.
+
+**Asking Leon (needs-human):**
+- **D1, how the slideshow knows whether the site's full-screen request worked (the "Press F" hint).**
+  - (a) recommended: amend CONV-006 as above. MOD-001 adds one field to what it already writes, and nothing else changes. Opening from the sidebar never flashes the hint, a direct visit shows it at once, and a refused request shows it within about 1.5 s. It needs a small PM change (CONV-006 text) before Doc-Sync.
+  - (b): no contract change; MOD-012 uses the design's guess (wait up to about 500 ms for full screen). No PM step. Risk: if your Mac's full-screen animation takes longer than that, the hint flashes for a moment when you open the deck from the sidebar in an interview, and every direct visit shows the hint about half a second later.
+- **D2, single-key shortcuts and WCAG 2.1.4 (design T5).**
+  - (a) recommended: accept the residual risk for both the slideshow keys (F, M, digits) and the existing site keys `1`-`7`. Record it as a known accessibility limitation. No change.
+  - (b): a PRD change adding a way to turn the shortcuts off (for example a toggle), with new design and engineering work in MOD-001 and MOD-012.
+- **D3, the `alt` field on section images once every record has alt text.**
+  - (a) recommended: leave it optional. QA checks the built pages for empty alts (AC-127). Making it required is logged for the Phase 4 integration review.
+  - (b): one more short MOD-003 run after the record modules, making `alt` required so a missing alt fails the build.
 
 ---
 
