@@ -123,3 +123,39 @@ None. scan-integration.sh was not run (build/HTML verification only).
 
 ### Open items
 - none
+
+---
+
+## QA Results — verify (2026-11-01, spec rev 1.10 incl. AC-108 to AC-110, AC-127 to AC-129)
+
+**Workflow:** verify (first verification of the overlay ACs; prior QA entries cover AC-019 to AC-026, AC-086, AC-089, AC-091, AC-092 and still hold). Run against `npm run build` + `next start` (port 3123), driven with headless Chrome over CDP (real key, mouse and history events). The server and Chrome were stopped afterwards.
+
+- `npm run build`: PASS (static pages: projects/multi-agent-system, projectday, siteplus, tabvault). run-qa.sh exit 127 (no test command, environment, as before). No `.claude/skills/verify` skill in the project.
+- Regression on AC-019 to AC-026, AC-086: `/projects` returns 307 to `/projects/multi-agent-system`; no change to ProjectList/layout in the overlay commit. PASS.
+
+**PASS AC-127**: `grep -c 'alt=""'` is 0 in all four `.next/server/app/projects/*.html`. Every project image carries alt (multi-agent 1 feature; projectday 1 feature + 2; siteplus 1 + 2; tabvault 1 + 2); each dialog `aria-label` equals the alt. Exact wording against PRD 4.3 to 4.6 was not re-read by QA (PRD is outside my allowed reads); wording is owned by MOD-004/005/006/011 QA.
+**PASS AC-108** (Chrome, headless): all project images are buttons with `cursor: zoom-in`; Tab reaches them; Enter and Space open (after focus), click opens. Open dims the whole page (dialog covers the viewport incl. the sidebar: `elementFromPoint` over the sidebar is the dialog, bg rgba(0,0,0,0.6)); cursor over overlay `zoom-out`. multi-agent at 1280x800: in page 657x334, in overlay 1152x585 (wider; within 90% of 1280x800; aspect kept).
+**PASS AC-109 (desktop parts)**: click on the image closes; Esc closes (after the animation, `history.back()` path); `history.back()` closes and stays on `/projects/multi-agent-system`; focus is in the dialog on open; 4 Tab presses stay in the dialog; wheel over the overlay does not scroll the panel behind (scrollTop 386 before and after); dialog `aria-label` is the alt; focus returns to the opening button on close. Phone Back and Safari/iPhone are in the human script below.
+**PASS AC-110 (code and timing parts)**: WAAPI 250ms (under 300ms) transform from the measured rect; with `prefers-reduced-motion: reduce` only opacity 0 to 1 plus the dim fade (no transform). Original `<img>` is at opacity 0 while open and back to 1 after; its rect before open and after close is identical (576,386,657x333.75) and the article top is unchanged. Feel of the animation: human script.
+**PASS AC-128**: `<img>` boxes have object-fit fill, no letterboxing. At 1280x800 the tallest Images-section image is 640 (projectday route/profile 295x640; tabvault phone 297x640, extension 603x640); none above 640. At 375: every image 296 wide (column width 360 less padding); tabvault phone 638 tall. No horizontal overflow at 375 on any slug.
+**PASS AC-089 / AC-091 at 1280 and 375** (rendered): feature images are 657x334 / 296x151 (multi-agent) and 657x461 / 296x208 (projectday); natural aspect preserved, no cropping, no horizontal overflow.
+**PASS AC-129**: with the overlay open, pressing 1 to 7 left the overlay open and the URL unchanged (`/projects/multi-agent-system`). Note: the guard is a stopPropagation in the dialog; MOD-001's `dialog[open]` check (CONV-007) is not in yet, so AC-129 depends on focus being inside the dialog (it is, via `showModal()`). Re-check once MOD-001 lands.
+**PASS AC-125 / AC-126 (/projects routes)**: no "Tsan-Yu", no phone number and no `tel:` in the four project HTML files.
+
+### Human test script (not judgeable in headless Chrome) — result: needs-signoff
+Run `cd site && npm run build && npx next start`, open http://localhost:3000/projects/multi-agent-system.
+1. Desktop Chrome and Safari, 1280x800: click the diagram. It should grow smoothly from its place to the center over a dimmed page and feel like Notion's image zoom; click anywhere, and it should shrink back to the same spot with nothing on the page jumping. Repeat with Esc. (AC-108, AC-110)
+2. Open the overlay, scroll the mouse wheel or trackpad: the page behind must not move. (AC-109)
+3. iPhone Safari (or Chrome): open /projects/projectday, tap the first screenshot, then use the Back button or the Back swipe. The overlay should close and you should stay on /projects/projectday, not go to the previous page. Tap again to open, tap the image to close; check the page behind does not scroll while it is open and the portrait screenshot fits the screen. (AC-109)
+4. macOS System Settings, Accessibility, Display, Reduce motion on: repeat step 1. It should fade, not move. (AC-110)
+5. With VoiceOver, open an image: it should announce a dialog named by the image description. (AC-109)
+Reply with PASS or the step that failed.
+
+### Integration notes (for Tech Lead)
+- scan-integration.sh reported no hits against MOD-003 beyond the module summary list.
+- CONV-007 half owned by MOD-001 (Sidebar `dialog[open]` check) still pending; AC-129 currently relies on the dialog's stopPropagation only.
+- Each Images/feature image renders twice in HTML (page image plus dialog copy), by design.
+
+### Open items
+- [ ] AC-108/AC-109/AC-110 needs-signoff — human device/feel checks (iPhone Back, Safari, animation feel, reduce motion, VoiceOver) (2026-11-01)
+- [ ] AC-129 re-check after MOD-001 adds the Sidebar `dialog[open]` check (2026-11-01)
