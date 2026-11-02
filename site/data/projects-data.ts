@@ -9,7 +9,7 @@ export interface ProjectLink {
   name: string;
 }
 
-export type SectionItem = string | { image: string };
+export type SectionItem = string | { image: string; alt?: string };
 
 export interface ProjectSection {
   heading: string;

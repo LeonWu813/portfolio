@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { projects, type SectionItem } from "@/data/projects-data";
+import ImageZoom from "./ImageZoom";
 
 type ItemGroup =
   | { type: "text"; value: string; key: number }
-  | { type: "images"; srcs: string[]; key: number };
+  | { type: "images"; images: { src: string; alt: string }[]; key: number };
 
 function groupItems(items: SectionItem[]): ItemGroup[] {
   const groups: ItemGroup[] = [];
@@ -16,12 +17,13 @@ function groupItems(items: SectionItem[]): ItemGroup[] {
       i++;
     } else {
       const start = i;
-      const srcs: string[] = [];
+      const images: { src: string; alt: string }[] = [];
       while (i < items.length && typeof items[i] !== "string") {
-        srcs.push((items[i] as { image: string }).image);
+        const it = items[i] as { image: string; alt?: string };
+        images.push({ src: it.image, alt: it.alt ?? "" });
         i++;
       }
-      groups.push({ type: "images", srcs, key: start });
+      groups.push({ type: "images", images, key: start });
     }
   }
   return groups;
@@ -127,10 +129,11 @@ export default async function ProjectDetailPage({
       {/* Feature image */}
       {project.featureImage && (
         <figure className="mb-10">
-          <img
+          <ImageZoom
             src={project.featureImage}
             alt={project.featureImageAlt ?? ""}
-            className="w-full rounded-lg border border-[var(--border)]"
+            buttonClassName="block w-full"
+            imgClassName="w-full h-auto rounded-lg border border-[var(--border)]"
           />
           {project.featureImageCaption && (
             <figcaption className="mt-2 text-sm text-[var(--text-muted)]">
@@ -153,21 +156,15 @@ export default async function ProjectDetailPage({
                   <p key={group.key} className="text-base leading-7 text-[var(--text-muted)]">
                     <InlineBold text={group.value} />
                   </p>
-                ) : group.srcs.length === 1 ? (
-                  <img
-                    key={group.key}
-                    src={group.srcs[0]}
-                    alt=""
-                    className="w-full rounded-lg border border-[var(--border)]"
-                  />
                 ) : (
-                  <div key={group.key} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {group.srcs.map((src, i) => (
-                      <img
+                  <div key={group.key} className="flex flex-col sm:flex-row sm:flex-wrap gap-3 items-start">
+                    {group.images.map((image, i) => (
+                      <ImageZoom
                         key={i}
-                        src={src}
-                        alt=""
-                        className="w-full rounded-lg border border-[var(--border)]"
+                        src={image.src}
+                        alt={image.alt ?? ""}
+                        buttonClassName="block max-w-full"
+                        imgClassName="w-auto max-w-full h-auto max-h-[640px] rounded-lg border border-[var(--border)]"
                       />
                     ))}
                   </div>

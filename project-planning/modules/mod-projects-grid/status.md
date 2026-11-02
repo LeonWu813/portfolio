@@ -11,6 +11,9 @@
 - self-check.sh: could not run meaningfully (script runs at repo root, package.json is in site/; exit 254/127 are environment, not code)
 - Tests: none for this module
 
+**spec-update (PRD 1.10/1.11: AC-108 to AC-110, AC-127 to AC-129), 2026-11-01.** Added `alt?` to SectionItem; `groupItems` carries `{src, alt}`; both Images render sites and the feature image go through new client component `site/app/projects/[slug]/ImageZoom.tsx` (native `<dialog>` + `showModal()`, button with zoom-in cursor, `<img alt>` names it, dialog `aria-label` = alt). Original stays at opacity 0 while a copy animates (WAAPI, 250ms, fade only under reduced motion); pushState without URL on open; Esc (cancel: preventDefault + history.back()) and click call history.back(); `dialog.close()` runs only from popstate after the closing animation; no synchronous close from keydown. Images cap: `w-auto max-w-full h-auto max-h-[640px]` on the img (AC-128). Digits 1-7: dialog keydown handler stops propagation so MOD-001's window handler never sees them (AC-129). Scope question for PM/Tech Lead: CONV-007 also wants Sidebar.tsx's handler to check `dialog[open]`; Sidebar is MOD-001's file, not touched. Record files untouched (AC-127 alt grep will fail until MOD-004/005/006/011 fill alts).
+- Build (site/): pass. Lint: 0 errors, warnings only (img). self-check.sh not run (package.json in site/). Not browser-tested (QA/human device check for AC-109).
+
 
 ## QA Results
 
