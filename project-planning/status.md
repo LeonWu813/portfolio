@@ -4,13 +4,13 @@
 
 ## Last Action
 
-agent: tech-lead
-mode: change-review
+agent: pm
+mode: change
 module: n/a
-next: Leon answers T1-T6 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.7 + rev 1.8 ...)"; the coordinator passes that review's "Technical limits for the design team" to the design team, which designs the MOD-012 slideshow (Design Lead PASS, Leon's approval); then claude --agent pm "change" (proposal pass) to record the design approval and apply T2, T3, T5, T6 and the Q6 correction; then claude --agent doc-sync; then engineers in the order in that review (MOD-003, record modules, page modules, MOD-012, MOD-001 last).
 result: needs-human
-Previous action: pm change rev 1.8 (9df3298). Still open for the human: AC-017 sign-off (mod-home), AC-091 375px sign-off (mod-project-multi-agent), "Seattle, WA" on Contact (non-blocking).
-timestamp: 2026-11-01T23:59:00Z
+next: show project-planning/pm-proposals/2026-11-01-design-approval-and-tech-lead-answers-rev-1-9.md to the human (questions 1-8); on approval run claude --agent pm "apply 2026-11-01-design-approval-and-tech-lead-answers-rev-1-9.md" with their exact words quoted
+Previous action: tech-lead change-review (0051840); design team revisions 1-2 and Design Lead review 2 PASS, Leon's design approval ("approve both", ac1a07d). Still open for the human: AC-017 sign-off (mod-home), AC-091 375px sign-off (mod-project-multi-agent).
+timestamp: 2026-11-01T23:59:30Z
 
 ## PM Updates
 
