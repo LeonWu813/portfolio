@@ -6,11 +6,11 @@
 
 
 ```
-agent: engineer-mod-experience
-mode: spec-update
+agent: qa-mod-experience
+mode: verify
 module: mod-experience
 result: success
-next: claude --agent qa-mod-experience "regression"
+next: the coordinator reports the cross-module AC-125 finding (full name "Tsan-Yu (Leon) Wu" still in built meta of /about, /contact, /skills and layout default) to the owners of those modules; then proceed per phase plan (other modules in this phase, or /pstack:thermos then claude --agent tech-lead "phase-end integration review")
 timestamp: 2026-11-01T00:00:00Z
 ```
 
