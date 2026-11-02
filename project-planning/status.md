@@ -4,13 +4,13 @@
 
 ## Last Action
 
-agent: pm
-mode: change
+agent: doc-sync
+mode: delta
 module: n/a
 result: success
-next: run these one after another, not in parallel (same working tree): 1) claude --agent doc-sync (delta sync of PRD rev 1.11: replace the AC-096 [AMBIGUITY] marker in the MOD-012 spec with the Tech Lead's method from 17e70cc, MOD-008 AC-132 replaces AC-063, heading lines for MOD-007 and MOD-010, MOD-001 isTrusted note, Purpose line in production.md); 2) then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003), and the rest of the Tech Lead's order (b8395f1). MOD-008 runs only after the rev 1.11 sync is committed.
-Previous action: pm change proposal pass (cbb5cef), approved by Leon in the coordinator session.
-timestamp: 2026-11-01T18:00:00Z
+next: run one after another, not in parallel (same working tree): claude --agent engineer-mod-projects-grid "spec-update" (MOD-003), then the rest of the Tech Lead's order (b8395f1); MOD-008 may now run: claude --agent engineer-mod-about "spec-update" (AC-132 replaces AC-063; no code change expected). MOD-001 spec-update (isTrusted note) is last in the order. No spec change needs an Engineer run for MOD-007 or MOD-010 (wording-only source change, no AC change).
+Previous action: pm change (726d9eb), PRD rev 1.11.
+timestamp: 2026-11-01T19:00:00Z
 
 ---
 
@@ -1096,6 +1096,29 @@ QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800
 - MOD-012: new module, all ACs.
 - MOD-002: AC-126 only.
 **verify-sync.sh result:** the script passes checks 1 to 3 and then aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual checks: Check 4 PASS (the PRD has no US-IDs); Check 5 PASS (the one AMBIGUITY marker in any spec is logged above); Check 6 N/A (no PRD phase section; Phase Plan and Current Phase unchanged, Phase 4). No HTML template comments in production.md or any spec.
+
+---
+
+### Sync Report — Delta Sync — 2026-11-01 (rev 1.11)
+**Sync type:** delta
+**PRD Revision:** 1.11
+**PM Update reference:** 2026-11-01 [SUBSTANTIVE] Log the Tech Lead's AC-096 refused-request QA method for the MOD-012 spec; record the About page as built (AC-132 replaces "no photo"); page headings for Experience, About and Contact; "Leon Wu" in the Purpose line; correct the rev 1.7 AC-017 note; PRD rev 1.11
+**Files modified:**
+- project-planning/modules/mod-slideshow/spec.md (MOD-012) - AMBIGUITY marker replaced by the AC-096 QA method (Tech Lead 17e70cc): test runs, not-valid list, Method 1, Method 2, timing recorder, pass rules, headless limits, human sign-off script; revision header 1.11
+- project-planning/modules/mod-site-shell/spec.md (MOD-001) - engineering note: nav and key-7 handlers must not ignore isTrusted false events; revision header 1.11
+- project-planning/modules/mod-about/spec.md (MOD-008) - AC-063 dropped, "No photo" lines removed; PRD 4.8 Sections and AC-132 added; Purpose, Context, Requirements and Output updated; revision header 1.11
+- project-planning/modules/mod-experience/spec.md (MOD-007) - "carried from earlier syncs" remark replaced with PRD section 4.7 source; revision header 1.11
+- project-planning/modules/mod-contact/spec.md (MOD-010) - heading line sourced from PRD section 4.10; revision header 1.11
+- project-planning/production.md - Project Summary Purpose line now "Leon Wu"; Module Index MOD-008 description updated (no photo clause replaced by the sections as built)
+**Files created:** none
+**Module removals noted:** none
+**AMBIGUITY markers added:** none
+**AMBIGUITY markers resolved:**
+- mod-slideshow/spec.md: AC-096 refused-request QA method (answered by Tech Lead 17e70cc via PM rev 1.11)
+**CONFLICT markers added:** none
+**Not changed:** AC-017 note correction (status.md only, no spec change); agent wrappers (Source Paths, dependencies and spec paths unchanged); AC-091 "proposed" wording (PM left it as is). The old MOD-008 status.md QA record for AC-063 is a QA record and left untouched.
+**Spec-update scope:** MOD-008: AC-063 dropped, AC-132 added (page already matches). MOD-001: engineering note only. MOD-012: QA method only. MOD-007, MOD-010: no AC change.
+**verify-sync.sh result:** checks 1 to 3 PASS, then the script aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual: Check 4 PASS (no US-IDs); Check 5 PASS (no AMBIGUITY marker removed or added; the slideshow marker is gone); Check 6 N/A (Phase Plan unchanged). No HTML template comments added.
 
 ---
 

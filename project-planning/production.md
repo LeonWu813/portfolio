@@ -4,7 +4,7 @@
 
 ## Project Summary
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Leon Wu, full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 **Goals:**
 1. Give technical recruiters and hiring managers a fast, credible picture of Leon's engineering ability within their first few seconds on the page.
@@ -192,7 +192,7 @@ Test:  (none — static site, no automated test suite defined)
 | MOD-005 | Project Detail: Multi-Agent System | mod-project-multi-agent | Detail page for the Multi-Agent Software Development System at /projects/multi-agent-system; header with H1, At-a-glance, tags, two links, description pull-quote, feature image with alt text and caption, and eight case study sections. Owns site/data/projects/multi-agent-system.ts. |
 | MOD-006 | Project Detail: TabVault | mod-project-tabvault | Detail page for TabVault at /projects/tabvault; header with H1, At-a-glance, tags, one link, description pull-quote, feature image with alt text, and nine case study sections including Images. TabVault is not live. Owns site/data/projects/tabvault.ts. |
 | MOD-007 | Experience Page | mod-experience | Reverse-chronological list of two professional roles (Exascend, GoFreight) and two education entries, per Leon's CV. |
-| MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, two body paragraphs; no photo and no education block on this page. |
+| MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, page heading, the sections "Meeee", "Hobbies" and "Background" with five photos; no education block on this page. |
 | MOD-009 | Skills Page | mod-skills | Technical skills in six groups as chip/badge elements, scannable at a glance. |
 | MOD-010 | Contact Page | mod-contact | Contact page with real email address, LinkedIn, GitHub links, and resume PDF download; no phone number. |
 | MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content (seven sections including Images) with header metadata, a three-screen feature image and no external links. Owns site/data/projects/projectday.ts and site/public/projectday-*. |

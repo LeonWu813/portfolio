@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.11 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -94,6 +94,7 @@ Persistent layout shell rendered on every page. Provides: a persistent slim left
 - CONV-007 with both bails: `Sidebar.tsx` (the `/slideshow` bail) returns `null` on `/slideshow` (its hooks still run before the early return), and its number-key handler (`Sidebar.tsx:177-187`) does nothing on `/slideshow` and does nothing while `document.querySelector("dialog[open]")` exists; both bails run before the `router.push` in the number-key handler.
 - The `main::after` decoration (`globals.css:72-81`, `/Subject.png`) is moved or guarded so it is not generated on `/slideshow`; no `/head.png` is requested there either (an `<img>` loads even when hidden with CSS).
 - AC-124 needs no size or layout change: MOD-001 changes only the text and keeps `truncate` as a safety net. QA checks `scrollWidth <= clientWidth` on the subtitle span at 1280 and 375 px wide.
+- The Slideshow nav handler and the `7` key handler must not ignore events with `isTrusted` false. CONV-006 does not ask for such a check, and with one QA's Method 1 for AC-096 (MOD-012 spec) cannot run. (Tech Lead, 17e70cc)
 - AC-125 at `layout.tsx:16`: the root description names "Leon Wu" in place of "Tsan-Yu (Leon) Wu" and keeps the rest of the text.
 - Slideshow icon: the one in `project-planning/design/ux-team/slideshow-ui.md` section 14, at commit ac1a07d (approved design, status.md Decisions "Slideshow design approval (rev 1.9)").
 - Copy `asset/Leon_cv.pdf` at commit cfa3367 to `site/public/Leon_cv.pdf`.

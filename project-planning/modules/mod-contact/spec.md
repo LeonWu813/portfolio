@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.11 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -17,7 +17,7 @@ Contact page at route /contact that makes contact effortless. Shows a real email
 **User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD section 4.10 govern this module:
 
 - Route: /contact
-- Page heading: "Contact"
+- Page heading: "Contact" (PRD section 4.10)
 - Intro line (verbatim): "Looking for a 2026/2027 internship in full-stack, frontend, or backend engineering. If you're working on something interesting, I'd love to hear about it."
 - Three contact methods required: Email (mailto link), LinkedIn, GitHub.
 - Resume download: label "Download CV" or "Resume (PDF)"; file served at `/Leon_cv.pdf` (`<a href="/Leon_cv.pdf" download="Leon_Wu_Resume.pdf">`).

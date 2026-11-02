@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.11 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -33,7 +33,7 @@ Reverse-chronological list of professional roles at route /experience, in a two-
 ## Requirements
 
 - Page route: `/experience`
-- Page heading: "Experience" (carried from earlier syncs; PRD section 4.7 does not restate it)
+- Page heading: "Experience" (PRD section 4.7)
 - Layout: two-column timeline (`grid grid-cols-[9rem_1fr]`). Left column: date range right-aligned. Right column: dot indicator with vertical line connector, role title, company, bullets, tech chips.
 - Date format: `{startDate} – {endDate}` (no line break between start and end).
 - Tech chips: small `px-2 py-0.5 rounded` badges.
