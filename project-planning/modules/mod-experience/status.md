@@ -10,6 +10,10 @@
 
 **Self-check:** lint PASS, build PASS
 
+### spec-update (PRD 1.10/1.11)
+- Changed ACs: AC-118 (CV content, new Exascend dates/bullets, GoFreight title/bullets/tags), AC-119 (full degree names, `period` field), AC-121 (meta descriptions, "Leon Wu"), AC-125, AC-126. Education now renders after work entries (was merged by date).
+- Self-check (run in site/: tsc, lint, build): pass. Built /experience HTML has no "Tsan-Yu" or "350%".
+
 ## QA Results
 
 **Date:** 2026-06-28

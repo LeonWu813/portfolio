@@ -12,8 +12,7 @@ export interface EducationEntry {
   degree: string;
   institution: string;
   gpa: string;
-  startDate: string;
-  endDate: string;
+  period: string;
   location: string;
 }
 
@@ -23,44 +22,41 @@ export const experience: ExperienceEntry[] = [
     company: "Exascend",
     location: "Taipei, Taiwan",
     startDate: "Sep 2023",
-    endDate: "Jun 2025",
+    endDate: "Aug 2025",
     bullets: [
-      "Designed and implemented a custom JavaScript event-tracking system posting structured user interactions to CRM and GA4 APIs, automating cross-platform data capture and cutting manual reporting by 70%.",
-      "Led end-to-end development of two customer-facing websites from scratch (HTML, CSS, JavaScript), growing monthly active users by 350% and increasing average session engagement time by 22.3%.",
-      "Ran technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) validated via A/B testing, driving a 48.84% increase in page views while ensuring inclusive, accessible experiences.",
+      "Built a custom JavaScript event-tracking system posting structured user interactions to CRM and GA4 APIs, cutting manual reporting 70%.",
+      "Two customer-facing websites went from requirements to shipped product under my ownership (HTML, CSS, JavaScript), growing monthly active users 3.5x, from 12,000 to 41,350, and increasing average session engagement time by 22.3%.",
+      "Page views rose 48.8% after a round of technical SEO and accessibility audits (Google Search Console, Lighthouse, WCAG) that I validated with A/B testing.",
     ],
     tags: ["JavaScript", "HTML", "CSS", "GA4", "SEO", "Lighthouse", "WCAG"],
   },
   {
-    title: "Growth Marketer / Marketing Project Manager",
+    title: "Marketing Project Manager",
     company: "GoFreight",
     location: "Taipei, Taiwan",
     startDate: "Jul 2021",
     endDate: "Mar 2023",
     bullets: [
-      "Planned and executed conversion rate optimization experiments, growing conversion from 0.38% to 2.55%, and improved technical SEO by raising Lighthouse score from 20 to 70.",
-      "Managed Google Ads campaigns to cut cost per demo from $5,000 to below $2,000, and expanded into the China market via Baidu Ads, generating $3,150 in inbound pipeline.",
-      "Planned and executed an SEO migration strategy that held the primary keyword to a one-rank drop, and organized the JCTrans GFFC 12th event achieving a $16,500 target pipeline.",
+      "Built and maintained a front-end codebase (HTML, CSS, JavaScript) with an A/B testing pipeline of variant logic and event tracking, lifting conversion rate 67% through iterative experimentation.",
+      "Led cross-functional teams through a product launch, coordinating tracking integrations and a cross-channel strategy that generated $16.5K in MRR.",
     ],
-    tags: ["Project Planning", "Google Ads", "Baidu Ads", "SEO", "CRO", "A/B Testing", "Analytics"],
+    tags: ["HTML", "CSS", "JavaScript", "A/B Testing", "Event Tracking", "Project Management"],
   },
 ];
 
 export const education: EducationEntry[] = [
   {
-    degree: "MS in Computer Science",
+    degree: "Master of Science in Computer Science",
     institution: "Northeastern University",
     gpa: "3.9 / 4.0",
-    startDate: "Sep 2025",
-    endDate: "Expected Dec 2027",
+    period: "Jul 2025 – Dec 2027 (Expected)",
     location: "Seattle, WA",
   },
   {
-    degree: "BA in International Business",
+    degree: "Bachelor of International Business",
     institution: "National Chengchi University",
     gpa: "3.5 / 4.0",
-    startDate: "Sep 2017",
-    endDate: "Jun 2021",
+    period: "Sep 2017 – Jun 2021",
     location: "Taipei, Taiwan",
   },
 ];

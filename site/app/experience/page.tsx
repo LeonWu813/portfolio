@@ -4,10 +4,10 @@ import { experience, education, type ExperienceEntry, type EducationEntry } from
 export const metadata: Metadata = {
   title: "Experience — Leon Wu",
   description:
-    "Professional experience and education of Tsan-Yu (Leon) Wu — Front-End Developer at Exascend, Growth Marketer at GoFreight, MS in Computer Science at Northeastern.",
+    "Professional experience and education of Leon Wu: Front-End Developer at Exascend, Marketing Project Manager at GoFreight, Master of Science in Computer Science at Northeastern University.",
   openGraph: {
     title: "Experience — Leon Wu",
-    description: "Professional experience and education of Tsan-Yu (Leon) Wu.",
+    description: "Professional experience and education of Leon Wu.",
     type: "website",
     url: "https://www.leon-wu.com/experience",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -16,20 +16,10 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Experience — Leon Wu",
-    description: "Professional experience and education of Tsan-Yu (Leon) Wu.",
+    description: "Professional experience and education of Leon Wu.",
     images: ["/og-image.png"],
   },
 };
-
-const MONTHS: Record<string, number> = {
-  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
-};
-
-function parseSortDate(date: string): number {
-  const [mon, year] = date.split(" ");
-  return parseInt(year) * 12 + (MONTHS[mon] ?? 0);
-}
 
 type TimelineItem =
   | { kind: "work"; data: ExperienceEntry }
@@ -38,11 +28,7 @@ type TimelineItem =
 const timeline: TimelineItem[] = [
   ...experience.map((e): TimelineItem => ({ kind: "work", data: e })),
   ...education.map((e): TimelineItem => ({ kind: "education", data: e })),
-].sort((a, b) => {
-  const startA = a.kind === "work" ? a.data.startDate : a.data.startDate;
-  const startB = b.kind === "work" ? b.data.startDate : b.data.startDate;
-  return parseSortDate(startB) - parseSortDate(startA);
-});
+];
 
 export default function ExperiencePage() {
   return (
@@ -57,18 +43,20 @@ export default function ExperiencePage() {
             const isLast = i === timeline.length - 1;
             const isWork = item.kind === "work";
 
-            const startDate = item.data.startDate;
-            const endDate = isWork ? item.data.endDate : item.data.endDate;
+            const dateRange = isWork
+              ? `${item.data.startDate} – ${item.data.endDate}`
+              : item.data.period;
+            const isCurrent = dateRange.includes("Expected") || dateRange.endsWith("Present");
             const key = isWork
-              ? `${item.data.company}-${startDate}`
-              : `${item.data.institution}-${startDate}`;
+              ? `${item.data.company}-${item.data.startDate}`
+              : `${item.data.institution}-${item.data.period}`;
 
             return (
               <li key={key} className="grid grid-cols-1 justify-items-start md:grid-cols-[9rem_1fr]">
                 {/* Left: date */}
                 <div className="pt-1 pr-6 text-left md:text-right">
                   <p className="text-xs text-[var(--text-muted)] leading-5">
-                    {startDate} – {endDate}
+                    {dateRange}
                   </p>
                 </div>
 
@@ -78,7 +66,7 @@ export default function ExperiencePage() {
                     <div className="absolute left-[4px] top-4 bottom-0 w-px bg-[var(--border)]" />
                   )}
                   <div className={`absolute left-0 top-[5px] w-[9px] h-[9px] rounded-full border-2 ${
-                    endDate.startsWith("Expected") || endDate === "Present"
+                    isCurrent
                       ? "border-[var(--accent)] bg-[var(--accent)]"
                       : "border-[var(--text-muted)] bg-[var(--bg)]"
                   }`} />
