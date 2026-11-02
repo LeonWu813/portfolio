@@ -15,15 +15,10 @@ export const multiAgentSystem: ProjectEntry = {
     "Systems Design",
   ],
   atAGlance:
-    "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store",
+    "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site",
   description:
-    "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store.",
+    "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped three products: TabVault, a full-stack web app deployed to AWS; ProjectDay, an iOS app submitted to the App Store; and this portfolio site.",
   links: [
-    {
-      name: "Built by the system: ",
-      label: "tab-vault.com",
-      href: "https://tab-vault.com",
-    },
     {
       name: "GitHub: ",
       label: "System repo",
@@ -51,7 +46,7 @@ export const multiAgentSystem: ProjectEntry = {
     {
       heading: "My role",
       items: [
-        "I was the sole architect and builder. I designed the agent roles, the information boundaries between them, the skill layer, the hooks, and the git-backed handoff mechanism. I drafted the full architecture up front in a single design document. Then I hardened it by running five end-to-end simulations and two real products through the system, and fixing whatever broke along the way.",
+        "I was the sole architect and builder. I designed the agent roles, the information boundaries between them, the skill layer, the hooks, and the git-backed handoff mechanism. I drafted the full architecture up front in a single design document. Then I hardened it by running five end-to-end simulations and three real products through the system, and fixing whatever broke along the way.",
       ],
     },
     {
@@ -92,7 +87,7 @@ export const multiAgentSystem: ProjectEntry = {
     {
       heading: "Impact",
       items: [
-        "The system has shipped two products. TabVault is a full-stack tab and notes manager with three clients, live in production on AWS. ProjectDay is an iOS bouldering app with 12 modules, a Supabase backend and an AWS video pipeline, submitted to the App Store in October 2026. In both, the agents wrote the code while I reviewed and approved each handoff.",
+        "The system has shipped three products. TabVault is a full-stack tab and notes manager with three clients, deployed to production on AWS and now offline. ProjectDay is an iOS bouldering app with 12 modules, a Supabase backend and an AWS video pipeline, submitted to the App Store in October 2026. The third is this portfolio site. In each, the agents wrote the code while I reviewed and approved each handoff.",
         "The second project tested the system at a much larger scale: over 1,500 commits, 217 acceptance criteria, and 88 integration-review items, each decided by a human. Failures stayed contained to one module instead of cascading, and every step can be reviewed and rolled back through git.",
         "Both builds also exercised the self-improvement loop. TabVault's deployment surfaced a series of cloud-only failures that became stronger engineering and QA checklists. ProjectDay's first retrospective produced 18 proposals, including a rule that the database migration chain must replay from zero, a path for bringing in code written outside the framework, and a rule that device failures go back through QA. Those changes are now part of the framework.",
       ],

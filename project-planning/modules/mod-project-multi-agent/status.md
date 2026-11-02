@@ -4,6 +4,11 @@
 
 *(No entries yet.)*
 
+### Engineer run: spec-update (rev 1.10/1.11), 2026-11-01
+- Changed ACs: AC-042, AC-044, AC-092, AC-117 (record file only). atAGlance now "Shipped 3 products: TabVault, ProjectDay and this site"; description says three products incl. this portfolio site; the tab-vault.com link removed (two links remain); My role "three real products"; Impact paragraph 1 "three products ... deployed to production on AWS and now offline ... The third is this portfolio site. In each, ..." per source file.
+- Feature image path, alt, caption unchanged; the overlay is rendered by MOD-003 (AC-091/AC-127 data side unchanged).
+- Verified: every long string matches asset/content/case-study-multi-agent-detailed.md (script, only the alt differs by design); no "tab-vault"/"live" in record. Build PASS, eslint on record PASS (run in site/).
+
 ### Engineer run: spec-update (E1 = A2 step 2), 2026-11-01
 - Created site/data/projects/multi-agent-system.ts (CONV-005: type-only import, one named export `multiAgentSystem: ProjectEntry`) with rev 1.6 content: atAGlance, tags incl. Python, description, 3 prefix+label links, featureImage /multi-agent-horizontal.png with alt and caption, 8 sections from case-study-multi-agent-detailed.md. Touches ACs 041-048, 091, 092 (data side).
 - Copied asset/diagrams/multi-agent-horizontal.png to site/public/multi-agent-horizontal.png. site/public/multi-agent.png kept until cutover.
