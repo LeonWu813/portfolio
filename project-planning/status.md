@@ -7,10 +7,10 @@
 agent: pm
 mode: change
 module: n/a
-result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-ac-096-qa-method-and-doc-sync-notes-rev-1-11.md to the human (questions 1-10); on approval run claude --agent pm "apply 2026-11-01-ac-096-qa-method-and-doc-sync-notes-rev-1-11.md" with their exact words quoted. Meanwhile MOD-003 may start (claude --agent engineer-mod-projects-grid "spec-update"); hold MOD-008 until Doc-Sync syncs rev 1.11.
-Previous action: tech-lead on-demand review (AC-096 refused-request QA method, 17e70cc).
-timestamp: 2026-11-01T17:30:00Z
+result: success
+next: run these one after another, not in parallel (same working tree): 1) claude --agent doc-sync (delta sync of PRD rev 1.11: replace the AC-096 [AMBIGUITY] marker in the MOD-012 spec with the Tech Lead's method from 17e70cc, MOD-008 AC-132 replaces AC-063, heading lines for MOD-007 and MOD-010, MOD-001 isTrusted note, Purpose line in production.md); 2) then claude --agent engineer-mod-projects-grid "spec-update" (MOD-003), and the rest of the Tech Lead's order (b8395f1). MOD-008 runs only after the rev 1.11 sync is committed.
+Previous action: pm change proposal pass (cbb5cef), approved by Leon in the coordinator session.
+timestamp: 2026-11-01T18:00:00Z
 
 ---
 
@@ -123,6 +123,20 @@ timestamp: 2026-11-01T17:30:00Z
     MOD-003 spec: the overlay never closes the dialog from a keydown; it closes only via the cancel event (Esc: preventDefault, then history.back()) or a click (history.back()), and dialog.close() runs from popstate after the closing animation; digits do nothing in the overlay (Q7). Images cap: max-h-[640px] with w-auto max-w-full h-auto on the img, border and rounding on the img (Q5). AC-128 belongs here only (Q4). QA check for AC-127 on the build: grep -c 'alt=""' in site/.next/server/app/projects/*.html is 0 (Q3, D3).
     MOD-001 spec: CONV-006 with fs; CONV-007 with both bails (/slideshow and dialog[open]) before the router.push in the number-key handler.
     QA: AC-096's refused-request case needs a way to make the browser refuse the site's request; the MOD-012 QA spec states how (Tech Lead to supply if Doc-Sync cannot). Gotcha 11 (iframe without allow="fullscreen") is out of QA's scope: QA tests top-level only.
+- 2026-11-01 [SUBSTANTIVE] Log the Tech Lead's AC-096 refused-request QA method for the MOD-012 spec; record the About page as built (AC-132 replaces "no photo"); page headings for Experience, About and Contact; "Leon Wu" in the Purpose line; correct the rev 1.7 AC-017 note; PRD rev 1.11
+  Approved by Leon in the coordinator session: "approve all recommendations" (questions 1-10 of the proposal, each with one recommendation: 1 yes, 2 yes, 3 yes, 4 keep empty alt text, 5 yes, 6 yes, 7 yes, 8 substantive, 9 not architectural, 10 MOD-003 may start, MOD-008 on hold until the rev 1.11 sync)
+  Proposal: project-planning/pm-proposals/2026-11-01-ac-096-qa-method-and-doc-sync-notes-rev-1-11.md
+  Resolves: [AMBIGUITY] in modules/mod-slideshow/spec.md (AC-096's refused-request case: how QA makes the browser refuse the site's full-screen request), from Sync Report "Delta Sync — 2026-11-01 (rev 1.7 + 1.8 + 1.9 + 1.10)" (2998d3f). Answer: Tech Lead Reviews "Review — 2026-11-01 — on-demand (AC-096 refused full-screen request: QA method)" (17e70cc). AC-096's PRD text is unchanged.
+  Answers Doc-Sync's "Noted for PM" points in the same report: (1) page headings now in PRD 4.7, 4.8 and 4.10; "No photo" on About is dropped, PRD 4.8 lists the sections and photos as built, AC-132; (2) Purpose line now "Leon Wu"; (3) see the correction below.
+  Corrects the rev 1.7 entry: "AC-017 download name unchanged" cited the wrong ID. It meant the Home "Download CV" file keeps the download name Leon_Wu_Resume.pdf (PRD 4.1 Tertiary CTA, already in the MOD-002 spec). AC-017 (above the fold) is not affected. No spec change.
+  Sections changed: header; 1 (Purpose); 4.7 (Page heading); 4.8 (Page heading, Sections, AC-132); 4.10 (Page heading).
+  Modules affected: MOD-012 (QA spec: the AC-096 method); MOD-001 (spec engineering note: the Method 1 precondition); MOD-008 (AC-132 replaces AC-063; spec-update scope gains AC-132, no code change expected, the page already matches); MOD-007 and MOD-010 (heading lines now sourced from the PRD; no AC change). No module added, removed or renamed. Module Map unchanged. Current Phase unchanged (Phase 4 — Deploy).
+  Notes for Doc-Sync:
+    MOD-012 spec: replace the [AMBIGUITY] marker with the Tech Lead's method from 17e70cc as QA instructions: Method 1 (main: headless Chrome on the production build via remote debugging, the nav click or a synthetic key 7 sent with userGesture false; a real browser refusal), Method 2 (backup and Safari/Firefox: the console-only requestFullscreen stub, never added to site/), the timing recorder, the pass rules (refused: hint first visible at 1200-2000 ms, no full screen, slideshow-return key gone after mount, no unhandled promise errors; successful opening, headless control: hint never visible within 4 s; direct visit: hint visible within about 500 ms), the headless limits, and the "not valid" list (iframe without allow="fullscreen", Firefox full-screen-api.enabled = false: these test the no-support path, not a refusal). Copy the scripts and numbers word for word from the review. Add the human sign-off script for AC-096 (Decisions, 2026-11-01 AC-096 sign-off): Leon, on the build, on his Mac in desktop Chrome, Safari and Firefox, clicks the Slideshow nav item and separately presses 7; "Press F for full screen" never appears, not even for a moment; on iPhone Safari no hint shows. The refused-request case needs no human sign-off.
+    MOD-001 spec: engineering note (Tech Lead, 17e70cc): the Slideshow nav and key-7 handlers must not ignore events with isTrusted false; CONV-006 does not ask for such a check, and with one QA's Method 1 cannot run.
+    MOD-008 spec: drop AC-063 ("no photo") and the "No photo" lines; add PRD 4.8's Sections and AC-132; the photos keep empty alt text by Leon's choice. AC-059 (heading) now has PRD 4.8 as its source.
+    MOD-007 and MOD-010 specs: the heading lines ("Experience", "Contact") now come from PRD 4.7 and 4.10; remove the "carried from earlier syncs" remark.
+    production.md: Project Summary copies the new Purpose line.
 
 ---
 
@@ -158,6 +172,8 @@ Test:  (none — static site, no automated test suite defined)
 - 2026-11-01 D2 (rev 1.9 change review, design T5): single-key shortcuts (site 1-7; slideshow F, M, digits) stay with no way to turn them off. Leon accepts the WCAG 2.1.4 risk as a known accessibility limitation (PRD 8). Leon: "other go with recommend and approve" (D2 (a)).
 - 2026-11-01 D3 (rev 1.9 change review): SectionItem.alt stays optional; QA checks the built project pages for empty alts (AC-127). "Make alt required" is a Phase 4 integration-review candidate, logged by Tech Lead (b8395f1). Leon: "other go with recommend and approve" (D3 (a)).
 - 2026-11-01 Branch: no feature branch for the rev 1.7-1.10 engineering; work stays on main. Leon: "4. no need a branch". Every push to main deploys, so do not push between MOD-012 and MOD-001 unless both are in (Tech Lead, b8395f1).
+- 2026-11-01 AC-096 sign-off (rev 1.11): QA tests AC-096's refused-request case with the Tech Lead's method (17e70cc), with no human step. Leon does the human part when MOD-012 and MOD-001 are QA'd together: on the build, on his Mac in desktop Chrome, Safari and Firefox, the Slideshow nav item and, separately, key 7; "Press F for full screen" never appears, not even for a moment; on iPhone Safari no hint shows. Leon: "approve all recommendations" (question 2: yes).
+- 2026-11-01 About page (rev 1.11): the About page stays as Leon built it on 2026-06-29 (sections "Meeee", "Hobbies", "Background", five photos). The old "no photo" rule (MOD-008 AC-063) is dropped. The photos keep empty alt text. Leon: "approve all recommendations" (question 3: yes; question 4: keep empty alt text).
 
 ---
 

@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.10
+**Revision:** 1.11
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -35,7 +35,7 @@
 
 ### Purpose
 
-A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
+A personal portfolio website for Leon Wu, full-stack engineer and CS master's student at Northeastern, currently seeking a 2026/2027 software engineering internship (full-stack, frontend, or backend). The site presents Leon's four flagship projects, work history, and technical skills in a clean, minimal, recruiter-friendly format.
 
 ### Goals
 
@@ -427,6 +427,8 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 
 **Route:** /experience
 
+**Page heading:** Experience
+
 **Layout:** Two-column timeline (`grid grid-cols-[9rem_1fr]`). Left column: date range right-aligned. Right column: dot indicator with vertical line connector, role title, company, bullets, tech chips.
 
 - Date format: `{startDate} – {endDate}` (no line break between start and end).
@@ -476,6 +478,21 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 
 **Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`. No education block on this page (education lives on Experience).
 
+**Page heading:** About
+
+**Sections (in this order, as Leon built them on 2026-06-29):**
+
+1. **Meeee**: three lines, each on its own line:
+   - Born and lived in Taipei Taiwan 🇹🇼
+   - Moved to Seattle for Master degree 🇺🇸
+   - Have a 3-year-old cat called 方勇吉 🐱
+
+   Then two photos side by side: `IMG_6605.jpg`, `IMG_6591.jpg`.
+2. **Hobbies**: the line "Ski ⛷️ Snowboard 🏂", then two photos side by side: `IMG_6353.jpg`, `IMG_6875.JPG`. Then the line "Bouldering 🧗", then one photo: `4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG`.
+3. **Background**: the main paragraph and the second paragraph below, in that order.
+
+The five photos are files in `site/public/` (project files of MOD-001, status.md Decisions, Q5). They have empty alt text: the line above each group says what the photos show (Leon's choice, revision 1.11).
+
 **Main paragraph:**
 
 > My path into engineering did not start in a computer science classroom. I studied International Business in Taipei and spent the early part of my career on the product and marketing side, where I taught myself to code so I could build the things I was responsible for shipping. That habit grew into building full-stack products that real companies and real users came to depend on. I am now pursuing my MS in Computer Science at Northeastern to strengthen the fundamentals beneath the work I had already been doing.
@@ -483,6 +500,9 @@ The Images section shows two screenshots from `asset/screenshots/projectday/`, i
 **Second paragraph:**
 
 > The pivot is the point. I learned to engineer by shipping software that people actually use, and I bring that same bias toward real, working results to everything I build, whether that is a production analytics platform or a system of AI agents that ships software on its own.
+
+**Acceptance criteria (added in revision 1.11):**
+- AC-132: /about shows the page heading "About", then the sections "Meeee", "Hobbies" and "Background", in that order. Each section's lines, paragraphs and photos are the ones listed under Sections above, word for word and in the listed order. No other section, line or photo appears, and there is no education block.
 
 ---
 
@@ -519,6 +539,8 @@ Each category rendered as a labeled group with chip/badge elements per skill.
 ### 4.10 Contact
 
 **Route:** /contact
+
+**Page heading:** Contact
 
 **Layout:** Outer wrapper `px-8 py-16 max-w-2xl mx-auto w-full`.
 

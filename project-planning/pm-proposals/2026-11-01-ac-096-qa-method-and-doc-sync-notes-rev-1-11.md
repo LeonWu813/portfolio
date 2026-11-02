@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: log the AC-096 refused-request QA method, record the About page as built, page headings, "Leon Wu" in the Purpose line, correct the AC-017 note (PRD rev 1.11)
 
