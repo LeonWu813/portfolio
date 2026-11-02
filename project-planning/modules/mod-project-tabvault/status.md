@@ -261,9 +261,54 @@ Other: no 'use client'; no gold-plating; spec has no template comments; CONV-005
 
 **Overall: PASS — all 12 ACs. No human sign-off needed.**
 
-### Open items
-- (none)
 
 ### Engineering Progress (spec-update, 2026-11-01)
 - Changed ACs: AC-054, AC-056, AC-116, AC-117, AC-127. Record file only: offline wording, live link removed, featureImageAlt and two section alts added. No image file changed.
 - lint 0 errors, build pass (run in site/); self-check not run at repo root per instructions.
+
+---
+
+## QA Run 4 - Verify (spec-update c612306, rev 1.10) - 2026-11-01
+
+**Workflow:** verify (first run against the rev 1.10 spec; prior runs were against older revisions). **Evidence:** `npm run build` in site/ passes (13 pages); `next start -p 3947`, real HTML fetched with curl for /, /about, /contact, /experience, /skills, /projects/{siteplus,multi-agent-system,projectday,tabvault}; server stopped. No automated suite (static site); project `verify` skill not present. Lint not re-run by QA.
+
+| AC | Result | Evidence |
+|----|--------|----------|
+| AC-053 | PASS | `<h1>TabVault</h1>` |
+| AC-054 | PASS | muted `<p>` reads "...Built by my multi-agent system · Deployed to AWS ECS Fargate (now offline)" exactly |
+| AC-055 | PASS | 8 tags in record, exact labels |
+| AC-056 | PASS | one external link: `GitHub: <a href="https://github.com/LeonWu813/tab-management" target="_blank" rel="noopener noreferrer">tab-management</a>`; prefix outside the anchor |
+| AC-057 | PASS | description in `border-l-2 border-[var(--accent)]` pull-quote (unchanged, verbatim text in record) |
+| AC-058 | PASS | h2s in order: The problem, My role, How it works, end to end, Images, Architecture, Key engineering decisions, Challenges and how I resolved them, Impact, What I learned, and what I would improve. Images section = `/tabvault-mobile.jpeg`, `/tabvault-plugin.png`, no paragraphs; other sections have paragraphs |
+| AC-059 | PASS | `<strong>` rendered from `**...**` (Key engineering decisions, Challenges) |
+| AC-060 | PASS | content from site/data/projects/tabvault.ts; no fs/markdown at request time |
+| AC-061 | PASS | page.tsx unchanged since Run 3; build OK |
+| AC-062 | PASS | /projects/nope 404 |
+| AC-063 | PASS | build lists /projects/tabvault via generateStaticParams |
+| AC-064 | PASS | canonical and og:url `https://www.leon-wu.com/projects/tabvault`; title/OG/Twitter present (unchanged) |
+| AC-116 | PASS | atAGlance exact; exactly one external link in the page body; "The problem" and "Impact" paragraphs match asset/content/case-study-tabvault-detailed.md word for word (checked by normalized substring comparison) and say deployed and offline now |
+| AC-117 | PASS (slideshow not yet checkable) | grep of all fetched routes: no "tab-vault.com", no link to it, no "is/now live", "live on AWS", or "Live:" copy. /slideshow returns 404 (MOD-012 not built): that part is not yet checkable. CV PDF excluded per spec |
+| AC-127 | PASS | tabvault page: feature image and both Images-section images carry exactly the spec alt text, no empty project-image alt; the overlay copy of each image has the same alt and the overlay dialog has `aria-label` equal to that alt (all three). `<img src="/head.png" alt="Leon Wu">` is the shell avatar, not a project image |
+| AC-126 | PASS (slideshow not yet checkable) | no `tel:`, no "206-677-7544", "2066777544" or other phone pattern in any fetched route. /slideshow 404: not yet checkable |
+
+### Requirement check: CONV-003 word for word (spec Requirements, not an AC)
+FAIL (requirement, not covered by an AC other than AC-116). Section headings match the source exactly (Images is spec-added, not in source). Paragraph text deviates from asset/content/case-study-tabvault-detailed.md in these places outside "The problem"/"Impact":
+- Architecture: source has 5 paragraphs (intro, client layer, backend, data layer, "One detail"); page has 3: intro and client layer are merged, backend and data layer are merged, and the data-layer sentences "Two design patterns in the data layer carry a lot of weight. First, ... Second, ..." are reworded into one sentence.
+- Architecture: "One detail I insisted on" in page vs "One detail I am glad I insisted on" in source.
+- Challenges: source intro paragraph and four paragraphs omitted (missing dependency, wrong status code on bad credentials, ISP/new domain, plus the intro and each "The lesson..." sentence on the health-check item); "secrets-exposure" paragraph omits ", and I fixed the order so the ignore file is created first".
+- What I learned: 1st paragraph uses 'done' (single quotes) vs "done" in source and omits the last sentence ("And because I reviewed and approved every step, I can speak to every decision in this build."); 2nd paragraph replaces ", with metrics" and "observability, with" commas by em dashes ("observability — metrics and tracing ... pipeline so a slow ...").
+Classification: implementation bug against the spec's word-for-word requirement (first report for this requirement). Caveat for the human: the page body was accepted in earlier runs while condensed, and the spec only names AC-116 for the two sections it checks. If condensing is intended, that is a spec/PRD wording decision for PM, not an engineering fix.
+
+### Other checks
+No 'use client'; no gold-plating; spec has no template comments; CONV-005 record shape satisfied; no image file changed. MOD-003 overlay and 640 px cap are verified by MOD-003 QA (17e339f); here only the markup (cap class `max-h-[640px]` on the two Images-section images) was seen.
+
+### Integration notes (for Tech Lead)
+- metadataBase not set: build warns and og:image resolves to http://localhost:3000 locally (already noted in Run 3; not MOD-006).
+- /slideshow does not exist; re-run AC-117 and AC-126 for the slideshow route after MOD-012.
+
+### Human script
+None required for this module (all ACs are verifiable in HTML). Optional glance: on /projects/tabvault click each of the three images, confirm the overlay opens and Esc closes it (feel is owned by MOD-003 sign-off).
+
+### Open items
+- [ ] CONV-003 bugs-found - paragraphs outside "The problem" and "Impact" not word for word with the source (details above) (2026-11-01)
+- [ ] AC-117 / AC-126 - /slideshow part not yet checkable until MOD-012 exists (2026-11-01)
