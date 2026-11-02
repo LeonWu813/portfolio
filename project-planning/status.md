@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-site-shell
-mode: spec-update
-module: mod-site-shell
-result: success
-next: claude --agent qa-mod-site-shell "verify" (QA together with mod-slideshow: AC-094, AC-095, AC-099)
-timestamp: 2026-11-02T01:00:00Z
+agent: qa-mod-slideshow
+mode: verify
+module: mod-slideshow
+result: bugs-found
+next: claude --agent engineer-mod-slideshow "bugfix" (AC-095 race in useFullscreenSession.ts: the slideshow sometimes leaves to Home right after a successful full-screen opening). Then claude --agent qa-mod-slideshow "regression", then Leon's sign-off script (QA Results in modules/mod-slideshow/status.md), then claude --agent qa-mod-site-shell "verify"
+timestamp: 2026-11-02T03:00:00Z
 ```
 
 ## PM Updates
