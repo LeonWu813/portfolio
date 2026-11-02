@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slideshow UI mock</title>
+<!-- UI designer mock for MOD-012 /slideshow. Design reference only, not site code.
+     Open with a hash: #<slide>-<light|dark>, e.g. #A5-dark, #menu-light, #gallery-dark.
+     Slide keys: 1 2 2a 2b 3 M M-states A1..A8 B1..B8 C1..C8 D1..D5,
+     or a type alias (see TYPE_ALIAS below). #audit-light runs the fit/size audit. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ---- Site tokens, copied verbatim from site/app/globals.css ---- */
+:root{--bg:#ffffff;--surface:#f4f4f4;--text:#161616;--text-muted:#525252;--border:#e0e0e0;--hover:#e8e8e8;--accent:#0f62fe;--accent-hover:#0043ce}
+.dark{--bg:#161616;--surface:#262626;--text:#f4f4f4;--text-muted:#c6c6c6;--border:#393939;--hover:#333333;--accent:#78a9ff;--accent-hover:#a6c8ff}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+/* ---- Slideshow tokens (MOD-012 scope; derived only from site variables) ---- */
+.ss-layer{
+  --ss-edge: color-mix(in srgb, var(--text-muted) 65%, var(--bg));   /* 3:1+ edge for clickable cards, A2 boxes */
+  --ss-line: max(2px, .3cqh);                                          /* stroke for rules/edges inside the frame */
+  position:fixed;inset:0;background:var(--bg);color:var(--text);overflow:hidden;
+  display:grid;place-items:center;user-select:none;
+}
+.frame{
+  container-type:size;position:relative;
+  width:min(100vw, calc(100vh * 16 / 9));aspect-ratio:16/9;background:var(--bg);
+  /* type scale, in % of frame height (1cqh = 1 fh) */
+  --fs-hero:12cqh; --fs-display:13cqh; --fs-title:7.5cqh; --fs-body:5.6cqh; --fs-sub:4.2cqh; --fs-label:3.6cqh; --fs-meta:2.8cqh;
+  /* spacing scale (fh) */
+  --sp-1:1cqh; --sp-2:2cqh; --sp-3:3cqh; --sp-4:4cqh; --sp-6:6cqh; --sp-8:8cqh;
+  /* grid: 12 columns, 10 fh side margins, 3 fh gutters */
+  --m-x:10cqh; --m-top:9cqh; --content-bottom:85cqh; --gutter:3cqh;
+  --col:calc((100cqw - 2 * var(--m-x) - 11 * var(--gutter)) / 12);
+  --radius:1cqh; --radius-sm:.6cqh;
+}
+.slide{position:absolute;inset:0;padding:var(--m-top) var(--m-x) 0;display:flex;flex-direction:column}
+.content{position:absolute;left:var(--m-x);right:var(--m-x);top:var(--m-top);bottom:calc(100cqh - var(--content-bottom));display:flex;flex-direction:column}
+
+/* title block: accent tick + sentence title */
+.tick{width:6cqh;height:.8cqh;background:var(--accent);margin-bottom:var(--sp-3);flex:none}
+h1.title{font-size:var(--fs-title);line-height:1.12;font-weight:700;letter-spacing:-.015em;margin:0;max-width:150cqh;text-wrap:balance}
+.sub{font-size:var(--fs-sub);line-height:1.3;color:var(--text-muted);margin-top:var(--sp-2)}
+
+/* bullets */
+ul.bullets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-3)}
+ul.bullets li{font-size:var(--fs-body);line-height:1.3;display:grid;grid-template-columns:4.4cqh 1fr;align-items:start}
+ul.bullets li::before{content:"";width:1.3cqh;height:1.3cqh;background:var(--accent);margin-top:calc(var(--fs-body) * .65 - .65cqh)}
+.body-gap{margin-top:var(--sp-6)}
+
+/* big numbers */
+.numbers{display:grid;grid-template-columns:repeat(3, calc(4 * var(--col) + 3 * var(--gutter)));column-gap:var(--gutter);margin-top:auto;margin-bottom:auto}
+.num{border-left:var(--ss-line) solid var(--ss-edge);padding-left:var(--sp-3)}
+.num .n{font-size:var(--fs-display);line-height:1;font-weight:700;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num .l{font-size:var(--fs-label);line-height:1.3;color:var(--text-muted);margin-top:var(--sp-2);max-width:40cqh}
+
+/* intro slide */
+.hero{font-size:var(--fs-hero);line-height:1.05;font-weight:700;letter-spacing:-.02em;margin:0}
+.titles{margin-top:var(--sp-6);border-left:var(--ss-line) solid var(--accent);padding-left:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-1)}
+.titles div{font-size:var(--fs-body);line-height:1.3}
+.titles div:first-child{font-weight:500}
+.titles div:not(:first-child){color:var(--text-muted)}
+
+/* chips (stack, B6 flow, A2 boxes share this look) */
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+.chip{font-size:var(--fs-label);line-height:1.25;padding:1.3cqh 2.2cqh;background:var(--surface);border:var(--ss-line) solid var(--border);border-radius:var(--radius-sm);white-space:nowrap}
+.role{font-size:var(--fs-body);line-height:1.3;font-weight:500;max-width:140cqh}
+
+/* key chip (sidebar shortcut badge, rebuilt in frame units) */
+.key{display:inline-grid;place-items:center;min-width:4.4cqh;height:4.4cqh;padding:0 1cqh;font-size:var(--fs-meta);font-weight:500;color:var(--text-muted);border:var(--ss-line) solid var(--ss-edge);border-radius:var(--radius-sm);background:var(--bg);font-variant-numeric:tabular-nums}
+
+/* clickable cards (timeline work cards, menu cards) */
+.card{position:relative;text-align:left;font:inherit;color:inherit;background:var(--surface);border:var(--ss-line) solid var(--ss-edge);border-radius:var(--radius);padding:var(--sp-3);cursor:pointer;display:flex;flex-direction:column}
+.card:hover,.card.is-hover{background:var(--hover)}
+.card:focus-visible,.card.is-focus{outline:2px solid var(--accent);outline-offset:3px}
+/* start-link highlight (AC-115): heavier full-strength edge + inverted key chip. Not accent, not color alone. */
+.card.is-highlight{border-color:var(--text);box-shadow:inset 0 0 0 .5cqh var(--text)}
+.card.is-highlight .key{background:var(--text);color:var(--bg);border-color:var(--text)}
+.details{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:var(--sp-2)}
+.details .det{font-size:var(--fs-meta);font-weight:500;color:var(--accent);display:flex;align-items:center;gap:.8cqh}
+.card:hover .det,.card.is-hover .det{color:var(--accent-hover)}
+.details svg{width:2.4cqh;height:2.4cqh}
+
+/* timeline */
+.tl{position:relative;margin-top:var(--sp-8);display:grid;grid-template-columns:repeat(4,1fr);column-gap:var(--gutter);flex:1}
+.tl::before{content:"";position:absolute;left:0;right:0;top:calc(7cqh - var(--ss-line) / 2);height:var(--ss-line);background:var(--ss-edge)}
+.tl .date{font-size:var(--fs-label);font-weight:500;color:var(--text-muted);height:5cqh;font-variant-numeric:tabular-nums}
+.tl .dot{width:2.8cqh;height:2.8cqh;border-radius:50%;border:var(--ss-line) solid var(--text-muted);background:var(--bg);margin:.6cqh 0 var(--sp-4) 0;position:relative;z-index:1}
+.tl .dot.work{background:var(--accent);border-color:var(--accent)}
+.tl .entry{padding:var(--sp-3) calc(var(--sp-3) + var(--ss-line))}
+.tl .role-t{font-size:var(--fs-label);font-weight:700;line-height:1.2}
+.tl .org{font-size:var(--fs-label);color:var(--text-muted);line-height:1.3;margin-top:var(--sp-1)}
+.tl .card{min-height:30cqh}
+
+/* photo slide */
+.photos{display:flex;gap:var(--sp-4);margin-top:var(--sp-6)}
+.photos figure{margin:0}
+.photos .ph{height:52cqh;width:39cqh}
+figcaption{font-size:var(--fs-label);color:var(--text-muted);margin-top:var(--sp-2);line-height:1.3}
+img.shot{display:block;width:100%;height:100%;object-fit:contain}
+.frameimg{border:max(1px,.15cqh) solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+
+/* two-column: text + visual */
+.split{display:grid;grid-template-columns:calc(5 * var(--col) + 4 * var(--gutter)) 1fr;column-gap:calc(2 * var(--gutter));margin-top:var(--sp-6);flex:1;min-height:0;align-items:center}
+.split .visual{height:100%;display:flex;align-items:center;justify-content:center;min-height:0}
+.split .text{align-self:start;padding-top:var(--sp-1)}
+.wide{width:100%}
+.phones{display:flex;gap:var(--sp-3);height:100%;max-height:62cqh;justify-content:flex-end}
+.phones .p{height:100%;aspect-ratio:1206/2622;border-radius:2.2cqh}
+.triple{display:flex;gap:3%;aspect-ratio:1.5;width:100%;max-height:100%;padding:0;justify-content:center;align-items:center}
+.triple img{height:100%;aspect-ratio:1206/2622;border-radius:1.6cqh;border:max(1px,.15cqh) solid var(--border)}
+
+/* menu */
+.menu-cards{display:grid;grid-template-columns:repeat(4,1fr);column-gap:var(--gutter);margin-top:var(--sp-6)}
+.menu-cards .card{min-height:38cqh;padding:var(--sp-4) var(--sp-3) var(--sp-3)}
+.card > .key{align-self:flex-start}
+.menu-cards .name{font-size:4.6cqh;font-weight:700;line-height:1.15;margin-top:var(--sp-4)}
+.menu-cards .one{font-size:var(--fs-label);color:var(--text-muted);line-height:1.3;margin-top:var(--sp-2)}
+.hint-slot{height:9cqh;margin-top:var(--sp-2);display:flex;align-items:center;justify-content:center}
+.hint{font-size:var(--fs-label);font-weight:500;background:var(--surface);border:var(--ss-line) solid var(--border);border-radius:99cqh;padding:1cqh 3cqh}
+.footer{position:absolute;left:var(--m-x);bottom:5.2cqh;font-size:var(--fs-meta);color:var(--text-muted);user-select:text;max-width:calc(100cqw - var(--m-x) - 15cqh)}
+
+/* role grid A5 */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,auto);grid-auto-flow:column;column-gap:calc(2*var(--gutter));row-gap:var(--sp-4);margin-top:var(--sp-6)}
+.rgrid .r{border-top:var(--ss-line) solid var(--border);padding-top:var(--sp-2)}
+.rgrid dt{font-size:var(--fs-body);font-weight:700;line-height:1.25}
+.rgrid dd{font-size:var(--fs-body);margin:0;color:var(--text-muted);line-height:1.25}
+
+/* A2 diagram */
+.wf{margin-top:auto;margin-bottom:auto;position:relative}
+.wf .bar{background:var(--text);color:var(--bg);font-size:var(--fs-label);font-weight:500;height:7cqh;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;gap:1.4cqh}
+.wf .bar svg{width:3cqh;height:3cqh}
+.wf .drops{position:relative;height:6cqh}
+.wf .drops i{position:absolute;top:0;bottom:-3.6cqh;z-index:0;width:0;border-left:var(--ss-line) dashed var(--text-muted)}
+.wf .row{display:flex;align-items:center;height:10cqh}
+.wf .box{height:100%;display:flex;align-items:center;justify-content:center;gap:1.2cqh;font-size:var(--fs-label);font-weight:500;background:var(--surface);border:var(--ss-line) solid var(--ss-edge);border-radius:var(--radius-sm);white-space:nowrap}
+.wf .box.end{border-color:var(--accent);color:var(--text)}
+.wf .box svg{width:5cqh;height:3.2cqh}
+.wf .arr{width:6cqh;flex:none;height:3cqh;color:var(--text-muted)}
+.wf .loop{position:absolute;height:6cqh;border:var(--ss-line) solid var(--text-muted);border-top:none;border-radius:0 0 var(--radius) var(--radius)}
+.wf .loop .head{position:absolute;left:calc(-1.2cqh - var(--ss-line)/2);top:-.2cqh;width:2.4cqh;height:2cqh;color:var(--text-muted)}
+.wf .retro{position:absolute;font-size:var(--fs-label);color:var(--text-muted);white-space:nowrap;transform:translateX(-50%)}
+.wf .retro b{font-weight:500;color:var(--text)}
+
+/* B6 flow */
+.flow{display:flex;align-items:center;margin-top:var(--sp-6);list-style:none;padding:0}
+.flow .chip{font-weight:500;font-size:var(--fs-label);padding:1.6cqh 2.6cqh;border-color:var(--ss-edge)}
+.flow .arr{width:7cqh;height:3cqh;color:var(--text-muted);flex:none}
+
+/* position cue (project slides): frame bottom-left */
+.cue{position:absolute;left:var(--m-x);bottom:5.2cqh;display:flex;align-items:center;gap:1.6cqh;font-size:var(--fs-meta);color:var(--text-muted)}
+.cue .name{font-weight:500}
+.cue .sep{width:var(--ss-line);height:2.6cqh;background:var(--border)}
+.cue .pos{font-variant-numeric:tabular-nums}
+
+/* screen-anchored controls (CSS px, not frame units) */
+.close{position:fixed;right:16px;bottom:16px;width:44px;height:44px;display:grid;place-items:center;border:0;background:transparent;color:var(--text-muted);border-radius:4px;cursor:pointer;padding:0}
+.close:hover,.close.is-hover{background:var(--hover);color:var(--text)}
+.close:focus-visible,.close.is-focus{outline:2px solid var(--accent);outline-offset:2px}
+.close svg{width:18px;height:18px}
+.fhint{position:fixed;left:16px;bottom:16px;height:44px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-muted)}
+.fhint kbd{font:inherit;font-size:12px;display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid var(--ss-edge);border-radius:2px;color:var(--text-muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* design overlays (mock only) */
+.zones .zone{position:absolute;outline:1px dashed #e5484d;background:rgba(229,72,77,.06);pointer-events:none}
+
+/* gallery */
+body.gallery{overflow:auto;height:auto}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:28px}
+.gal .cell{font:500 13px Roboto;color:var(--text-muted)}
+.gal .mini{position:relative;width:100%;aspect-ratio:16/9;outline:1px solid var(--border);margin-top:6px;overflow:hidden}
+.gal .mini .frame{width:100%;position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const PUB='file:///Users/tsan/Desktop/MacBookPro/portfolio/site/public/';
+const PD='file:///Users/tsan/Desktop/MacBookPro/portfolio/asset/screenshots/projectday/';
+
+/* ---- Deck text, word for word from asset/content/interview-deck.md ---- */
+const PROJ={A:{name:'Multi-Agent System',n:8},B:{name:'ProjectDay',n:8},C:{name:'SitePlus+',n:8},D:{name:'TabVault',n:5}};
+const S={
+ '1':{type:'intro',title:"Hi, I'm Leon",titles:['Full-Stack Software Engineer','AI Systems Builder','MSCS Candidate, Northeastern University']},
+ '2':{type:'timeline',title:'From marketing to engineering',entries:[
+   {date:'2017 to 2021',role:'Bachelor of International Business',org:'National Chengchi University, Taipei'},
+   {date:'2021 to 2023',role:'Marketing Project Manager',org:'GoFreight, Taipei',key:'1'},
+   {date:'2023 to 2025',role:'Front-End Developer',org:'Exascend, Taipei',key:'2'},
+   {date:'2025 to 2027',role:'Master of Science in Computer Science',org:'Northeastern University, Seattle'}]},
+ '2a':{type:'job',title:'Front-End Developer at Exascend',sub:'Taipei · Sep 2023 to Aug 2025',nums:[
+   ['70%','less manual reporting, from an event-tracking system I built'],['3.5x','monthly active users on two sites I built from scratch'],['48.8%','more page views after SEO and accessibility audits']]},
+ '2b':{type:'job',title:'Marketing Project Manager at GoFreight',sub:'Taipei · Jul 2021 to Mar 2023',nums:[
+   ['67%','higher conversion rate, from an A/B testing pipeline I coded'],['$16.5K','in MRR from a product launch I led']]},
+ '3':{type:'photo',title:'Based in Seattle, usually on snow or a wall',photos:[
+   [PUB+'IMG_6875.JPG','Snowboarding','Leon on a snowboard on a snowy slope, giving a peace sign, with forested mountains behind.'],
+   [PUB+'4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG','Bouldering','Leon on an indoor bouldering wall, reaching for orange holds.']]},
+ 'M':{type:'menu',title:'Pick a project'},
+ 'A1':{type:'cover',title:'Multi-Agent Development System',nums:[['3','products shipped'],['6','-agent dev team'],['6','skills created']]},
+ 'A2':{type:'workflow',title:'An AI dev team with a human in charge'},
+ 'A3':{type:'stack',title:'My role and stack',role:'Sole architect and builder',stack:['Claude Code (subagents, skills, hooks)','Bash','Python','Git']},
+ 'A4':{type:'bullets',title:'It started with one AI agent losing the plot',bullets:['Context drifts over long sessions','Earlier decisions get overwritten','No clean way to undo']},
+ 'A5':{type:'rolegrid',title:'So I split it into six focused agents',roles:[['PM','writes the requirements'],['Doc-Sync','one spec per module'],['Engineer','builds one module'],['QA','tests it in the running app'],['Tech Lead','reviews the whole phase'],['Retrospective','improves the system']]},
+ 'A6':{type:'bullets',title:'Each agent sees only what it needs',bullets:['Only its own spec and files','Scope check on every change','Every handoff is a git commit','Cost: one extra sync step']},
+ 'A7':{type:'bullets',title:'Then QA passed code it never ran',bullets:['Early QA only read the code','Fix: real server, real requests',"People check what machines can't"]},
+ 'A8':{type:'bullets',title:'The system matters more than the prompt',bullets:['Most fixes: boundaries, not prompts','Result: 3 products, every step reviewable','For your team: clear specs, small changes, honest tests']},
+ 'B1':{type:'cover',title:'ProjectDay',nums:[['12','modules'],['13','gyms in greater Taipei'],['1,500+','commits']]},
+ 'B2':{type:'introshot',title:"A climbing log for Taiwan's gyms",bullets:['Log a climb in 4 taps','Watch beta for that exact route','Submitted to the App Store'],img:'triple'},
+ 'B3':{type:'stack',title:'My role and stack',role:'Product owner; built with my multi-agent system',stack:['React Native / Expo','TypeScript','Supabase (Postgres, Auth, Edge Functions)','AWS (S3, MediaConvert, CloudFront, CDK)','EAS','GitHub Actions']},
+ 'B4':{type:'bullets',title:"I climb, and Taiwan's gyms had no app",bullets:['Global apps target outdoor crags','Beta videos lost on Instagram','Local app only logs climbs']},
+ 'B5':{type:'bulletsshot',title:'So I put logging, beta and gyms in one app',bullets:['Log a send in 4 taps','Beta videos tied to each route','Route lists for 13 gyms'],img:'phones'},
+ 'B6':{type:'flow',title:'Beta videos needed a real video pipeline',flow:['Upload','S3','MediaConvert','CloudFront'],bullets:['iPhone HDR looked overexposed','Supabase had no CDN','So I moved video to AWS','Cost: a second cloud to run']},
+ 'B7':{type:'bullets',title:'Moving the videos hid a privacy hole',bullets:['Backfill copied old videos to S3','It trusted any path a user sent','My audit caught it: owner-prefix check']},
+ 'B8':{type:'bullets',title:'Shipping to a real phone taught me mocks lie',bullets:['Passed Jest, broke the iOS build','Now: native build before QA','Next: Android, offline logging']},
+ 'C1':{type:'cover',title:'SitePlus+',nums:[['~60%','less analytics work'],['3+','months in real use'],['10+','reports generated']]},
+ 'C2':{type:'introshot',title:'Analytics, campaigns and SEO in one place',bullets:['Designed, built and deployed alone','Used by a real company'],img:[PUB+'siteplusplus-home.jpg',2860/1488,'Screenshot of the SitePlus+ home dashboard.']},
+ 'C3':{type:'stack',title:'My role and stack',role:'Sole engineer, full stack and AWS',stack:['Java 21 / Spring Boot','Spring Security / JWT','React / TypeScript','Redux','PostgreSQL','Redis','Docker','GitHub Actions','AWS (EC2, ALB, RDS, ElastiCache, S3, CloudFront)','Cloudflare']},
+ 'C4':{type:'bullets',title:'A company lost hours to manual reports',bullets:['Data spread across tools','Same gathering every week','Goal: install once, rely on it']},
+ 'C5':{type:'bulletsshot',title:'So I built one snippet and one dashboard',bullets:['Snippet captures views, clicks, forms','Dashboard: trends, pages, channels','SEO auditor re-checks weekly'],img:[PUB+'siteplusplus-reports.jpeg',1920/996,'Screenshot of the SitePlus+ reports page.']},
+ 'C6':{type:'bullets',title:"But the snippet's endpoint had to be public",bullets:['Visitors have no login','Anyone writes, only the owner reads','50 req/min per IP, shared in Redis']},
+ 'C7':{type:'bullets',title:'Going live behind Cloudflare broke CORS',bullets:['Preflights never reached my server','My logs showed nothing','Fix: a Worker answers them']},
+ 'C8':{type:'bullets',title:'Real problems start where textbooks stop',bullets:['Two servers broke a simple rate limit','Next: sliding window, event-driven deploys',"For your team: I've owned production end to end"]},
+ 'D1':{type:'introshot',title:'Save a tab now, find it later',bullets:['AI summaries and reminders','Deployed on AWS, now offline'],img:[PUB+'tabvault-home.png',2878/1748,'Screenshot of the TabVault web app home screen.']},
+ 'D2':{type:'stack',title:'My role and stack',role:'Orchestrator and reviewer; built by my multi-agent system',stack:['Java 21 / Spring Boot','React / TypeScript PWA','Chrome Extension (MV3)','PostgreSQL','Redis','Quartz','Claude API','AWS ECS Fargate']},
+ 'D3':{type:'bullets',title:'Open tabs pile up, then get lost',bullets:['Tabs kept "for later" slow the browser','Closing them loses the content','I also needed a real test for my agents']},
+ 'D4':{type:'bullets',title:'So saving takes one click, and AI works after',bullets:['Extension saves and returns instantly','A worker asks Claude for summary and deadlines','Search and reminders build on that']},
+ 'D5':{type:'bullets',title:'Deploying to AWS exposed cloud-only bugs',bullets:['Health check behind login: no traffic','ARM image on x86 servers','Each fix became a deploy checklist item']},
+};
+const MENU=[['1','Multi-Agent System','An AI dev team with a human in charge'],['2','ProjectDay','An iOS climbing app my agents built'],['3','SitePlus+','Analytics a real company runs on'],['4','TabVault','Save a tab now, find it later']];
+const FOOTER='leon-wu.com · github.com/LeonWu813 · linkedin.com/in/leon-wu-tsan-yu · leon.wu.tsan.yu@gmail.com';
+const TYPE_ALIAS={intro:'1',timeline:'2',job:'2a','job-2':'2b',photo:'3',menu:'M','menu-states':'M-states',cover:'B1',
+ 'intro-shot':'B2','intro-shot-1':'C2',stack:'C3','stack-2':'B3',bullets:'A8','bullets-shot':'B5','bullets-shot-1':'C5','role-grid':'A5',workflow:'A2',flow:'B6',
+ 'timeline-focus':'2-focus'};
+
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const ARROW='<svg class="arr" viewBox="0 0 60 30" aria-hidden="true"><path d="M4 15H52M42 6l11 9-11 9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// drawn replacement for the U+21C4 glyph: right arrow over left arrow, half-heads like the glyph
+const BIDI='<svg viewBox="0 0 50 32" aria-hidden="true"><path d="M4 10H44M34 2l10 8M46 22H6M16 30L6 22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHEV='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHECK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const X='<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+const titleBlock=(t,h='h1')=>`<div class="tick"></div><${h} class="title">${esc(t)}</${h}>`;
+const bullets=b=>`<ul class="bullets">${b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+const cue=id=>{const p=PROJ[id[0]];const i=+id.slice(1);return `<div class="cue"><span class="name">${esc(p.name)}</span><span class="sep"></span><span class="pos" aria-hidden="true">${i} / ${p.n}</span><span class="sr">${i} of ${p.n}</span></div>`};
+const numbers=n=>`<div class="numbers">${n.map(([a,b])=>`<div class="num"><div class="n">${esc(a)}</div><div class="l">${esc(b)}</div></div>`).join('')}</div>`;
+
+function render(id,opts={}){
+  const base=id.replace(/-(states|focus)$/,'');const s=S[base];let h='';
+  switch(s.type){
+   case 'intro':
+    h=`<div class="content" style="justify-content:center;padding-bottom:6cqh"><div class="tick"></div><h1 class="hero">${esc(s.title)}</h1>
+       <div class="titles">${s.titles.map(t=>`<div>${esc(t)}</div>`).join('')}</div></div>`;break;
+   case 'timeline':{
+    const f=id.endsWith('-focus');
+    h=`<div class="content">${titleBlock(s.title)}<div class="tl">${s.entries.map((e,i)=>{
+      const inner=`<div class="role-t">${esc(e.role)}</div><div class="org">${esc(e.org)}</div>`;
+      const body=e.key?`<button class="card${f&&i===2?' is-focus':''}${f&&i===1?' is-hover':''}" aria-keyshortcuts="${e.key}">${inner}<div class="details"><span class="det">Details${CHEV}</span><span class="key">${e.key}</span></div></button>`:`<div class="entry">${inner}</div>`;
+      return `<div><div class="date">${esc(e.date)}</div><div class="dot${e.key?' work':''}"></div>${body}</div>`}).join('')}</div></div>`;break;}
+   case 'job':
+    h=`<div class="content">${titleBlock(s.title)}<div class="sub">${esc(s.sub)}</div>${numbers(s.nums)}</div>`;break;
+   case 'cover':
+    h=`<div class="content">${titleBlock(s.title)}${numbers(s.nums)}</div>`;break;
+   case 'photo':
+    h=`<div class="content">${titleBlock(s.title)}<div class="photos">${s.photos.map(([src,c,alt])=>`<figure><div class="ph frameimg"><img class="shot" src="${src}" alt="${esc(alt)}"></div><figcaption>${c}</figcaption></figure>`).join('')}</div></div>`;break;
+   case 'menu':{
+    const st=id.endsWith('-states');
+    h=`<div class="content">${titleBlock(s.title)}<div class="menu-cards">${MENU.map(([k,n,o],i)=>{
+       const cls=st?(i===2?' is-highlight':i===0?' is-focus':i===3?' is-hover':''):'';
+       return `<button class="card${cls}" aria-keyshortcuts="${k}"><span class="key">${k}</span><span class="name">${esc(n)}</span><span class="one">${esc(o)}</span></button>`}).join('')}</div>
+       <div class="hint-slot">${st?'<div class="hint" role="status">Pick a project: press 1 to 4 or click a card</div>':''}</div></div>
+       <div class="footer">${esc(FOOTER)}</div>`;break;}
+   case 'stack':
+    h=`<div class="content">${titleBlock(s.title)}<div class="role body-gap">${esc(s.role)}</div><ul class="chips" style="margin-top:var(--sp-6)">${s.stack.map(c=>`<li class="chip">${esc(c)}</li>`).join('')}</ul></div>`;break;
+   case 'bullets':
+    h=`<div class="content">${titleBlock(s.title)}<div class="body-gap">${bullets(s.bullets)}</div></div>`;break;
+   case 'introshot': case 'bulletsshot':{
+    let vis;
+    if(s.img==='triple') vis=`<div class="triple" role="img" aria-label="Three ProjectDay screens in Traditional Chinese. Home shows saved gyms, a target route and new beta videos. Gyms lists climbing gyms with search and city filters. A route screen shows a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button.">${['home','gyms','route'].map(n=>`<img src="${PD}projectday-${n}.png" alt="">`).join('')}</div>`;
+    else if(s.img==='phones') vis=`<div class="phones">${[['route','ProjectDay route screen showing a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button.'],['route-beta',"ProjectDay route screen scrolled to the Beta videos section, showing the thumbnail of a climber's beta video for a V0 route."],['profile','ProjectDay profile screen with climbing stats: top grade V10, 10 sends, 9 climbing days, and a bar chart of sends per grade.']].map(([n,a])=>`<div class="p frameimg"><img class="shot" src="${PD}projectday-${n}.png" alt="${esc(a)}"></div>`).join('')}</div>`;
+    else vis=`<div class="frameimg wide" style="aspect-ratio:${s.img[1]}"><img class="shot" src="${s.img[0]}" alt="${esc(s.img[2])}"></div>`;
+    h=`<div class="content">${titleBlock(s.title)}<div class="split"><div class="text">${bullets(s.bullets)}</div><div class="visual">${vis}</div></div></div>`;break;}
+   case 'rolegrid':
+    h=`<div class="content">${titleBlock(s.title)}<dl class="rgrid">${s.roles.map(([a,b])=>`<div class="r"><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></div>`;break;
+   case 'workflow':{
+    // widths in fh; content width = 177.78 - 20 = 157.78 fh
+    const W=[['Requirements',27],['PM',11],['Doc-Sync',19.5],['Engineer ⇄ QA',30.5],['Tech Lead',21],['Shipped',18.78]];
+    let x=0;const centers=[],arrows=[];
+    W.forEach(([t,w],i)=>{centers.push(x+w/2);x+=w;if(i<5){arrows.push(x+3);x+=6}});
+    const box=([t,w],i)=>t==='Engineer ⇄ QA'
+      ?`<li class="box" style="width:${w}cqh"><span aria-hidden="true">Engineer</span>${BIDI}<span aria-hidden="true">QA</span><span class="sr">Engineer ⇄ QA</span></li>`
+      :`<li class="box${i===5?' end':''}" style="width:${w}cqh">${esc(t)}</li>`;
+    const l=centers[1],r=centers[4];
+    h=`<div class="content">${titleBlock(s.title)}<div class="wf">
+      <div class="bar">${CHECK}<span>I approve every handoff</span></div>
+      <div class="drops">${arrows.map(a=>`<i style="left:${a}cqh"></i>`).join('')}</div>
+      <ol class="row" style="list-style:none;margin:0;padding:0">${W.map((b,i)=>box(b,i)+(i<5?`<li aria-hidden="true" style="display:contents">${ARROW}</li>`:'')).join('')}</ol>
+      <div class="loop" style="left:${l}cqh;width:${r-l}cqh"><svg class="head" viewBox="0 0 24 20" aria-hidden="true"><path d="M2 18L12 4l10 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div style="height:6cqh"></div>
+      <p class="retro" style="left:${(l+r)/2}cqh;margin:2cqh 0 0">Retrospective feeds improvements back into the system</p>
+      <div style="height:7cqh"></div>
+    </div></div>`;break;}
+   case 'flow':
+    h=`<div class="content">${titleBlock(s.title)}<ol class="flow">${s.flow.map((c,i)=>`<li class="chip">${esc(c)}</li>${i<3?`<li aria-hidden="true" style="display:contents">${ARROW}</li>`:''}`).join('')}</ol><div class="body-gap">${bullets(s.bullets)}</div></div>`;break;
+  }
+  if(/^[ABCD]\d$/.test(base)) h+=cue(base);
+  return `<section class="slide" role="group" aria-roledescription="slide">${h}</section>`;
+}
+
+function zones(id){ // reserved zones overlay (#...-zones)
+  let z='<div class="zones"><div class="zone" style="right:0;bottom:0;width:8cqw;height:15cqh"></div>';
+  if(id==='1') z+='<div class="zone" style="left:0;bottom:0;width:30cqw;height:15cqh"></div>';
+  z+=`<div class="zone" style="left:var(--m-x);right:var(--m-x);top:var(--m-top);bottom:calc(100cqh - var(--content-bottom));outline-color:#46a758;background:none"></div></div>`;
+  return z;
+}
+
+function layer(id,{zonesOn=false}={}){
+  const fh=id==='1'?'<div class="fhint">Press <kbd>F</kbd> for full screen</div>':'';
+  const st=id.endsWith('-states');
+  return `<div class="ss-layer" role="region" aria-label="Slideshow"><div class="frame">${render(id)}${zonesOn?zones(id):''}</div>
+   ${fh}<button class="close${st?' is-focus':''}" aria-label="Close slideshow" aria-keyshortcuts="Escape">${X}</button>
+   <div class="sr" aria-live="polite" aria-atomic="true"></div></div>`;
+}
+
+const ORDER=['1','2','2-focus','2a','2b','3','M','M-states',...'A1 A2 A3 A4 A5 A6 A7 A8 B1 B2 B3 B4 B5 B6 B7 B8 C1 C2 C3 C4 C5 C6 C7 C8 D1 D2 D3 D4 D5'.split(' ')];
+
+function audit(){
+  // checks every slide at 1600x900: no element outside the frame, nothing in the close zone,
+  // nothing in slide 1's F-hint zone, and every text node at or above its AC-102 minimum.
+  const out=[];const host=document.getElementById('root');
+  for(const id of ORDER){
+    host.innerHTML=layer(id);
+    const fr=host.querySelector('.frame').getBoundingClientRect();const fh=fr.height/100,fw=fr.width/100;
+    const cz={l:fr.right-8*fw,t:fr.bottom-15*fh}, hz={r:fr.left+30*fw,t:fr.bottom-15*fh};
+    host.querySelectorAll('.frame *').forEach(el=>{
+      if(el.closest('.sr')||el.classList.contains('zone')) return;
+      const ownText=[...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+      if(!(ownText||el.matches('img,svg,.card,.chip,.box,.loop,.bar,.key,.hint,.tick,.dot,.num'))) return;
+      const r=el.getBoundingClientRect(); if(!r.width||!r.height) return;
+      if(r.left<fr.left-1||r.right>fr.right+1||r.top<fr.top-1||r.bottom>fr.bottom+1) out.push(`${id}: outside frame <${el.tagName.toLowerCase()} class="${el.className.baseVal??el.className}">`);
+      if(r.right>cz.l+1&&r.bottom>cz.t+1) out.push(`${id}: in close zone <${el.tagName.toLowerCase()} class="${el.className.baseVal??el.className}"> ${el.textContent.slice(0,30)}`);
+      if(id==='1'&&r.left<hz.r&&r.bottom>hz.t+1) out.push(`${id}: in F-hint zone <${el.tagName.toLowerCase()}>`);
+      if(el.scrollWidth>el.clientWidth+1&&getComputedStyle(el).overflow==='hidden') out.push(`${id}: clipped ${el.className}`);
+      const own=[...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+      if(own){const fs=parseFloat(getComputedStyle(el).fontSize)/fh;
+        const min=el.matches('h1')?7:el.closest('ul.bullets,.titles,.rgrid,.role')?4.2:2.4;
+        if(fs<min-0.01) out.push(`${id}: font ${fs.toFixed(2)}fh < ${min} "${el.textContent.trim().slice(0,30)}"`);}
+    });
+    const h1=host.querySelector('h1');const lines=h1?Math.round(h1.getBoundingClientRect().height/(parseFloat(getComputedStyle(h1).lineHeight))):0;
+    if(lines>2) out.push(`${id}: title ${lines} lines`);
+    out.push(`${id}: title lines=${lines}`);
+  }
+  host.innerHTML=`<pre id="audit">${esc(out.join('\n'))}</pre>`;
+}
+
+function route(){
+  const raw=(location.hash||'#gallery-light').slice(1);
+  const m=raw.match(/^(.*?)-(light|dark)(-zones)?$/)||[null,raw,'light'];
+  let [,key,theme,z]=m; key=TYPE_ALIAS[key]||key;
+  document.documentElement.classList.toggle('dark',theme==='dark');
+  const host=document.getElementById('root');
+  if(key==='gallery'){document.body.className='gallery';
+    host.innerHTML=`<div class="gal">${ORDER.map(id=>`<div class="cell">${id}<div class="mini"><div class="ss-layer" style="position:absolute"><div class="frame">${render(id)}</div></div></div></div>`).join('')}</div>`;return;}
+  document.body.className='';
+  if(key==='audit'){document.fonts.ready.then(audit);return;}
+  host.innerHTML=layer(key,{zonesOn:!!z});
+}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
