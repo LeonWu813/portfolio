@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: qa-mod-slideshow
-mode: regression
-module: mod-slideshow
-result: needs-signoff
-next: Leon runs the human sign-off script in project-planning/modules/mod-slideshow/status.md (Chrome, Safari, Firefox, iPhone Safari) and reports "ui-results: <per step>" to claude --agent qa-mod-slideshow
-timestamp: 2026-11-01T23:00:00Z
+agent: qa-mod-site-shell
+mode: verify
+module: mod-site-shell
+result: bugs-found
+next: claude --agent engineer-mod-site-shell "bugfix"  (AC-003/AC-004: dark class stripped from <html> at hydration; see QA Results in modules/mod-site-shell/status.md). Human script items (Safari/Firefox/iPhone, CV filename) are listed under Open items there.
+timestamp: 2026-11-02T00:00:00Z
 ```
 
 ## PM Updates

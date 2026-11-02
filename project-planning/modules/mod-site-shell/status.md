@@ -36,6 +36,50 @@ ACs changed: AC-093 (7th Slideshow nav item, key 7, icon from slideshow-ui.md s1
 
 ## QA Results
 
+### 2026-11-02 — QA run (rev 1.11 spec-update, 1dffb80). Workflow: functional-test (first QA of the new rev-1.11 ACs; the June results below are history)
+
+Method: `npm run build`, `next start` on port 3123, headless Chrome driven over CDP (real key events, no isTrusted shortcuts), built-HTML grep. Server and Chrome stopped. No project verify skill exists. run-qa.sh: no test command in production.md (exit 127 is the script's "none" placeholder, not a failure). Build passes, 14 routes.
+
+**Overall: FAIL (AC-003, AC-004).**
+
+- FAIL AC-003: Input=[`localStorage.theme="dark"`, load /about at 1280x800], Actual=[inline script adds `dark` at DOMContentLoaded (className ends "variable dark"), then about 35 ms later, at hydration, `<html>` class is rewritten to just `roboto_..._variable`; `document.documentElement.classList.contains('dark')` is false from then on, so the page renders light], Expected=[`dark` class present before and after hydration per spec]. Same with `prefers-color-scheme: dark` emulated and no stored value: false. Cause lead: `<html className={roboto.variable}>` in layout.tsx is re-applied by React and drops the class the script added (suppressHydrationWarning does not preserve it). Origin unknown (I could not build the pre-1dffb80 tree to compare); June QA only inspected the code for this AC.
+- FAIL AC-004: Input=[click/Enter on ThemeToggle to set dark, then reload /], Actual=[`localStorage.theme` is "dark" but class is gone after reload ("persist false"); toggle's aria-label reads "Switch to light mode" while the page is light], Expected=[stored override applied on subsequent loads]. Same root cause as AC-003. Routing: implementation bug, Engineer (1st failure for both; June results passed them).
+- PASS AC-001: sidebar with profile, 7 nav links in order, Online block, on /; screenshot of /about at 1280.
+- PASS AC-002: at 375 the top bar shows "Leon Wu", theme toggle, hamburger; drawer lists all 7 items with profile and Online block (screenshot).
+- PASS AC-005: 0 `<footer>` elements; no bottom bar.
+- PASS AC-006: favicon.ico and apple-touch-icon.png in site/app, no manual link tags (unchanged; build serves them).
+- PASS AC-007, AC-008: unchanged files; no `@import url()`; `@variant dark` present.
+- PASS AC-009 (keyboard): Tab reaches nav, Online links and toggle; Enter on toggle activates; outline 2px solid on focused links. Note: the focused LinkedIn link's outline color was rgb(22,22,22), not the accent; not a rev-1.11 change, spec says "outline using --accent" for focus states; recorded as an observation, not failed (Online links were not previously flagged).
+- PASS AC-010: unchanged Online links (target=_blank, rel=noopener noreferrer).
+- PASS AC-093: 7th item "Slideshow" after Contact, svg icon (section-14 presentation icon, `M2 3h20 ... m7 21 5-5 5 5`), badge "7", identical class string to the other items (sameCls true), in desktop sidebar and mobile drawer; click goes to /slideshow.
+- PASS AC-094 (with MOD-012, qa-mod-slideshow fb2151e): real key `7` from /about opens /slideshow with sessionStorage written then consumed, `document.fullscreenElement` set, aside count 0; Ctrl+7 stays on /about; `2` in a focused input does not navigate; keys 1-6 navigate on normal pages (`2` lands on /projects/multi-agent-system through /projects's 307 redirect); `3` on /slideshow does nothing.
+- PASS AC-095 (headless Chrome only): key 7 and link click both enter full screen, no sidebar, top bar or shell element on /slideshow. Safari, Firefox and iPhone Safari not exercisable here: human script below.
+- PASS AC-099 (headless Chrome): Esc returns to /about from both key and click entry, and to / after a direct visit; sidebar present again (2 aside nodes) and keys work. Browser-own fullscreen exit not testable here (covered by qa-mod-slideshow).
+- PASS AC-124: subtitle "Full-Stack Software Engineer" on one line, scrollWidth 153 = clientWidth 153, height 15 px, at 1280 (desktop sidebar) and 375 (drawer); the other copy of the span is display:none at each width.
+- PASS AC-125: no "Tsan-Yu (Leon) Wu", "Tsan-Yu Wu (Leon)" or "Tsan-Yu Wu" in any of the 14 built HTML files (case-insensitive scan finds only the LinkedIn URL and email address); root description in layout.tsx reads "Portfolio of Leon Wu — full-stack engineer and CS master's student at Northeastern University."
+- PASS AC-126: no `tel:`, "206-677-7544", "2066777544" or any phone-number pattern in any built HTML, including slideshow.html.
+- PASS AC-129: on /projects/multi-agent-system with the dialog open (confirmed open first), real keys 1-7 leave it open and the URL unchanged; after Esc closes it, key 5 navigates to /about.
+- PASS CONV-007: direct load of /slideshow requests no /head.png or /Subject.png (Network events), and none after client-side nav from /contact; 0 aside, 0 header, no decoration div there; key handler inert there; decoration div reappears after Esc.
+- PASS decoration on normal pages: fixed div at 1140,700 120x80 (bottom 20 / right 20), pointer-events none, visible in the /about screenshot; same geometry as the old main::after (z-index 10 is new, harmless). `main::after` content is now none.
+- PASS CV: site/public/Leon_cv.pdf is byte-identical to asset/Leon_cv.pdf, served 200; both the Home and Contact CV links carry `download="Leon_Wu_Resume.pdf"` (attribute-level check; the saved filename itself is a browser behavior a CLI browser cannot show, in the human script).
+- Gold-plating: none found.
+
+### Human script (what headless cannot judge)
+
+1. Safari and Firefox desktop: from /about click Slideshow, then repeat with key 7. Expect slide 1 in full screen, no sidebar or top bar. Esc once returns to /about.
+2. iPhone Safari: open the drawer, tap Slideshow. Expect slide 1 filling the window, no top bar. Close returns to the page.
+3. Click "Download CV" on Home and Contact in Chrome. Expect a saved file named Leon_Wu_Resume.pdf with the new CV.
+4. After the Engineer fix: set dark mode, reload, navigate between pages; expect dark to stay.
+
+### Open items
+
+- [ ] AC-095 needs-signoff — Safari, Firefox, iPhone Safari check by the human (script above) (2026-11-02)
+- [ ] CV download filename needs-signoff — saved name check in a real browser (2026-11-02)
+
+---
+
+### History: 2026-06-28 QA run (superseded)
+
 **Date:** 2026-06-28
 **Workflow:** functional-test (first-time verification)
 **Overall result:** PASS (AC-006 bug fixed inline; all 10 ACs pass or conditionally pass pending browser verification)
