@@ -118,6 +118,27 @@ iPhone Safari (open the site over your network address or the deployed preview):
 - No new regressions. No escalation marker for AC-095 or AC-099 exists; both now pass.
 - Limit: headless Chrome has no macOS full-screen animation, so the race is shown fixed under a deliberately slowed page, not on Leon's real browsers. The human script below remains the confirmation (steps 1 and 2 repeat 5 times).
 
+### QA Run 3 — Integration-fix verification INT-006, INT-007 — 2026-11-02
+
+**Workflow: integration-fix-verify (INT-006 and INT-007, Engineer commit cd54a20).** Chosen because both rows were `FIXED – AWAITING QA`. Fresh `npm run build` (pass), `next start -p 3471`, headless Chrome over CDP, trusted CDP key, mouse and touch input. Server and Chrome stopped afterwards.
+
+**INT-006 PASS** (return path parsed with `new URL`). Method: set `sessionStorage["slideshow-return"]` on `/about`, full load of `/slideshow`, leave by trusted Esc and again by the "Close slideshow" button, read the landing location.
+- Direct-visit result (landed on `/`): `"/\t/evil.com"`, `"/\n/evil.com"`, `"/\r/evil.com"`, `"//evil.com"`, `"/\\evil.com"`, `"https://evil.com/x"`, `"about"`, path as number, missing `t`, `/slideshow`, `/slideshow/`, `/slideshow?x=1`, `/slideshow#h`, `t` 20 s old, bad JSON `{nope`, JSON `null`, JSON string `"/about"`, empty string. Esc and button: all landed on the origin `/`, never on another origin.
+- Normal results: `/about` to `/about`; `/projects/tabvault` to the same; `/about?x=1#h` to `/about` (search and hash dropped); `/slideshow/../about` to `/about`; `/skills` with `fs: true` to `/skills`. Esc and button both, 9 of 9 cases each.
+- AC-095/AC-099 return checks (key 7 and nav click from `/about`, Esc, close button, browser exit, Back) re-run? Only Esc and the close button were driven against the new code path here. The `fullscreenchange` exit and Back paths call the same `leave()`/`readEntry()` code, untouched except `resolveReturnPath`; the entry write (MOD-001 `Sidebar.tsx`, `location.pathname`) is unchanged. I did not re-run the full-screen races (key 7 and nav click, browser exit, Back) in this run: headless Chrome with a live sessionStorage entry was used instead. Limit stated; Leon's sign-off script steps 1, 2 and 6 still cover them.
+- Test-script note: my first pass reported 5 FAILs for normal paths; cause was my script building the `t` timestamps once at start (later cases were over the 10 s limit), not the app. Rerun with fresh timestamps: all pass.
+
+**INT-007 PASS** (stale mouse entry no longer invalidates touch). Touch emulation on, 1280 px window.
+- Baseline (no stale entry): tap right half next, tap left half prev, swipe left next, swipe right prev.
+- Stale mouse entry (CDP `mousePressed` at (640,300), never released): tap right next, tap left prev, swipe left next, swipe right prev, swipe up next, swipe down prev: all behave as baseline, 6 of 6 (before the fix, per the finding, these would be ignored).
+- Multi-touch still invalid: two-finger tap with the stale mouse entry present changed nothing; the next single tap worked.
+- Mouse click alone: advances one slide.
+- Behaviour change confirmed as stated: a touch tap while a mouse press is held advances (touch valid), and releasing the mouse afterwards also advances (mouse gesture not invalidated).
+- Not run against the pre-fix build (no control run); the pass is on the new behaviour against the spec of the finding.
+- Note: a tap at y=400 on slide 1 advanced and also opened a job card via the compatibility click under CDP touch emulation (artifact of the emulation hitting a card; pre-existing, unrelated to this fix).
+
+No regressions found in the checks run. No escalation markers involved.
+
 ### Open items
 - [x] AC-095 bugs-found — passed 2026-11-01 (regression run 2); was: slideshow leaves to Home right after a successful full-screen opening, about 1 run in 4 under the recorder (2026-11-02)
 - [x] AC-099 bugs-found — passed 2026-11-01 (regression run 2); was: same race gives return target "/" and no return to the opening page when it hits (2026-11-02)
@@ -125,3 +146,5 @@ iPhone Safari (open the site over your network address or the deployed preview):
 - [ ] AC-096 needs-signoff — Leon: hint never appears, not even for a frame, during the real full-screen animation (steps 1 and 2) and none on iPhone (2026-11-02)
 - [ ] AC-098 needs-signoff — real touch on iPhone Safari incl. pinch (step 9) (2026-11-02)
 - [ ] AC-104 needs-signoff — Leon's eye on all slide types in both themes (step 5) (2026-11-02)
+- [x] INT-006 integration-fix — passed 2026-11-02 (QA run 3)
+- [x] INT-007 integration-fix — passed 2026-11-02 (QA run 3)

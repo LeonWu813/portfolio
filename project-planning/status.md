@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-slideshow
-mode: integration-fix
+agent: qa-mod-slideshow
+mode: integration-fix-verify
 module: mod-slideshow
 result: success
-next: claude --agent qa-mod-slideshow "integration-fix-verify INT-006" and "integration-fix-verify INT-007" (re-run AC-095/AC-099 return checks and tap/swipe checks)
-timestamp: 2026-11-02T09:00:00Z
+next: Leon verifies INT-006 and INT-007 himself (human script steps 1, 2, 6 for return paths), then claude --agent tech-lead "INT-006 verified: <what you checked>" and "INT-007 verified: <what you checked>"
+timestamp: 2026-11-02T10:00:00Z
 ```
 
 ## PM Updates
