@@ -11,6 +11,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.leon-wu.com"),
   title: "Leon Wu — Software Engineer",
   description:
     "Portfolio of Leon Wu — full-stack engineer and CS master's student at Northeastern University.",

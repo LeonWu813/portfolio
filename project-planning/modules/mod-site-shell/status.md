@@ -2,6 +2,19 @@
 
 ## Engineering Progress
 
+### Engineer integration-fix: INT-001 (part 1), INT-002, INT-010, INT-011 (2026-11-02)
+- INT-001: `metadataBase: new URL("https://www.leon-wu.com")` added to root metadata. Part 2 (og-image.png) not done, not approved.
+- INT-002 (sips, in place, same names/format; `sips -Z N`, `--resampleWidth`, `-s format jpeg -s formatOptions 80`):
+  - head.png 1,834,627 B 1300x1300 -> 93,952 B 256x256 (`sips -Z 256`, RGBA)
+  - Subject.png 1,387,704 B 2410x938 -> 88,804 B 480x187 (`sips --resampleWidth 480`, RGBA)
+  - IMG_6353.jpg 1,460,372 -> 424,752 B; IMG_6591.jpg 1,565,008 -> 549,479 B; IMG_6605.jpg 1,026,073 -> 373,006 B; each 4032x3024 -> 1600x1200 (`sips -Z 1600 -s format jpeg -s formatOptions 80`)
+  - 4D0BDA8A-...JPG 796,301 B 2480x3307 -> 549,484 B 1500x2000 (`sips -Z 2000 -s format jpeg -s formatOptions 80`)
+  - IMG_6875.JPG untouched.
+  - Note: `file` reports an EXIF orientation tag on the three IMG_*.jpg in both the old and new files (unchanged by sips, pixel dims landscape), so browser rendering is as before. Leon to check visually.
+- INT-010: git rm of TopNav.tsx, public/{file,globe,next,vercel,window}.svg, favicon_io/, favicon.ico, apple-touch-icon.png, site.webmanifest, android-chrome-*.png, favicon-16x16.png, favicon-32x32.png. Grep first: no references in app/, components/, data/, next.config.ts; cmp showed public favicon/touch icon identical to app/ ones.
+- INT-011: `inert={!mobileOpen}` on the mobile drawer aside. AC-094 on mobile to be checked by QA.
+- Checks in site/: tsc clean, lint 0 errors (6 pre-existing warnings), build passes.
+
 ### Bugfix (AC-003/AC-004, dark class stripped at hydration)
 - Mode: bugfix. Root cause was NOT the html className: ThemeToggle's useState initializer read document.documentElement.classList during hydration, so client render (dark) differed from server HTML (light) -> React error #418 -> root client re-render discarded the class the inline script had added. layout.tsx unchanged.
 - Fix: ThemeToggle.tsx now uses useSyncExternalStore (server snapshot false, client snapshot reads html.dark, MutationObserver on class). Toggle writes class + localStorage only; label/icon follow the DOM.

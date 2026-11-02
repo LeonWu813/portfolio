@@ -284,6 +284,7 @@ export default function Sidebar() {
         className={`md:hidden fixed top-12 left-0 bottom-0 z-40 w-64 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col gap-4 p-3 transition-transform duration-200 ${mobileOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         aria-label="Site navigation"
+        inert={!mobileOpen}
       >
         <ProfileSection />
         <NavLinks onClick={() => setMobileOpen(false)} />

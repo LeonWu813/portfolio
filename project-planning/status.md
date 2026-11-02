@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: qa-mod-projects-grid
-mode: integration-fix-verify
-module: mod-projects-grid
+agent: engineer-mod-site-shell
+mode: integration-fix
+module: mod-site-shell
 result: success
-next: Leon verifies INT-003, INT-004 and INT-005 himself (VoiceOver on the overlay close button; keys 1-7 with the overlay open), then claude --agent tech-lead "INT-003 verified: <what you checked>" (likewise INT-004, INT-005)
-timestamp: 2026-11-02T12:00:00Z
+next: claude --agent qa-mod-site-shell "integration-fix-verify INT-001 INT-002 INT-010 INT-011"; PM then drops site/components/TopNav.tsx from the MOD-001 Source Path
+timestamp: 2026-11-02T13:00:00Z
 ```
 
 ## PM Updates
