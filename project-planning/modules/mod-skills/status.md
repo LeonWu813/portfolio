@@ -2,6 +2,11 @@
 
 ## Engineering Progress
 
+### 2026-11-01 — spec-update (rev 1.10/1.11)
+- Changed ACs: AC-122 (six groups from skills.md, word for word, one chip per comma item), AC-125 (meta/OG/Twitter descriptions now "Technical skills of Leon Wu: ..."), AC-067/069 (group order and contents); AC-126 verified (no phone/tel in /skills HTML).
+- Files: site/data/skills-data.ts, site/app/skills/page.tsx (descriptions only; intro line unchanged).
+- Self-check (run in site/): lint 0 errors; build pass; built skills.html has no "Tsan-Yu", no phone; description appears 3x. Server Component, data file, canonical unchanged: pass.
+
 ### 2026-06-28 — implementation complete
 
 **Files created / modified:**

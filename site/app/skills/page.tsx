@@ -4,11 +4,11 @@ import { skillGroups } from "@/data/skills-data";
 export const metadata: Metadata = {
   title: "Skills — Leon Wu",
   description:
-    "Technical skills of Tsan-Yu (Leon) Wu — languages, backend, frontend, databases, cloud, DevOps, analytics, and design.",
+      "Technical skills of Leon Wu: languages, backend, frontend, infrastructure and DevOps, and AI and agentic development.",
   openGraph: {
     title: "Skills — Leon Wu",
     description:
-      "Technical skills of Tsan-Yu (Leon) Wu — languages, backend, frontend, cloud, DevOps, and more.",
+      "Technical skills of Leon Wu: languages, backend, frontend, infrastructure and DevOps, and AI and agentic development.",
     type: "website",
     url: "https://www.leon-wu.com/skills",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Skills — Leon Wu",
     description:
-      "Technical skills of Tsan-Yu (Leon) Wu — languages, backend, frontend, cloud, DevOps, and more.",
+      "Technical skills of Leon Wu: languages, backend, frontend, infrastructure and DevOps, and AI and agentic development.",
     images: ["/og-image.png"],
   },
 };
