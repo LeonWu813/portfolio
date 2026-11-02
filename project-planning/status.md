@@ -6,11 +6,11 @@
 
 
 ```
-agent: engineer-mod-about
-mode: spec-update
+agent: qa-mod-about
+mode: verify
 module: mod-about
 result: success
-next: claude --agent qa-mod-about "regression"
+next: AC-125 leftover ("Tsan-Yu (Leon) Wu" in /contact and /skills meta, built HTML) belongs to the contact and skills modules - route to their engineers (or Tech Lead); MOD-008 itself needs nothing further
 timestamp: 2026-11-01T00:00:00Z
 ```
 

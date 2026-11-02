@@ -17,6 +17,30 @@
 
 ## QA Results
 
+**Date:** 2026-11-01
+**Mode:** verify (functional-test) - spec rebuilt against PRD 1.10/1.11; supersedes the 2026-06-28 results below (old AC-062 education and AC-063 "no photo" records are void).
+**Method:** `npm run build` PASS, `next start -p 3917` (stopped after), curl of /about plus parsing of built HTML. Server Component and no-`'use client'` confirmed in source. No project verify skill exists; no human script needed (all ACs judged from HTML text/attributes).
+
+- AC-059: PASS - h1 "About".
+- AC-060: PASS - first paragraph verbatim under Background (normalized text compare).
+- AC-061: PASS - second paragraph verbatim.
+- AC-062: PASS - no education text (Northeastern University / Chengchi / GPA / Expected) in /about main.
+- AC-132: PASS - headings in order About, Meeee, Hobbies, Background. Meeee: three lines word for word with emojis, then IMG_6605.jpg, IMG_6591.jpg. Hobbies: "Ski ⛷️ Snowboard 🏂", IMG_6353.jpg, IMG_6875.JPG, "Bouldering 🧗", 4D0BDA...BB73.JPG. Background: two paragraphs. Exactly five img, all alt="", all five files return 200. No other section/line/photo.
+- AC-064: PASS - no em dash in rendered body copy (em dashes only in title/meta, where the spec mandates "About — Leon Wu").
+- AC-065: PASS - title "About — Leon Wu", og:title/description/url, twitter:card/title/description, canonical and og:url https://www.leon-wu.com/about.
+- AC-125 (on /about): PASS - description, og:description, twitter:description all "About Leon Wu — ..."; no "Tsan-Yu" anywhere in /about HTML (the one hit in the page is the shell's email/LinkedIn URL, which is exempt).
+- AC-126 (on /about): PASS - no tel: link, no 206-677-7544 / 2066777544 in /about HTML. All other built routes also clean of phone; /slideshow does not exist (404) in this build.
+- Layout wrapper `px-8 py-16 max-w-2xl mx-auto w-full` present (plus flex classes). No gold-plating found.
+
+### Open items
+- [ ] AC-125 bugs-found (other modules, not MOD-008) - built HTML still contains "Tsan-Yu (Leon) Wu" in /contact meta descriptions and /skills description (also reflected in /projects and _not-found output); belongs to the contact and skills modules (2026-11-01)
+
+### Integration notes (for Tech Lead)
+- AC-125 route-wide leftover noted above is outside MOD-008; scan-integration not run because the finding was reached by direct grep of .next output.
+
+---
+### Superseded 2026-06-28 record (historical)
+
 **Date:** 2026-06-28
 **Mode:** functional-test
 **Lint:** PASS — `npm run lint` exits with zero errors or warnings
