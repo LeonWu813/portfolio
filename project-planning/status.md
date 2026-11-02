@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: qa-mod-site-shell
-mode: integration-fix-verify
+agent: engineer-mod-site-shell
+mode: integration-fix
 module: mod-site-shell
-result: spec-issue
-next: INT-001, INT-002, INT-011 are QA VERIFIED (need Leon's check). INT-010 is back to APPROVED: GET /apple-touch-icon.png now 404s because Next serves only app/apple-icon.png, not app/apple-touch-icon.png. Coordinator asks Leon: restore site/public/apple-touch-icon.png (no spec change; claude --agent engineer-mod-site-shell "integration-fix INT-010"), or rename to app/apple-icon.png (needs claude --agent pm "change: spec issue from qa-mod-site-shell" for AC-006 wording).
-timestamp: 2026-11-02T14:00:00Z
+result: success
+next: claude --agent qa-mod-site-shell "integration-fix-verify INT-010"
+timestamp: 2026-11-02T00:00:00Z
 ```
 
 ## PM Updates

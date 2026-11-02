@@ -295,3 +295,7 @@ FAIL — one implementation bug found.
 
 **Conditionally passing ACs** (require browser verification): AC-001, AC-002, AC-004, AC-009.
 All other ACs: PASS.
+
+### Engineer integration-fix: INT-010 follow-up (2026-11-02)
+- Restored site/public/apple-touch-icon.png byte-identical to the pre-deletion file (option 1, Leon: "go with recommend"); no spec change. All other INT-010 deletions kept.
+- Verified on `next start`: /apple-touch-icon.png 200, /favicon.ico 200, no asset 404 on any linked page. build, tsc pass; lint 0 errors (6 pre-existing warnings).
