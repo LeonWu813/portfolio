@@ -4,13 +4,13 @@
 
 ## Last Action
 
-agent: doc-sync
-mode: delta
+agent: tech-lead
+mode: on-demand-review
 module: n/a
-result: needs-pm
-next: claude --agent pm (one open question, see the 2026-11-01 rev 1.7-1.10 Sync Report: the QA method for AC-096's refused full-screen request; the Tech Lead review b8395f1 says the Tech Lead supplies it, so route it to claude --agent tech-lead first if PM wants it supplied there, then PM logs it, then Doc-Sync writes it into the MOD-012 spec). Engineering can start on MOD-003 meanwhile only if PM agrees; otherwise after PM. Engineers in the Tech Lead's order (b8395f1): claude --agent engineer-mod-projects-grid "spec-update"; then engineer-mod-project-multi-agent "spec-update", engineer-mod-project-tabvault "spec-update", engineer-mod-project-marketing "spec-update", engineer-mod-project-projectday "spec-update"; then engineer-mod-experience, engineer-mod-about, engineer-mod-skills, engineer-mod-contact, each "spec-update"; then claude --agent engineer-mod-slideshow "implement"; then claude --agent engineer-mod-site-shell "spec-update" last. MOD-002: no code run (spec carries only AC-126). New agents engineer-mod-slideshow and qa-mod-slideshow: if they cannot be called yet, claude --continue reloads them in the same conversation.
-Previous action: pm change (rev 1.10).
-timestamp: 2026-11-01T16:30:00Z
+next: claude --agent pm "change" (log the Tech Lead's AC-096 refused-request QA method from the 2026-11-01 on-demand review: Method 1, Method 2, timing recorder, pass rules, headless limits, human sign-off part); then claude --agent doc-sync to replace the [AMBIGUITY] marker in the MOD-012 spec. The engineering order in the Tech Lead's rev 1.9 review (b8395f1) is unchanged; the Doc-Sync 2026-11-01 Last Action's engineer list still applies once PM agrees.
+result: success
+Previous action: doc-sync delta (rev 1.7-1.10), result needs-pm, one open question (this one).
+timestamp: 2026-11-01T17:00:00Z
 
 ---
 
@@ -582,6 +582,69 @@ QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800
 - **D3, the `alt` field on section images once every record has alt text.**
   - (a) recommended: leave it optional. QA checks the built pages for empty alts (AC-127). Making it required is logged for the Phase 4 integration review.
   - (b): one more short MOD-003 run after the record modules, making `alt` required so a missing alt fails the build.
+
+### Review — 2026-11-01 — on-demand (AC-096 refused full-screen request: QA method)
+
+Trigger: the [AMBIGUITY] marker Doc-Sync left in `modules/mod-slideshow/spec.md` (commit 2998d3f). My rev 1.9 review (b8395f1) said the MOD-012 QA spec states how to make the browser refuse the site's full-screen request; this entry supplies the method so PM can log it and Doc-Sync can copy it into the MOD-012 spec. No pstack findings file covers this question; none is required for this trigger.
+
+**What I ran (observed, not assumed).** A throwaway test page in my scratchpad (not the site) in Chrome 156.0.8078.74 `--headless=new` on this Mac, driven over the Chrome DevTools Protocol from Node v20.20.2 with `--experimental-websocket` (no npm package). The page calls `document.documentElement.requestFullscreen()` from a `keydown` "7" handler and from a link `click` handler, the same as CONV-006 asks of MOD-001.
+- (A) Untrusted `keydown` "7" sent by `Runtime.evaluate` with `userGesture: false`: `document.fullscreenEnabled` true; request rejected `TypeError: Permissions check failed`; `fullscreenerror` fired.
+- (F) Untrusted `link.click()` with `userGesture: false`: same rejection and `fullscreenerror`.
+- (B) The same untrusted `keydown` with `userGesture: true` (how the DevTools console and Puppeteer/Playwright `evaluate` run code): request **succeeded**. So a refusal cannot be made by typing the dispatch straight into the console.
+- (C) Same as (B) but delayed by `setTimeout(..., 6000)`: rejected with `Permissions check failed` (the gesture's activation had expired).
+- (D) Trusted `7` from CDP `Input.dispatchKeyEvent`: request succeeded, `fullscreenchange` fired with `document.fullscreenElement` set. Headless Chrome does enter full screen.
+- (E) Test stub on `Element.prototype.requestFullscreen` (below), then a trusted `7`: `fullscreenEnabled` still true, `fullscreenerror` fired, the request rejected with the stub's error.
+
+**Recommendations** (the method for the MOD-012 QA spec; PM logs it, Doc-Sync copies it):
+
+- **Not valid for the refused-request case.** An iframe without `allow="fullscreen"`, or Firefox `full-screen-api.enabled = false`, makes `document.fullscreenEnabled` false. MOD-001 then writes `fs: false` and makes no request, and per AC-096 the hint does not show at all on a browser without full-screen support. These test the "no full-screen support" path, not a refusal. QA tests top-level pages only (my rev 1.9 note). A Chrome flag or site setting that blocks full screen does not exist in current Chrome.
+
+- **Method 1 (main; a real browser refusal; QA agent, headless Chrome).** Chrome refuses `requestFullscreen()` when no user activation is present. Run the site's own entry handlers with an untrusted event and no user gesture:
+  1. `cd site && npm run build && npm run start` (the build, at `http://localhost:3000`; `npm run dev` runs Strict Mode's extra effects and is not what QA verifies).
+  2. Launch `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9333 --user-data-dir=<scratch dir> --window-size=1280,800 http://localhost:3000/about`. Drive it with a small CDP script kept in QA's scratchpad (Node 20: `node --experimental-websocket <script>`; it uses `fetch` to `http://127.0.0.1:9333/json` and the global `WebSocket`; nothing is installed and nothing ships).
+  3. Install the timing recorder (below) with `Runtime.evaluate`.
+  4. Trigger with `Runtime.evaluate`, **`userGesture: false`** (the default; never `true`), in one expression that sets the start time first:
+     - nav item: `__qa.t0 = performance.now(); document.querySelector('a[href="/slideshow"]').click()`
+     - key 7: `__qa.t0 = performance.now(); document.body.dispatchEvent(new KeyboardEvent('keydown', { key: '7', code: 'Digit7', bubbles: true }))`
+  5. Wait 4 s, then read `__qa` and `sessionStorage.getItem('slideshow-return')`.
+  - Precondition for Engineer (MOD-001): the nav and `7` handlers must not ignore events with `isTrusted === false`. CONV-006 does not ask for such a check; if one is added, this method cannot run and QA falls back to Method 2.
+  - A human can do Method 1 in desktop Chrome's DevTools console only with a delay longer than the activation lifetime (run C): `setTimeout(() => { __qa.t0 = performance.now(); document.querySelector('a[href="/slideshow"]').click(); }, 6000)`, then keep hands off the page for 6 s. Typed without the delay it succeeds (run B) and proves nothing. The 6 s delay is inside CONV-006's 10-second window because MOD-001 writes `t` when the handler runs, not when the command is typed.
+
+- **Method 2 (backup and other browsers; a test-only stub; QA agent or human).** Before the trigger, paste into the DevTools console (or send by CDP `Runtime.evaluate`) on any site page:
+  `Element.prototype.requestFullscreen = function () { queueMicrotask(() => document.dispatchEvent(new Event('fullscreenerror'))); return Promise.reject(new TypeError('QA stub: refused')); };`
+  Then use the **real** Slideshow nav item or the real `7` key (in headless, a trusted CDP `Input.dispatchMouseEvent` or `Input.dispatchKeyEvent`). `fullscreenEnabled` stays true, so MOD-001 writes `fs: true` and the "request" is refused (run E). The stub lives only in that page session: a reload removes it, and it survives the client-side navigation to `/slideshow` that CONV-006 requires. It must never be added to `site/`. It works the same in Safari and Firefox consoles. It tests MOD-012's waiting logic, not the browser's own refusal, which is why Method 1 is the main method in Chrome.
+
+- **Timing recorder** (install before the trigger, same page session; the hint is `button[aria-keyshortcuts="F"]` per my rev 1.9 Q8 ruling):
+  ```js
+  window.__qa = { t0: null, shown: null, fsSeen: false, errors: [] };
+  document.addEventListener('fullscreenchange', () => { if (document.fullscreenElement) __qa.fsSeen = true; });
+  window.addEventListener('unhandledrejection', e => __qa.errors.push(String(e.reason)));
+  (function poll() {
+    const h = document.querySelector('button[aria-keyshortcuts="F"]');
+    if (__qa.t0 !== null && __qa.shown === null && h && h.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
+      __qa.shown = Math.round(performance.now() - __qa.t0);
+    requestAnimationFrame(poll);
+  })();
+  ```
+  `__qa.shown` is the milliseconds from trigger to the first frame the hint is visible at all (any opacity above 0), so a brief flash is also caught. Run each case 3 times and record every value.
+
+- **Pass rules for AC-096 (proposed for the QA spec).**
+  - Refused request (Method 1, nav item and key 7): `__qa.shown` between 1200 and 2000 ms (the ~1.5 s wait plus the up-to-300 ms entrance delay, with tolerance; below 1200 means it did not wait, which would flash on a successful opening; `null` or above 2000 fails), `__qa.fsSeen` false, `document.fullscreenElement` null, the `slideshow-return` key gone after mount, and `__qa.errors` empty (CONV-006: MOD-001 ignores the rejection).
+  - Successful request, headless control: trusted CDP `Input.dispatchKeyEvent` "7" and a trusted `Input.dispatchMouseEvent` click on the nav item (run D shows headless enters full screen): `__qa.fsSeen` true and `__qa.shown` still null after 4 s.
+  - Direct visit control: load `/slideshow` directly (install the recorder with `Page.addScriptToEvaluateOnNewDocument` and set `t0` there): `__qa.shown` at most about 500 ms (entrance delay plus tolerance).
+
+- **Limits of headless Chrome.**
+  - Headless full screen has no macOS full-screen animation, so `fullscreenchange` comes almost at once. The headless "never shows on a successful opening" result therefore does not prove the real case D1 was about: a slow animation on Leon's Mac in desktop Chrome, Safari and Firefox.
+  - Headless cannot show Safari or Firefox behaviour, and cannot show iPhone Safari.
+  - Headless can measure timing; it cannot judge by eye whether a one-frame flash was noticeable. The recorder catches any frame with opacity above 0, so the numeric rule is stricter than the eye.
+
+- **Human sign-off needed for part of AC-096 (in the QA spec as a sign-off script, same as AC-017 and AC-091).**
+  - Successful opening, by eye on the build, in desktop Chrome, Safari and Firefox on Leon's Mac: click the Slideshow nav item, then (separately) press `7`; "Press F for full screen" never appears, not even for a moment, during the full-screen animation. Optional: a screen recording to step through frame by frame.
+  - iPhone Safari: no hint (already a device check in my rev 1.9 review).
+  - The refused-request case needs **no** human sign-off: Method 1 in headless Chrome is a real browser refusal and gives a measured time. Method 2 in Safari or Firefox is optional extra evidence, not required.
+
+**Approved**:
+- AC-096 as written in PRD rev 1.10 is testable with the method above; no PRD text change is needed. Everything Method 1 and Method 2 need is already on this machine as `setup.md` describes it (Chrome 156, Node 20.20.2, `npm run build` and `npm run start`); no new dependency and no file in `site/`.
 
 ---
 
