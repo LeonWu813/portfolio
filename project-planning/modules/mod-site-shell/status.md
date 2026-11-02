@@ -71,12 +71,34 @@ Method: `npm run build`, `next start` on port 3123, headless Chrome driven over 
 - PASS CV: site/public/Leon_cv.pdf is byte-identical to asset/Leon_cv.pdf, served 200; both the Home and Contact CV links carry `download="Leon_Wu_Resume.pdf"` (attribute-level check; the saved filename itself is a browser behavior a CLI browser cannot show, in the human script).
 - Gold-plating: none found.
 
+### QA Run 2 — Regression — 2026-11-02 (engineer fix c2ef6af). Workflow: regression (Engineer bugfix entry newer than the failing rev-1.11 run)
+
+Method: `npm run build` (14 routes), `next start` on port 3157, headless Chrome over CDP with real key events, built-HTML scan. Server and Chrome stopped afterwards. run-qa.sh: no test command in production.md (same as run 1).
+
+**Overall: PASS. REGRESSION PASS for AC-003 and AC-004; no new regressions.**
+
+- REGRESSION PASS AC-003: original failure scenario resolved. `localStorage.theme="dark"` on /, /about, /projects/multi-agent-system, /slideshow, /experience: `dark` on `<html>` from about 10-16 ms (before first paint at 36-258 ms), never removed after hydration, body bg rgb(22,22,22). `prefers-color-scheme: dark` emulated with no stored value on /about and /slideshow: dark, same timing. Stored "light" with system dark: stays light (correct). No stored value, light system: light (bg rgb(255,255,255)). Class history shows a single add before DCL and no later removal.
+- REGRESSION PASS AC-004: toggle (click) light to dark: class and `localStorage.theme="dark"`, aria-label "Switch to light mode"; reload keeps dark; navigate to /projects/siteplus keeps dark; toggle back: `theme="light"`, reload stays light. Enter key on the focused toggle also switches to dark and the reload keeps it. At 375 px, dark persists and the label is correct. Toggle count 2 (sidebar and mobile bar), as before.
+- Console: 0 errors, 0 warnings, 0 uncaught exceptions on every load above (no React #418 / hydration error). Both ACs: closes the earlier FAIL.
+- Light flash: headless evidence only. The `dark` class is applied by the blocking head script about 10 ms in, 25 to 250 ms before the first paint, so no light frame is painted in these runs. Real-device flash is not observable here.
+- LinkedIn focus outline (engineer's claim confirmed): with real keyboard Tab, every focused sidebar link (7 nav, LinkedIn, GitHub, email) and the toggle is `:focus-visible` with `outline: solid 2px rgb(15,98,254)` = `--accent` #0f62fe. The rgb(22,22,22) seen in run 1 came from programmatic focus(). AC-009 observation withdrawn.
+- PASS (re-run) AC-093 / nav item 7: 7 links in order (Home, Projects, Experience, Skills, About, Contact, Slideshow with badge 7) in sidebar and drawer.
+- PASS (re-run) AC-094 key 7: from /about opens /slideshow with fullscreenElement set, 0 aside, 0 header; Esc returns to /about; Ctrl+7 stays; key 2 goes to /projects(/multi-agent-system redirect); key 3 on /slideshow does nothing.
+- PASS (re-run) CONV-007: direct /slideshow load has 0 aside, 0 header, and no head.png or Subject.png resource entries.
+- PASS (re-run) AC-124: subtitle scrollWidth 153 = clientWidth 153, height 15, at 1280 and 375 (drawer open).
+- PASS (re-run) AC-125: no "Tsan-Yu (Leon) Wu", "Tsan-Yu Wu (Leon)" or "Tsan-Yu Wu" in any of the 14 built HTML files (only the LinkedIn URL and email contain the substring tsan-yu).
+- PASS (re-run) AC-126: no `tel:`, 206-677-7544 or 2066777544 in any built HTML.
+- PASS (re-run) AC-129: overlay opened on /projects/multi-agent-system (dialog[open] confirmed); keys 1 to 7 leave it open, URL unchanged; after Esc, key 5 goes to /about.
+- PASS (re-run) CV: public/Leon_cv.pdf byte-identical to asset/Leon_cv.pdf.
+- Not re-run (unchanged files, run 1 stands): AC-001, AC-002, AC-005 to AC-008, AC-010, AC-095/AC-099 headless detail, decoration geometry.
+- Gold-plating: none (diff is ThemeToggle.tsx only).
+
 ### Human script (what headless cannot judge)
 
 1. Safari and Firefox desktop: from /about click Slideshow, then repeat with key 7. Expect slide 1 in full screen, no sidebar or top bar. Esc once returns to /about.
 2. iPhone Safari: open the drawer, tap Slideshow. Expect slide 1 filling the window, no top bar. Close returns to the page.
 3. Click "Download CV" on Home and Contact in Chrome. Expect a saved file named Leon_Wu_Resume.pdf with the new CV.
-4. After the Engineer fix: set dark mode, reload, navigate between pages; expect dark to stay.
+4. (Headless-verified in run 2; optional real-browser confirmation) Set dark mode, reload, navigate between pages; expect dark to stay and no light flash on reload.
 
 ### Open items
 

@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-site-shell
-mode: bugfix
+agent: qa-mod-site-shell
+mode: regression
 module: mod-site-shell
 result: success
-next: claude --agent qa-mod-site-shell "regression"
-timestamp: 2026-11-02T01:00:00Z
+next: Remaining human sign-offs for mod-site-shell are listed under Open items in modules/mod-site-shell/status.md (AC-095 Safari/Firefox/iPhone, CV download filename). Otherwise the coordinator runs the next step of the phase flow (after all modules pass: /pstack:thermos, then claude --agent tech-lead "phase-end integration review").
+timestamp: 2026-11-02T02:00:00Z
 ```
 
 ## PM Updates
