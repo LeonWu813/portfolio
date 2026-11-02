@@ -1,6 +1,6 @@
 # Slideshow UX: interaction and flow (MOD-012, /slideshow)
 
-Written by: ux-designer, 2026-11-01. Intended path: `project-planning/design/ux-team/slideshow-ux.md`.
+Written by: ux-designer, 2026-11-01. Revision 1 (same day) after Design Lead review 1; see the changelog at the end. Intended path: `project-planning/design/ux-team/slideshow-ux.md`.
 Inputs: `slideshow-brief.md` (with the Tech Lead's 13 limits), `slideshow-research.md`, `project-planning/prd.md` sections 2, 3, 4.11 and 6 (Revision 1.8), `asset/content/interview-deck.md` at HEAD (last changed in e479e22), the Tech Lead change review of 2026-11-01 in `status.md` (CONV-006, CONV-007, Q2 to Q5, T4), `site/components/Sidebar.tsx` (existing focus style).
 
 Advisory only. This document does not change any slide text, the slides or their order, the controls or the acceptance criteria. Where the PRD is silent, I give a recommendation in section 13 (Open questions) instead of deciding. "Research N.N" points to a section of `slideshow-research.md`. "Limit N" is the Tech Lead's numbered limit in the brief.
@@ -184,7 +184,7 @@ Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close butt
 
 ### 4.3 Focus appearance
 
-- **Cards and close button:** the site's existing focus style, a 2 px `--accent` outline (`Sidebar.tsx` uses `focus-visible:outline-2 focus-visible:outline-[var(--accent)]`), plus a 2 px outward offset so the ring does not merge with a card edge. `--accent` on `--bg` is 5.0:1 light and 7.68:1 dark (research 5.2). Shown only for `:focus-visible`.
+- **Cards and close button:** the site's existing focus style, a 2 px `--accent` outline (`Sidebar.tsx` uses `focus-visible:outline-2 focus-visible:outline-[var(--accent)]`), with an outward offset of **3 px on cards** (they carry a thick edge, so the ring needs more room to stay separate) and **2 px on the close button**. These match UI 10 and the motion tokens. `--accent` on `--bg` is 5.0:1 light and 7.68:1 dark (research 5.2). Shown only for `:focus-visible`.
 - **Card focus rings scale with nothing:** keep the outline at 2 CSS px (not frame units) so it never drops below 2 px on a phone frame (WCAG 2.4.13 perimeter, research 4.4).
 - **The start-link highlight (AC-115) must not look like focus** (research 4.4). A highlighted card that also has focus shows both, side by side: the highlight's own form plus the accent ring outside it. The UI designer picks the highlight form; the UX requirements are: not an accent outline, not color alone, visible in both themes on a compressed video call.
 
@@ -210,7 +210,7 @@ Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close butt
 - Only when `origin` = direct (a typed or shared link, a start link, or a reload; CONV-006, AC-096). Never when opened from the site.
 - It can only ever show on slide 1, because the first interaction hides it.
 - On browsers where `document.fullscreenEnabled` is false (iPhone Safari), the PRD still shows it; see Q2.
-- Render it only after mount, once CONV-006's check has run, so it never flashes for a visitor who came from the site. The motion designer owns its entrance; under reduced motion it appears instantly.
+- Render it only after mount, once CONV-006's check has run, so it never flashes for a visitor who came from the site. The motion designer owns its entrance; under reduced motion it appears instantly, without the entrance delay. Its exit is always instant (motion 2.2).
 
 ### 6.2 When the hint hides (for good, in that session)
 
@@ -221,7 +221,12 @@ Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close butt
 ### 6.3 Where it shows
 
 - **Bottom-left corner of the screen**, mirroring the close button: same inset rule (16 px, or 8 px under 500 px; plus safe-area insets), vertically centered on the close button's 44 px row. This keeps it off the top center and the top edge (limit 5), and away from the close button.
-- Sized in CSS px like the close button, not in frame units, so it stays legible on a phone: 14 px text, 500 weight, `--text-muted`, with "F" in a key chip matching the card key chips (research 5.4: the sidebar shortcut badge). Single line; at 375 px wide it fits ("Press F for full screen" is about 150 px at 14 px).
+- **Placed** relative to the screen (bottom-left corner), but **sized from the frame height** with a 14 px floor, so it meets limit 7 and AC-102's 2.4 fh minimum at every size and stays legible on a phone:
+  - text: `font-size: max(14px, calc(min(100dvh, 100vw * 9 / 16) * 0.028))`. That is 2.8 fh: 30 px at 1920x1080, 22.7 px at 1440x900, 20 px at 1280x720, and the 14 px floor on a 375x667 phone (where 2.8 fh would be 5.9 px);
+  - the "F" key chip about 1.6x the text size, gaps about 0.4x the text size (UI 6.8 sets the exact values);
+  - 500 weight, `--text-muted`, "F" in a key chip matching the card key chips (research 5.4: the sidebar shortcut badge);
+  - single line. At 1920x1080 it is about 330 px wide, inside slide 1's reserved 30 fw x 15 fh zone (576x162 px). At 375 px wide it is about 150 px.
+- Only the close button stays fixed in CSS px (limit 8 exempts only the close button).
 - Slide 1 keeps its bottom-left 30 fw x 15 fh free of content, because on a 16:9 window the hint overlaps the frame's corner there. Slide 1 has no position cue, so nothing else competes for that corner.
 - Not interactive in the current PRD: a click on it is a click on the slide (Next). See Q3.
 
@@ -346,7 +351,7 @@ Do not move focus to the heading on slide change (research 4.1: the title would 
 ## 10. Motion (hand-off to the motion designer)
 
 - Slide changes: instant, no transition (limit 1). Card activation, menu return and Home are slide changes, so also instant.
-- Allowed to move: the F hint (entrance, exit), the menu hint (show, hide), focus ring (appearance). All must collapse to instant under `prefers-reduced-motion: reduce`.
+- Allowed to move: the F hint (entrance only; its exit is instant, per the motion doc), the menu hint (show, hide), focus ring (appearance). All must collapse to instant under `prefers-reduced-motion: reduce`.
 - Card hover/pressed fill changes: instant (they are not focus or hints; keep them out of motion scope).
 
 ---
@@ -404,3 +409,13 @@ Flags already raised by the researcher, not mine to decide: the "⇄" glyph in A
 - **Motion designer:** section 10.
 - **Tech Lead (via the coordinator):** pointer handling by `pointerType` (3.3), `touch-action` / `overscroll-behavior` (3.3), number keys by `key` and `code` (3.1), skip `focus()` when the layer already has focus (9.2).
 - **PM (via the coordinator):** Q2, Q3, Q5, Q6, Q7, Q8, Q9, Q10, Q11 wording; the limit-9 AC sentence (8.3).
+
+---
+
+## Revision 1 (2026-11-01, after Design Lead review 1)
+
+- **Issue 6 / X1, focus offset (4.3):** card focus ring offset changed from 2 px to 3 px; the close button keeps 2 px. Now matches UI 10 and the motion tokens.
+- **Issue 1 / X2, F hint size (6.3):** the hint is no longer fixed at 14 px. It stays anchored to the screen's bottom-left corner, but its text is sized from the frame height, `max(14px, calc(min(100dvh, 100vw * 9 / 16) * 0.028))`, with the key chip about 1.6x and gaps about 0.4x the text. This meets limit 7 and AC-102. The width check against slide 1's reserved zone is added. The close button is now the only element fixed in CSS px.
+- **X7, F hint exit (6.1, 10):** aligned with the motion doc. The hint's exit is instant; only its entrance may animate, and under reduced motion the entrance and its delay go away too.
+- No other contradiction in the review involves this document: X5 (A2 reading order) is a fix to the mock, and UX 7's order stands. Open questions Q1 to Q13 are unchanged. The Design Lead's consolidated list (review 1 section 11) suggests merging Q2 and Q7 into one rule: show the hint whenever the slideshow is windowed and full screen is available. I agree with that merge.
+

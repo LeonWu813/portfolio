@@ -1,12 +1,12 @@
 # Slideshow UI: visual design (MOD-012, /slideshow)
 
-Written by: ui-designer, 2026-11-01. Intended path: `project-planning/design/ux-team/slideshow-ui.md`.
+Written by: ui-designer, 2026-11-01. Revision 1 (after Design Lead review 1), same day; changelog in section 14. Intended path: `project-planning/design/ux-team/slideshow-ui.md`.
 Inputs: `slideshow-brief.md` (13 Tech Lead limits), `slideshow-research.md`, `slideshow-ux.md`, `project-planning/prd.md` sections 2, 3 and 4.11 (Revision 1.8), `asset/content/interview-deck.md` at HEAD, `site/app/globals.css`.
 Companion files: `slideshow-mock.html` (every slide of the deck, real text, both themes) and `slideshow-mock-<type>-<light|dark>.png` (1600x900, headless Chrome).
 
 Advisory only. No slide text, slide, order, control or acceptance criterion changes here. Where I needed a decision the PRD does not make, it is in section 12 with a recommendation.
 
-Units: **fh** = 1% of frame height, **fw** = 1% of frame width. In CSS the frame is a size container (`container-type: size`), so `1cqh` = 1 fh and `1cqw` = 1 fw inside it. On the 1600x900 artboard 1 fh = 9 px. Everything inside the frame is in fh (limit 7); the close button and F hint are in CSS px (limit 8).
+Units: **fh** = 1% of frame height, **fw** = 1% of frame width. In CSS the frame is a size container (`container-type: size`), so `1cqh` = 1 fh and `1cqw` = 1 fw inside it. On the 1600x900 artboard 1 fh = 9 px. Everything inside the frame is in fh (limit 7). The close button is in CSS px (limit 8). The F hint is screen-anchored but sized from the frame height with a 14 px floor (6.8).
 
 ---
 
@@ -46,7 +46,7 @@ All sizes in fh. px columns: 1920x1080 / 1280x720 / 375x211 (upright phone, T4).
 |---|---|---|---|---|---|---|---|---|
 | Hero | 12 | 700 | 1.05 | -0.02em | `--text` | 130 / 86 / 25 | 7 (title) | Slide 1 "Hi, I'm Leon" |
 | Display number | 13 | 700, `tabular-nums` | 1.0 | -0.02em | `--accent` | 140 / 94 / 27 | 2.4 | Big numbers on 2a, 2b, A1, B1, C1 |
-| Title | 7.5 | 700 | 1.12 | -0.015em | `--text` | 81 / 54 / 16 | 7 | Every slide title (`h1`), `text-wrap: balance`, max 2 lines |
+| Title | 7.5 | 700 | 1.12 | -0.015em | `--text` | 81 / 54 / 16 | 7 | Every slide title (`h1`), full content width, `text-wrap: balance`, max 2 lines |
 | Body | 5.6 | 400 | 1.3 | 0 | `--text` | 60 / 40 / 12 | 4.2 | Bullets, Titles lines (slide 1), A5 Roles |
 | Role | 5.6 | 500 | 1.3 | 0 | `--text` | 60 / 40 / 12 | 4.2 | "Role" line on A3, B3, C3, D2 |
 | Subtitle | 4.2 | 400 | 1.3 | 0 | `--text-muted` | 45 / 30 / 9 | 2.4 | Job slide Subtitle |
@@ -56,7 +56,7 @@ All sizes in fh. px columns: 1920x1080 / 1280x720 / 375x211 (upright phone, T4).
 
 Why these numbers:
 - Title 7.5 fh = 40.5 pt on a PowerPoint slide: top of Leon's guide (32-40 pt) and above the 7% floor with margin for rounding.
-- Body 5.6 fh = 30 pt: above the guide's 24 pt (4.4 fh) and the research's 4.4 fh video floor. A 1080p share in a 960x540 call tile shows bullets at 30 px. Every deck title still fits on one line at this size on the 16:9 artboard (checked by the mock's audit; B8 wraps to 2 lines only on the smallest frames).
+- Body 5.6 fh = 30 pt: above the guide's 24 pt (4.4 fh) and the research's 4.4 fh video floor. A 1080p share in a 960x540 call tile shows bullets at 30 px. Titles may use the full content width (157.78 fh, no max-width). At that width every deck title fits on one line at 1920x1080, 1600x900, 1440x900, 1280x720, 960x540, 667x375 and 500x889 (mock audit, Revision 1). `text-wrap: balance` stays on, so a title that ever wraps splits evenly.
 - Label 3.6 fh = 19.4 pt: above the research's 3.3 fh "interviewer reads it" floor.
 - Meta 2.8 fh: above the 2.4 floor with rounding margin; reserved for Leon-facing text (research 3.2).
 - Display 13 fh: the widest number ("1,500+") still fits in a 4-column cell; all numbers on a slide are the same size (research 3.3).
@@ -110,9 +110,17 @@ Tick (6 x 0.8 fh, `--accent`, square ends), 3 fh gap, `h1` title (Title style). 
 
 ### 6.2 Bullets
 `ul` with no native markers; each `li` is a 2-column grid (4.4 fh marker column, text). Marker: 1.3 fh solid `--accent` square, top aligned to the first line's x-height (`margin-top: calc(var(--fs-body) * .65 - .65cqh)`), so wrapped lines hang cleanly. 3 fh between bullets. Bullet boxes shrink to their text (`align-items: flex-start`) so long bullet boxes never cross the close zone.
+Wrapping: `text-wrap: pretty` on every bullet; `text-wrap: balance` on bullets in the narrow text column beside a screenshot (7.7, 7.10), which removes the one-word last lines ("App / Store", "re-checks / weekly"). Hyphenated compounds never break at the hyphen: wrap each word containing "-" in a `white-space: nowrap` span (markup only, the text is unchanged).
 
-### 6.3 Chips (stack chips, B6 flow chips)
-One chip style for the whole deck (research 5.4, Leon's "one consistent look"): Label 3.6 fh, `--text`, `--surface` fill, `--ss-line` border in `--border`, `--radius-sm`, padding 1.3 x 2.2 fh, gaps 2 fh, `white-space: nowrap`. B6 flow chips use the same chip at 500 weight with a `--ss-edge` border because they are part of a diagram (3:1 graphic).
+### 6.3 Chips: two named roles
+The deck has exactly two chip-like styles, each with one job:
+
+| Role | Where | Weight | Edge | Padding | Why it differs |
+|---|---|---|---|---|---|
+| **Tag chip** | Stack chips on A3, B3, C3, D2 | 400 | `--ss-line` in `--border` (decorative) | 1.3 x 2.2 fh | A list of labels, like the site's project tag chip. The text identifies it; the edge is decoration. |
+| **Diagram node** | A2 boxes, B6 flow chips | 500 | `--ss-line` in `--ss-edge` (3:1 graphic) | 1.6 x 2.6 fh (B6); fixed width, 10 fh tall (A2) | A step in a process; its edge is part of a diagram the viewer must read, so it meets 1.4.11. |
+
+Shared by both: Label 3.6 fh, `--text`, `--surface` fill, `--radius-sm`, `white-space: nowrap`, 2 fh gaps.
 
 ### 6.4 Key chip
 The sidebar shortcut badge, rebuilt in frame units (limit 13): min 4.4 x 4.4 fh, Meta 2.8 fh 500 `--text-muted`, `--ss-line` border in `--ss-edge`, `--bg` fill, `--radius-sm`, tabular figures. Used on menu cards and timeline work cards. The F hint uses the same look in px (6.8).
@@ -130,8 +138,12 @@ Frame bottom-left: left 10 fh, bottom 5.2 fh. "ProjectDay" (Meta, 500, `--text-m
 - Focus-visible: 2 px `--accent` outline, 2 px offset (same as site focus, plus offset).
 - No visible label, no tooltip (UX 5).
 
-### 6.8 "Press F for full screen" hint (screen-anchored, CSS px; UX 6.3)
-`position: fixed; left: 16px; bottom: 16px; height: 44px` (centred on the close button's row). "Press", key chip "F", "for full screen", 14 px Roboto 500 `--text-muted` (7.81 / 10.59:1), 6 px gaps. Key chip: 20 x 20 px, 12 px 500, 1 px `--ss-edge` border, 2 px radius (the sidebar badge at its original size). Not focusable today (see UX Q3). Motion: motion designer.
+### 6.8 "Press F for full screen" hint (screen-anchored, sized from the frame; UX 6.3, limit 7)
+- Position: `position: fixed; left: 16px; bottom: 16px` (8 px under a 500 px short side, plus safe-area insets), `min-height: 44px`, contents vertically centred. Off the top centre and top edge (limit 5).
+- Size: `font-size: max(14px, calc(min(100dvh, 100vw * 9 / 16) * 0.028))`, i.e. 2.8% of the frame height (Meta, above the 2.4% floor of AC-102) with a 14 px floor on tiny frames. Results: 30.2 px at 1920x1080, 25.2 px at 1600x900, 22.7 px at 1440x900, 20.2 px at 1280x720, 14 px on a 375x211 phone frame.
+- Everything else scales with it in `em`: key chip 1.6em square, border `max(1px, .08em)` in `--ss-edge`, radius .15em; gaps .4em. Text "Press", key "F", "for full screen", Roboto 500 `--text-muted` (7.81 / 10.59:1).
+- Fit: at 1920x1080 the hint is about 340 x 48 px, inside slide 1's reserved 30 fw x 15 fh zone (576 x 162 px); the mock audit confirms slide 1 keeps that zone empty.
+- Not focusable today (UX Q3). Motion: motion designer.
 
 ## 7. Per-slide-type layouts
 
@@ -159,23 +171,24 @@ Positions in fh from the frame's top-left at the 16:9 artboard. "cols" are grid 
 - No position cue (PRD Look).
 
 ### 7.4 Photo slide (3) — PNG `photo`
-- Title block; 6 fh gap; two figures side by side, left-aligned, 4 fh apart.
-- Each photo box 39 x 52 fh (exactly 0.75:1, limit 10), `object-fit: contain`, `--radius`, 1 px-or-0.15 fh `--border` edge. Caption under it (Label 3.6 fh, `--text-muted`), 2 fh gap.
-- The right ~70 fh stays empty on purpose: the title runs full width above, and enlarging the photos would push captions into the bottom band. See Q5 for an alternative.
+- Title block; 4 fh gap; two figures side by side, left-aligned, 4 fh apart.
+- Each photo box 48 x 64 fh (exactly 0.75:1, limit 10), `object-fit: contain`, `--radius`, thin `--border` edge. Photos run from about 24.5 to 88.5 fh.
+- Captions (Label 3.6 fh, `--text-muted`) sit 2 fh under each photo, in the bottom band (about 90.5 to 95 fh). Slide 3 has no position cue, so the band's left side is free; the captions stay well left of the close zone.
+- The photos are about 23% larger in area than in the first version. The right ~55 fh stays open, because two portrait photos cannot fill a landscape frame without cropping (limit 10) or breaking the title-on-top rule; see Q5.
 
 ### 7.5 Menu (M) — PNG `menu`, `menu-states`
 - Title block ("Pick a project" or "Pick another project"; same position, so the swap never shifts layout).
-- 6 fh gap; 4 equal cards in one row (each 3 cols), min height 38 fh, padding 4 / 3 / 3 fh. In each card: key chip (top-left, not stretched), 4 fh gap, name (Name 4.6 fh 700), 2 fh gap, one-liner (Label 3.6 fh `--text-muted`). Keys 1-4 left to right match the keyboard's number row.
-- Menu hint slot: 9 fh tall, 2 fh under the cards, always reserved (UX 2.3). Hint: pill, `--surface` fill, `--ss-line` `--border` edge, Label 3.6 fh 500 `--text`, centred on the card row.
+- 6 fh gap; 4 equal cards in one row (each 3 cols), height = content (about 41 fh with the longest one-liner at 1600x900; no min-height), padding 3 / 3 / 4 fh. In each card: key chip (top-left, not stretched), 3 fh gap, name (Name 4.6 fh 700) in a block that always reserves **two lines** (`min-height: calc(2 * 4.6cqh * 1.15)` ≈ 10.6 fh, top-aligned), 2 fh gap, one-liner (Label 3.6 fh `--text-muted`). All four one-liners therefore start on one shared line. Keys 1-4 left to right match the keyboard's number row.
+- Menu hint slot: 9 fh tall, 2 fh under the cards (it moves up with the shorter cards), always reserved (UX 2.3). Hint: pill, `--surface` fill, `--ss-line` `--border` edge, Label 3.6 fh 500 `--text`, centred on the card row.
 - Footer: plain text, Meta 2.8 fh `--text-muted`, at the cue position (left 10 fh, bottom 5.2 fh), selectable (`user-select: text`), max width stops 15 fh before the frame's right edge so it never meets the close zone (on the artboard it ends at about x = 1240 of 1600 px).
-- `menu-states` shows, for review only: card 1 focus-visible, card 3 start-link highlighted, card 4 hovered, the hint visible, close button focus-visible.
+- `menu-states` shows, for review only: the title "Pick another project", card 1 focus-visible, card 3 start-link highlighted, card 4 hovered, the hint visible, close button focus-visible. (In the product the highlight is gone by the time the title says "Pick another project" if that project was shown, UX Q5; the mock combines states only to show them together.)
 
 ### 7.6 Project numbers cover (A1, B1, C1) — PNG `cover` (B1, widest number)
 Same as 7.3 without the subtitle; the project name is the title (7.5 fh), so the numbers (13 fh) are the biggest thing on the slide (research 3.3). A1's second label is "-agent dev team" exactly as in the source; it sits under "6" so it reads "6 -agent dev team" (see Q4). Position cue bottom-left.
 
 ### 7.7 Intro with screenshot (B2, C2, D1) — PNG `intro-shot` (B2), `intro-shot-1` (C2)
 - Title block; 6 fh gap; split: text column 5 cols (≈61 fh) left, 6 fh gap (2 gutters), visual takes the rest (≈ 90 fh) right.
-- Bullets (6.2) top-aligned in the text column.
+- Bullets (6.2, balanced wrapping) top-aligned in the text column. I tried a 6/6 split for the landscape screenshots (C2, C5, D1) as the review suggested: the image lost about 13% of its width and the bullets still wrapped, so I kept 5/7 and fixed the widows with wrapping rules instead.
 - Visual vertically centred in the remaining height, full column width, `object-fit: contain` at the file's own ratio (C2 1.92:1, D1 1.65:1, B2 ≈1.5:1). Image frame: `--radius`, thin `--border` edge, `--surface` behind (shows only if the image fails, UX 7).
 - B2 in the mock is drawn from the three single PNGs (Home, Gyms, Route) inside a 1.5:1 box, as a stand-in for the MOD-011 three-screen file, which does not exist yet. The real slide uses the single image file.
 
@@ -212,12 +225,14 @@ HTML boxes plus inline SVG arrows; no image file (limit 10). Vertically centred 
 | Shipped | 18.78 | 139 |
 | total | 157.78 | = content width |
 
-- Boxes: 10 fh tall, Label 3.6 fh 500 `--text`, `--surface` fill, `--ss-line` `--ss-edge` border, `--radius-sm`. "Shipped" has an `--accent` border (the outcome).
+- Boxes: 10 fh tall, Label 3.6 fh 500 `--text`, `--surface` fill, `--ss-line` `--ss-edge` border, `--radius-sm` (diagram node, 6.3). All six boxes have the same grey edge.
+- "Shipped" (the outcome) is marked by **700 weight and a drawn check mark** (3 fh, `--accent`, before the word), never by an accent outline, so it cannot read as keyboard focus. Revision 1 widths: Requirements 26, PM 11, Doc-Sync 18.5, Engineer ⇄ QA 30, Tech Lead 20, Shipped 22.28 fh (arrows unchanged at 6 fh; total 157.78).
 - Arrows: SVG 6 x 3 fh, line plus open arrowhead, stroke 0.3 fh `--text-muted` (7.81 / 10.59:1), round caps.
 - "Engineer ⇄ QA": "Engineer", a drawn bidirectional arrow, "QA". The arrow is an SVG 5 x 3.2 fh of two parallel strokes (upper pointing right, lower pointing left, each with a half arrowhead, like the U+21C4 glyph), `currentColor`. The visible words are `aria-hidden`; a visually hidden span carries the exact text "Engineer ⇄ QA", so the DOM text and the list for screen readers stay word for word (AC-100) without depending on Roboto's math subset (research 5.3). See 12 Q1.
-- Bar "I approve every handoff": full content width, 7 fh tall, above the boxes, `--text` fill with `--bg` text (the site's inverted "active" style; 18.10 / 16.45:1), Label 3.6 fh 500, centred, with a drawn check mark (3 fh, decorative). Five dashed `--ss-line` `--text-muted` drop lines run from the bar down to the middle of each of the five arrows: the human gate sits on every handoff. This is the "human in charge" in the title, drawn.
+- Approval bar "I approve every handoff": full content width, 7 fh tall, at the top of the diagram. Revision 1 makes it light: `--surface` fill, `--ss-line` `--border` edge, a 0.8 fh `--accent` left edge (the pull-quote motif), label Label 3.6 fh 500 `--text` with a drawn 3 fh `--accent` check mark. In dark mode it is a `#262626` band, one step above the background, not a white slab. Five dashed `--ss-line` `--text-muted` drop lines run from the bar's bottom edge to the middle of each of the five arrows: the human gate on every handoff.
 - Retrospective loop: a U-shaped `--ss-line` `--text-muted` line from under Tech Lead's centre down 6 fh, left, and up into PM's centre with an open arrowhead (`--radius` corners). The line "Retrospective feeds improvements back into the system" sits 2 fh under it, centred on the loop, Label 3.6 fh `--text-muted`.
-- Screen-reader structure per UX 7: `ol` of the six boxes, then the retrospective `p`, then the bar text. In the mock the bar comes first in the DOM; engineers should place it last in DOM order and position it on top with CSS order or grid (reading order: list, retrospective, bar).
+- Geometry: the diagram is a 38 fh tall, positioned box; its parts sit at fixed tops (bar 0, drop lines 7 to 16.6, boxes 13 to 23, loop 23 to 29, retrospective line 31 fh), so DOM order is free.
+- DOM / reading order (UX 7), as the mock now has it: `ol` of the six boxes (arrows `aria-hidden`), the retrospective `p`, the drop lines (`aria-hidden`), then the bar last. The bar is drawn on top by position only.
 
 ### 7.13 Flow chips (B6) — PNG `flow`
 Title block; 6 fh gap; `ol` row of the four chips (6.3, 500 weight, padding 1.6 x 2.6 fh, `--ss-edge` border) joined by 7 x 3 fh SVG arrows (same arrow as A2); 6 fh gap; the four bullets at full width. The flow row reads as one element (research 3.2).
@@ -235,7 +250,7 @@ All screenshots are light-themed. In dark mode they sit on `--bg` (`#161616`) wi
 
 ## 9. Iconography
 
-One drawn set, inline SVG, `currentColor`, round caps and joins, stroke ≈ 12% of the icon box: close X, chevron (Details), check (A2 bar), arrow (A2, B6), bidirectional arrow (A2), loop arrowhead (A2). No icon font, no files.
+One drawn set, inline SVG, `currentColor`, round caps and joins, stroke ≈ 12% of the icon box: close X, chevron (Details), check (A2 bar and "Shipped"), arrow (A2, B6), bidirectional arrow (A2), loop arrowhead (A2). No icon font, no files.
 
 ## 10. States: focus ring vs `?project=` highlight
 
@@ -261,11 +276,11 @@ Why it works: focus is blue, thin and outside; highlight is black (white in dark
 | `--text-muted` on `--bg` | 7.81 | 10.59 | subtitle, labels, captions, cue, footer, F hint, close X | 4.5 ✓ |
 | `--text-muted` on `--surface` | 7.10 | 8.86 | card one-liners, timeline org | 4.5 ✓ |
 | `--text-muted` on `--hover` | 6.38 | 7.40 | hovered card one-liner | 4.5 ✓ |
-| `--accent` on `--bg` | 5.00 | 7.68 | big numbers (large), focus ring, bullet squares, tick, nodes | 3 (large/graphic) ✓, also 4.5 ✓ |
+| `--accent` on `--bg` or `--surface` | 5.00 / 4.55 | 7.68 / 6.43 | big numbers (large), focus ring, bullet squares, tick, nodes, A2 check marks and bar edge (graphics) | 3 (large/graphic) ✓, also 4.5 ✓ |
 | `--accent` on `--surface` | 4.55 | 6.43 | "Details" (Meta 2.8 fh, 500) on a card | 4.5 ✓ |
 | `--accent` on `--hover` | 4.08 | 5.37 | not used for text: "Details" turns `--accent-hover` on hover | n/a |
 | `--accent-hover` on `--hover` | 6.36 | 7.42 | hovered "Details" | 4.5 ✓ |
-| `--bg` on `--text` | 18.10 | 16.45 | A2 bar, inverted key chip | 4.5 ✓ |
+| `--bg` on `--text` | 18.10 | 16.45 | inverted key chip (highlight) | 4.5 ✓ |
 | `--ss-edge` on `--bg` | 3.23 | 5.10 | card, chip and A2 box edges, timeline axis, number rules | 3 (1.4.11) ✓ |
 | `--text-muted` on `--bg` as a graphic | 7.81 | 10.59 | A2/B6 arrows, loop, drop lines, education nodes | 3 ✓ |
 | `--text` (highlight edge) vs `--ss-edge` | 5.60 | 3.22 | highlighted vs default card edge | 3 ✓ (change of state) |
@@ -282,15 +297,52 @@ All slide text passes AA in both themes (AC-102, limit 3). The only sub-3:1 line
 | Q2 | Show "Role" and "Stack" as small labels on A3/B3/C3/D2? PRD 4.11 lists Role and Stack as copy fields but not their names as on-screen text. | **No labels.** The title "My role and stack" already names both, and the visual split (one sentence, then chips) makes them obvious. Labels would be extra on-screen text the PRD does not list. |
 | Q3 | Timeline entries split onto lines drop the colon after the dates and the comma after the role (e.g. "2021 to 2023: Marketing Project Manager, GoFreight, Taipei" → three lines). | **Accept as the PRD's own example** ("a timeline entry's dates, role and place on separate lines"). PM to confirm the punctuation at the break is not counted, so QA does not flag it. |
 | Q4 | A1 "6" + "-agent dev team" renders as two pieces; the hyphenated label under the number reads slightly oddly. | **Keep as written** (text cannot change). If Leon dislikes it, PM could change the source to "6" / "agents on the dev team" in a PRD change. Not a design blocker. |
-| Q5 | Slide 3 leaves the right ~40% of the frame empty. | **Keep** (calm, left-aligned, grid-true). Alternative if the Design Lead wants more photo: put the title in a left 5-col column (wrapping to 3 lines) and the photos at 70 fh tall on the right; it breaks the "title on top" rule of every other slide, so I do not recommend it. |
+| Q5 | Slide 3: how large should the photos be? | **Revision 1: photos 48 x 64 fh, captions in the bottom band** (review issue 4). I checked the title-left alternative: in a column wide enough to leave room for 70 fh photos, the title runs to 4 or 5 lines, which is worse than open space. The remaining open area on the right is the honest cost of two uncropped portrait photos. |
 | Q6 | B2's three-screen image does not exist yet; its final ratio and padding decide how big the phones look. | **MOD-011 makes it with gaps ≈ 5% of one screen's width and a transparent background**, per PRD 4.6. The slide box takes any ratio via `contain`; the mock's stand-in is 1.5:1. |
 | Q7 | `color-mix()` for `--ss-edge`: acceptable as a "derived value", or should the hex values (#8f8f8f / #888888) be written into the MOD-012 stylesheet under `.dark`? | **Use `color-mix()`.** It derives from the existing variables (limit 3, "existing CSS variables only") and follows the theme with no second copy of colours. |
-| Q8 | F hint at 14 px is small for anyone watching on a call. | **Keep 14 px**: it is Leon's cue, appears only on direct visits and disappears at the first key. |
+| Q8 | F hint size. | **Resolved in Revision 1:** sized from the frame (2.8% of its height) with a 14 px floor (6.8), so it meets limit 7 and AC-102. Tech Lead to confirm (review T3). |
 
 ## 13. Notes for the engineer (MOD-012), the motion designer and the Design Lead
 
 - Frame CSS: `.frame { container-type: size; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; }` and all inner sizes in `cqh` (and `cqw` only for the reserved zone). Define the column variable on an element inside the frame, not on the frame itself (container units on the container resolve against its parent).
 - Use `100dvh` rather than `100vh` on iOS Safari for the frame fit.
-- The mock (`slideshow-mock.html`) renders every slide of the deck. Hashes: `#<slide>-<light|dark>` with slide `1 2 2a 2b 3 M A1…D5`, or a type alias (`intro timeline timeline-focus job job-2 photo menu menu-states cover intro-shot intro-shot-1 stack stack-2 bullets bullets-shot bullets-shot-1 role-grid workflow flow`). Add `-zones` (e.g. `#B6-light-zones`) to overlay the reserved zones and the content box. `#gallery-light` shows all slides as thumbnails. `#audit-light` checks every slide for: text below its AC-102 minimum, anything outside the frame, anything in the close zone or slide 1's hint zone, clipping, and titles over two lines; it passes with no findings at 1920x1080, 1600x900, 1440x900, 1280x720 and 667x375 (headless Chrome cannot make a window narrower than about 500 px, so the 375x667 run is approximate).
+- **The layer must cover the site's corner image.** `globals.css` draws `main::after` (`/Subject.png`, fixed, bottom-right, 120 x 80 px) on every page. If /slideshow renders inside the root layout's `<main>`, the opaque MOD-012 layer (`position: fixed; inset: 0; background: var(--bg)`) must sit above it (a stacking context with a higher `z-index` than `main::after`, or the route rendered outside `<main>`). Otherwise the image would show behind or beside the close button (limit 2, CONV-007).
+- The mock (`slideshow-mock.html`) renders every slide of the deck. Hashes: `#<slide>-<light|dark>` with slide `1 2 2a 2b 3 M A1…D5`, or a type alias (`intro timeline timeline-focus job job-2 photo menu menu-states cover intro-shot intro-shot-1 stack stack-2 bullets bullets-shot bullets-shot-1 role-grid workflow flow`). Add `-zones` (e.g. `#B6-light-zones`) to overlay the reserved zones and the content box. `#gallery-light` shows all slides as thumbnails. `#audit-light` checks every slide for: text below its AC-102 minimum, anything outside the frame, anything in the close zone or slide 1's hint zone, clipping, and titles over two lines; Revision 1 passes with no findings at 1920x1080, 1600x900, 1440x900, 1280x720, 960x540, 667x375 and 500x889, in both themes, and every title is one line at all of them (headless Chrome cannot make a window narrower than about 500 px; the Design Lead checked 375x667 in an iframe).
 - Motion designer: only the F hint, the menu hint and the focus ring may move; their resting visuals are 6.7, 6.8, 7.5 and 10. Hover fills are instant.
 - Mock-only: the `is-hover` / `is-focus` / `is-highlight` classes force states for screenshots; the dashed overlay is `-zones` only.
+
+## 14. Sidebar "Slideshow" nav icon (input to MOD-001, not MOD-012)
+
+AC-093 adds a "Slideshow" item under Contact in the sidebar. Its icon belongs to MOD-001 (`site/components/Sidebar.tsx`); this is the design input for that engineer, not something MOD-012 draws.
+
+- Idiom (matches the six existing nav icons in `Sidebar.tsx`): inline SVG, `width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"`. No icon library, no file.
+- Glyph: a Lucide-style "presentation" icon: a top rail, a screen hanging from it, and a stand with two feet.
+
+```tsx
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <path d="M2 3h20" />
+  <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
+  <path d="m7 21 5-5 5 5" />
+</svg>
+```
+
+- Colour, hover, active and badge states: unchanged from the other nav items (`currentColor`; the shortcut badge shows `7`).
+- Why this glyph: it reads as "present" at 16 px, it is the same visual family as the Contact envelope above it (rounded rectangle, 1.75 stroke), and it is not a "play" triangle, which would suggest video.
+
+## 15. Revision 1 changelog (after Design Lead review 1, REVISE)
+
+| Review issue | Change | Where |
+|---|---|---|
+| 1 F hint in fixed px (limit 7, AC-102) | Sized from the frame: `max(14px, calc(min(100dvh, 100vw * 9 / 16) * 0.028))`; key chip 1.6em, gaps 0.4em, border in em; still bottom-left, inside slide 1's reserved zone | 6.8, mock `.fhint`, PNG `intro` |
+| 2 "Shipped" accent outline reads as focus | Grey `--ss-edge` edge like the other boxes; marked by 700 weight and an accent check mark; box widened to 22.28 fh | 7.12, PNG `workflow` |
+| 3 Approval bar too heavy, glares in dark | `--surface` band with a `--border` edge and a 0.8 fh accent left edge, `--text` label; drop lines kept | 7.12, PNG `workflow` |
+| 4 Slide 3 photos too small | 39 x 52 → 48 x 64 fh; captions moved into the bottom band | 7.4, Q5, PNG `photo` |
+| 5 Menu cards ragged and half empty | Name block reserves two lines so one-liners share a top line; cards size to content (no 38 fh minimum); hint slot moves up with them | 7.5, PNGs `menu`, `menu-states` |
+| 7 Widows beside screenshots | `text-wrap: pretty` on all bullets, `balance` in the screenshot text column, hyphenated words kept whole; 6/6 split tried and rejected (smaller image, no wrap gain) | 6.2, 7.7, PNGs `intro-shot`, `intro-shot-1`, `bullets-shot`, `bullets-shot-1` |
+| 8 B8 title wraps at some sizes | Title max-width removed (full content width); audit re-run at 960x540, 667x375, 500x889 and the four AC sizes: every title one line | 3, 13 |
+| 9 "One chip style" claim | Named the two roles: tag chip (stack) and diagram node (A2, B6) | 6.3 |
+| 10 Mock gaps | `menu-states` shows "Pick another project"; A2 bar is last in the DOM; note that the layer must cover `main::after` | 7.5, 7.12, 13, mock |
+| 11 No sidebar icon | Lucide-style presentation icon spec for MOD-001 | 14 |
+| 6 Focus offset (UX) | Not mine; UI keeps 3 px on cards and 2 px on the close button, which the UX doc is being aligned to | 10 |
+
+Re-rendered PNGs in Revision 1: all 38. Visibly changed: intro, photo, menu, menu-states, workflow, intro-shot, intro-shot-1, bullets-shot, bullets-shot-1 (both themes). The others were re-rendered for consistency and look the same.
