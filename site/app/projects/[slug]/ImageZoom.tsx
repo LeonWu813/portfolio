@@ -120,21 +120,19 @@ export default function ImageZoom({ src, alt, imgClassName, buttonClassName = ""
           e.preventDefault();
           requestClose();
         }}
-        onKeyDown={(e) => {
-          if (/^[1-7]$/.test(e.key)) e.stopPropagation();
-        }}
         className="fixed inset-0 m-0 h-screen w-screen max-h-none max-w-none border-0 bg-transparent p-0 overflow-hidden overscroll-contain backdrop:bg-transparent"
       >
         <button
           type="button"
           onClick={requestClose}
+          aria-label="Close image"
           className="absolute inset-0 h-full w-full cursor-zoom-out"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={copyRef}
             src={src}
-            alt={alt}
+            alt=""
             className="fixed max-w-none rounded-lg"
             style={{ transformOrigin: "top left" }}
           />

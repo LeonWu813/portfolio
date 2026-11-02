@@ -2,6 +2,8 @@
 
 ## Engineering Progress
 
+- 2026-11-02 integration-fix INT-003/INT-004/INT-005: ImageZoom inner button aria-label="Close image", copy img alt=""; removed ImageZoom onKeyDown 1-7 stopPropagation (Sidebar dialog[open] check covers AC-129); SectionItem.alt now required, alt defaults dropped in [slug]/page.tsx. popstate-on-unmount leak left as is (outside these rows). tsc, lint (0 errors), build: pass.
+
 - spec-update (E1 = A2 cutover): projects-data.ts now holds only the interfaces, imports the four record files, and exports projects = [multiAgentSystem, projectday, siteplus, tabvault] (ProjectDay at index 1, so /projects still redirects to multi-agent-system). Inline records deleted. Only projects-data.ts changed.
 - Build (site/): pass, /projects/projectday among the static pages. Lint: 0 errors, 9 warnings (pre-existing img warnings). self-check.sh not run (known root package.json issue).
 

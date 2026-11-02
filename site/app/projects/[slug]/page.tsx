@@ -19,8 +19,8 @@ function groupItems(items: SectionItem[]): ItemGroup[] {
       const start = i;
       const images: { src: string; alt: string }[] = [];
       while (i < items.length && typeof items[i] !== "string") {
-        const it = items[i] as { image: string; alt?: string };
-        images.push({ src: it.image, alt: it.alt ?? "" });
+        const it = items[i] as { image: string; alt: string };
+        images.push({ src: it.image, alt: it.alt });
         i++;
       }
       groups.push({ type: "images", images, key: start });
