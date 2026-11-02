@@ -6,11 +6,11 @@
 
 
 ```
-agent: qa-mod-about
-mode: verify
-module: mod-about
-result: success
-next: AC-125 leftover ("Tsan-Yu (Leon) Wu" in /contact and /skills meta, built HTML) belongs to the contact and skills modules - route to their engineers (or Tech Lead); MOD-008 itself needs nothing further
+agent: pm
+mode: change
+module: n/a
+result: needs-human
+next: show project-planning/pm-proposals/2026-11-01-tabvault-condensed-text-rev-1-12.md to Leon; on approval run claude --agent pm "apply 2026-11-01-tabvault-condensed-text-rev-1-12.md" with his exact words quoted
 timestamp: 2026-11-01T00:00:00Z
 ```
 
