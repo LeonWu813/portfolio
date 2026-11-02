@@ -80,7 +80,6 @@ export function useFullscreenSession(): FullscreenSession {
   const [hintDismissed, setHintDismissed] = useState(false);
 
   const subscribe = useCallback((onChange: () => void) => {
-    if (document.fullscreenElement) wasFullscreenRef.current = true;
     document.addEventListener("fullscreenchange", onChange);
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
@@ -93,7 +92,8 @@ export function useFullscreenSession(): FullscreenSession {
   const leave = useCallback(() => {
     if (leavingRef.current) return;
     leavingRef.current = true;
-    const target = entryRef.current?.returnPath ?? "/";
+    entryRef.current ??= readEntry();
+    const target = entryRef.current.returnPath;
     if (document.fullscreenElement) document.exitFullscreen().catch(() => undefined);
     router.replace(target);
   }, [router]);

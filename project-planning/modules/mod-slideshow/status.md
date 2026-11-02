@@ -2,6 +2,12 @@
 
 ## Engineering Progress
 
+### Bugfix 2026-11-02 (AC-095, AC-099 race)
+- Cause as QA diagnosed: subscribe() set wasFullscreenRef early, so the hydration snapshot (false) looked like an in->out change and leave() ran before entry was read.
+- Fix in useFullscreenSession.ts: removed the write in subscribe (wasFullscreenRef is now set only by the effect when the snapshot is seen true, so only a real in->out transition leaves); leave() now reads the entry itself if not yet read, so the target is always the opening page.
+- Re-ran QA's repro with a slow fullscreenchange listener (3M-iteration busy loop), headless Chrome, trusted CDP key 7 on /about, 4 s wait: 24/24 stayed on /slideshow in full screen. Did not re-check return target by script. Build, tsc, lint: pass (6 pre-existing warnings, 0 errors).
+- Self-check items: no other change; hint timing, Esc, close, browser exit, Back code untouched.
+
 - Mode: implement (spec rev 1.11, PRD 1.11). Dependencies read: MOD-001, MOD-004, MOD-006 passed QA; MOD-011 passed QA Run 1 (feature image post-screenshot clause pending, its four webp files exist in site/public).
 - Built in site/app/slideshow/ only: page.tsx (metadata, Suspense, eager Preload), Slideshow.tsx, deck.ts (all text word for word from interview-deck.md at ac1a07d), navigation.ts (pure reducer), useFullscreenSession.ts (CONV-006 read into a useRef, useSyncExternalStore full-screen state, leave guard, unmount exit, F hint timing), useSlideInput.ts (keys, pointerType handling, idle pointer, overscroll), SlideView/Menu/Timeline/Workflow/FlowChips/BulletList/MenuHint/FullscreenHint/icons, slideshow.module.css (all --ss-* tokens on the root `.layer`, z-index 100, 100dvh).
 - Design choices: A2 box widths use UI 7.12 Revision 1 widths (Shipped needs 22.28 fh); `//x` and backslash return paths are treated as direct visits (hardening of CONV-006's "starts with /"); F hint shows once a timer arms it (0 ms direct, 1.5 s when opened from the site with fs true), so no setState runs inside an effect body.
