@@ -4,12 +4,12 @@
 
 ## Last Action
 
-agent: qa-mod-home
-mode: verify
-module: mod-home
-result: needs-signoff
-next: Leon confirms AC-017 directly: at http://localhost:3000/ (about 1280x800, after `cd site && npm run build && npx next start`) are the H1, bio, status line and all three buttons visible without scrolling, and does Download CV save as Leon_Wu_Resume.pdf? Reply "AC-017: pass" or describe what is cut off; then claude --agent qa-mod-home "ui-results: <reply>". Separately pending: Leon's D1-D3 answers from the tech-lead rev 1.9 change review.
-timestamp: 2026-11-01T12:00:00Z
+agent: pm
+mode: change
+module: n/a
+result: needs-human
+next: show project-planning/pm-proposals/2026-11-01-d1-d3-hint-contract-rev-1-10.md to Leon (questions 1-3); on approval run claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted. Separately pending: Leon's AC-017 sign-off (claude --agent qa-mod-home "ui-results: <reply>") and AC-091.
+timestamp: 2026-11-01T12:30:00Z
 
 ---
 
