@@ -160,4 +160,25 @@ Reply with PASS or the step that failed.
 
 ### Open items
 - [ ] AC-108/AC-109/AC-110 needs-signoff — human device/feel checks (iPhone Back, Safari, animation feel, reduce motion, VoiceOver) (2026-11-01)
-- [ ] AC-129 re-check after MOD-001 adds the Sidebar `dialog[open]` check (2026-11-01)
+- [x] AC-129 re-check after MOD-001 adds the Sidebar `dialog[open]` check — passed 2026-11-02 (INT-004 run)
+
+## QA Results — integration-fix-verify INT-003, INT-004, INT-005 (2026-11-02)
+
+**Workflow:** integration-fix-verify (regression-test workflow), chosen because integration-review.md INT-003/004/005 were set to FIXED – AWAITING QA after engineer commit 9a06d62. Run against `npm run build` + `next start` (port 3457), headless Chrome 156 driven over CDP (real key events, accessibility tree). Server and Chrome stopped afterwards. `npx tsc --noEmit` exit 0; build passes (14 pages).
+
+- INT-003 PASS: on all four project pages the AX tree shows the dialog named by the image's alt (e.g. siteplus: "Screenshot of the SitePlus+ home dashboard."), the focused control inside it is a button named "Close image" (focus verified in dialog), and no img node appears in the dialog's accessibility tree (copy alt="" is decorative).
+- INT-004 PASS: with the overlay open on multi-agent-system, projectday, siteplus and tabvault, keys 1-7 each leave the dialog open and the URL unchanged (7/7 per page). After Esc closes it (URL unchanged), key 2 navigates away on projectday, siteplus and tabvault; on multi-agent-system key 1 after load goes to "/". The Sidebar `dialog[open]` bail is the sole guard now (ImageZoom's onKeyDown is gone).
+- INT-005 PASS: `SectionItem.alt: string` in projects-data.ts, no `?? ""` in page.tsx, tsc and build pass with all four record files.
+- AC-127 PASS (updated to new markup): every non-dialog img on every project page has a non-empty alt, equal to the record's text (spot-read all 4 pages; 0 empty alts outside the dialog). The only `alt=""` in the built HTML are the overlay copies inside `<dialog>` (1, 3, 3, 3 per page, one per zoomable image). The dialog is named by the alt. Note: the spec line 80 grep (`grep -c 'alt=""'` is 0) is stale for this markup and now counts the decorative copies (1 per page by line count); the dialog-scoped check above replaces it. Not raised as a spec issue: AC-127's wording ("no project image has an empty alt") still holds for project images.
+- AC-129 PASS (see INT-004). Earlier open item ticked.
+- Regression AC-108 PASS: zoom-in cursor, Tab/focus and Enter and Space open on all four pages; overlay image fits within 90% of 1280x800 (e.g. 1152x585, 1026x720, 1152x701); multi-agent overlay image 1152px wide vs 657px in page; overlay cursor zoom-out.
+- Regression AC-109 PASS: click closes; Esc closes (INT-004 loop); history.back() closes and stays on the same page; focus is inside the dialog on open; Tab cycles only between the close button and the document boundary (never to page content); document body overflow hidden while open; focus returns to the opener after close.
+- Regression AC-110: not re-driven for animation (code path untouched by 9a06d62; diff only touched attributes and the key handler). Prior human sign-off item stays open below.
+- Regression AC-128 PASS: at 1280x800 no Images-section image taller than 640px (heights 334; 461/640/640; 343/342/342; 400/640/640).
+
+### Integration notes (for Tech Lead)
+- Spec section 6 line 80 (the AC-127 grep and "alt stays optional") and line 66 are stale after INT-003/INT-005; Doc-Sync/PM may want to update them.
+
+### Open items
+- [ ] AC-108/AC-109/AC-110 needs-signoff — human device/feel checks (iPhone Back, Safari, animation feel, reduce motion, VoiceOver) (2026-11-01)
+- [x] AC-129 re-check after MOD-001 adds the Sidebar `dialog[open]` check — passed 2026-11-02

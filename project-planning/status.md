@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-projects-grid
-mode: integration-fix
+agent: qa-mod-projects-grid
+mode: integration-fix-verify
 module: mod-projects-grid
 result: success
-next: claude --agent qa-mod-projects-grid "integration-fix-verify INT-003"  (then INT-004, INT-005)
-timestamp: 2026-11-02T11:00:00Z
+next: Leon verifies INT-003, INT-004 and INT-005 himself (VoiceOver on the overlay close button; keys 1-7 with the overlay open), then claude --agent tech-lead "INT-003 verified: <what you checked>" (likewise INT-004, INT-005)
+timestamp: 2026-11-02T12:00:00Z
 ```
 
 ## PM Updates
