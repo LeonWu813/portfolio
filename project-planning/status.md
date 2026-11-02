@@ -4,12 +4,12 @@
 
 ## Last Action
 
-agent: qa-mod-home
-mode: verify
-module: mod-home
+agent: qa-mod-project-multi-agent
+mode: regression
+module: mod-project-multi-agent
 result: success
-next: all MOD-002 acceptance criteria now pass (AC-017 human-reported). Separately pending: Leon's answers to the D1-D3 proposal (claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted) and AC-091 recording by qa-mod-multi-agent. Then continue the phase: the coordinator runs /pstack:thermos when every module passes, then claude --agent tech-lead "phase-end integration review".
-timestamp: 2026-11-01T13:00:00Z
+next: all MOD-005 acceptance criteria now pass (AC-091 human-reported). Pending elsewhere: Leon's answers to the D1-D3 proposal (claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted). When every module in the phase passes: the coordinator runs /pstack:thermos, then claude --agent tech-lead "phase-end integration review".
+timestamp: 2026-11-01T13:30:00Z
 
 ---
 

@@ -267,4 +267,8 @@ Evidence: `npm run build` in site/ passes (/projects/multi-agent-system prerende
 - og:image and twitter:image resolve to http://localhost:3000/og-image.png in built HTML (no metadataBase set); shared metadata, outside this module's files (MOD-001/003 area).
 
 ### Open items
-- [ ] AC-091 needs-signoff — 375px visual check pending human (2026-11-01)
+- [x] AC-091 needs-signoff — 375px visual check — passed 2026-11-01 (human-reported)
+
+### Human UI results (2026-11-01)
+Workflow: regression (ui-results continuation; same mode as the needs-signoff stop).
+AC-091 (375px): PASS — reported by the human 2026-11-01. Question asked: diagram fully visible, no clipped edges, no sideways scroll, caption right under it. Human's reply, quoted: "The two browser checks need you to actually look at the pages: both check and pass" (the first clause repeats the coordinator's heading; "both check and pass" covers AC-017 and AC-091). Recorded as the human's report, not as QA's own observation. All module ACs now PASS; verdict: PASS.
