@@ -80,5 +80,8 @@ Spec requires all hero content to be visible above-the-fold on a standard laptop
 ### Human UI results (2026-11-01)
 - AC-017: NOT RECORDED — the human's reply ("4. no need a branch / other go with recommend and approve") answered an unrelated branch question; item 5 (AC-017) had no recommendation to approve, and the reply reports no observation of the page or the download. Not treated as sign-off.
 
+### Human UI results (2026-11-01, second reply)
+- AC-017: PASS — reported by the human 2026-11-01. Exact reply: "The two browser checks need you to actually look at the pages: both check and pass". The first clause repeats the coordinator's heading; "both check and pass" was given in answer to the AC-017 and AC-091 questions. The reply does not itemize the fold or the filename, so the pass rests on the human's word, not on QA's own observation. (Workflow: ui-results, mode verify.)
+
 ### Open items
-- [ ] AC-017 needs-signoff — above-the-fold check at laptop viewport needs a human (2026-11-01)
+- [x] AC-017 needs-signoff — above-the-fold check at laptop viewport — passed (human-reported) 2026-11-01

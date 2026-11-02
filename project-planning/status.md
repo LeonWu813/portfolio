@@ -4,12 +4,12 @@
 
 ## Last Action
 
-agent: pm
-mode: change
-module: n/a
-result: needs-human
-next: show project-planning/pm-proposals/2026-11-01-d1-d3-hint-contract-rev-1-10.md to Leon (questions 1-3); on approval run claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted. Separately pending: Leon's AC-017 sign-off (claude --agent qa-mod-home "ui-results: <reply>") and AC-091.
-timestamp: 2026-11-01T12:30:00Z
+agent: qa-mod-home
+mode: verify
+module: mod-home
+result: success
+next: all MOD-002 acceptance criteria now pass (AC-017 human-reported). Separately pending: Leon's answers to the D1-D3 proposal (claude --agent pm "apply 2026-11-01-d1-d3-hint-contract-rev-1-10.md" with his exact words quoted) and AC-091 recording by qa-mod-multi-agent. Then continue the phase: the coordinator runs /pstack:thermos when every module passes, then claude --agent tech-lead "phase-end integration review".
+timestamp: 2026-11-01T13:00:00Z
 
 ---
 
