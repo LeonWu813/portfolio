@@ -106,6 +106,17 @@ Method: `npm run build` (14 routes), `next start` on port 3157, headless Chrome 
 - Not re-run (unchanged files, run 1 stands): AC-001, AC-002, AC-005 to AC-008, AC-010, AC-095/AC-099 headless detail, decoration geometry.
 - Gold-plating: none (diff is ThemeToggle.tsx only).
 
+### QA Run 3 - Integration-fix verification INT-001, INT-002, INT-010, INT-011 - 2026-11-02 (engineer fix 7cf7f7b). Workflow: integration-fix-verify (rows at FIXED - AWAITING QA)
+
+Method: `npm run build` (passes, no warnings, 14 pages), `next start -p 3457` (stopped afterwards), headless Chrome via puppeteer-core in the scratchpad (old files served via request interception from `git show 4fc10d3:site/public/<name>` for before/after pixel comparison). No project verify skill exists.
+
+- INT-001 part 1: PASS. All 10 built routes: og:image and twitter:image = https://www.leon-wu.com/og-image.png; canonical and og:url unchanged (own URL on each route); no metadataBase warning. /og-image.png 404 (expected).
+- INT-002: PASS. Dimensions and formats as specified, IMG_6875.JPG unchanged, names/paths unchanged, EXIF orientation tags same as before. Old vs new pixel diff: /about 0.06 percent, slide 3 at 1920x1080 0.005 percent, home (avatar and corner decoration) 0.009 percent; diff images show only edge resampling noise. Image bytes: /about 9.35 MB to 3.36 MB, /slideshow 2.08 MB to 1.83 MB (AC-106 under 3 MB: PASS).
+- INT-011: PASS. At 390 px closed drawer inert, links not in a11y tree or Tab order; opened drawer not inert, 12 links, Tab enters it; visible Slideshow link opens /slideshow and writes slideshow-return (AC-094 mobile); /skills click navigates and re-closes (inert).
+- INT-010: FAIL (partial). TopNav and listed files unreferenced; build passes; favicon.ico 200; no 404 or console errors on any of the 10 built pages. FAIL: `GET /apple-touch-icon.png` Actual=404 (no apple-touch-icon `<link>` in HTML either), Expected=still served (finding says "favicon and touch icon still serve from app/"). Cause: App Router serves only `apple-icon.png` from app/; `app/apple-touch-icon.png` is not a metadata convention, so the deleted `public/apple-touch-icon.png` was what served it. Related: AC-006 and spec line 110 say "apple-touch-icon.png in site/app/ ... Next generates link tags automatically", which is not how Next behaves for that filename. [SPEC ISSUE: AC-006 mechanism wrong for the apple touch icon; if the fix is to rename to app/apple-icon.png the AC text must change - PM/Doc-Sync]. Alternative with no spec change: Engineer restores `site/public/apple-touch-icon.png`.
+
+Regression re-check: AC-006 favicon part still PASS; AC-009/AC-093/AC-094/AC-124 unaffected by the one-line inert change.
+
 ### Human script (what headless cannot judge)
 
 1. Safari and Firefox desktop: from /about click Slideshow, then repeat with key 7. Expect slide 1 in full screen, no sidebar or top bar. Esc once returns to /about.
@@ -115,6 +126,7 @@ Method: `npm run build` (14 routes), `next start` on port 3157, headless Chrome 
 
 ### Open items
 
+- [ ] INT-010 / AC-006 spec-issue - /apple-touch-icon.png returns 404 after deleting public copy (2026-11-02)
 - [ ] AC-095 needs-signoff — Safari, Firefox, iPhone Safari check by the human (script above) (2026-11-02)
 - [ ] CV download filename needs-signoff — saved name check in a real browser (2026-11-02)
 
