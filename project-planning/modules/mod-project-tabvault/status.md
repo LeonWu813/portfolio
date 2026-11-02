@@ -263,3 +263,7 @@ Other: no 'use client'; no gold-plating; spec has no template comments; CONV-005
 
 ### Open items
 - (none)
+
+### Engineering Progress (spec-update, 2026-11-01)
+- Changed ACs: AC-054, AC-056, AC-116, AC-117, AC-127. Record file only: offline wording, live link removed, featureImageAlt and two section alts added. No image file changed.
+- lint 0 errors, build pass (run in site/); self-check not run at repo root per instructions.

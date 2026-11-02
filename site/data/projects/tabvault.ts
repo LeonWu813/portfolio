@@ -6,14 +6,14 @@ export const tabvault: ProjectEntry = {
   date: "06/01",
   title: "TabVault",
   featureImage: "/tabvault-home.png",
+  featureImageAlt: "Screenshot of the TabVault web app home screen.",
   tech: "Full-Stack · PWA · AI · AWS",
   tags: ["Java 21 / Spring Boot", "React / TypeScript PWA", "Chrome Extension (MV3)", "PostgreSQL", "Redis", "Quartz", "Claude API", "AWS ECS Fargate"],
   atAGlance:
-    "Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Live on AWS ECS Fargate",
+    "Orchestrator + reviewer · 3 clients (Chrome MV3, React PWA, Spring Boot API) · Built by my multi-agent system · Deployed to AWS ECS Fargate (now offline)",
   description:
     "A production full-stack tab manager spanning a Chrome extension, a React PWA, and a Spring Boot backend, with an AI content-analysis pipeline. I produced it by running my own multi-agent development system, reviewing and approving every step.",
   links: [
-    { name: "Live: ", label: "tab-vault.com", href: "https://tab-vault.com" },
     { name: "GitHub: ", label: "tab-management", href: "https://github.com/LeonWu813/tab-management" },
   ],
   sections: [
@@ -21,7 +21,7 @@ export const tabvault: ProjectEntry = {
       heading: "The problem",
       items: [
         "I needed a real, non-trivial product to prove that my multi-agent development system could do more than scaffold a toy app. A throwaway CRUD demo would not have tested anything. So I set the bar high: a genuine full-stack product with three separate clients, asynchronous background jobs, an external AI integration, push notifications, and a real cloud deployment. If the system could ship that, with me reviewing each handoff rather than writing the code myself, it would be a credible result.",
-        "TabVault is that product. People accumulate browser tabs they mean to return to, which slows the browser down and buries content they wanted. TabVault lets someone save a tab in one action, close it immediately, and trust that the content and its context are preserved, searchable, and surfaced again when it matters. It is live in production.",
+        "TabVault is that product. People accumulate browser tabs they mean to return to, which slows the browser down and buries content they wanted. TabVault lets someone save a tab in one action, close it immediately, and trust that the content and its context are preserved, searchable, and surfaced again when it matters. It was deployed to production on AWS and is offline now.",
       ],
     },
     {
@@ -40,8 +40,8 @@ export const tabvault: ProjectEntry = {
     {
       heading: "Images",
       items: [
-        { image: "/tabvault-mobile.jpeg" },
-        { image: "/tabvault-plugin.png" },
+        { image: "/tabvault-mobile.jpeg", alt: "Screenshot of the TabVault web app on an iPhone, showing saved items grouped by category, with search and filters." },
+        { image: "/tabvault-plugin.png", alt: "Screenshot of the TabVault Chrome extension popup, with buttons to save the current tab, save all tabs or write a quick note, and a list of recent saves." },
       ],
     },
     {
@@ -73,7 +73,7 @@ export const tabvault: ProjectEntry = {
     {
       heading: "Impact",
       items: [
-        "TabVault is deployed and running in production on AWS, served through a CDN and load balancer in front of containers on Fargate, backed by managed PostgreSQL and Redis. It is a complete product: save tabs from the extension or a mobile share sheet, get AI-generated summaries and categories, receive push reminders for detected deadlines, search everything by content, and browse offline through the installed app.",
+        "TabVault was deployed to production on AWS, served through a CDN and load balancer in front of containers on Fargate, backed by managed PostgreSQL and Redis. It is offline now, but it is a complete product: save tabs from the extension or a mobile share sheet, get AI-generated summaries and categories, receive push reminders for detected deadlines, search everything by content, and browse offline through the installed app.",
         "Just as importantly, it is the proof that my multi-agent system works. A real, multi-client, cloud-deployed application came out the other end of that workflow, with a human reviewing every handoff, which is exactly what the system was designed to make possible.",
       ],
     },
