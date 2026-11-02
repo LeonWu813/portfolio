@@ -77,5 +77,8 @@ Spec requires all hero content to be visible above-the-fold on a standard laptop
 2. Without scrolling, confirm H1, bio, status line and all three buttons (Connect on LinkedIn, Reach out, Download CV) are visible.
 3. Click Download CV: file saves as Leon_Wu_Resume.pdf.
 
+### Human UI results (2026-11-01)
+- AC-017: NOT RECORDED — the human's reply ("4. no need a branch / other go with recommend and approve") answered an unrelated branch question; item 5 (AC-017) had no recommendation to approve, and the reply reports no observation of the page or the download. Not treated as sign-off.
+
 ### Open items
 - [ ] AC-017 needs-signoff — above-the-fold check at laptop viewport needs a human (2026-11-01)

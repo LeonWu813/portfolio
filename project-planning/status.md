@@ -4,13 +4,12 @@
 
 ## Last Action
 
-agent: tech-lead
-mode: change-review
-module: n/a
-next: Leon answers D1-D3 in Tech Lead Reviews "Review — 2026-11-01 — change (rev 1.9 ...)". If D1 = (a) (or D2 = (b)): claude --agent pm "change" (CONV-006 amendment per Tech Lead D1, proposal pass then apply pass), then claude --agent doc-sync (syncs rev 1.7, 1.8, 1.9 and that change together). If D1 = (b) and D2, D3 = (a): claude --agent doc-sync (syncs rev 1.7, 1.8 and 1.9 together). Then engineers in the order in that review: MOD-003; MOD-005/006/004/011; MOD-007/008/009/010; MOD-012; MOD-001 last.
-result: needs-human
-Previous action: pm change rev 1.9 (6ca5be9); coordinator /pstack:how rev 1.9 deltas (fddbdd7). Still open for the human: AC-017 sign-off (mod-home), AC-091 375px sign-off (mod-project-multi-agent).
-timestamp: 2026-11-02T01:45:00Z
+agent: qa-mod-home
+mode: verify
+module: mod-home
+result: needs-signoff
+next: Leon confirms AC-017 directly: at http://localhost:3000/ (about 1280x800, after `cd site && npm run build && npx next start`) are the H1, bio, status line and all three buttons visible without scrolling, and does Download CV save as Leon_Wu_Resume.pdf? Reply "AC-017: pass" or describe what is cut off; then claude --agent qa-mod-home "ui-results: <reply>". Separately pending: Leon's D1-D3 answers from the tech-lead rev 1.9 change review.
+timestamp: 2026-11-01T12:00:00Z
 
 ---
 
