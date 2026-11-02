@@ -4,13 +4,13 @@
 
 ## Last Action
 
-agent: pm
-mode: change
+agent: doc-sync
+mode: delta
 module: n/a
-result: success
-next: claude --agent doc-sync (sync PRD rev 1.7, 1.8, 1.9 and 1.10 together; the rev 1.10 PM Updates entry lists the spec notes). Then the engineers in the Tech Lead's order (b8395f1): MOD-003; MOD-005, MOD-006, MOD-004, MOD-011; MOD-007, MOD-008, MOD-009, MOD-010; MOD-012; MOD-001 last. Leon's UI sign-offs are done (AC-017 qa-mod-home 6847f0d, AC-091 qa-mod-project-multi-agent 4cb16ad); nothing else pending from him.
-Previous action: qa-mod-project-multi-agent regression pass (AC-091 human-reported).
-timestamp: 2026-11-02T04:51:13Z
+result: needs-pm
+next: claude --agent pm (one open question, see the 2026-11-01 rev 1.7-1.10 Sync Report: the QA method for AC-096's refused full-screen request; the Tech Lead review b8395f1 says the Tech Lead supplies it, so route it to claude --agent tech-lead first if PM wants it supplied there, then PM logs it, then Doc-Sync writes it into the MOD-012 spec). Engineering can start on MOD-003 meanwhile only if PM agrees; otherwise after PM. Engineers in the Tech Lead's order (b8395f1): claude --agent engineer-mod-projects-grid "spec-update"; then engineer-mod-project-multi-agent "spec-update", engineer-mod-project-tabvault "spec-update", engineer-mod-project-marketing "spec-update", engineer-mod-project-projectday "spec-update"; then engineer-mod-experience, engineer-mod-about, engineer-mod-skills, engineer-mod-contact, each "spec-update"; then claude --agent engineer-mod-slideshow "implement"; then claude --agent engineer-mod-site-shell "spec-update" last. MOD-002: no code run (spec carries only AC-126). New agents engineer-mod-slideshow and qa-mod-slideshow: if they cannot be called yet, claude --continue reloads them in the same conversation.
+Previous action: pm change (rev 1.10).
+timestamp: 2026-11-01T16:30:00Z
 
 ---
 
@@ -961,6 +961,62 @@ Every step keeps `npm run build` passing and lint at 0 errors (baseline 9 `no-im
 - MOD-010 AC-076 and the Requirement allow the label "Download resume"; PRD 4.10 now says "Download CV" or "Resume (PDF)". The code reads "Download resume (PDF)". Left as is.
 - The PRD 4.1 "Layout notes" (outer wrapper classes) are not in the MOD-002 spec; no AC asks for them.
 **verify-sync.sh result:** the script passes checks 1 to 3 and then aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual checks: Check 4 PASS (the PRD has no US-IDs); Check 5 PASS (no AMBIGUITY markers remain in any spec or production.md); Check 6 N/A (no PRD phase section; Phase Plan and Current Phase unchanged, Phase 4). No HTML template comments in any spec or production.md.
+
+### Sync Report — Delta Sync — 2026-11-01 (rev 1.7 + 1.8 + 1.9 + 1.10)
+**Sync type:** delta (rev 1.7 [SUBSTANTIVE] [ARCHITECTURAL], rev 1.8 [SUBSTANTIVE], rev 1.9 [SUBSTANTIVE] [ARCHITECTURAL] and rev 1.10 [SUBSTANTIVE], synced together)
+**PRD Revision:** 1.10
+**PM Update reference:** 2026-11-01 [SUBSTANTIVE] Answer Tech Lead D1-D3: CONV-006 `fs` field and hint timing (AC-096), single-key shortcuts as a known accessibility limitation, SectionItem alt stays optional; no feature branch; PRD rev 1.10 (also covers the rev 1.7, 1.8 and 1.9 entries before it, and the Tech Lead Reviews 0051840 and b8395f1)
+**Files modified:**
+- project-planning/production.md — rev header 1.10; Goal 5 (interview deck); sidebar subtitle "Full-Stack Software Engineer"; /slideshow route row; Assets rows (Resume PDF at cfa3367, Skills content, ProjectDay screenshots, Interview deck copy, Seattle photos, Slideshow design at ac1a07d); "Leon Wu" name rule; removed the ProjectDay-screenshots non-blocking row (supplied, PRD 7); CONV-006 and CONV-007 copied verbatim; Module Index rows MOD-001, 003, 004, 005, 006, 007, 009, 010, 011 updated, MOD-012 added
+- modules/mod-site-shell/spec.md (MOD-001) — rebuilt against PRD 2, 3, 4.11 Opening and 6 (the spec was at PRD 1.2): profile section, seven nav items, "Online" block, no footer, IBM Carbon tokens, shortcuts and suppression rules, AC-093, AC-094, AC-095, AC-099, AC-124, AC-125, AC-126, AC-129; CONV-006 and CONV-007; Tech Lead engineering rules; Integration Points with MOD-012 and MOD-003
+- modules/mod-experience/spec.md (MOD-007) — rebuilt against PRD 4.7 as a whole: layout, two roles per CV, two education entries, interfaces with `tags`, AC-118, AC-119, AC-121, AC-125, AC-126 (AC-055 and AC-056 replaced by AC-118 and AC-119)
+- modules/mod-about/spec.md (MOD-008) — rebuilt against PRD 4.8: no education block (AC-062 now says so), AC-125, AC-126
+- modules/mod-skills/spec.md (MOD-009) — rebuilt against PRD 4.9: six new groups, source file, AC-067, AC-122, AC-125, AC-126
+- modules/mod-contact/spec.md (MOD-010) — rebuilt against PRD 4.10: email only, order Email, LinkedIn, GitHub, Resume, label "Download CV" or "Resume (PDF)", no phone, AC-123, AC-125, AC-126
+- modules/mod-projects-grid/spec.md (MOD-003) — image overlay, Images-section cap, alt text (PRD 4.2), `SectionItem.alt?`, CONV-007 overlay rules, Tech Lead rules (dialog, cancel and popstate, 640 px cap, alt grep), AC-108, AC-109, AC-110, AC-127, AC-128, AC-129, AC-125, AC-126; Integration Points refreshed for MOD-011 (AC-089, AC-111), MOD-005 (AC-091, AC-092) and MOD-004 and MOD-006 (AC-127)
+- modules/mod-project-marketing/spec.md (MOD-004) — tags (Spring Security / JWT), link "Demo: " + "interactive walkthrough", e479e22, alts, Record 1 with featureImageAlt, AC-031, AC-032, AC-034, AC-120, AC-127, AC-126; Integration Points with MOD-012
+- modules/mod-project-multi-agent/spec.md (MOD-005) — At-a-glance, description, two links (no tab-vault.com), rev 1.7 body copy, Record 2, AC-042, AC-044, AC-092 changed, AC-117, AC-126, AC-127; QA note for AC-091 under AC-110
+- modules/mod-project-tabvault/spec.md (MOD-006) — At-a-glance, offline statement, one link, alts, Record 3 with featureImageAlt, AC-054, AC-056 changed, AC-116, AC-117, AC-126, AC-127; Integration Points with MOD-012
+- modules/mod-project-projectday/spec.md (MOD-011) — rebuilt from PRD 4.6: seven sections with Images, three-screen feature image and caption, file names and composition rules (T4), Record 4, AC-084 and AC-089 changed, AC-111, AC-112, AC-127, AC-126; Integration Points with MOD-003, MOD-002, MOD-012
+- modules/mod-home/spec.md (MOD-002) — revision header and AC-126 only (no PRD change to Home)
+- project-planning/status.md — Last Action; this report
+**Files created:**
+- project-planning/modules/mod-slideshow/spec.md (MOD-012; AC-095 to AC-100, AC-102 to AC-107, AC-113 to AC-115, AC-130, AC-131, plus AC-117 and AC-126)
+- project-planning/modules/mod-slideshow/status.md
+- .claude/agents/engineer-mod-slideshow.md and .claude/agents/qa-mod-slideshow.md (template tools and model copied unchanged; Source Path site/app/slideshow/; read access to the status files of MOD-001, 004, 006, 011; design files at ac1a07d and the deck at ac1a07d named as read inputs)
+**Module removals noted:** none
+**AMBIGUITY markers added:**
+- modules/mod-slideshow/spec.md: [AMBIGUITY: AC-096's refused-request case needs a way for QA to make the browser refuse the site's full-screen request; Tech Lead review b8395f1 says "the MOD-012 QA spec states how (Tech Lead to supply if Doc-Sync cannot)", and neither the PRD nor the review states the method] — Doc-Sync does not invent it. The Tech Lead supplies it (via PM to log it), then Doc-Sync writes it into the spec.
+**AMBIGUITY markers resolved:** none (the earlier domain markers were resolved in the rev 1.5 + 1.6 sync)
+**CONFLICT markers added:** none
+**Tech Lead Doc-Sync notes applied:** `slideshow-motion.md` line 16 "Details" cue named as stale in the MOD-012 spec and not carried; Design Lead review 2 L-3 row ("first Tab stop") named as overridden by the PRD and UX 4.1; UX 6.1 "about 500 ms" window replaced by CONV-006; deck slide 2 "(opens the ... detail slide)" notes and the note under the timeline named as annotations, not on-screen text; review 2 section 3 wins for UI 6.4 and 7.4; AC-128 placed in MOD-003 only (MOD-006 has no image-file task); AC-129 in MOD-001 and MOD-003; AC-117 in MOD-005, 006, 012; AC-125 in MOD-001, 003, 007, 008, 009, 010 (the Tech Lead's list is MOD-001, 007, 008, 009, 010; MOD-003 carries it because the /projects routes use the root description, listed so QA sees it); AC-126 in every spec for its own routes.
+**Noted for PM (not written into specs as decisions):**
+- Items the older specs carried that PRD 1.10 no longer states were kept unchanged and marked in MOD-007 and MOD-008 only where the PRD is silent: page headings "Experience" and "About" (PRD 4.7 and 4.8 do not give one; 4.9 does for Skills) and "No photo" on About (PRD 4.8 is silent). Confirm or drop. Contact and the other specs keep their earlier heading line the same way.
+- PRD 1 Purpose (prd.md:38) still reads "Tsan-Yu Wu (Leon)"; production.md Project Summary copies it verbatim. The Tech Lead noted it is not site code and is PM's call whether to change it.
+- AC-017 and the MOD-002 spec: PM's rev 1.7 note says "AC-017 download name unchanged"; in the MOD-002 spec AC-017 is the above-the-fold criterion. No change made.
+- MOD-005 AC-091 still says the alt text is "proposed" (PRD wording kept); Record 2 gives the alt text.
+**Engineer sequence (source: Tech Lead Reviews 0051840 and b8395f1 and Decisions "Branch"; Tech Lead decisions, not PRD text, so recorded here and not as spec requirements). Work stays on main; every push deploys, so do not push between MOD-012 and MOD-001 unless both are in.**
+1. MOD-003 (spec-update: `SectionItem.alt?`, `groupItems` carries `{ src, alt }`, both render sites, the overlay as a native `<dialog>`, 640 px cap).
+2. Record modules, any order, after step 1: MOD-005, MOD-006, MOD-004, MOD-011 (the four WebP files including the T4 composition).
+3. Page modules, any time: MOD-007, MOD-008, MOD-009, MOD-010.
+4. MOD-012 (implement), after MOD-011; can be built and checked by direct visit before the nav item exists.
+5. MOD-001 (spec-update) last: nav item 7 with the slideshow-ui.md 14 icon, key 7, CONV-006 with `fs`, CONV-007 with both bails, AC-124, AC-125 at layout.tsx:16, the CV at cfa3367, AC-126.
+6. MOD-002: no change.
+QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800 and 375 px, AC-091 re-check); MOD-012 and MOD-001 together after step 5.
+**Spec-update scope per module (ACs changed; CONV-004 limits each engineer to these):**
+- MOD-003: AC-108, 109, 110, 127, 128, 129 (new); AC-125, 126; Integration AC-089, 091, 092, 111 refreshed.
+- MOD-004: AC-031, 032, 034 changed; AC-120, 127 new; AC-126.
+- MOD-005: AC-042, 044, 092 changed; AC-117, 127 new; AC-126.
+- MOD-006: AC-054, 056 changed; AC-116, 117, 127 new; AC-126.
+- MOD-011: AC-084, 089 changed; AC-111, 112, 127 new; AC-126.
+- MOD-007: AC-055, 056 replaced by AC-118, 119; AC-054 order wording; AC-121, 125, 126 new.
+- MOD-008: AC-062 changed (no education block); AC-125, 126 new.
+- MOD-009: AC-067 changed; AC-122, 125, 126 new.
+- MOD-010: AC-076 label changed; AC-123, 125, 126 new.
+- MOD-001: AC-001, 002, 005, 010 changed (AC-005 now "no footer"); AC-093, 094, 095, 099, 124, 125, 126, 129 new.
+- MOD-012: new module, all ACs.
+- MOD-002: AC-126 only.
+**verify-sync.sh result:** the script passes checks 1 to 3 and then aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual checks: Check 4 PASS (the PRD has no US-IDs); Check 5 PASS (the one AMBIGUITY marker in any spec is logged above); Check 6 N/A (no PRD phase section; Phase Plan and Current Phase unchanged, Phase 4). No HTML template comments in production.md or any spec.
 
 ---
 

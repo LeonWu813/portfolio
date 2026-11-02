@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -11,6 +11,7 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 2. Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar.
 3. Make contact and resume access effortless from any page.
 4. Have the site itself serve as evidence of Leon's frontend, accessibility, and deployment skills by being fast, responsive, and WCAG-conscious.
+5. Give Leon a ready-to-present interview deck on the site, one click or one key press from any page.
 
 **Target Audience:**
 - Primary: Technical recruiters and engineering hiring managers evaluating internship candidates.
@@ -39,7 +40,7 @@ A personal portfolio website for Tsan-Yu Wu (Leon), full-stack engineer and CS m
 ## Architecture
 
 **Layout:** Persistent slim left sidebar (w-64, fixed) containing:
-- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Engineer".
+- Profile section: LW initials circle (accent-colored), name "Leon Wu", subtitle "Full-Stack Software Engineer".
 - Primary navigation links with SVG icons and keyboard shortcut badges.
 - Horizontal rule separator.
 - "Online" block with social/contact links and external link icons.
@@ -63,6 +64,7 @@ Main content area to the right of the sidebar (`md:ml-64`): each page controls i
 | /about | About |
 | /skills | Skills |
 | /contact | Contact |
+| /slideshow | Slideshow (full-screen interview deck) |
 
 **Project detail pages:** Four project detail pages are collapsed into a single `app/projects/[slug]/page.tsx` dynamic route. `generateStaticParams` returns all four slugs from the `projects` array. `dynamicParams = false` ensures unknown slugs return 404. `params` is `Promise<{ slug: string }>` and must be awaited.
 
@@ -92,19 +94,26 @@ Active nav item: `bg-[var(--text)] text-[var(--bg)]` (dark bg, light text in lig
 | Asset | Location |
 | --- | --- |
 | Favicon files | `asset/favicon_io/` — copy `favicon.ico` and `apple-touch-icon.png` to `site/app/` |
-| Resume PDF | `asset/Leon_cv.pdf` — copy to `site/public/Leon_cv.pdf` |
+| Resume PDF | `asset/Leon_cv.pdf` — copy to `site/public/Leon_cv.pdf` (replaced 2026-11-01 with Leon's newer CV; the file at commit cfa3367 is the one served) |
 | Case study content | `asset/content/case-study-*-detailed.md` |
 | Multi-agent feature image | `asset/diagrams/multi-agent-horizontal.png` (source: `asset/diagrams/multi-agent-horizontal.html`) |
 | ProjectDay case study | `asset/content/case-study-projectday-detailed.md` |
 | Site copy | `asset/content/site-copy.md` |
 | Experience content | `asset/content/experience.md` |
+| Skills content | `asset/content/skills.md` |
 | Domain | https://www.leon-wu.com |
 | SitePlus+ screenshots | Shown in the SitePlus+ Images section (PRD section 4.3) |
 | TabVault screenshots | Shown in the TabVault Images section (PRD section 4.5) |
+| ProjectDay screenshots | `asset/screenshots/projectday/` (five 1206x2622 iPhone screenshots of demo data, cleared for publishing; all five are used, see PRD sections 4.6 and 4.11) |
+| Interview deck copy | `asset/content/interview-deck.md` |
+| Seattle photos for the slideshow | `site/public/IMG_6875.JPG` (snowboarding), `site/public/4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG` (bouldering) |
+| Slideshow design | `project-planning/design/ux-team/` at commit ac1a07d, approved by Leon on 2026-11-01 (`status.md` Decisions) |
 
 **SEO / Open Graph:** Every page exports a `metadata` object (Next.js Metadata API). Title format: `"{Page Name} — Leon Wu"`. Every page includes `description`, `og:title`, `og:description`, `og:image`, `og:url`, `og:type`, `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`, and a canonical URL tag.
 
 Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
+
+The site names Leon "Leon Wu": in the sidebar, the mobile wordmark, page titles, and wherever page text or a meta tag gives his full name. The full-name forms "Tsan-Yu (Leon) Wu" and "Tsan-Yu Wu (Leon)" do not appear on the site. The CV PDF served at /Leon_cv.pdf is outside this rule.
 
 Social preview image: [ASSET NEEDED — 1200×630px]
 
@@ -117,7 +126,6 @@ Social preview image: [ASSET NEEDED — 1200×630px]
 | Asset | Used On | Notes |
 | --- | --- | --- |
 | Social preview image (OG image) | All pages (og:image) | 1200×630px; affects link previews only |
-| ProjectDay feature image / screenshots | /projects/projectday | Leon's iPhone screenshots from the App Store Connect submission; Leon supplies the files, which ones, and their order. The page renders without them until then. |
 | ProjectDay App Store link | /projects/projectday | Add once the App Store listing is live |
 
 ---
@@ -168,6 +176,8 @@ Test:  (none — static site, no automated test suite defined)
 - CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-005: A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (Tech Lead Reviews, 2026-11-01 change review, rev 1.5)
+- CONV-006: Slideshow entry contract between MOD-001 and MOD-012. When the site opens the slideshow (the Slideshow nav link or key `7`), MOD-001, in the same event handler and in this order: writes `sessionStorage["slideshow-return"] = JSON.stringify({ path: location.pathname, t: Date.now(), fs })`, where `fs` is `true` when it is about to call `document.documentElement.requestFullscreen()` in the same handler (that is, when `document.fullscreenEnabled`), otherwise `false`; calls `document.documentElement.requestFullscreen()` if `document.fullscreenEnabled`, ignoring a rejection; and navigates client-side to `/slideshow`. MOD-012 reads and removes that key once on first mount. A value whose `path` starts with "/" and is not "/slideshow", and whose `t` is at most 10 seconds old, means "opened from the site": leaving returns to `path` with `router.replace`. Anything else means a direct visit: leaving goes to "/". A value without `fs` reads as `fs: false` (no request made). MOD-012 shows the "Press F for full screen" hint only while slide 1 is in a browser window and `document.fullscreenEnabled` is true. After an opening from the site with `fs: true`, it waits until full screen starts (the hint then never shows) or about 1.5 seconds pass with the browser still windowed. On any other opening it shows the hint at once, after its entrance delay. Every full-screen request the slideshow makes (`F` and the hint) targets `document.documentElement`. (Tech Lead Reviews, 2026-11-01 change review rev 1.7 + 1.8; hint rule changed by Leon's design decision L-2; `fs` field and hint timing from the 2026-11-01 change review rev 1.9, D1 (a) and Q6)
+- CONV-007: The shell on /slideshow. On `/slideshow` the site shell renders nothing: Sidebar returns `null`, its number-key handler does nothing, and no shell image is requested (no `/head.png`, no `/Subject.png`, verified in DevTools Network). MOD-001 moves or guards the `main::after` decoration so it is not generated there. The slideshow root is a fixed full-viewport layer above the shell, owned by MOD-012. Sidebar's number-key handler also does nothing while a `dialog[open]` exists, and in-page overlays are native `<dialog>` elements opened with `showModal()`. (Tech Lead Reviews, 2026-11-01 change review rev 1.7 + 1.8; T1 (b), T3 (a), T6)
 
 ---
 
@@ -175,14 +185,15 @@ Test:  (none — static site, no automated test suite defined)
 
 | MOD-ID | Module Name | Directory | Description |
 | --- | --- | --- | --- |
-| MOD-001 | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) | mod-site-shell | Persistent layout shell: left sidebar with profile section, navigation, and "Online" block; dark mode toggle with blocking inline script and localStorage persistence. No footer. |
+| MOD-001 | Site Shell (Layout, Sidebar, Nav, Footer, Dark Mode) | mod-site-shell | Persistent layout shell: left sidebar with profile section (name "Leon Wu", subtitle "Full-Stack Software Engineer"), seven navigation items (the seventh, Slideshow, opens /slideshow), and "Online" block; dark mode toggle with blocking inline script and localStorage persistence. Writes the CONV-006 slideshow entry value and keeps the shell off /slideshow (CONV-007). No footer. |
 | MOD-002 | Home Page | mod-home | Hero screen with greeting headline, bio, current status line, primary CTA linking to LinkedIn, secondary CTA "Reach out", tertiary CTA "Download CV", and a projects list. |
-| MOD-003 | Projects Grid Page | mod-projects-grid | /projects route and persistent split-panel layout: scrollable project list aside (title and tech string, active item highlighted) beside the active project detail; /projects redirects to /projects/multi-agent-system. Owns the shared project frame (CONV-001). |
-| MOD-004 | Project Detail: Marketing Analytics | mod-project-marketing | Detail page for SitePlus+ at /projects/siteplus; header with H1, At-a-glance, tags, links, description pull-quote, and nine case study sections including Images. Owns site/data/projects/siteplus.ts. |
-| MOD-005 | Project Detail: Multi-Agent System | mod-project-multi-agent | Detail page for the Multi-Agent Software Development System at /projects/multi-agent-system; header with H1, At-a-glance, tags, three links, description pull-quote, feature image with alt text and caption, and eight case study sections. Owns site/data/projects/multi-agent-system.ts. |
-| MOD-006 | Project Detail: TabVault | mod-project-tabvault | Detail page for TabVault at /projects/tabvault; header with H1, At-a-glance, tags, links, description pull-quote, and nine case study sections including Images. Owns site/data/projects/tabvault.ts. |
-| MOD-007 | Experience Page | mod-experience | Reverse-chronological list of professional roles and education entries. |
+| MOD-003 | Projects Grid Page | mod-projects-grid | /projects route and persistent split-panel layout: scrollable project list aside (title and tech string, active item highlighted) beside the active project detail; /projects redirects to /projects/multi-agent-system. Owns the shared project frame (CONV-001) and the image overlay on every project image (AC-108 to AC-110). |
+| MOD-004 | Project Detail: Marketing Analytics | mod-project-marketing | Detail page for SitePlus+ at /projects/siteplus; header with H1, At-a-glance, tags, links, description pull-quote, feature image with alt text, and nine case study sections including Images. Owns site/data/projects/siteplus.ts. |
+| MOD-005 | Project Detail: Multi-Agent System | mod-project-multi-agent | Detail page for the Multi-Agent Software Development System at /projects/multi-agent-system; header with H1, At-a-glance, tags, two links, description pull-quote, feature image with alt text and caption, and eight case study sections. Owns site/data/projects/multi-agent-system.ts. |
+| MOD-006 | Project Detail: TabVault | mod-project-tabvault | Detail page for TabVault at /projects/tabvault; header with H1, At-a-glance, tags, one link, description pull-quote, feature image with alt text, and nine case study sections including Images. TabVault is not live. Owns site/data/projects/tabvault.ts. |
+| MOD-007 | Experience Page | mod-experience | Reverse-chronological list of two professional roles (Exascend, GoFreight) and two education entries, per Leon's CV. |
 | MOD-008 | About Page | mod-about | Short narrative about Leon's pivot story, two body paragraphs; no photo and no education block on this page. |
-| MOD-009 | Skills Page | mod-skills | Technical skills listed by category as chip/badge elements, scannable at a glance. |
-| MOD-010 | Contact Page | mod-contact | Contact page with real email address, LinkedIn, GitHub links, and resume PDF download. |
-| MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content with header metadata and no external links. Owns site/data/projects/projectday.ts. |
+| MOD-009 | Skills Page | mod-skills | Technical skills in six groups as chip/badge elements, scannable at a glance. |
+| MOD-010 | Contact Page | mod-contact | Contact page with real email address, LinkedIn, GitHub links, and resume PDF download; no phone number. |
+| MOD-011 | Project Detail: ProjectDay | mod-project-projectday | Detail page for ProjectDay at /projects/projectday; renders case study content (seven sections including Images) with header metadata, a three-screen feature image and no external links. Owns site/data/projects/projectday.ts and site/public/projectday-*. |
+| MOD-012 | Interview Slideshow | mod-slideshow | Full-screen interview slideshow at /slideshow: three slides about Leon, a project menu and four project tracks, designed by the design team (project-planning/design/ux-team/ at commit ac1a07d), with copy from asset/content/interview-deck.md. Owns site/app/slideshow/. |

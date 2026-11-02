@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -19,11 +19,11 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 **User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD sections 4.3 and 5 govern this module:
 
 - Route: /projects/siteplus
-- Source file reference: `asset/content/case-study-siteplus-detailed.md` (content stored as structured TypeScript data in the record file `site/data/projects/siteplus.ts`).
+- Source file reference: `asset/content/case-study-siteplus-detailed.md` (as of commit e479e22; it was aligned with Leon's CV on 2026-11-01) (content stored as structured TypeScript data in the record file `site/data/projects/siteplus.ts`).
 - Header area: H1 "SitePlus+", atAGlance line (muted, below title), tag chips, external links row, description as pull-quote (border-l-2 accent).
 - Links: each link shows its plain-text prefix followed by the linked label; only the label is a link.
 - Sections: The problem, My role, How it works, end to end, Images, Architecture, Key engineering decisions, Challenges and how I resolved them, Impact, What I learned, and what I would improve.
-- The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs.
+- The Images section shows the SitePlus+ screenshots below, in this order, and has no paragraphs. The feature image, `/siteplusplus-home.jpg`, has the alt text "Screenshot of the SitePlus+ home dashboard." (Record 1).
 - Inline bold: paragraphs may contain `**bold text**` markdown rendered as `<strong>` via an InlineBold helper component.
 
 **Non-goals (from PRD section 8 — Out of Scope):**
@@ -31,7 +31,7 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.6. Requirements are drawn directly from PRD sections 4.3 and 5.
+- No formal US-IDs defined in PRD revision 1.10. Requirements are drawn directly from PRD sections 4.3 and 5.
 
 ## Requirements
 
@@ -46,9 +46,9 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 - Header area elements (rendered in this order):
   - H1: "SitePlus+"
   - atAGlance line (muted, below title): "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%"
-  - Tag chips: Full-Stack · Java/Spring Boot · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS
+  - Tag chips: Full-Stack · Java/Spring Boot · Spring Security / JWT · React · TypeScript · Redux Toolkit · PostgreSQL · Redis · Docker · GitHub Actions · AWS
   - External links row (each link shows its plain-text prefix followed by the linked label; only the label is a link):
-    - Link 1: "Demo Video: " followed by the linked label "link" — https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah — with `target="_blank" rel="noopener noreferrer"`
+    - Link 1: "Demo: " followed by the linked label "interactive walkthrough" — https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah — with `target="_blank" rel="noopener noreferrer"`
     - Link 2: "GitHub: " followed by the linked label "marketing-analytics" — https://github.com/LeonWu813/marketing-analytics — with `target="_blank" rel="noopener noreferrer"`
   - Description as pull-quote (`border-l-2 accent`): "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent."
 - Sections (each: h2 heading + items):
@@ -61,7 +61,16 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
   7. Challenges and how I resolved them
   8. Impact
   9. What I learned, and what I would improve
-- The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs.
+- The Images section shows the SitePlus+ screenshots below, in this order, and has no paragraphs. The feature image, `/siteplusplus-home.jpg`, has the alt text "Screenshot of the SitePlus+ home dashboard." (Record 1).
+
+  | Screenshot | Alt text |
+  |---|---|
+  | `/siteplusplus-reports.jpeg` | Screenshot of the SitePlus+ reports page. |
+  | `/siteplusplus-sites.jpeg` | Screenshot of the SitePlus+ Sites page, with a form to register a new site and a card for a registered test site. |
+
+- Section headings and paragraphs match the source file `asset/content/case-study-siteplus-detailed.md` (as of commit e479e22) word for word (CONV-003). In particular, "Key engineering decisions" includes the paragraph that starts "**Resilience on purpose.**" and ends "fails over 100% of traffic to the survivor automatically.", and the paragraph that starts "**Securing an endpoint that has to be public.**" says "50 requests per minute per IP". The tag chips match the Tags row above, in that order (AC-120).
+- Every image on the page (the feature image and each Images-section image) carries exactly the alt text above and no project image has an empty alt (AC-127). Each image opens in the image overlay owned by MOD-003.
+- The two screenshots `/siteplusplus-home.jpg` and `/siteplusplus-reports.jpeg` are used on slides C2 and C5 of the slideshow (MOD-012): renaming any `site/public/siteplus*` file breaks MOD-012.
 - InlineBold helper: splits paragraph text on `**...**` and renders `<strong>` tags for bolded spans.
 - All external links include `target="_blank" rel="noopener noreferrer"`.
 - Page exports a `metadata` object with title "SitePlus+ — Leon Wu" and page-specific description.
@@ -75,14 +84,17 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 slug: "siteplus"
 title: "SitePlus+"
 tech: "Full-Stack · Java/Spring Boot · React · AWS"
-tags: ["Full-Stack", "Java/Spring Boot", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]
+tags: ["Full-Stack", "Java/Spring Boot", "Spring Security / JWT", "React", "TypeScript", "Redux Toolkit", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"]
 atAGlance: "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%"
 description: "A full-stack analytics platform for tracking user behavior, managing campaigns, and auditing SEO across multiple websites. Built end to end on my own and adopted in production by a real company, where it cut recurring analytics work by roughly 60 percent."
 links:
-  - { name: "Demo Video: ", label: "link", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
+  - { name: "Demo: ", label: "interactive walkthrough", href: "https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah" }
   - { name: "GitHub: ", label: "marketing-analytics", href: "https://github.com/LeonWu813/marketing-analytics" }
 featureImage: "/siteplusplus-home.jpg"
+featureImageAlt: "Screenshot of the SitePlus+ home dashboard."
 ```
+
+**Engineering rules (Tech Lead change review rev 1.7 + 1.8, 0051840, and rev 1.9, b8395f1):** this module runs after MOD-003 has added `SectionItem.alt` (the excess-property check rejects `alt` in a record until the type has it). Fill `featureImageAlt` and the two section-item `alt` values, and the rev 1.8 paragraphs, tags and demo link. Keep the two screenshot files named as above (slides C2 and C5 use them).
 
 **ProjectEntry TypeScript interface (from PRD section 5):**
 ```typescript
@@ -92,7 +104,7 @@ interface ProjectLink {
   href: string;
 }
 
-type SectionItem = string | { image: string };   // a paragraph (may contain **bold**) or an image
+type SectionItem = string | { image: string; alt?: string };   // a paragraph (may contain **bold**) or an image with its alt text
 
 interface ProjectSection {
   heading: string;
@@ -137,13 +149,22 @@ interface ProjectEntry {
 
 - AC-029: The system shall render "SitePlus+" as H1 on the /projects/siteplus route.
 - AC-030: The system shall render the atAGlance line "Sole engineer · Full-stack + AWS infra · Live in production · Cut recurring analytics work ~60%" in a muted style below the H1.
-- AC-031: The system shall render tag chips for: Full-Stack, Java/Spring Boot, React, TypeScript, Redux Toolkit, PostgreSQL, Redis, Docker, GitHub Actions, AWS.
-- AC-032: The system shall render a link showing "Demo Video: " followed by the linked label "link" to https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah and a link showing "GitHub: " followed by the linked label "marketing-analytics" to https://github.com/LeonWu813/marketing-analytics. Each link shows its plain-text prefix followed by the linked label, and only the label is a link; both links use `target="_blank" rel="noopener noreferrer"`.
+- AC-031: The system shall render tag chips for: Full-Stack, Java/Spring Boot, Spring Security / JWT, React, TypeScript, Redux Toolkit, PostgreSQL, Redis, Docker, GitHub Actions, AWS.
+- AC-032: The system shall render a link showing "Demo: " followed by the linked label "interactive walkthrough" to https://app.supademo.com/demo/cmosxfpu96m3ew9doctdnhtah and a link showing "GitHub: " followed by the linked label "marketing-analytics" to https://github.com/LeonWu813/marketing-analytics. Each link shows its plain-text prefix followed by the linked label, and only the label is a link; both links use `target="_blank" rel="noopener noreferrer"`.
 - AC-033: The system shall render the description as a pull-quote with `border-l-2 accent` styling above the sections.
-- AC-034: The system shall render the nine sections in order (The problem, My role, How it works, end to end, Images, Architecture, Key engineering decisions, Challenges and how I resolved them, Impact, What I learned, and what I would improve), each with an h2 heading. The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order) and has no paragraphs; every other section has paragraph content.
+- AC-034: The system shall render the nine sections in order (The problem, My role, How it works, end to end, Images, Architecture, Key engineering decisions, Challenges and how I resolved them, Impact, What I learned, and what I would improve), each with an h2 heading. The Images section shows the SitePlus+ screenshots (`/siteplusplus-reports.jpeg`, `/siteplusplus-sites.jpeg`, in order, with the alt texts above) and has no paragraphs; every other section has paragraph content.
 - AC-035: The system shall render `**bold**` syntax within paragraph text as `<strong>` elements via the InlineBold helper.
 - AC-036: The system shall serve content from structured TypeScript data in the record file `site/data/projects/siteplus.ts` — not from `fs.readFileSync` or any markdown parsing at request time.
 - AC-037: The system shall await `params` before reading the slug, with `params` typed as `Promise<{ slug: string }>`.
 - AC-038: The system shall set `dynamicParams = false` so that an unknown slug returns 404.
 - AC-039: The system shall populate `generateStaticParams` by iterating the projects data array, not by hard-coding slug strings.
 - AC-040: The system shall export a metadata object with title "SitePlus+ — Leon Wu" and Open Graph and Twitter card tags.
+- AC-120 (added in revision 1.8): On /projects/siteplus, every section heading and paragraph matches the source file at commit e479e22 word for word, as CONV-003 requires. In particular, "Key engineering decisions" includes the paragraph that starts "**Resilience on purpose.**" and ends "fails over 100% of traffic to the survivor automatically.", and the paragraph that starts "**Securing an endpoint that has to be public.**" says "50 requests per minute per IP". The tag chips match the Tags row above, in that order.
+- AC-127: On every /projects/<slug> page, the feature image and every image in an Images section have exactly the alt text given for them in sections 4.3 to 4.6 and 5, and no project image has an empty alt. The overlay dialog each one opens is named by that alt text. (For MOD-004, /projects/siteplus.)
+- AC-126: In the built HTML of every route, including /slideshow, no phone number appears: no `tel:` link, and neither "206-677-7544" nor "2066777544" nor any other phone number in text, links or meta tags. AC-126 does not cover the contents of the CV PDF served at /Leon_cv.pdf, which lists Leon's phone number (see section 6, Resume Hosting). (For MOD-004, the /projects/siteplus route.)
+
+## Integration Points
+
+### Integration with MOD-012 (Interview Slideshow) — Slide images
+- Slide C2 uses `/siteplusplus-home.jpg` and slide C5 uses `/siteplusplus-reports.jpeg` (PRD 4.11 Slide images: "MOD-004 asset"), with alt texts "Screenshot of the SitePlus+ home dashboard." and "Screenshot of the SitePlus+ reports page.". Renaming either file breaks MOD-012.
+- **AC:** AC-106 (MOD-012 spec) gates QA for the slideshow images.

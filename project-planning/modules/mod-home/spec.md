@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -86,6 +86,7 @@ A single, short hero screen that orients the visitor immediately. Renders the gr
 - AC-017: The system shall display all hero content above the fold (visible without scrolling) on a standard laptop viewport.
 - AC-018: The system shall export a metadata object with title "Home — Leon Wu" and Open Graph and Twitter card tags.
 - AC-087: ProjectDay appears in the Home page projects list with its title and tech line, links to /projects/projectday, and shows no date.
+- AC-126: In the built HTML of every route, including /slideshow, no phone number appears: no `tel:` link, and neither "206-677-7544" nor "2066777544" nor any other phone number in text, links or meta tags. AC-126 does not cover the contents of the CV PDF served at /Leon_cv.pdf, which lists Leon's phone number (see section 6, Resume Hosting). (For MOD-002, the / route.)
 
 ## Integration Points
 

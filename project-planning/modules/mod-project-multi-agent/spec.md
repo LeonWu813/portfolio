@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.6 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -14,7 +14,7 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 
 ## Context
 
-**Business problem:** From PRD Goal 2: "Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar." The Multi-Agent Software Development System is described as "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store." This project demonstrates Leon's systems design skills and his ability to build AI-powered development tooling. The detail page must convey the full story of how the system works and what it shipped.
+**Business problem:** From PRD Goal 2: "Showcase four strong projects as full case studies, each reachable in one click from the projects sidebar." The Multi-Agent Software Development System is described as "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site." This project demonstrates Leon's systems design skills and his ability to build AI-powered development tooling. The detail page must convey the full story of how the system works and what it shipped.
 
 **User stories:** The PRD does not define US-IDs for this project. The following page-level requirements from PRD sections 4.4 and 5 govern this module:
 
@@ -33,7 +33,7 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.6. Requirements are drawn directly from PRD sections 4.4 and 5.
+- No formal US-IDs defined in PRD revision 1.10. Requirements are drawn directly from PRD sections 4.4 and 5.
 
 ## Requirements
 
@@ -47,13 +47,12 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 - A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (CONV-005)
 - Header area elements (rendered in this order):
   - H1: "Multi-Agent Software Development System"
-  - atAGlance line (muted, below title): "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store"
+  - atAGlance line (muted, below title): "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site"
   - Tag chips: Claude Code · Bash · Python · Git · Multi-agent · Systems Design
   - External links row (each link shows its plain-text prefix followed by the linked label; only the label is a link):
-    - Link 1: "Built by the system: " followed by the linked label "tab-vault.com" — https://tab-vault.com — with `target="_blank" rel="noopener noreferrer"`
-    - Link 2: "GitHub: " followed by the linked label "System repo" — https://github.com/LeonWu813/multi-agent-software-development-system — with `target="_blank" rel="noopener noreferrer"`
-    - Link 3: "GitHub: " followed by the linked label "TabVault repo" — https://github.com/LeonWu813/tab-management — with `target="_blank" rel="noopener noreferrer"`
-  - Description as pull-quote (`border-l-2 accent`): "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store."
+    - Link 1: "GitHub: " followed by the linked label "System repo" — https://github.com/LeonWu813/multi-agent-software-development-system — with `target="_blank" rel="noopener noreferrer"`
+    - Link 2: "GitHub: " followed by the linked label "TabVault repo" — https://github.com/LeonWu813/tab-management — with `target="_blank" rel="noopener noreferrer"`
+  - Description as pull-quote (`border-l-2 accent`): "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped three products: TabVault, a full-stack web app deployed to AWS; ProjectDay, an iOS app submitted to the App Store; and this portfolio site."
   - Feature image: `asset/diagrams/multi-agent-horizontal.png` (landscape, 3080x1560). It replaces the current portrait diagram in the same position on the page. Editable source: `asset/diagrams/multi-agent-horizontal.html`.
   - Feature image caption: Human approval sits on every arrow. The coordinator runs the next step only after the human says yes.
   - Feature image alt text: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."
@@ -73,7 +72,9 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 - Page exports a canonical URL tag.
 - Canonical URL and og:url use the domain https://www.leon-wu.com followed by the page path.
 - Page is a Server Component (no `'use client'`).
-- Body copy: Section paragraphs match `asset/content/case-study-multi-agent-detailed.md` as of revision 1.4 (6 agents plus a coordinator, PM two-pass approval, scope check, pstack reviews, integration review, repeat-failure escalation, and an Impact section covering TabVault and ProjectDay).
+- Body copy: Section paragraphs match `asset/content/case-study-multi-agent-detailed.md` as of revision 1.7 (6 agents plus a coordinator, PM two-pass approval, scope check, pstack reviews, integration review, repeat-failure escalation, and an Impact section covering three shipped products: TabVault, now offline; ProjectDay; and this site).
+- No link to tab-vault.com appears on the page; in the built HTML of every route no link points to tab-vault.com, the text "tab-vault.com" does not appear, and no copy says TabVault is live (AC-092, AC-117).
+- Every image on the page (the feature image) carries the alt text in Record 2 and no project image has an empty alt (AC-127). The feature image opens in the image overlay owned by MOD-003.
 
 **Multi-Agent System ProjectEntry record (from PRD section 5):**
 ```
@@ -81,10 +82,9 @@ slug: "multi-agent-system"
 title: "Multi-Agent Software Development System"
 tech: "Harness Engineering · AI Agents · Systems Design · Claude Code"
 tags: ["Claude Code", "Bash", "Python", "Git", "Multi-agent", "Systems Design"]
-atAGlance: "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store"
-description: "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped two products: TabVault, a live full-stack web app, and ProjectDay, an iOS app submitted to the App Store."
+atAGlance: "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site"
+description: "A team of six AI agents, run by a coordinator session, that plan, build, and QA software through a human-approved workflow. It has shipped three products: TabVault, a full-stack web app deployed to AWS; ProjectDay, an iOS app submitted to the App Store; and this portfolio site."
 links:
-  - { name: "Built by the system: ", label: "tab-vault.com", href: "https://tab-vault.com" }
   - { name: "GitHub: ", label: "System repo", href: "https://github.com/LeonWu813/multi-agent-software-development-system" }
   - { name: "GitHub: ", label: "TabVault repo", href: "https://github.com/LeonWu813/tab-management" }
 featureImage: the landscape diagram in section 4.4 (a copy of asset/diagrams/multi-agent-horizontal.png; file name and location are the Tech Lead's call)
@@ -132,7 +132,7 @@ interface ProjectEntry {
 
 **Output:**
 - Rendered page at route `/projects/multi-agent-system` inside the projects split-panel layout (MOD-003) and the Site Shell layout (MOD-001).
-- Header: H1 title, atAGlance line (muted), tag chips, external links row (three links), description pull-quote, feature image with caption.
+- Header: H1 title, atAGlance line (muted), tag chips, external links row (two links), description pull-quote, feature image with caption.
 - Sections: each h2 heading followed by paragraphs with inline bold rendered via InlineBold helper.
 - Page-level `metadata` object for SEO and Open Graph.
 
@@ -144,9 +144,9 @@ interface ProjectEntry {
 ## Acceptance Criteria
 
 - AC-041: The system shall render "Multi-Agent Software Development System" as H1 on the /projects/multi-agent-system route.
-- AC-042: The system shall render the atAGlance line "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped TabVault (live) · ProjectDay submitted to the App Store" in a muted style below the H1.
+- AC-042: The system shall render the atAGlance line "Sole architect · 6 specialized agents + coordinator · Human-approved at every handoff · Shipped 3 products: TabVault, ProjectDay and this site" in a muted style below the H1.
 - AC-043: The system shall render tag chips for: Claude Code, Bash, Python, Git, Multi-agent, Systems Design.
-- AC-044: The system shall render three external links — "Built by the system: " followed by the linked label "tab-vault.com" (https://tab-vault.com), "GitHub: " followed by the linked label "System repo" (https://github.com/LeonWu813/multi-agent-software-development-system), and "GitHub: " followed by the linked label "TabVault repo" (https://github.com/LeonWu813/tab-management). Each link shows its plain-text prefix followed by the linked label, and only the label is a link; all three links use `target="_blank" rel="noopener noreferrer"`.
+- AC-044: The system shall render two external links — "GitHub: " followed by the linked label "System repo" (https://github.com/LeonWu813/multi-agent-software-development-system) and "GitHub: " followed by the linked label "TabVault repo" (https://github.com/LeonWu813/tab-management). Each link shows its plain-text prefix followed by the linked label, and only the label is a link; both links use `target="_blank" rel="noopener noreferrer"`.
 - AC-045: The system shall render the description as a pull-quote with `border-l-2 accent` styling above the sections.
 - AC-046: The system shall render the eight sections in order (The problem, My role, How it works, end to end, Design principles, The six agents, Decisions worth calling out, Impact, What I learned, and what I would improve), each with an h2 heading and paragraph content.
 - AC-047: The system shall render `**bold**` syntax within paragraph text as `<strong>` elements via the InlineBold helper.
@@ -156,7 +156,13 @@ interface ProjectEntry {
 - AC-051: The system shall populate `generateStaticParams` by iterating the projects data array, not by hard-coding slug strings.
 - AC-052: The system shall export a metadata object with title "Multi-Agent Software Development System — Leon Wu" and Open Graph and Twitter card tags.
 - AC-091: On /projects/multi-agent-system, the feature image is the landscape diagram from `asset/diagrams/multi-agent-horizontal.png`, not the earlier portrait diagram. It fills the width of the content column with no cropping on desktop (1280px wide) and mobile (375px wide). It has alt text describing the workflow (proposed: "Workflow diagram of the multi-agent system. A planning row runs from user requirements through PM, Tech Lead, human setup and approval, PM finalize, and Doc-Sync. A build row runs through Engineer, QA, Tech Lead integration review, PM checkpoint, and project complete, with loops for bugs, repeat failures, spec issues and retrospectives, all run by a coordinator session."), and the caption above appears directly below it.
-- AC-092: The At-a-glance line, tags, three links, description pull-quote, and every section paragraph on /projects/multi-agent-system match this section and the source file word for word. Each link shows its plain-text prefix followed by the linked label, as in the header table, and only the label is a link. The editor's line "Feature image: ..." from the source file does not appear on the page.
+- AC-092: The At-a-glance line, tags, two links, description pull-quote, and every section paragraph on /projects/multi-agent-system match this section and the source file word for word. Each link shows its plain-text prefix followed by the linked label, as in the header table, and only the label is a link. No link to tab-vault.com appears on the page. The editor's line "Feature image: ..." from the source file does not appear on the page. (Changed in revision 1.7: TabVault is offline, so the "Built by the system: tab-vault.com" link is removed.)
+
+- AC-117: In the built HTML of every route, including /slideshow, no link points to tab-vault.com, the text "tab-vault.com" does not appear, and no copy says TabVault is live. AC-117 does not cover the contents of the CV PDF served at /Leon_cv.pdf: the CV Leon chose on 2026-11-01 still names tab-vault.com (see section 6, Resume Hosting).
+- AC-127: On every /projects/<slug> page, the feature image and every image in an Images section have exactly the alt text given for them in sections 4.3 to 4.6 and 5, and no project image has an empty alt. The overlay dialog each one opens is named by that alt text. (For MOD-005, /projects/multi-agent-system.)
+- AC-126: In the built HTML of every route, including /slideshow, no phone number appears: no `tel:` link, and neither "206-677-7544" nor "2066777544" nor any other phone number in text, links or meta tags. AC-126 does not cover the contents of the CV PDF served at /Leon_cv.pdf, which lists Leon's phone number (see section 6, Resume Hosting). (For MOD-005, the /projects/multi-agent-system route.)
+
+**QA note (Tech Lead, b8395f1):** MOD-003's overlay wraps the multi-agent feature image in a button, so QA re-checks AC-091 under AC-110 after MOD-003's overlay is in.
 
 ## Integration Points
 
