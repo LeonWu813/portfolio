@@ -117,6 +117,15 @@ Method: `npm run build` (passes, no warnings, 14 pages), `next start -p 3457` (s
 
 Regression re-check: AC-006 favicon part still PASS; AC-009/AC-093/AC-094/AC-124 unaffected by the one-line inert change.
 
+### QA Run 4 - Integration-fix verification INT-010 - 2026-11-02 (engineer fix 1d10e5f). Workflow: integration-fix-verify (regression of run 3 failure)
+
+Method: `npm run build` (passes, 14 pages), `next start -p 3457` with curl, server stopped afterwards. No project verify skill exists.
+
+- INT-010: REGRESSION PASS. `GET /apple-touch-icon.png` 200 image/png 4072 bytes (180x180 PNG); `cmp` against the pre-deletion file (7cf7f7b^) identical. `/favicon.ico` 200 image/x-icon with a `<link rel=icon>` tag. Deleted files (TopNav, scaffold SVGs, favicon_io, manifest, android-chrome, favicon-16/32): grep finds no reference in app/, components/, data/, next.config.ts. All 37 local src/href assets referenced by the 10 built pages return 200 (no 404). Pages /, /about, /experience, /skills, /contact, /slideshow 200; /projects 307 to /projects/multi-agent-system (existing behavior).
+- Spec-issue note from run 3 closed as resolved without a spec change; AC-006 wording stays. Observation only: the HTML has no apple-touch-icon link tag (browsers request the default path, which now works).
+- Regressions: none. Only file changed by the fix is public/apple-touch-icon.png (plus planning docs).
+- integration-review.md: INT-010 row formatting fixed (stray APPROVED cell). INT-001, INT-002, INT-011 rows had the same misplaced cell (QA VERIFIED had been written into Assigned Module); corrected so Status=QA VERIFIED and Assigned Module=mod-site-shell (MOD-001). Tech Lead should glance at these cells.
+
 ### Human script (what headless cannot judge)
 
 1. Safari and Firefox desktop: from /about click Slideshow, then repeat with key 7. Expect slide 1 in full screen, no sidebar or top bar. Esc once returns to /about.
@@ -126,7 +135,7 @@ Regression re-check: AC-006 favicon part still PASS; AC-009/AC-093/AC-094/AC-124
 
 ### Open items
 
-- [ ] INT-010 / AC-006 spec-issue - /apple-touch-icon.png returns 404 after deleting public copy (2026-11-02)
+- [x] INT-010 / AC-006 spec-issue - /apple-touch-icon.png returns 404 after deleting public copy - resolved 2026-11-02 without a spec change (public copy restored, run 4)
 - [ ] AC-095 needs-signoff — Safari, Firefox, iPhone Safari check by the human (script above) (2026-11-02)
 - [ ] CV download filename needs-signoff — saved name check in a real browser (2026-11-02)
 

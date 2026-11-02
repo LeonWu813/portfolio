@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-site-shell
-mode: integration-fix
+agent: qa-mod-site-shell
+mode: integration-fix-verify
 module: mod-site-shell
 result: success
-next: claude --agent qa-mod-site-shell "integration-fix-verify INT-010"
-timestamp: 2026-11-02T00:00:00Z
+next: human verifies INT-010 (and INT-001, INT-002, INT-011) then claude --agent tech-lead "INT-010 verified: <what you checked>". Open sign-offs remain on AC-095 and the CV filename (human script in mod-site-shell status.md)
+timestamp: 2026-11-02T01:00:00Z
 ```
 
 ## PM Updates
