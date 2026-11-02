@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: qa-mod-site-shell
-mode: regression
-module: mod-site-shell
-result: success
-next: Remaining human sign-offs for mod-site-shell are listed under Open items in modules/mod-site-shell/status.md (AC-095 Safari/Firefox/iPhone, CV download filename). Otherwise the coordinator runs the next step of the phase flow (after all modules pass: /pstack:thermos, then claude --agent tech-lead "phase-end integration review").
-timestamp: 2026-11-02T02:00:00Z
+agent: tech-lead
+mode: integration-review
+module: n/a
+next: Leon decides every row in project-planning/integration-review.md (INT-001 to INT-011: approve, reject or defer; for INT-001 also whether to say "use the OG image"), then claude --agent tech-lead "decisions: INT-001 approve, INT-002 ..."; after decided fixes are QA'd, human-verified and confirmed closed: claude --agent pm "checkpoint"
+result: issues-found
+timestamp: 2026-11-02T07:08:39Z
 ```
 
 ## PM Updates
@@ -672,6 +672,23 @@ Trigger: the [AMBIGUITY] marker Doc-Sync left in `modules/mod-slideshow/spec.md`
 **Approved**:
 - AC-096 as written in PRD rev 1.10 is testable with the method above; no PRD text change is needed. Everything Method 1 and Method 2 need is already on this machine as `setup.md` describes it (Chrome 156, Node 20.20.2, `npm run build` and `npm run start`); no new dependency and no file in `site/`.
 
+### Integration & Optimization Review — Phase 4 — 2026-11-01
+Reviewed: MOD-001, MOD-003, MOD-004, MOD-005, MOD-006, MOD-007, MOD-008, MOD-009, MOD-010, MOD-011, MOD-012 (code changed this phase); MOD-002 (no code change).
+Findings: 2 Concerns (INT-001, INT-002), 9 Recommendations (INT-003 to INT-011); 0 carried-forward DEFERRED rows (see project-planning/integration-review.md). 3 user-facing items escalated, not logged (SitePlus+ diagram and tree, pstack B-L2, site-wide reduced motion).
+
+pstack input: project-planning/pstack-findings/2026-11-01-thermos-phase4.md (b6bbe0b). I checked every finding I cite against the code at 3cf21aa.
+- Accepted: B-L4 (INT-003, ImageZoom.tsx:128-140, the close control is named by the image alt); Q-M1 (INT-004, ImageZoom.tsx:123-125 duplicates the Sidebar.tsx:220 guard); Q-L2 (folded into INT-005); B-L1 (INT-006, useFullscreenSession.ts:19-27, tab/newline and `/slideshow/` pass the check; not exploitable, because the only writer is same-origin, same-tab and under 10 s old); B-L3 (INT-007, useSlideInput.ts:144-159, a stale mouse entry poisons later touches on touch laptops); Q-H3 (INT-008, with MOD-012 proposed as owner of a `site/app/slideshow/handoff.ts`, so no unowned `site/lib/`; recommend defer); Q-H1 + Q-H2 (INT-009, deck.ts:3 and navigation.ts:90-101; module-internal, logged only for tracking; recommend defer); B-I2 (part of INT-001).
+- Escalated (user-facing, CONV-006 change): B-L2 (duplicate history entry). TL recommends no change.
+- Rejected: Q-H4, route group. It reverses T1 (b), which Leon adopted, and rewrites the Source Paths of MOD-001 to MOD-010. The shell's `return null` on /slideshow works and is QA'd (CONV-007), and the leftover `<main>` under the fixed layer causes no failure. Q-M2 to Q-M6, Q-LM1, Q-L1, Q-L4, Q-L5: MOD-012-internal structure with no failure scenario; not integration items. Q-M7: MOD-007-internal; the order and free-text period are intended (AC-118/119, QA 5591f89). Q-M8: the duplication is deliberate, because the deck's source is asset/content/interview-deck.md and the page's is experience.md (PRD sources), so deriving one from the other would couple MOD-012 to MOD-007 for no requirement. Q-L3: if ImageZoom unmounts while open, its refs are null, so `finishClose` returns early. The leftover listener is harmless, and no in-app path unmounts the page while the modal is open (links are inert, digits are blocked). B-I1: resize while open is cosmetic.
+
+Other inputs:
+- QA integration notes: metadataBase/og-image on 7 modules (INT-001); the drawer `querySelector` note (INT-011, the real defect is at phone widths); scan "file not found" for `/…` image paths (false positive, all files exist in site/public; logged under Skill Recommendations, not as a row); the Sidebar Email mailto carries `target="_blank"` (noted only: convention 6 reads it as an external link, the effect is at most a blank tab, not logged).
+- Earlier log items: SectionItem.alt required (INT-005); TopNav.tsx (INT-010); head.png and Subject.png (INT-002, extended to the About photos); reduced motion site-wide (escalated, recommend no change); SitePlus+ diagram and tree (escalated with a how-to, MOD-004-only option recommended).
+- Conflict and leak checklist, current-phase modules: routes unique; CONV-006 implemented on both sides (writer `{path,t,fs}` at Sidebar.tsx:91-105 matches the reader at useFullscreenSession.ts:29-50); CONV-007 both bails present (Sidebar.tsx:220, `return null` on /slideshow, Subject.png inside Sidebar); slide image file names unchanged (MOD-012 dependency on MOD-004/006/011); AC-125 name rule clean in source (no "Tsan-Yu" in app/, components/, data/); canonical and og:url on all 7 page files at www.leon-wu.com. No data, cache, log, job or secret paths exist in this static site, so no leakage surface beyond sessionStorage, which is same-origin and single-key.
+- Not measured: the Phase 4 milestone "Lighthouse score above 90" has no run on record. After INT-002, the PM checkpoint should include one (Chrome DevTools Lighthouse on `npm run build && npm run start` or the Vercel preview, mobile preset). That is runnable with what setup.md provides (Chrome, Node, build and start). I could not rebuild here (the sandbox blocks the Google Fonts fetch); QA's builds at 3cf21aa and earlier pass.
+
+Suggested grouping if approved (one engineer run per module, then QA, then Leon verifies): MOD-001: INT-001, INT-002, INT-010, INT-011. MOD-003: INT-003, INT-004, INT-005. MOD-012: INT-006, INT-007. Nothing has been pushed since b8395f1, and every push deploys, so push only after the checkpoint.
+
 ---
 
 ## Phase Plan
@@ -1154,4 +1171,8 @@ QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800
 
 Pattern: Next.js App Router dark mode without hydration flash — blocking inline script in layout.tsx sets the theme class synchronously before React hydration, reading localStorage with prefers-color-scheme fallback. This avoids the flash that useEffect-only solutions produce on SSR pages.
 Why: This pattern recurs on every SSR project with class-based theming and is non-obvious. A reusable skill would save the engineer from rediscovering the dangerouslySetInnerHTML script approach each time.
+Agent: tech-lead
+
+Pattern: scan-integration.sh reports "file not found" for every `/…` image path in a Next.js spec (e.g. /siteplusplus-home.jpg), because it resolves them against the project root instead of the framework's public directory (site/public/). QA flagged it on MOD-004 and MOD-012, and it produced 14 false leads in the Phase 4 review.
+Why: false leads cost every QA and Tech Lead run a manual check. The script should resolve root-relative URL paths against `<source root>/public` (Next.js, Vite) when such a directory exists, or print them as "URL path, not checked".
 Agent: tech-lead
