@@ -93,7 +93,7 @@ ul.bullets li::before{content:"";width:1.3cqh;height:1.3cqh;background:var(--acc
 .tl .entry{padding:var(--sp-3) calc(var(--sp-3) + var(--ss-line))}
 .tl .role-t{font-size:var(--fs-label);font-weight:700;line-height:1.2}
 .tl .org{font-size:var(--fs-label);color:var(--text-muted);line-height:1.3;margin-top:var(--sp-1)}
-.tl .card{min-height:30cqh}
+.tl .card.work{border-top:.8cqh solid var(--accent);padding-top:calc(var(--sp-3) - .5cqh)}
 
 /* photo slide */
 .photos{display:flex;gap:var(--sp-4);margin-top:var(--sp-4)}
@@ -144,9 +144,9 @@ img.shot{display:block;width:100%;height:100%;object-fit:contain}
 .wf .box.end svg.ok{width:3cqh;height:3cqh;color:var(--accent)}
 .wf .box svg{width:5cqh;height:3.2cqh}
 .wf .arr{width:6cqh;flex:none;height:3cqh;color:var(--text-muted)}
-.wf .loop{top:23cqh;right:auto;height:6cqh;border:var(--ss-line) solid var(--text-muted);border-top:none;border-radius:0 0 var(--radius) var(--radius)}
-.wf .loop .head{position:absolute;left:calc(-1.2cqh - var(--ss-line)/2);top:-.2cqh;width:2.4cqh;height:2cqh;color:var(--text-muted)}
-.wf .retro{top:31cqh;right:auto;font-size:var(--fs-label);color:var(--text-muted);white-space:nowrap;transform:translateX(-50%)}
+.wf .sys{top:25cqh;height:2.2cqh;border:var(--ss-line) solid var(--text-muted);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm)}
+.wf .up{top:calc(27.2cqh - var(--ss-line));left:50%;right:auto;width:2.4cqh;height:5cqh;transform:translateX(-50%);color:var(--text-muted)}
+.wf .retro{top:32.6cqh;left:50%;right:auto;font-size:var(--fs-label);color:var(--text-muted);white-space:nowrap;transform:translateX(-50%)}
 .wf .retro b{font-weight:500;color:var(--text)}
 
 /* B6 flow */
@@ -204,7 +204,7 @@ const S={
    [PUB+'IMG_6875.JPG','Snowboarding','Leon on a snowboard on a snowy slope, giving a peace sign, with forested mountains behind.'],
    [PUB+'4D0BDA8A-B273-40DC-BD3D-3098AF6BBB73.JPG','Bouldering','Leon on an indoor bouldering wall, reaching for orange holds.']]},
  'M':{type:'menu',title:'Pick a project'},
- 'A1':{type:'cover',title:'Multi-Agent Development System',nums:[['3','products shipped'],['6','-agent dev team'],['6','skills created']]},
+ 'A1':{type:'cover',title:'Multi-Agent Development System',nums:[['3','products shipped'],['6','agents on the dev team'],['6','skills created']]},
  'A2':{type:'workflow',title:'An AI dev team with a human in charge'},
  'A3':{type:'stack',title:'My role and stack',role:'Sole architect and builder',stack:['Claude Code (subagents, skills, hooks)','Bash','Python','Git']},
  'A4':{type:'bullets',title:'It started with one AI agent losing the plot',bullets:['Context drifts over long sessions','Earlier decisions get overwritten','No clean way to undo']},
@@ -238,7 +238,7 @@ const MENU=[['1','Multi-Agent System','An AI dev team with a human in charge'],[
 const FOOTER='leon-wu.com · github.com/LeonWu813 · linkedin.com/in/leon-wu-tsan-yu · leon.wu.tsan.yu@gmail.com';
 const TYPE_ALIAS={intro:'1',timeline:'2',job:'2a','job-2':'2b',photo:'3',menu:'M','menu-states':'M-states',cover:'B1',
  'intro-shot':'B2','intro-shot-1':'C2',stack:'C3','stack-2':'B3',bullets:'A8','bullets-shot':'B5','bullets-shot-1':'C5','role-grid':'A5',workflow:'A2',flow:'B6',
- 'timeline-focus':'2-focus'};
+ 'timeline-focus':'2-focus','cover-a1':'A1'};
 
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const ARROW='<svg class="arr" viewBox="0 0 60 30" aria-hidden="true"><path d="M4 15H52M42 6l11 9-11 9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -264,7 +264,7 @@ function render(id,opts={}){
     const f=id.endsWith('-focus');
     h=`<div class="content">${titleBlock(s.title)}<div class="tl">${s.entries.map((e,i)=>{
       const inner=`<div class="role-t">${esc(e.role)}</div><div class="org">${esc(e.org)}</div>`;
-      const body=e.key?`<button class="card${f&&i===2?' is-focus':''}${f&&i===1?' is-hover':''}" aria-keyshortcuts="${e.key}">${inner}<div class="details"><span class="det">Details${CHEV}</span><span class="key">${e.key}</span></div></button>`:`<div class="entry">${inner}</div>`;
+      const body=e.key?`<button class="card work${f&&i===2?' is-focus':''}${f&&i===1?' is-hover':''}" aria-keyshortcuts="${e.key}">${inner}</button>`:`<div class="entry">${inner}</div>`;
       return `<div><div class="date">${esc(e.date)}</div><div class="dot${e.key?' work':''}"></div>${body}</div>`}).join('')}</div></div>`;break;}
    case 'job':
     h=`<div class="content">${titleBlock(s.title)}<div class="sub">${esc(s.sub)}</div>${numbers(s.nums)}</div>`;break;
@@ -274,7 +274,7 @@ function render(id,opts={}){
     h=`<div class="content">${titleBlock(s.title)}<div class="photos">${s.photos.map(([src,c,alt])=>`<figure><div class="ph frameimg"><img class="shot" src="${src}" alt="${esc(alt)}"></div><figcaption>${c}</figcaption></figure>`).join('')}</div></div>`;break;
    case 'menu':{
     const st=id.endsWith('-states');
-    h=`<div class="content">${titleBlock(st?'Pick another project':s.title)}<div class="menu-cards">${MENU.map(([k,n,o],i)=>{
+    h=`<div class="content">${titleBlock(s.title)}<div class="menu-cards">${MENU.map(([k,n,o],i)=>{
        const cls=st?(i===2?' is-highlight':i===0?' is-focus':i===3?' is-hover':''):'';
        return `<button class="card${cls}" aria-keyshortcuts="${k}"><span class="key">${k}</span><span class="name">${esc(n)}</span><span class="one">${esc(o)}</span></button>`}).join('')}</div>
        <div class="hint-slot">${st?'<div class="hint" role="status">Pick a project: press 1 to 4 or click a card</div>':''}</div></div>
@@ -302,9 +302,10 @@ function render(id,opts={}){
     const l=centers[1],r=centers[4];
     h=`<div class="content">${titleBlock(s.title)}<div class="wf">
       <ol class="row">${W.map((b,i)=>box(b,i)+(i<5?`<li aria-hidden="true" style="display:contents">${ARROW}</li>`:'')).join('')}</ol>
-      <div class="loop" aria-hidden="true" style="left:${l}cqh;width:${r-l}cqh"><svg class="head" viewBox="0 0 24 20" aria-hidden="true"><path d="M2 18L12 4l10 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <p class="retro" style="left:${(l+r)/2}cqh">Retrospective feeds improvements back into the system</p>
-      <div class="drops" aria-hidden="true">${arrows.map(a=>`<i style="left:${a}cqh"></i>`).join('')}</div>
+      <div class="sys" aria-hidden="true"></div>
+      <svg class="up" viewBox="0 0 24 50" preserveAspectRatio="none" aria-hidden="true"><path d="M12 48V4M4 12l8-8 8 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+      <p class="retro">Retrospective feeds improvements back into the system</p>
+      <div class="drops" aria-hidden="true">${[0,1,4].map(k=>`<i style="left:${arrows[k]}cqh"></i>`).join('')}</div>
       <div class="bar">${CHECK}<span>I approve every handoff</span></div>
     </div></div>`;break;}
    case 'flow':

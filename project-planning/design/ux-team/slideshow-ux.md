@@ -1,9 +1,9 @@
 # Slideshow UX: interaction and flow (MOD-012, /slideshow)
 
-Written by: ux-designer, 2026-11-01. Revision 1 (same day) after Design Lead review 1; see the changelog at the end. Intended path: `project-planning/design/ux-team/slideshow-ux.md`.
+Written by: ux-designer, 2026-11-01. Revision 1 after Design Lead review 1; Revision 2 after Leon's review of the passed design (both 2026-11-01); see the changelogs at the end. Intended path: `project-planning/design/ux-team/slideshow-ux.md`.
 Inputs: `slideshow-brief.md` (with the Tech Lead's 13 limits), `slideshow-research.md`, `project-planning/prd.md` sections 2, 3, 4.11 and 6 (Revision 1.8), `asset/content/interview-deck.md` at HEAD (last changed in e479e22), the Tech Lead change review of 2026-11-01 in `status.md` (CONV-006, CONV-007, Q2 to Q5, T4), `site/components/Sidebar.tsx` (existing focus style).
 
-Advisory only. This document does not change any slide text, the slides or their order, the controls or the acceptance criteria. Where the PRD is silent, I give a recommendation in section 13 (Open questions) instead of deciding. "Research N.N" points to a section of `slideshow-research.md`. "Limit N" is the Tech Lead's numbered limit in the brief.
+Advisory only. This document does not change any slide text, the slides or their order, the controls or the acceptance criteria. Where the PRD was silent, section 13 lists the questions; since Revision 2 they are all decided by Leon. Revision 2 also contains three changes Leon asked for that need PRD wording changes through PM before engineering (no "Details" cue and no visible keys on the timeline cards; one menu title; the A2 visual); they are listed in section 13.2. "Research N.N" points to a section of `slideshow-research.md`. "Limit N" is the Tech Lead's numbered limit in the brief.
 
 Words used below:
 - **Screen**: the browser viewport (full screen or windowed).
@@ -22,11 +22,11 @@ Words used below:
 | Id | Slide type (brief) | On-screen title | Interactive elements | Name + position cue |
 |---|---|---|---|---|
 | 1 | Intro | Hi, I'm Leon | none | no |
-| 2 | Timeline | From marketing to engineering | 2 work cards: GoFreight (key 1), Exascend (key 2) | no |
+| 2 | Timeline | From marketing to engineering | 2 work cards: GoFreight, Exascend (no visible cue or key; hidden shortcut keys 1, 2) | no |
 | 2a (hidden) | Hidden job slide (big numbers) | Front-End Developer at Exascend | none | no |
 | 2b (hidden) | Hidden job slide (big numbers) | Marketing Project Manager at GoFreight | none | no |
 | 3 | Photo slide | Based in Seattle, usually on snow or a wall | none | no |
-| M | Menu | Pick a project / Pick another project | 4 project cards (keys 1 to 4) | no |
+| M | Menu | Pick a project (always) | 4 project cards (keys 1 to 4) | no |
 | A1, B1, C1 | Project numbers cover | project name | none | yes |
 | A2 | Simple workflow diagram | An AI dev team with a human in charge | none | yes |
 | B2, C2, D1 | Intro with screenshot (bullets + image) | per deck | none | yes |
@@ -46,10 +46,9 @@ Note on labels: the hidden slides are labelled 2a = Exascend and 2b = GoFreight 
 |---|---|---|
 | `current` | slide 1 | any navigation |
 | `origin` | from CONV-006: "site" (with a return path) or "direct" | never after mount |
-| `menuTitleAnother` | false | set true when a project is finished (Next on its last slide) or left with M from a project slide. Never reset in the session. |
 | `preselected` | the `?project=` value if exactly one of `multi-agent`, `projectday`, `siteplus`, `tabvault`; else none | never |
-| `preselectedShown` | false | set true the first time any slide of the preselected project is shown (see Q5, Q6) |
-| `fullscreenHint` | visible if `origin` = direct; else hidden | hides on the first keydown, pointerdown, or full-screen entry (section 6) |
+| `preselectedShown` | false | set true the first time any slide of the preselected project is shown (decided: L-4, L-5) |
+| `fullscreenHint` | visible if the slideshow is windowed once the opening full-screen request has settled **and** `document.fullscreenEnabled` is true, whatever the origin (decided: L-2) | hides on the first keydown, pointerdown, or full-screen entry (section 6) |
 | `menuHint` | hidden | shown by Next on the menu when nothing is preselected or already shown; hides after about 2 s or when the menu is left |
 
 A reload is a direct visit (CONV-006): state resets to the initial values and slide 1.
@@ -65,18 +64,18 @@ A reload is a direct visit (CONV-006): state resets to the initial values and sl
 | On | Next | Previous | M | Home | Number keys | F | Esc / close button |
 |---|---|---|---|---|---|---|---|
 | 1 | 2 | no-op | Menu | no-op | no-op | full screen (section 6) | leave |
-| 2 | 3 | 1 | Menu | 1 | `1` opens 2b GoFreight, `2` opens 2a Exascend, `3`/`4` no-op | same | leave |
+| 2 | 3 | 1 | Menu | 1 | `1` opens 2b GoFreight, `2` opens 2a Exascend (hidden shortcuts, nothing on screen names them), `3`/`4` no-op | same | leave |
 | 2a / 2b | 2 | 2 | Menu | 1 | no-op | same | leave |
 | 3 | Menu | 2 | Menu | 1 | no-op | same | leave |
 | Menu | preselected project's first slide if `preselected` and not `preselectedShown`; otherwise show the menu hint and stay | 3 | no-op | 1 | `1`-`4` start that project at its first slide | same | leave |
-| Project first slide (A1, B1, C1, D1) | second slide | Menu (title flag unchanged, see Q8) | Menu, set `menuTitleAnother` | 1 | no-op | same | leave |
-| Project middle slide | next in track | previous in track | Menu, set `menuTitleAnother` | 1 | no-op | same | leave |
-| Project last slide (A8, B8, C8, D5) | Menu, set `menuTitleAnother` | previous in track | Menu, set `menuTitleAnother` | 1 | no-op | same | leave |
+| Project first slide (A1, B1, C1, D1) | second slide | Menu | Menu | 1 | no-op | same | leave |
+| Project middle slide | next in track | previous in track | Menu | 1 | no-op | same | leave |
+| Project last slide (A8, B8, C8, D5) | Menu | previous in track | Menu | 1 | no-op | same | leave |
 
 Rules that hold across the table:
 - Next and Previous never reach 2a or 2b from anywhere except as listed (AC-114). From 1, Previous does nothing; from 3, Previous goes to 2, not to a job slide.
-- M from slides 1, 2, 2a, 2b or 3 goes to the menu but does not set `menuTitleAnother` ("left with M" applies only to a project).
-- Home keeps all session state (title flag, preselection). Only a reload resets it.
+- The menu title is always "Pick a project" (Leon, Revision 2). Nothing in the session changes it.
+- Home keeps all session state (the preselection and whether it was shown). Only a reload resets it.
 - Opening a project from the menu always starts at its first slide, even if it was shown before.
 - After the menu returns from a track, there is no "visited" or "shown" styling of any kind on the cards (no tag, no dimming, no check mark). AC-100 forbids a "Shown" tag, and a visual stand-in for it would break the same intent.
 
@@ -84,15 +83,15 @@ Rules that hold across the table:
 
 **Main flow (Leon in an interview, opened from the site):**
 1. Leon presses `7` or clicks Slideshow. MOD-001 requests full screen and navigates (CONV-006). Slide 1 shows full screen, no hint.
-2. Space, Space: slide 2, slide 3. On slide 2 he may press `1` (GoFreight job slide), then Space to come back to slide 2, then `2` (Exascend), then Space back to 2, then Space to 3.
+2. Space, Space: slide 2, slide 3. On slide 2 he may click the GoFreight card (or press the hidden key `1`), then Space to come back to slide 2, then the Exascend card (or `2`), then Space back to 2, then Space to 3. If he does not open a card, Space or a click anywhere off the cards goes straight to slide 3.
 3. Space: menu, titled "Pick a project". He presses `2`: B1 to B8.
-4. Space on B8: menu, now titled "Pick another project". He presses another number, or Esc to leave.
+4. Space on B8: the menu again, with the same title. He presses another number, or Esc to leave.
 5. Esc (one press, even in full screen): back on the page he came from (CONV-006, AC-099).
 
 **Start link flow (`/slideshow?project=siteplus`, direct visit):**
-1. Slide 1 in the browser window, with the "Press F for full screen" hint. He presses F (full screen, hint gone) or Space (slide 2, hint gone).
+1. Slide 1 in the browser window, with the "Press F for full screen" hint. He presses F or clicks the hint (full screen, hint gone), or presses Space (slide 2, hint gone).
 2. Through 2 and 3 to the menu. The SitePlus+ card is highlighted. Space (or a click anywhere off the cards) starts C1.
-3. After C8, the menu returns as "Pick another project". The highlight is gone (see Q5) and Space now shows the menu hint.
+3. After C8, the menu returns, still titled "Pick a project". The highlight is gone (L-4) and Space now shows the menu hint.
 
 **Detour flows:** M from any slide jumps to the menu (for example, an interviewer says "skip ahead to your projects"). Home from anywhere restarts at slide 1 without forgetting what was shown.
 
@@ -116,12 +115,12 @@ The key handler listens on `window`, so keys work whether focus is on the layer,
 
 | Key | Action | Notes |
 |---|---|---|
-| Space | Next | When focus is on a card: opens the card instead. When focus is on the close button: leaves (see Q11). |
+| Space | Next | When focus is on a card: opens the card instead. When focus is on the close button: leaves (decided: P-1). |
 | Shift+Space | Previous | |
 | Right, Down, Page Down | Next | Also when focus is on a card or the close button (arrows never move between cards). Presenter clickers send Page Down / Page Up, so they work. |
 | Left, Up, Page Up | Previous | |
-| Enter | Next | When focus is on a card: opens the card. When focus is on the close button: leaves (see Q11). |
-| `1`, `2` | On slide 2 only: open GoFreight, Exascend | |
+| Enter | Next | When focus is on a card: opens the card. When focus is on the close button: leaves (decided: P-1). |
+| `1`, `2` | On slide 2 only: open GoFreight, Exascend | Hidden shortcut since Revision 2: no key is shown on the cards. Exposed to assistive tech through `aria-keyshortcuts` (9.1). |
 | `1`-`4` | On the menu only: start Multi-Agent, ProjectDay, SitePlus+, TabVault | |
 | M | Menu | `m` or `M` (Caps Lock). |
 | Home | Slide 1 | |
@@ -132,23 +131,23 @@ The key handler listens on `window`, so keys work whether focus is on the layer,
 
 Number-key matching: accept `event.key` "1" to "4", and also `event.code` Digit1-Digit4 and Numpad1-Numpad4. This makes the number row work on layouts such as French AZERTY, where the unshifted key produces "&" and not "1". F and M match by `event.key` (layout-aware letters).
 
-Held keys: see Q10. Recommended: ignore auto-repeat (`event.repeat`) for every action key, so a key held a moment too long on a laptop does not skip slides in front of an interviewer.
+Held keys (decided: L-8): ignore auto-repeat (`event.repeat`) for every action key, so a key held a moment too long on a laptop does not skip slides in front of an interviewer.
 
 ### 3.2 Mouse (pointerType "mouse")
 
-- **Primary-button click anywhere in the layer = Next**, including the bars around the frame (section 8, limit 9), the slide text, images, diagrams, the position cue, the menu footer, the menu hint and the "Press F" hint (but see Q3).
-- **Exceptions:** a click on a slide-2 work card opens it; a click on a menu card starts it; a click on the close button leaves. These never also fire Next (the handler stops there).
-- **Never Previous** (PRD Controls). See Q1 for the missing mouse "back".
+- **Primary-button click anywhere in the layer = Next**, including the bars around the frame (section 8, limit 9), the slide text, images, diagrams, the position cue, the menu footer and the menu hint.
+- **Exceptions:** a click on a slide-2 work card opens it; a click on a menu card starts it; a click on the close button leaves; a click on the "Press F for full screen" hint enters full screen (decided: L-3). These never also fire Next (the handler stops there).
+- **Never Previous** (PRD Controls). There is no mouse "back"; decided as intended (L-1): Leon goes back with Left/Up or a clicker.
 - **Only the primary button counts.** Right-click keeps the browser's context menu; middle-click does nothing.
 - **A drag is not a click.** If the pointer moves more than 10 CSS px between down and up, nothing happens. This lets a visitor drag-select the email in the menu footer without changing slides.
 - **Double-click** counts as two clicks (two Nexts), like Keynote. Prevent the double-click word selection with `user-select: none` on the slides, except the menu footer line, which stays selectable.
 - **Mouse wheel and trackpad scroll do nothing**, and do not scroll the page (the layer does not scroll; AC-102 says no scrolling).
-- **Cursor:** the default arrow on the slide and bars, `pointer` only on cards and the close button. A pointer cursor everywhere would erase the one affordance that tells cards apart (research 3.4). Optional auto-hide: Q9.
+- **Cursor:** the default arrow on the slide and bars, `pointer` only on cards, the close button and the F hint. A pointer cursor everywhere would erase the one affordance that tells cards apart (research 3.4). Auto-hide (decided: L-7): after 3 s without pointer movement, in full screen only and for a mouse only, the cursor hides (`cursor: none`) and hover fills are suppressed; any movement brings both back.
 
-### 3.3 Touch (pointerType "touch"; also "pen", see Q12)
+### 3.3 Touch (pointerType "touch"; also "pen", decided: P-3)
 
 - **Tap** on the right half of the screen = Next; on the left half = Previous. "Screen" is the viewport, bars included (PRD Controls). The dividing line is the viewport's vertical center line, not the frame's (they coincide anyway, since the frame is centered).
-- **Tap on a card or the close button** activates it, whichever half it is in.
+- **Tap on a card, the close button or the F hint** activates it, whichever half it is in.
 - **Swipe** left or up = Next; right or down = Previous. Recommended thresholds: at least 40 CSS px along the dominant axis, the dominant axis at least 1.5 times the other, completed within 700 ms. A swipe that starts on a card is a swipe, not a card tap.
 - **One finger only.** Two-finger gestures are ignored, so pinch-zoom keeps working (WCAG 1.4.4; it is the only way to read the 375x211 frame closely on an upright phone). While the page is zoomed in (`visualViewport.scale > 1`), one-finger moves pan the zoomed view and are not swipes; taps still navigate.
 - **Long press** (over 500 ms without moving) does nothing, so a reader who rests a thumb does not change slides.
@@ -167,7 +166,7 @@ Held keys: see Q10. Recommended: ignore auto-repeat (`event.repeat`) for every a
 2. **Cards**, on slides 2 and M only, in reading order: slide 2: GoFreight, Exascend (left to right, matching keys 1, 2). Menu: cards 1, 2, 3, 4 (in a 2x2 layout: row by row).
 3. **Close button**, on every slide, last in the DOM inside the layer, so the first Tab on a card slide lands on the first card, and on every other slide on the close button.
 
-The F hint, the menu hint, the position cue, images and diagrams are never focusable. There are no links on any slide (the menu footer is plain text, PRD Menu).
+The menu hint, the position cue, images and diagrams are never focusable. The F hint is a `<button>` but has `tabindex="-1"` (pointer target only): AC-096 hides it on the first key press, so a Tab would remove it before reaching it, and the F key already gives keyboard users the same action (`aria-keyshortcuts="F"`). For that reason this departs from the earlier note that it becomes the first Tab stop on slide 1. There are no links on any slide (the menu footer is plain text, PRD Menu).
 
 Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close button -> browser UI -> back to the first card. Shift+Tab reverses. The site shell renders nothing on /slideshow (CONV-007), so no hidden site link can take focus; no focus trap is needed and none should be built (a trap would stop a keyboard user reaching the browser's address bar).
 
@@ -207,15 +206,15 @@ Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close butt
 
 ### 6.1 When the hint shows
 
-- Only when `origin` = direct (a typed or shared link, a start link, or a reload; CONV-006, AC-096). Never when opened from the site.
+- **Rule (decided, L-2):** the hint shows whenever the slideshow is windowed on slide 1 after mount **and** `document.fullscreenEnabled` is true, whatever the origin. In practice: every direct visit on a desktop browser, plus the rare case where the site's opening full-screen request was refused. It never shows on iPhone Safari (no full screen there). This replaces CONV-006's "direct visit only" hint rule and needs AC-096 and CONV-006 wording changes through the Tech Lead and PM.
 - It can only ever show on slide 1, because the first interaction hides it.
-- On browsers where `document.fullscreenEnabled` is false (iPhone Safari), the PRD still shows it; see Q2.
-- Render it only after mount, once CONV-006's check has run, so it never flashes for a visitor who came from the site. The motion designer owns its entrance; under reduced motion it appears instantly, without the entrance delay. Its exit is always instant (motion 2.2).
+- Decide after mount, once the opening full-screen request has settled (wait for the first `fullscreenchange`, or about 500 ms if none arrives), so it never flashes for a visitor whose site click put the browser in full screen. The motion designer owns its entrance; under reduced motion it appears instantly, without the entrance delay. Its exit is always instant (motion 2.2).
 
 ### 6.2 When the hint hides (for good, in that session)
 
 - On the first `keydown` of any key (including Tab, Shift, F and Esc), the first `pointerdown` anywhere (mouse, touch or pen, including on the close button), or a `fullscreenchange` into full screen by any means (F, F11, the browser's green button).
 - The interaction that hides it still does its normal job: a first Space both hides the hint and goes to slide 2; a first click goes to slide 2; F enters full screen.
+- **Exception for the hint button itself (L-3):** a `pointerdown` on the hint does not hide it, because removing it on pointerdown would cancel the click that requests full screen. The click calls `requestFullscreen()`; the hint then hides on the resulting `fullscreenchange`, or right after the click if the request is rejected. Either way, that click never fires Next.
 - It never comes back. Leaving full screen leaves the slideshow (PRD Leaving), so there is no "windowed again" state to re-hint.
 
 ### 6.3 Where it shows
@@ -228,19 +227,19 @@ Tab order: layer (start) -> card 1 -> card 2 (-> card 3 -> card 4) -> close butt
   - single line. At 1920x1080 it is about 330 px wide, inside slide 1's reserved 30 fw x 15 fh zone (576x162 px). At 375 px wide it is about 150 px.
 - Only the close button stays fixed in CSS px (limit 8 exempts only the close button).
 - Slide 1 keeps its bottom-left 30 fw x 15 fh free of content, because on a 16:9 window the hint overlaps the frame's corner there. Slide 1 has no position cue, so nothing else competes for that corner.
-- Not interactive in the current PRD: a click on it is a click on the slide (Next). See Q3.
+- **It is a button (decided, L-3):** a click or tap on it enters full screen (the click is the user gesture the Fullscreen API needs) and does not fire Next; its text is unchanged. Hover: instant `--hover` fill, pointer cursor. Accessible name = its text, plus `aria-keyshortcuts="F"`. Not in the Tab order (4.1).
 
 ### 6.4 F and full-screen behaviour
 
 | Situation | F does |
 |---|---|
 | Windowed, `fullscreenEnabled` true | `document.documentElement.requestFullscreen()` (Tech Lead Q2). On rejection: stay windowed, show nothing (no error text exists in the PRD). |
-| Already full screen | Nothing (see Q4; toggling out would leave the slideshow). |
+| Already full screen | Nothing (settled; toggling out would leave the slideshow). |
 | `fullscreenEnabled` false (iPhone) | Nothing. |
 
 - **Entering full screen changes nothing else:** same slide, same focus, frame rescales instantly.
 - **Leaving full screen by any route** (Esc, F11, the browser's controls, a macOS swipe) = leave the slideshow (PRD Leaving, AC-099), guarded so it navigates once (Tech Lead Q3).
-- **Opened from the site but full screen was refused or unsupported:** no hint, per CONV-006. See Q7.
+- **Opened from the site but full screen was refused:** the hint shows (L-2 rule, 6.1). Unsupported (iPhone): no hint.
 
 ---
 
@@ -258,17 +257,17 @@ General for every slide:
 | Type | Slides | Behaviour and states | Reading order |
 |---|---|---|---|
 | Intro | 1 | Static. On a direct visit, the F hint shares the screen (6.3). | Title, three Titles lines. |
-| Timeline | 2 | Four entries, left to right, in time order. Only GoFreight and Exascend are cards (`<button>`). Card states: default, hover (`--hover` fill, pointer cursor), focus-visible (4.3), pressed (`:active`, same as hover; the slide changes on release). Education entries are plain text, no hover, default cursor, and a click on them is Next. Each card shows "Details" and its key; card name = its visible text, plus `aria-keyshortcuts="1"` / `"2"`. | Title; 2017 entry; GoFreight card; Exascend card; 2025 entry. |
+| Timeline | 2 | Four entries, left to right, in time order. Only GoFreight and Exascend are cards (`<button>`). Card states: default, hover (`--hover` fill, pointer cursor), focus-visible (4.3), pressed (`:active`, same as hover; the slide changes on release). Education entries are plain text, no hover, default cursor, and a click on them is Next. **Since Revision 2 the cards show no "Details" cue and no key chip** (Leon). A click or tap on a card opens its job slide; a click anywhere else is Next to slide 3. With the text cue gone, the card container (edge and fill, UI doc), the instant hover fill and the pointer cursor carry the whole "this is clickable" signal for a mouse user, so the UI designer must keep the card-vs-plain-entry difference strong (research 3.4). Discovery for keyboard and screen-reader users is in 9.1. | Title; 2017 entry; GoFreight card; Exascend card; 2025 entry. |
 | Hidden job slide | 2a, 2b | Static. No name or position cue (PRD Look). No on-screen "back" cue: any Next or Previous returns to slide 2 (PRD lists no such text). | Title, Subtitle, big numbers left to right (number, then its label). |
 | Photo slide | 3 | Static. Two portrait photos (0.75:1), each with its caption under it; captions are visible text, alts per PRD 4.11. A click on a photo is Next (no zoom, no lightbox: the project-page image overlay is MOD-003's and is not part of the slideshow). | Title, photo 1 + "Snowboarding", photo 2 + "Bouldering". |
-| Menu | M | Four card buttons in order (`aria-keyshortcuts="1"` to `"4"`). Card states: default, hover, focus-visible, pressed, **highlighted** (start link only, until shown; Q5), highlighted + focus-visible, highlighted + hover. The highlighted card gets `aria-describedby` pointing at visually hidden text "Next starts this project." (not on screen). Menu hint slot (2.3). Footer as plain text, selectable (3.2). Title text switches per `menuTitleAnother`. | Title; cards 1 to 4 (key, name, one-liner); hint slot; footer. |
+| Menu | M | Four card buttons in order (`aria-keyshortcuts="1"` to `"4"`). Card states: default, hover, focus-visible, pressed, **highlighted** (start link only, until shown; L-4), highlighted + focus-visible, highlighted + hover. The highlighted card gets `aria-describedby` pointing at visually hidden text "Next starts this project." (not on screen). Menu hint slot (2.3). Footer as plain text, selectable (3.2). Title is always "Pick a project". | Title; cards 1 to 4 (key, name, one-liner); hint slot; footer. |
 | Project numbers cover | A1, B1, C1 | Static, three equal numbers (research 3.3). Name + position cue. | Title, number + label x3, cue. |
 | Intro with screenshot | B2, C2, D1 | Static image + bullets. | Title, bullets, image (image after bullets so the claim is read first; the visual order may put the image on the right). |
 | Role and stack | A3, B3, C3, D2 | Static. Chips are a plain list (`<ul>`), not buttons; they have no hover. | Title, Role, Stack chips in source order. |
 | Bullet slide | A4, A6-A8, B4, B7, B8, C4, C6-C8, D3-D5 | Static. | Title, bullets. |
 | Bullet slide with screenshot(s) | B5 (three screens), C5 (one) | Static. B5 images in the order Route, Route beta, Profile, left to right. | Title, bullets, image(s). |
 | Role grid | A5 | Static. Six role/description pairs in two columns. Fill the columns so that DOM order equals source order: column 1 = PM, Doc-Sync, Engineer; column 2 = QA, Tech Lead, Retrospective (read down, then across). | Title, the six pairs in source order. |
-| Simple workflow diagram | A2 | Static, drawn in SVG/CSS (limit 10). Arrows are decorative to a screen reader; expose the diagram as an ordered list in source order ("Requirements", "PM", "Doc-Sync", "Engineer ⇄ QA", "Tech Lead", "Shipped"), then the Retrospective line, then the "I approve every handoff" bar. Arrows at least 3:1 (research 5.2). | As listed. |
+| Simple workflow diagram | A2 | Static, drawn in SVG/CSS (limit 10). Arrows are decorative to a screen reader; expose the diagram as an ordered list in source order ("Requirements", "PM", "Doc-Sync", "Engineer ⇄ QA", "Tech Lead", "Shipped"), then the Retrospective line, then the "I approve every handoff" bar. Arrows at least 3:1 (research 5.2). Revision 2 (Leon): the approval bar no longer connects to the Doc-Sync to Engineer and Engineer to Tech Lead handoffs, and the Retrospective line is drawn as its own separate line feeding improvements back into the system as a whole, not into PM. Visual change owned by the UI designer; the on-screen text, this reading order and the interaction (static, click = Next) are unchanged. | As listed. |
 | Flow chips | B6 | Static. The four chips as an ordered list (Upload, S3, MediaConvert, CloudFront), arrows decorative, then the bullets. | Title, flow list, bullets. |
 
 **Name and position cue (project slides only):** recommended in the **frame's bottom-left corner**, so it never meets the close button (bottom-right) and the F hint never meets it (the hint shows on slide 1 only). Visible "ProjectDay" and "3 / 8"; the visible "3 / 8" is `aria-hidden`, with a visually hidden "3 of 8" beside it, so a screen reader browsing the slide hears "ProjectDay, 3 of 8", not "3 slash 8". Size 2.4 fh minimum, quiet (research 2.2 item 3).
@@ -316,7 +315,12 @@ Proposed AC wording for PM (so QA can test it): "A mouse click on the area outsi
 
 - Layer: `role="region"`, `aria-label="Slideshow"` (matches the nav label; the APG says the label must not say "carousel", research 4.1).
 - One slide in the DOM at a time (7). Its title is the page's `<h1>`.
-- Cards are `<button>`s; their accessible name is their visible text (key, name, one-liner or dates, role, place, "Details"), plus `aria-keyshortcuts`.
+- Menu cards are `<button>`s; their accessible name is their visible text (key, name, one-liner), plus `aria-keyshortcuts="1"` to `"4"`.
+- Timeline work cards (Revision 2: no visible cue or key) are `<button>`s, so a screen reader announces them as buttons, which is itself the cue that they open something:
+  - accessible name = the visible text, for example "2021 to 2023 Marketing Project Manager GoFreight Taipei";
+  - `aria-describedby` pointing at visually hidden text "Opens details." (not on screen; hidden assistive text does not touch PRD 4.11's on-screen text list);
+  - `aria-keyshortcuts="1"` / `"2"`, so screen readers that report shortcuts expose the hidden keys;
+  - they stay in the Tab order: a sighted keyboard user who presses Tab on slide 2 lands on the GoFreight card with the 2 px accent ring (3 px offset), which shows it is interactive; Enter or Space opens it.
 - Close button: 5.
 - Hints: the F hint is visible plain text and also part of the mount announcement (9.2); the menu hint text is visible and also announced through the live region.
 
@@ -331,7 +335,7 @@ What it says, set once per change:
 | Event | Announcement (exact pattern) | Example |
 |---|---|---|
 | About slide, job slide | `<title>` | "From marketing to engineering" |
-| Menu | `<current title>` | "Pick another project" |
+| Menu | `Pick a project` | "Pick a project" |
 | Project slide | `<title>. <project name>, <n> of <N>.` | "Then QA passed code it never ran. Multi-Agent System, 7 of 8." |
 | Menu hint | `Pick a project: press 1 to 4 or click a card` | (on repeat: clear the region, then set the text again about 100 ms later, so it is re-announced) |
 | First mount | `<slide 1 title>`, plus `. Press F for full screen` when the F hint shows; set about 500 ms after mount (an initial live-region value is not announced) | "Hi, I'm Leon. Press F for full screen" |
@@ -376,39 +380,49 @@ Do not move focus to the heading on slide change (research 4.1: the title would 
 | 4.3: touch targets; 2.5.1 single-pointer alternative to swipes | Yes | Tap halves cover 2.5.1. |
 | 4.4: focus ring vs start-link highlight must differ | Yes | 4.3, 7 (menu). |
 | 4.5: 2.1.4 "active only on focus" | Yes | 9.3. |
-| 4.7 / 6: hide F hint on touch-only devices is a PRD conflict | Yes, as an open question | Q2. |
-| 6: no on-screen prev/next arrows, no progress bar, no help overlay | Yes | None added. Mouse-back gap is Q1. |
-| 2.2 item 4: chrome hides itself (cursor auto-hide) | Not decided | Q9. |
+| 4.7 / 6: hide F hint on touch-only devices is a PRD conflict | Yes, decided by Leon | L-2: hint only where full screen is available. |
+| 6: no on-screen prev/next arrows, no progress bar, no help overlay | Yes | None added. No mouse back, decided (L-1). |
+| 2.2 item 4: chrome hides itself (cursor auto-hide) | Yes, decided | L-7. |
 | 7: background counts as "on a slide" | Yes | 8.3. |
 
 ---
 
-## 13. Open questions (PRD is silent or ambiguous; recommendation for each)
+## 13. Decisions (formerly open questions)
 
-| # | Question | Recommendation |
+### 13.1 Answered by Leon (Revision 2: "Other go with recommendation", as consolidated in Design Lead review 2)
+
+| Review 2 # | Was | Decision |
 |---|---|---|
-| Q1 | A mouse has no way to go back ("A mouse click never goes back"). | **No change.** Leon presents with a keyboard or a clicker (Left/Up, Page Up). Adding mouse-wheel or right-click "back" risks skipping slides on a trackpad and contradicts his "click always go to the next". If he wants one later: right-click = Previous is the safest, but it needs a PRD change. |
-| Q2 | The F hint shows on devices that cannot go full screen (iPhone; `document.fullscreenEnabled` false), where "Press F" is impossible. | **PRD change:** show the hint only on a direct visit **and** when `document.fullscreenEnabled` is true. Amend AC-096 to say so. |
-| Q3 | Should the F hint itself be clickable? A mouse user who clicks the hint text today goes to slide 2 and loses the hint without getting full screen. | **PRD change:** make the hint a button that enters full screen on click or tap (a click is a valid user gesture for the Fullscreen API), keeping its text. It then joins cards and the close button as a non-Next target and becomes the first Tab stop on slide 1. |
-| Q4 | What F does when already in full screen. | **Nothing.** Toggling out would leave the slideshow (PRD: leaving full screen leaves), which would surprise Leon. |
-| Q5 | How long the start-link highlight lasts. The PRD says Next starts the preselected project "if it has not been shown yet", but does not say whether the highlight stays afterwards. | **Remove the highlight once that project has been shown**, so the highlight always means "Next starts this". |
-| Q6 | What "shown" means for the preselected project. | **Shown = any of its slides was displayed, by any route** (Next on the menu, its number key, a click on its card). |
-| Q7 | Opened from the site, but full screen was refused or is unsupported (CONV-006 gives no hint in this case). Leon would sit in a window with no reminder that F exists. | **Show the F hint whenever the slideshow is windowed on mount and `fullscreenEnabled` is true**, regardless of origin. Needs a CONV-006 / AC-096 wording change through the Tech Lead and PM. Low priority: Chrome, Safari and Firefox grant the request from the nav click. |
-| Q8 | Previous on a project's first slide returns to the menu, but by the PRD's wording does not switch the title to "Pick another project", while M from the same slide does. | **Keep the PRD as written** (backing out of a project's first slide = not presented). Ask PM only to confirm it is intended, so QA does not flag it. |
-| Q9 | Hide the mouse cursor while idle in full screen (reveal.js, Google Slides; research 2.2 item 4)? | **Yes:** hide it after 3 s without pointer movement while in full screen; show it on any movement. Keeps the shared screen clean. Not motion, not text; no AC needed, but PM should record it if accepted. |
-| Q10 | Key auto-repeat: does a held Right arrow skip through slides? | **Ignore auto-repeat** for all action keys. One press = one step, so a stuck key cannot skip slides in front of an interviewer. |
-| Q11 | PRD Controls says Enter is Next "when focus is not on a card"; read literally, Enter on the focused close button goes Next, which conflicts with AC-098 ("the close button ... can be reached and pressed from the keyboard"). | **Native button behaviour wins:** Enter and Space on the focused close button leave. PM to amend Controls to "when focus is not on a card or the close button". |
-| Q12 | Pen input (iPad with Apple Pencil, Surface pen): treat as mouse (click always Next) or touch (halves)? | **Touch.** A pen points directly at the screen like a finger, and on iPad the reader expects tap-left-to-go-back. |
-| Q13 | Keyboard and pinch zoom: the PRD does not mention browser zoom on the phone frame. | **Keep pinch-zoom enabled** (WCAG 1.4.4); no AC change. Listed so the engineer does not add `user-scalable=no`. |
+| L-1 | Q1, mouse has no back | **No mouse back.** Left/Up, Page Up or a clicker go back. |
+| L-2 | Q2 + Q7, when the F hint shows | **Whenever the slideshow is windowed and full screen is available** (`document.fullscreenEnabled`), any origin. Never on iPhone. Needs AC-096 / CONV-006 wording (6.1). |
+| L-3 | Q3, clickable F hint | **The hint is a button** that enters full screen; it is not a Next target. Pointer-only; F is its keyboard equivalent (4.1, 6.3). |
+| L-4 | Q5, highlight lifetime | **The start-link highlight clears once that project has been shown.** |
+| L-5 | Q6, meaning of "shown" | **Any slide of the project displayed, by any route.** |
+| L-6 | Q8, Previous from a first slide and the menu title | **Moot**: the menu title is now always "Pick a project" (13.2). |
+| L-7 | Q9, idle cursor | **Hide after 3 s idle, full screen and mouse only**, hover fills suppressed while hidden (3.2). |
+| L-8 | Q10, key auto-repeat | **Ignore auto-repeat** on every action key (3.1). |
+| L-9 | A1 "6" / "-agent dev team" copy | Leon took the Design Lead's suggestion. A copy change in the source deck through PM; nothing in this document depends on it. |
+| L-10 | Role / Stack labels | **No labels** (UI doc). |
+| L-11 | Menu hint duration | **2 s** (2.3). |
+| P-1 | Q11, Enter/Space on the focused close button | **Leaves** (native button). PM amends Controls. |
+| P-3 | Q12, pen input | **Treated as touch** (halves). |
+| P-4 | Q13, pinch zoom | **Kept on**; no `user-scalable=no`. |
+| (settled) | Q4, F in full screen | **Nothing.** |
+
+### 13.2 Changes Leon asked for in Revision 2 (need PRD wording changes through PM)
+
+- **Timeline cards: no "Details" cue and no visible key.** The cards still open their job slides on click, tap, focused Enter or Space; anything else on slide 2 goes Next to slide 3. Keys `1` and `2` keep working as hidden shortcuts. PRD 4.11 "Hidden job slides", "On-screen text" and Controls (which list the cue and keys) and AC-114 need matching wording.
+- **Menu title always "Pick a project".** "Pick another project" is never shown. PRD 4.11 Menu and AC-113 need matching wording. The menu-title state is removed from this design (1.2, 2.1).
+- **A2 visual:** no approval step drawn between Doc-Sync and Engineer or between Engineer and Tech Lead; the Retrospective line is a separate line feeding improvements back to the system, not to PM. The text is unchanged; PM to confirm PRD 4.11's A2 definition still reads correctly.
 
 Flags already raised by the researcher, not mine to decide: the "⇄" glyph in A2 sits outside Roboto's preloaded latin file and may not render after the network is off (AC-105), for the Tech Lead; WCAG 2.1.4 residual risk for speech input (9.3).
 
 ## 14. Hand-offs
 
-- **UI designer:** reserved zones (bottom-right 8 fw x 15 fh on every slide; bottom-left 30 fw x 15 fh on slide 1); name and position cue in the frame's bottom-left; menu hint slot under the cards; a highlight form for AC-115 that is not an accent outline and not color alone; card hover/pressed fills; image error box; key-chip look shared by cards and the F hint; menu footer ends before the close zone.
+- **UI designer:** reserved zones (bottom-right 8 fw x 15 fh on every slide; bottom-left 30 fw x 15 fh on slide 1); name and position cue in the frame's bottom-left; menu hint slot under the cards; a highlight form for AC-115 that is not an accent outline and not color alone; card hover/pressed fills; image error box; key-chip look shared by menu cards and the F hint (timeline cards no longer have one); a strong card-vs-plain-entry difference on slide 2 now that the "Details" cue is gone; the A2 redraw (13.2); the F hint's button hover; menu footer ends before the close zone.
 - **Motion designer:** section 10.
 - **Tech Lead (via the coordinator):** pointer handling by `pointerType` (3.3), `touch-action` / `overscroll-behavior` (3.3), number keys by `key` and `code` (3.1), skip `focus()` when the layer already has focus (9.2).
-- **PM (via the coordinator):** Q2, Q3, Q5, Q6, Q7, Q8, Q9, Q10, Q11 wording; the limit-9 AC sentence (8.3).
+- **PM (via the coordinator):** record the decisions in 13.1 (L-2 and L-3 need AC-096 and CONV-006 wording; L-7, L-8, P-1); the three Revision 2 changes in 13.2; the limit-9 AC sentence (8.3).
 
 ---
 
@@ -418,4 +432,11 @@ Flags already raised by the researcher, not mine to decide: the "⇄" glyph in A
 - **Issue 1 / X2, F hint size (6.3):** the hint is no longer fixed at 14 px. It stays anchored to the screen's bottom-left corner, but its text is sized from the frame height, `max(14px, calc(min(100dvh, 100vw * 9 / 16) * 0.028))`, with the key chip about 1.6x and gaps about 0.4x the text. This meets limit 7 and AC-102. The width check against slide 1's reserved zone is added. The close button is now the only element fixed in CSS px.
 - **X7, F hint exit (6.1, 10):** aligned with the motion doc. The hint's exit is instant; only its entrance may animate, and under reduced motion the entrance and its delay go away too.
 - No other contradiction in the review involves this document: X5 (A2 reading order) is a fix to the mock, and UX 7's order stands. Open questions Q1 to Q13 are unchanged. The Design Lead's consolidated list (review 1 section 11) suggests merging Q2 and Q7 into one rule: show the hint whenever the slideshow is windowed and full screen is available. I agree with that merge.
+
+## Revision 2 (2026-11-01, after Leon's review of the passed design)
+
+- **Timeline (1.1, 2.1, 2.2, 3.1, 7, 9.1):** the work cards no longer show "Details" or a key. A click, tap, or focused Enter or Space on a card opens its job slide; anything else goes Next to slide 3. Keys `1` and `2` remain as hidden shortcuts. Discovery without the cue: for a mouse, the card container plus hover fill and pointer cursor; for keyboard and screen-reader users, the cards stay buttons in the Tab order with a focus ring, an accessible name from the visible text, a hidden description "Opens details." and `aria-keyshortcuts`.
+- **Menu title (1.1, 1.2, 2.1, 2.2, 7, 9.2):** always "Pick a project". The `menuTitleAnother` state is removed, and old Q8 / L-6 is moot.
+- **A2 (7):** the approval steps between Doc-Sync and Engineer and between Engineer and Tech Lead are gone, and Retrospective is a separate line back to the system, not to PM. Visual only; text, reading order and behaviour are unchanged.
+- **Decisions (13):** the open questions are now recorded as Leon's decisions (L-1 to L-11, P-1, P-3, P-4), and the body follows them: the F hint shows whenever the slideshow is windowed and full screen is available, and is a pointer-only button (1.2, 3.2, 3.3, 4.1, 6); the highlight clears once shown; idle cursor after 3 s; auto-repeat ignored. One departure from my earlier Q3 wording: the F hint button is not a Tab stop, because the first key press hides it (AC-096) and F does the same job.
 

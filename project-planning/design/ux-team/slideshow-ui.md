@@ -1,6 +1,6 @@
 # Slideshow UI: visual design (MOD-012, /slideshow)
 
-Written by: ui-designer, 2026-11-01. Revision 1 (after Design Lead review 1), same day; changelog in section 14. Intended path: `project-planning/design/ux-team/slideshow-ui.md`.
+Written by: ui-designer, 2026-11-01. Revision 1 (after Design Lead review 1) and Revision 2 (after Leon's review), same day; changelogs in sections 15 and 16. Intended path: `project-planning/design/ux-team/slideshow-ui.md`.
 Inputs: `slideshow-brief.md` (13 Tech Lead limits), `slideshow-research.md`, `slideshow-ux.md`, `project-planning/prd.md` sections 2, 3 and 4.11 (Revision 1.8), `asset/content/interview-deck.md` at HEAD, `site/app/globals.css`.
 Companion files: `slideshow-mock.html` (every slide of the deck, real text, both themes) and `slideshow-mock-<type>-<light|dark>.png` (1600x900, headless Chrome).
 
@@ -12,7 +12,7 @@ Units: **fh** = 1% of frame height, **fw** = 1% of frame width. In CSS the frame
 
 ## 1. Design idea in one paragraph
 
-A Carbon-style editorial deck: white (or Gray 100) page, one blue accent, Roboto 700 sentence titles, lots of left-aligned structure on a 12-column grid. The accent is used for exactly four jobs: the short "tick" above every title (the deck's signature, one consistent look), the square bullet markers, the big numbers, and interactive cues ("Details", focus ring). Everything clickable has a visible card edge and a key chip; nothing static does. No gradients, no shadows, no decorative images (limit 10), no frame border (research 2.2 item 8).
+A Carbon-style editorial deck: white (or Gray 100) page, one blue accent, Roboto 700 sentence titles, lots of left-aligned structure on a 12-column grid. The accent is used for exactly four jobs: the short "tick" above every title (the deck's signature, one consistent look), the square bullet markers, the big numbers, and interactive cues (focus ring, the top edge of the timeline work cards). Everything clickable has a visible card edge and a key chip; nothing static does. No gradients, no shadows, no decorative images (limit 10), no frame border (research 2.2 item 8).
 
 ## 2. Tokens
 
@@ -27,7 +27,7 @@ A Carbon-style editorial deck: white (or Gray 100) page, one blue accent, Roboto
 | `--ss-edge` | `color-mix(in srgb, var(--text-muted) 65%, var(--bg))` = `#8f8f8f` light / `#888888` dark | Edge of clickable cards, key chips, A2 boxes, B6 chips, timeline axis, number rules. `--border` is only 1.32 / 1.57:1 on `--bg`; this mix is 3.23 / 5.10:1, which meets WCAG 1.4.11 (3:1) and survives video compression. In light it lands within 2 levels of Carbon's own `border-strong` Gray 50 (`#8d8d8d`), so it is on-system. One formula, both themes, no new hex values. `color-mix` is supported in every browser the PRD targets (Chrome 111, Safari 16.2, Firefox 113). |
 | `--ss-line` | `max(2px, 0.3cqh)` | Every structural stroke (card edges, rules, axis). 2.7 px at 900 tall, never under 2 px on small frames (research 3.2: no hairlines on video). |
 
-No other derived color exists. Focus uses `--accent`; highlight uses `--text`; hover uses `--hover`; the "Details" cue on a hovered card uses `--accent-hover` (see 10).
+No other derived color exists. Focus uses `--accent`; highlight uses `--text`; hover uses `--hover`; the accent top edge of a timeline work card stays `--accent` in every state (see 10).
 
 ### 2.3 Radius
 
@@ -52,7 +52,7 @@ All sizes in fh. px columns: 1920x1080 / 1280x720 / 375x211 (upright phone, T4).
 | Subtitle | 4.2 | 400 | 1.3 | 0 | `--text-muted` | 45 / 30 / 9 | 2.4 | Job slide Subtitle |
 | Name (card) | 4.6 | 700 | 1.15 | 0 | `--text` | 50 / 33 / 10 | 2.4 | Menu card names |
 | Label | 3.6 | 400 or 500 | 1.25-1.3 | 0 | `--text-muted` or `--text` | 39 / 26 / 7.6 | 2.4 | Things the interviewer reads: chips, captions, number labels, card one-liners, timeline entries and dates, A2/B6 labels, menu hint |
-| Meta | 2.8 | 400 or 500 | 1.2 | 0 | `--text-muted` | 30 / 20 / 5.9 | 2.4 | Things only Leon needs: position cue, key chips, "Details", menu footer |
+| Meta | 2.8 | 400 or 500 | 1.2 | 0 | `--text-muted` | 30 / 20 / 5.9 | 2.4 | Things only Leon needs: position cue, menu key chips, menu footer |
 
 Why these numbers:
 - Title 7.5 fh = 40.5 pt on a PowerPoint slide: top of Leon's guide (32-40 pt) and above the 7% floor with margin for rounding.
@@ -123,7 +123,7 @@ The deck has exactly two chip-like styles, each with one job:
 Shared by both: Label 3.6 fh, `--text`, `--surface` fill, `--radius-sm`, `white-space: nowrap`, 2 fh gaps.
 
 ### 6.4 Key chip
-The sidebar shortcut badge, rebuilt in frame units (limit 13): min 4.4 x 4.4 fh, Meta 2.8 fh 500 `--text-muted`, `--ss-line` border in `--ss-edge`, `--bg` fill, `--radius-sm`, tabular figures. Used on menu cards and timeline work cards. The F hint uses the same look in px (6.8).
+The sidebar shortcut badge, rebuilt in frame units (limit 13): min 4.4 x 4.4 fh, Meta 2.8 fh 500 `--text-muted`, `--ss-line` border in `--ss-edge`, `--bg` fill, `--radius-sm`, tabular figures. Used on menu cards only (Revision 2 removed it from the timeline work cards). The F hint uses the same look in px (6.8).
 
 ### 6.5 Clickable card (timeline work cards, menu cards)
 `--surface` fill, `--ss-line` border in `--ss-edge` (3.23 / 5.10:1 on `--bg`), `--radius`, padding 3 fh. Cursor `pointer`. States in section 10.
@@ -161,7 +161,14 @@ Positions in fh from the frame's top-left at the 16:9 artboard. "cols" are grid 
 - Axis: full content width, `--ss-line` in `--ss-edge`, through the node centres.
 - Nodes: 2.8 fh circles with a `--ss-line` ring. Education: ring `--text-muted`, `--bg` fill (hollow). Work: filled `--accent`. The filled node is a second, non-colour-only cue (form: filled vs hollow).
 - Education entries (2017, 2025): no container. Role in Label 700 `--text`, org and place under it in Label 400 `--text-muted`. Their text is inset by the card padding so all four text columns align.
-- Work entries (GoFreight key 1, Exascend key 2): clickable card (6.5), min height 30 fh. Role (Label 700), org and place (Label 400 muted), then a bottom row: "Details" + chevron (Meta 500, `--accent`, chevron drawn 2.4 fh SVG) on the left, key chip on the right.
+- Work entries (GoFreight, Exascend; Revision 2): clickable card with **no "Details" text and no key chip** (Leon; deck 02e9c80). Content: role (Label 700) and org and place (Label 400 muted) only; height = content. Keys 1 and 2 still open them as a hidden shortcut (`aria-keyshortcuts="1"` / `"2"`, nothing visible).
+- How the work cards still read as clickable, without any text cue:
+  1. **Container vs none:** they are the only two boxed entries on the slide; the education entries have no box (research 3.4, NN/g: a container is the strongest familiar cue).
+  2. **A clear edge:** `--ss-line` border in `--ss-edge` (3.23 / 5.10:1, meets 1.4.11) on a `--surface` fill.
+  3. **An accent top edge:** 0.8 fh `--accent` border-top on the card. In this deck the accent means "interactive" (focus ring, menu-card keys sit with it) or the deck's signature tick; on this slide it marks exactly the two things you can open. It also ties each card to its filled accent node directly above it.
+  4. **Filled vs hollow nodes** on the axis (form, not only colour).
+  5. **Pointer states:** `cursor: pointer`, `--hover` fill on hover and press (instant), and the 2 px `--accent` focus ring 3 px outside on `:focus-visible`.
+  Leon drives the deck himself, so the cue only has to be discoverable, not instructional; the audience never clicks.
 - Text split (PRD allows it): "2021 to 2023" / "Marketing Project Manager" / "GoFreight, Taipei". The source's colon after the dates and the comma after the role fall at line breaks and are not drawn; see Q3.
 
 ### 7.3 Hidden job slide (2a, 2b) — PNG `job` (2a, 3 numbers), `job-2` (2b, 2 numbers)
@@ -177,14 +184,14 @@ Positions in fh from the frame's top-left at the 16:9 artboard. "cols" are grid 
 - The photos are about 23% larger in area than in the first version. The right ~55 fh stays open, because two portrait photos cannot fill a landscape frame without cropping (limit 10) or breaking the title-on-top rule; see Q5.
 
 ### 7.5 Menu (M) — PNG `menu`, `menu-states`
-- Title block ("Pick a project" or "Pick another project"; same position, so the swap never shifts layout).
+- Title block: always "Pick a project" (Revision 2; deck 02e9c80 drops "Pick another project").
 - 6 fh gap; 4 equal cards in one row (each 3 cols), height = content (about 41 fh with the longest one-liner at 1600x900; no min-height), padding 3 / 3 / 4 fh. In each card: key chip (top-left, not stretched), 3 fh gap, name (Name 4.6 fh 700) in a block that always reserves **two lines** (`min-height: calc(2 * 4.6cqh * 1.15)` ≈ 10.6 fh, top-aligned), 2 fh gap, one-liner (Label 3.6 fh `--text-muted`). All four one-liners therefore start on one shared line. Keys 1-4 left to right match the keyboard's number row.
 - Menu hint slot: 9 fh tall, 2 fh under the cards (it moves up with the shorter cards), always reserved (UX 2.3). Hint: pill, `--surface` fill, `--ss-line` `--border` edge, Label 3.6 fh 500 `--text`, centred on the card row.
 - Footer: plain text, Meta 2.8 fh `--text-muted`, at the cue position (left 10 fh, bottom 5.2 fh), selectable (`user-select: text`), max width stops 15 fh before the frame's right edge so it never meets the close zone (on the artboard it ends at about x = 1240 of 1600 px).
-- `menu-states` shows, for review only: the title "Pick another project", card 1 focus-visible, card 3 start-link highlighted, card 4 hovered, the hint visible, close button focus-visible. (In the product the highlight is gone by the time the title says "Pick another project" if that project was shown, UX Q5; the mock combines states only to show them together.)
+- `menu-states` shows, for review only: card 1 focus-visible, card 3 start-link highlighted, card 4 hovered, the hint visible, close button focus-visible.
 
 ### 7.6 Project numbers cover (A1, B1, C1) — PNG `cover` (B1, widest number)
-Same as 7.3 without the subtitle; the project name is the title (7.5 fh), so the numbers (13 fh) are the biggest thing on the slide (research 3.3). A1's second label is "-agent dev team" exactly as in the source; it sits under "6" so it reads "6 -agent dev team" (see Q4). Position cue bottom-left.
+Same as 7.3 without the subtitle; the project name is the title (7.5 fh), so the numbers (13 fh) are the biggest thing on the slide (research 3.3). A1's second label is now "agents on the dev team" (deck 02e9c80; Q4 resolved). PNG `cover-a1` shows it. Position cue bottom-left.
 
 ### 7.7 Intro with screenshot (B2, C2, D1) — PNG `intro-shot` (B2), `intro-shot-1` (C2)
 - Title block; 6 fh gap; split: text column 5 cols (≈61 fh) left, 6 fh gap (2 gutters), visual takes the rest (≈ 90 fh) right.
@@ -229,10 +236,10 @@ HTML boxes plus inline SVG arrows; no image file (limit 10). Vertically centred 
 - "Shipped" (the outcome) is marked by **700 weight and a drawn check mark** (3 fh, `--accent`, before the word), never by an accent outline, so it cannot read as keyboard focus. Revision 1 widths: Requirements 26, PM 11, Doc-Sync 18.5, Engineer ⇄ QA 30, Tech Lead 20, Shipped 22.28 fh (arrows unchanged at 6 fh; total 157.78).
 - Arrows: SVG 6 x 3 fh, line plus open arrowhead, stroke 0.3 fh `--text-muted` (7.81 / 10.59:1), round caps.
 - "Engineer ⇄ QA": "Engineer", a drawn bidirectional arrow, "QA". The arrow is an SVG 5 x 3.2 fh of two parallel strokes (upper pointing right, lower pointing left, each with a half arrowhead, like the U+21C4 glyph), `currentColor`. The visible words are `aria-hidden`; a visually hidden span carries the exact text "Engineer ⇄ QA", so the DOM text and the list for screen readers stay word for word (AC-100) without depending on Roboto's math subset (research 5.3). See 12 Q1.
-- Approval bar "I approve every handoff": full content width, 7 fh tall, at the top of the diagram. Revision 1 makes it light: `--surface` fill, `--ss-line` `--border` edge, a 0.8 fh `--accent` left edge (the pull-quote motif), label Label 3.6 fh 500 `--text` with a drawn 3 fh `--accent` check mark. In dark mode it is a `#262626` band, one step above the background, not a white slab. Five dashed `--ss-line` `--text-muted` drop lines run from the bar's bottom edge to the middle of each of the five arrows: the human gate on every handoff.
-- Retrospective loop: a U-shaped `--ss-line` `--text-muted` line from under Tech Lead's centre down 6 fh, left, and up into PM's centre with an open arrowhead (`--radius` corners). The line "Retrospective feeds improvements back into the system" sits 2 fh under it, centred on the loop, Label 3.6 fh `--text-muted`.
-- Geometry: the diagram is a 38 fh tall, positioned box; its parts sit at fixed tops (bar 0, drop lines 7 to 16.6, boxes 13 to 23, loop 23 to 29, retrospective line 31 fh), so DOM order is free.
-- DOM / reading order (UX 7), as the mock now has it: `ol` of the six boxes (arrows `aria-hidden`), the retrospective `p`, the drop lines (`aria-hidden`), then the bar last. The bar is drawn on top by position only.
+- Approval bar "I approve every handoff": full content width, 7 fh tall, at the top of the diagram. `--surface` fill, `--ss-line` `--border` edge, a 0.8 fh `--accent` left edge (the pull-quote motif), label Label 3.6 fh 500 `--text` with a drawn 3 fh `--accent` check mark (light since Revision 1). **Revision 2:** dashed `--ss-line` `--text-muted` drop lines run from the bar to the middle of only three arrows: Requirements → PM, PM → Doc-Sync and Tech Lead → Shipped (the handoffs Leon approves). Doc-Sync → Engineer and Engineer ⇄ QA → Tech Lead have no drop line.
+- Retrospective (Revision 2, redesigned): a separate line, not a loop into PM. A "system" bracket runs under the whole pipeline: a `--ss-line` `--text-muted` line from the left edge of Requirements to the right edge of Shipped, 2 fh below the boxes, with 2.2 fh up-turned ends and `--radius-sm` corners, so it groups all six steps as one system. From the caption, a single 5 fh up-arrow (same stroke, open head) at the diagram's centre points into that bracket. The caption "Retrospective feeds improvements back into the system" (word for word) sits under the arrow, centred, Label 3.6 fh `--text-muted`. Reading: the retrospective sits outside the flow and feeds the system as a whole.
+- Geometry: the diagram is a 38 fh tall, positioned box; its parts sit at fixed tops (bar 0, drop lines 7 to 16.6, boxes 13 to 23, system bracket 25 to 27.2, up-arrow 27 to 32, retrospective line 32.6 fh), so DOM order is free.
+- DOM / reading order (UX 7): `ol` of the six boxes (arrows `aria-hidden`), the bracket and up-arrow (`aria-hidden`), the retrospective `p`, the drop lines (`aria-hidden`), then the bar last. The bar is drawn on top by position only.
 
 ### 7.13 Flow chips (B6) — PNG `flow`
 Title block; 6 fh gap; `ol` row of the four chips (6.3, 500 weight, padding 1.6 x 2.6 fh, `--ss-edge` border) joined by 7 x 3 fh SVG arrows (same arrow as A2); 6 fh gap; the four bullets at full width. The flow row reads as one element (research 3.2).
@@ -250,14 +257,14 @@ All screenshots are light-themed. In dark mode they sit on `--bg` (`#161616`) wi
 
 ## 9. Iconography
 
-One drawn set, inline SVG, `currentColor`, round caps and joins, stroke ≈ 12% of the icon box: close X, chevron (Details), check (A2 bar and "Shipped"), arrow (A2, B6), bidirectional arrow (A2), loop arrowhead (A2). No icon font, no files.
+One drawn set, inline SVG, `currentColor`, round caps and joins, stroke ≈ 12% of the icon box: close X, check (A2 bar and "Shipped"), arrow (A2, B6), bidirectional arrow (A2), retrospective up-arrow and system bracket (A2). No icon font, no files.
 
 ## 10. States: focus ring vs `?project=` highlight
 
 | State | Card | Key chip | Close button |
 |---|---|---|---|
 | Default | `--surface` fill, `--ss-edge` edge | `--bg` fill, `--ss-edge` edge, `--text-muted` digit | muted X, no fill |
-| Hover / pressed | `--hover` fill; "Details" switches to `--accent-hover` (6.36 / 7.42:1 on `--hover`) | unchanged | `--hover` fill, `--text` X |
+| Hover / pressed | `--hover` fill (timeline work cards keep their accent top edge) | unchanged (menu only) | `--hover` fill, `--text` X |
 | Focus-visible | adds a **2 px `--accent` outline, 3 px outside** the card (CSS px, never scaled) | unchanged | 2 px `--accent` outline, 2 px offset |
 | Start-link highlight (AC-115) | edge becomes `--text` and **thickens to ≈ 0.8 fh** (border + 0.5 fh inset ring), drawn **inside** the card | **inverted**: `--text` fill, `--bg` digit | n/a |
 | Highlight + focus | both: thick `--text` inner edge, then the blue ring outside | inverted | |
@@ -277,12 +284,10 @@ Why it works: focus is blue, thin and outside; highlight is black (white in dark
 | `--text-muted` on `--surface` | 7.10 | 8.86 | card one-liners, timeline org | 4.5 ✓ |
 | `--text-muted` on `--hover` | 6.38 | 7.40 | hovered card one-liner | 4.5 ✓ |
 | `--accent` on `--bg` or `--surface` | 5.00 / 4.55 | 7.68 / 6.43 | big numbers (large), focus ring, bullet squares, tick, nodes, A2 check marks and bar edge (graphics) | 3 (large/graphic) ✓, also 4.5 ✓ |
-| `--accent` on `--surface` | 4.55 | 6.43 | "Details" (Meta 2.8 fh, 500) on a card | 4.5 ✓ |
-| `--accent` on `--hover` | 4.08 | 5.37 | not used for text: "Details" turns `--accent-hover` on hover | n/a |
-| `--accent-hover` on `--hover` | 6.36 | 7.42 | hovered "Details" | 4.5 ✓ |
+| `--accent` on `--bg` (work-card top edge) | 5.00 | 7.68 | graphic, 0.8 fh | 3 ✓ |
 | `--bg` on `--text` | 18.10 | 16.45 | inverted key chip (highlight) | 4.5 ✓ |
 | `--ss-edge` on `--bg` | 3.23 | 5.10 | card, chip and A2 box edges, timeline axis, number rules | 3 (1.4.11) ✓ |
-| `--text-muted` on `--bg` as a graphic | 7.81 | 10.59 | A2/B6 arrows, loop, drop lines, education nodes | 3 ✓ |
+| `--text-muted` on `--bg` as a graphic | 7.81 | 10.59 | A2/B6 arrows, system bracket, retrospective arrow, drop lines, education nodes | 3 ✓ |
 | `--text` (highlight edge) vs `--ss-edge` | 5.60 | 3.22 | highlighted vs default card edge | 3 ✓ (change of state) |
 | `--accent` ring on `--bg` | 5.00 | 7.68 | focus ring | 3 (2.4.13 change) ✓ |
 | `--border` on `--bg` | 1.32 | 1.57 | stack chip edge, A5 rules, image edge, cue divider | decorative only; text or the fill identifies the element |
@@ -296,7 +301,7 @@ All slide text passes AA in both themes (AC-102, limit 3). The only sub-3:1 line
 | Q1 | A2 "⇄": I draw the arrow as SVG and keep the exact text "Engineer ⇄ QA" in a visually hidden span. Does QA accept that the visible glyph is drawn rather than typed (AC-100 "read exactly as defined")? | **Accept the drawn arrow.** It removes the offline font risk (research 5.3, AC-105) and the DOM text is still word for word. Tech Lead to confirm; if not accepted, the fallback is typing the glyph and preloading Roboto's math subset. |
 | Q2 | Show "Role" and "Stack" as small labels on A3/B3/C3/D2? PRD 4.11 lists Role and Stack as copy fields but not their names as on-screen text. | **No labels.** The title "My role and stack" already names both, and the visual split (one sentence, then chips) makes them obvious. Labels would be extra on-screen text the PRD does not list. |
 | Q3 | Timeline entries split onto lines drop the colon after the dates and the comma after the role (e.g. "2021 to 2023: Marketing Project Manager, GoFreight, Taipei" → three lines). | **Accept as the PRD's own example** ("a timeline entry's dates, role and place on separate lines"). PM to confirm the punctuation at the break is not counted, so QA does not flag it. |
-| Q4 | A1 "6" + "-agent dev team" renders as two pieces; the hyphenated label under the number reads slightly oddly. | **Keep as written** (text cannot change). If Leon dislikes it, PM could change the source to "6" / "agents on the dev team" in a PRD change. Not a design blocker. |
+| Q4 | A1 label | **Resolved in Revision 2:** the deck now reads "6" / "agents on the dev team". |
 | Q5 | Slide 3: how large should the photos be? | **Revision 1: photos 48 x 64 fh, captions in the bottom band** (review issue 4). I checked the title-left alternative: in a column wide enough to leave room for 70 fh photos, the title runs to 4 or 5 lines, which is worse than open space. The remaining open area on the right is the honest cost of two uncropped portrait photos. |
 | Q6 | B2's three-screen image does not exist yet; its final ratio and padding decide how big the phones look. | **MOD-011 makes it with gaps ≈ 5% of one screen's width and a transparent background**, per PRD 4.6. The slide box takes any ratio via `contain`; the mock's stand-in is 1.5:1. |
 | Q7 | `color-mix()` for `--ss-edge`: acceptable as a "derived value", or should the hex values (#8f8f8f / #888888) be written into the MOD-012 stylesheet under `.dark`? | **Use `color-mix()`.** It derives from the existing variables (limit 3, "existing CSS variables only") and follows the theme with no second copy of colours. |
@@ -346,3 +351,18 @@ AC-093 adds a "Slideshow" item under Contact in the sidebar. Its icon belongs to
 | 6 Focus offset (UX) | Not mine; UI keeps 3 px on cards and 2 px on the close button, which the UX doc is being aligned to | 10 |
 
 Re-rendered PNGs in Revision 1: all 38. Visibly changed: intro, photo, menu, menu-states, workflow, intro-shot, intro-shot-1, bullets-shot, bullets-shot-1 (both themes). The others were re-rendered for consistency and look the same.
+
+## 16. Revision 2 changelog (Leon's review; deck commit 02e9c80)
+
+Leon's words: "Page 2: remove the "detail > 1" and "detail > 2" text ... No need to use "Pick another project" ... A2 remove the human approve step between doc sync <> engineer, engineer <> tech-lead. And the retro is a seperate line that take the improvements go back to the system instead of pm". For the open questions: L-9 follows the Design Lead; all others follow the recommendations (no UI impact beyond what is listed).
+
+| Change | Design | Where |
+|---|---|---|
+| Timeline work cards: no "Details" text, no key chip | Cards keep the container, the `--ss-edge` edge, hover and focus; new 0.8 fh accent top edge marks them as openable; height = content. Keys 1 and 2 remain a hidden shortcut. The `.details` row and its styles are gone. | 7.2, 10, 11, PNGs `timeline`, `timeline-focus` |
+| Menu title always "Pick a project" | Single title; `menu-states` no longer shows "Pick another project" | 7.5, PNG `menu-states` |
+| A1 label "agents on the dev team" | Data only; same layout | 7.6, Q4, new PNG `cover-a1` |
+| A2 approvals | Drop lines only on the arrows into PM, into Doc-Sync and into Shipped | 7.12, PNG `workflow` |
+| A2 retrospective | Loop into PM removed. A system bracket spans the whole pipeline; a separate up-arrow from the caption feeds it. Caption unchanged. | 7.12, 9, PNG `workflow` |
+
+Audit after Revision 2: no findings in both themes at 1920x1080, 1600x900, 960x540 and 667x375; every title one line.
+Re-rendered in Revision 2 (both themes): timeline, timeline-focus, menu, menu-states, workflow, and the new cover-a1. `cover` (B1) is unchanged.
