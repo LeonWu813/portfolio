@@ -4,13 +4,13 @@
 
 ## Last Action
 
-agent: tech-lead
-mode: on-demand-review
+agent: pm
+mode: change
 module: n/a
-next: claude --agent pm "change" (log the Tech Lead's AC-096 refused-request QA method from the 2026-11-01 on-demand review: Method 1, Method 2, timing recorder, pass rules, headless limits, human sign-off part); then claude --agent doc-sync to replace the [AMBIGUITY] marker in the MOD-012 spec. The engineering order in the Tech Lead's rev 1.9 review (b8395f1) is unchanged; the Doc-Sync 2026-11-01 Last Action's engineer list still applies once PM agrees.
-result: success
-Previous action: doc-sync delta (rev 1.7-1.10), result needs-pm, one open question (this one).
-timestamp: 2026-11-01T17:00:00Z
+result: needs-human
+next: show project-planning/pm-proposals/2026-11-01-ac-096-qa-method-and-doc-sync-notes-rev-1-11.md to the human (questions 1-10); on approval run claude --agent pm "apply 2026-11-01-ac-096-qa-method-and-doc-sync-notes-rev-1-11.md" with their exact words quoted. Meanwhile MOD-003 may start (claude --agent engineer-mod-projects-grid "spec-update"); hold MOD-008 until Doc-Sync syncs rev 1.11.
+Previous action: tech-lead on-demand review (AC-096 refused-request QA method, 17e70cc).
+timestamp: 2026-11-01T17:30:00Z
 
 ---
 
