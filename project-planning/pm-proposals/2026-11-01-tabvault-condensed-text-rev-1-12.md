@@ -1,4 +1,4 @@
-Status: pending
+Status: applied 2026-11-01
 
 # PM proposal: TabVault keeps its shorter case-study text (exception to CONV-003), SitePlus+ diagram note (PRD rev 1.12)
 

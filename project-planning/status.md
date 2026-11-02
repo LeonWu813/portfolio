@@ -4,15 +4,16 @@
 
 ## Last Action
 
-
 ```
-agent: qa-mod-skills
-mode: verify
-module: mod-skills
+agent: pm
+mode: change
+module: n/a
 result: success
-next: MOD-009 passes; the coordinator should route the AC-125 leftovers on /projects, /contact and /slideshow to the owning engineers (engineer-mod-projects, engineer-mod-contact, and the slideshow owner), then continue with the next module or phase-end review
-timestamp: 2026-11-01T21:40:00Z
+next: claude --agent doc-sync (delta sync of PRD rev 1.12: MOD-006 spec gets 4.5 Body copy and AC-133, production.md gets the CONV-003 exception); then claude --agent qa-mod-project-tabvault "verify" to re-verify MOD-006 against AC-133 and close QA Run 4's CONV-003 item as not a bug (follow Doc-Sync's Sync Report if it routes differently); then continue engineering in order: claude --agent engineer-mod-contact "spec-update" (MOD-010), claude --agent engineer-mod-slideshow "implement" (MOD-012), claude --agent engineer-mod-site-shell "spec-update" (MOD-001, last), each followed by its QA. At the Phase 4 integration review, Tech Lead takes up the SitePlus+ diagram/data-model tree candidate (Decisions, 2026-11-01).
+timestamp: 2026-11-02T05:35:52Z
 ```
+
+---
 
 ## PM Updates
 
@@ -137,6 +138,15 @@ timestamp: 2026-11-01T21:40:00Z
     MOD-008 spec: drop AC-063 ("no photo") and the "No photo" lines; add PRD 4.8's Sections and AC-132; the photos keep empty alt text by Leon's choice. AC-059 (heading) now has PRD 4.8 as its source.
     MOD-007 and MOD-010 specs: the heading lines ("Experience", "Contact") now come from PRD 4.7 and 4.10; remove the "carried from earlier syncs" remark.
     production.md: Project Summary copies the new Purpose line.
+- 2026-11-01 [SUBSTANTIVE] TabVault keeps its shorter case-study text: exception to CONV-003 for /projects/tabvault, AC-133 pins the text at c612306; PRD rev 1.12
+  Approved by Leon in the coordinator session: "TabVault go with (b)" and, for the proposal's questions 1-6 (proposal commit 198ad17), "Approve all recommendations" (1 (a), 2 yes, 3 yes, 4 yes keep AC-116, 5 substantive not architectural, 6 raise the SitePlus+ diagram/data-model tree at the Phase 4 integration review)
+  Proposal: project-planning/pm-proposals/2026-11-01-tabvault-condensed-text-rev-1-12.md
+  Answers: MOD-006 QA Run 4 (f6c603f), "Requirement check: CONV-003 word for word" (bugs-found). Not a bug: the condensed paragraphs are intended.
+  Sections changed: header; 4.5 (Body copy, AC-133); 9 (CONV-003 exception sentence).
+  Modules affected: MOD-006 only (spec: Body copy exception and AC-133; AC-116 unchanged). No code change expected: the page at c612306 is the reference. No module added, removed or renamed. Module Map unchanged. Current Phase unchanged (Phase 4 — Deploy).
+  Notes for Doc-Sync:
+    MOD-006 spec: replace the word-for-word requirement for paragraphs outside "The problem" and "Impact" with PRD 4.5 Body copy; add AC-133. QA closes Run 4's open item "CONV-003 bugs-found" as "not a bug (PRD rev 1.12)" on its next MOD-006 run, after checking AC-133.
+    production.md: copy CONV-003 with its new exception sentence.
 
 ---
 
@@ -174,6 +184,8 @@ Test:  (none — static site, no automated test suite defined)
 - 2026-11-01 Branch: no feature branch for the rev 1.7-1.10 engineering; work stays on main. Leon: "4. no need a branch". Every push to main deploys, so do not push between MOD-012 and MOD-001 unless both are in (Tech Lead, b8395f1).
 - 2026-11-01 AC-096 sign-off (rev 1.11): QA tests AC-096's refused-request case with the Tech Lead's method (17e70cc), with no human step. Leon does the human part when MOD-012 and MOD-001 are QA'd together: on the build, on his Mac in desktop Chrome, Safari and Firefox, the Slideshow nav item and, separately, key 7; "Press F for full screen" never appears, not even for a moment; on iPhone Safari no hint shows. Leon: "approve all recommendations" (question 2: yes).
 - 2026-11-01 About page (rev 1.11): the About page stays as Leon built it on 2026-06-29 (sections "Meeee", "Hobbies", "Background", five photos). The old "no photo" rule (MOD-008 AC-063) is dropped. The photos keep empty alt text. Leon: "approve all recommendations" (question 3: yes; question 4: keep empty alt text).
+- 2026-11-01 TabVault case-study text (rev 1.12): the TabVault page keeps the shorter text from Leon's own June edits instead of the full asset/content/case-study-tabvault-detailed.md. The reference is the page text at c612306 (AC-133); "The problem" and "Impact" still match the source (AC-116). Leon: "TabVault go with (b)"; "Approve all recommendations" (question 1: (a)).
+- 2026-11-01 SitePlus+ diagram and data-model tree: not on the page for now. The record format holds only paragraphs and images (MOD-004 QA, dd390a9). Raised at the Phase 4 integration review as a candidate (Tech Lead decides how, if Leon wants it shown). Leon: "Approve all recommendations" (question 6).
 
 ---
 

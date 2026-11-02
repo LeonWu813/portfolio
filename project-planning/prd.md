@@ -1,6 +1,6 @@
 # Product Requirements Document: Leon's Portfolio Website
 
-**Revision:** 1.11
+**Revision:** 1.12
 **Date:** 2026-11-01
 **Author:** PM Agent (updated to reflect implemented state)
 
@@ -350,6 +350,9 @@ TabVault is not live. It was deployed to production on AWS and is offline now, s
 - AC-116: On /projects/tabvault, the At-a-glance line reads exactly as in the header table, exactly one external link renders ("GitHub: " followed by the linked label "tab-management"), and the paragraphs of "The problem" and "Impact" match the source file word for word (they say TabVault was deployed and is offline now).
 - AC-117: In the built HTML of every route, including /slideshow, no link points to tab-vault.com, the text "tab-vault.com" does not appear, and no copy says TabVault is live. AC-117 does not cover the contents of the CV PDF served at /Leon_cv.pdf: the CV Leon chose on 2026-11-01 still names tab-vault.com (see section 6, Resume Hosting).
 
+**Acceptance criteria (added in revision 1.12):**
+- AC-133: On /projects/tabvault, the paragraphs of every section other than "Images", "The problem" and "Impact" match the paragraph text in `site/data/projects/tabvault.ts` at commit c612306 word for word, including its punctuation ('done' in single quotes, the em dashes in "What I learned, and what I would improve"). In those sections the page does not have to match `asset/content/case-study-tabvault-detailed.md`.
+
 **Case study sections (in order):**
 1. The problem
 2. My role
@@ -367,6 +370,8 @@ The Images section shows the TabVault screenshots below, in this order, and has 
 |---|---|
 | `/tabvault-mobile.jpeg` | Screenshot of the TabVault web app on an iPhone, showing saved items grouped by category, with search and filters. |
 | `/tabvault-plugin.png` | Screenshot of the TabVault Chrome extension popup, with buttons to save the current tab, save all tabs or write a quick note, and a list of recent saves. |
+
+**Body copy (added in revision 1.12):** The page keeps the shorter text Leon chose, not the full source file. This is an exception to CONV-003, chosen by Leon on 2026-11-01. The reference for every paragraph outside "The problem" and "Impact" is the paragraph text in `site/data/projects/tabvault.ts` at commit c612306, the text MOD-006 QA Run 4 checked. Compared with the source file, that text has three paragraphs in "Architecture" (the source has five), leaves out the intro and three challenges in "Challenges and how I resolved them" (missing dependency, wrong status code on bad credentials, ISP blocking the new domain), the "lesson" sentences and a sentence of the secrets paragraph, and in "What I learned, and what I would improve" drops one sentence, puts 'done' in single quotes and uses two em dashes where the source has commas. The paragraphs of "The problem" and "Impact" still match the source file word for word (AC-116). The section headings are the list above. A later edit to the source file changes the page only through a PRD change.
 
 ---
 
@@ -942,7 +947,7 @@ Conventions proposed by the Tech Lead and approved by Leon. Doc-Sync copies them
 
 - CONV-001: The shared project frame belongs to MOD-003: `site/app/projects/`, `site/components/ProjectList.tsx`, `site/components/ProjectMobileNav.tsx`, and the interfaces and ordered `projects` array in `site/data/projects-data.ts`. Each project-detail module owns only its record file `site/data/projects/<slug>.ts` and its `site/public/<prefix>*` assets. A detail module that needs a template change logs `blocked-technical` for MOD-003 and does not edit the template itself. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-002: A project record's position in `projects` is its display order everywhere: the side panel, the mobile switcher and the Home list. `projects[0]` is the `/projects` redirect target. (Tech Lead Reviews, 2026-11-01 change review)
-- CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. (Tech Lead Reviews, 2026-11-01 change review)
+- CONV-003: Section headings and paragraphs match the project's own source file in `asset/content/` word for word. Editor's notes in a source file never render. Exception: on /projects/tabvault, paragraphs outside "The problem" and "Impact" follow section 4.5 Body copy and AC-133 (Leon, 2026-11-01, revision 1.12). (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-004: A `spec-update` changes only the ACs named in the triggering Sync Report. Code that differs from the spec in other ACs is reported in Engineering Progress and is not changed. (Tech Lead Reviews, 2026-11-01 change review)
 - CONV-005: A project record file `site/data/projects/<slug>.ts` exports exactly one named constant annotated `ProjectEntry` and imports only types from `@/data/projects-data`. `site/data/projects-data.ts` holds only the interfaces and the ordered `projects` array. (Tech Lead Reviews, 2026-11-01 change review, rev 1.5)
 - CONV-006: Slideshow entry contract between MOD-001 and MOD-012. When the site opens the slideshow (the Slideshow nav link or key `7`), MOD-001, in the same event handler and in this order: writes `sessionStorage["slideshow-return"] = JSON.stringify({ path: location.pathname, t: Date.now(), fs })`, where `fs` is `true` when it is about to call `document.documentElement.requestFullscreen()` in the same handler (that is, when `document.fullscreenEnabled`), otherwise `false`; calls `document.documentElement.requestFullscreen()` if `document.fullscreenEnabled`, ignoring a rejection; and navigates client-side to `/slideshow`. MOD-012 reads and removes that key once on first mount. A value whose `path` starts with "/" and is not "/slideshow", and whose `t` is at most 10 seconds old, means "opened from the site": leaving returns to `path` with `router.replace`. Anything else means a direct visit: leaving goes to "/". A value without `fs` reads as `fs: false` (no request made). MOD-012 shows the "Press F for full screen" hint only while slide 1 is in a browser window and `document.fullscreenEnabled` is true. After an opening from the site with `fs: true`, it waits until full screen starts (the hint then never shows) or about 1.5 seconds pass with the browser still windowed. On any other opening it shows the hint at once, after its entrance delay. Every full-screen request the slideshow makes (`F` and the hint) targets `document.documentElement`. (Tech Lead Reviews, 2026-11-01 change review rev 1.7 + 1.8; hint rule changed by Leon's design decision L-2; `fs` field and hint timing from the 2026-11-01 change review rev 1.9, D1 (a) and Q6)
