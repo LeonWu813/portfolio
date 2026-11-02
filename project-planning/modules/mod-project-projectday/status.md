@@ -33,5 +33,24 @@ Method: `npm run build` and `npm run lint` in site/ (build pass, 13 static pages
 ### Integration notes (for Tech Lead)
 scan-integration.sh: no hits involving mod-project-projectday (only the module listing).
 
+### QA Run 2 (2026-11-01) - workflow: verify (spec-update 26eeede; MOD-003 overlay/alt/640 px cap f66a813, QA'd 17e339f)
+Method: `npm run build` (pass, 13 static pages) and `next start -p 3071`; real HTML via curl; headless Chrome (CDP) at 1280x800 and 375x800 for geometry and overlay; screenshot of the full page Read by eye; composed image checked with Pillow and composited on magenta and viewed. Server and Chrome stopped afterwards. No project verify skill. run-qa.sh not applicable (no test command at repo root, known).
+
+- PASS AC-079, AC-080, AC-081, AC-082, AC-083, AC-085, AC-086, AC-087, AC-088, AC-090: re-checked on the rebuilt app, unchanged from Run 1 (h1, glance, 7 chips, no links/tel, pull-quote, 10 strong and no literal `**` in rendered text, order Multi-Agent/ProjectDay/SitePlus+/TabVault, title/description/og/twitter/canonical, siteplus/multi-agent-system/tabvault 200, /projects/nope 404, /projects 307).
+- PASS AC-084: seven h2 in order: The problem, My role, How it works end to end, Images, Notable technical decisions, Impact and status, What I learned and what I'd improve. Every body paragraph of the source file is found verbatim in the rendered text (the only unmatched source lines are the At-a-glance line, tag line, and the editor lines, which must not render). Images section has no paragraphs. "confirm it is live" and "Suggested listing" absent from the built HTML.
+- PASS AC-089: feature image /projectday-screens.webp, alt equals Record 4 featureImageAlt, figcaption "ProjectDay's interface is in Traditional Chinese, for climbers in Taiwan." directly below. 1280 wide: 657x461 in the 721 px column, natural 1854x1300, aspect preserved; 375 wide: 296x208, no horizontal scroll (scrollWidth 375). Image viewed: Home, Gyms, Route left to right, each whole (no crop), gaps exactly 30 px (x 598-627 and 1226-1255, alpha 0; 5% of 598 = 29.9), corners and gaps transparent (alpha 0), no outer margin. Rendered page screenshot shows it intact.
+- PASS AC-111: Images section shows route-beta then profile, exact alts from the table, no empty alts. 1280x800: each 295x640 (not taller than 640), aspect preserved; 375: each 295x640 at x=32, inside the 360 px column, no horizontal scroll.
+- PASS AC-112: sizes projectday-screens 124,140 B; route 41,120; route-beta 27,478; profile 26,538; served bytes by HTTP equal file sizes. Each under 300 KB; total 219,276 B (limit 800,000). Singles 598x1300 (at least 1000 tall); screens 1854x1300 (at least 1500 wide); WebP with alpha on screens.
+- PASS AC-127: feature image and both Images images carry exactly the spec alts, none empty; the overlay dialog opened by each of the three images (via click in headless Chrome) has aria-label equal to that alt text and an inner img with the same alt.
+- PASS AC-126 (/projects/projectday part): no `tel:`, no "206-677-7544" or "2066777544", no phone-number-like digit string in text, links or meta of the built HTML. The "/slideshow" part is NOT YET CHECKABLE (route does not exist).
+- PASS CONV-001, CONV-005: record file has one named export typed ProjectEntry, type-only import; only projectday-* assets owned.
+- Gold-plating: none.
+- Note, not a failure: og:image / twitter:image resolve to http://localhost:3000/og-image.png because metadataBase is unset (build warning); site-wide, not in this module's AC scope.
+- Human script: none needed. Visual feel of the overlay open/close animation is owned by MOD-003 sign-off.
+
+### Integration notes (for Tech Lead)
+Not re-run this round (no new dependency change). Run 1: no hits for this module.
+
 ### Open items
-- [ ] AC-089 (post-screenshot clause) deferred, not a failure: re-verify at desktop 1280px and mobile 375px once Leon supplies site/public/projectday-* files (2026-11-01)
+- [x] AC-089 post-screenshot clause - passed 2026-11-01 (1280 and 375)
+- [ ] AC-126 /slideshow part - not yet checkable, /slideshow does not exist; re-verify when MOD-012 lands (2026-11-01)
