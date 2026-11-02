@@ -71,7 +71,38 @@ const navLinks = [
       </svg>
     ),
   },
+  {
+    href: "/slideshow",
+    label: "Slideshow",
+    shortcut: 7,
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M2 3h20" />
+        <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
+        <path d="m7 21 5-5 5 5" />
+      </svg>
+    ),
+  },
 ];
+
+const SLIDESHOW_HREF = "/slideshow";
+
+// CONV-006: record the return point, request full screen, all inside the caller's event handler.
+function openSlideshow(router: ReturnType<typeof useRouter>) {
+  const fs = document.fullscreenEnabled;
+  try {
+    sessionStorage.setItem(
+      "slideshow-return",
+      JSON.stringify({ path: location.pathname, t: Date.now(), fs }),
+    );
+  } catch {}
+  if (fs) {
+    try {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } catch {}
+  }
+  router.push(SLIDESHOW_HREF);
+}
 
 const connectLinks = [
   { href: "https://www.linkedin.com/in/leon-wu-tsan-yu/", label: "LinkedIn" },
@@ -81,6 +112,7 @@ const connectLinks = [
 
 function NavLinks({ onClick }: { onClick?: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
   return (
     <nav aria-label="Primary navigation">
       <ul className="flex flex-col gap-1">
@@ -91,7 +123,13 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
             <li key={href}>
               <Link
                 href={href}
-                onClick={onClick}
+                onClick={(e) => {
+                  if (href === SLIDESHOW_HREF && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)) {
+                    e.preventDefault();
+                    openSlideshow(router);
+                  }
+                  onClick?.();
+                }}
                 className={`group flex items-center justify-between rounded-lg p-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${isActive
                   ? "bg-[var(--text)] text-[var(--bg)]"
                   : "text-[var(--text)] hover:bg-[var(--hover)]"
@@ -163,7 +201,7 @@ function ProfileSection() {
           Leon Wu
         </span>
         <span className="text-xs text-[var(--text-muted)] leading-tight truncate">
-          Full-Stack Engineer
+          Full-Stack Software Engineer
         </span>
       </div>
     </Link>
@@ -173,21 +211,33 @@ function ProfileSection() {
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const onSlideshow = pathname === SLIDESHOW_HREF;
 
   useEffect(() => {
+    if (onSlideshow) return;
     const handler = (e: KeyboardEvent) => {
+      if (document.querySelector("dialog[open]")) return;
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement).isContentEditable) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const link = navLinks.find((l) => String(l.shortcut) === e.key);
-      if (link) router.push(link.href);
+      if (!link) return;
+      if (link.href === SLIDESHOW_HREF) openSlideshow(router);
+      else router.push(link.href);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [router]);
+  }, [router, onSlideshow]);
+
+  if (onSlideshow) return null;
 
   return (
     <>
+      <div
+        aria-hidden="true"
+        className="fixed bottom-5 right-5 z-10 h-20 w-[120px] pointer-events-none bg-[url('/Subject.png')] bg-contain bg-center bg-no-repeat"
+      />
       {/* Mobile top bar */}
       <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 h-12 bg-[var(--surface)] border-b border-[var(--border)]">
         <Link

@@ -13,7 +13,7 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "Leon Wu — Software Engineer",
   description:
-    "Portfolio of Tsan-Yu (Leon) Wu — full-stack engineer and CS master's student at Northeastern University.",
+    "Portfolio of Leon Wu — full-stack engineer and CS master's student at Northeastern University.",
 };
 
 const themeScript = `

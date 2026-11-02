@@ -2,6 +2,14 @@
 
 ## Engineering Progress
 
+### 2026-11-02 — spec-update (rev 1.11)
+
+ACs changed: AC-093 (7th Slideshow nav item, key 7, icon from slideshow-ui.md s14), CONV-006 entry in link click + key-7 handler (sessionStorage write, requestFullscreen, router.push; untrusted events not ignored), CONV-007/AC-094/AC-095/AC-129 (Sidebar returns null on /slideshow, key handler off there and while dialog[open]; main::after Subject.png removed from globals.css and replaced by a Sidebar-rendered fixed div so it is not emitted on /slideshow), AC-124 subtitle, AC-125 layout description "Leon Wu", AC-126 (built HTML has no tel:/phone), public/Leon_cv.pdf replaced from asset/Leon_cv.pdf (cfa3367).
+- lint (site/): 0 errors: pass
+- build (site/): pass; slideshow.html contains no head.png/Subject.png: pass
+- no phone in built HTML: pass
+- TopNav.tsx untouched: pass
+
 ### 2026-06-28 — implementation complete
 
 **Files created / modified:**

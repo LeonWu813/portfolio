@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-slideshow
-mode: implement
-module: mod-slideshow
+agent: engineer-mod-site-shell
+mode: spec-update
+module: mod-site-shell
 result: success
-next: claude --agent qa-mod-slideshow "verify" (QA together with MOD-001 once MOD-001 lands; do not push before MOD-001)
-timestamp: 2026-11-02T00:00:00Z
+next: claude --agent qa-mod-site-shell "verify" (QA together with mod-slideshow: AC-094, AC-095, AC-099)
+timestamp: 2026-11-02T01:00:00Z
 ```
 
 ## PM Updates
