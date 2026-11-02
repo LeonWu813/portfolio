@@ -204,5 +204,36 @@ Build (`npm run build` in site/): PASS, /projects/siteplus prerendered. Lint: 0 
 
 Result: all 12 ACs PASS. No human sign-off needed for this module. No failures. No dependency blockers (MOD-001, MOD-003 passed).
 
+### QA Run (verify, 2026-11-01) - spec-update rev 1.10/1.11 (8282cea)
+Workflow: verify (functional-test), because the spec changed (AC-031, 032, 034, 120, 127) and the engineer logged a spec-update. No automated suite (static site). `npm run build` in site/: PASS, /projects/siteplus prerendered. Checked real HTML from `next start` on port 3471 (server stopped afterwards) against the source at e479e22 (`git show e479e22:asset/content/case-study-siteplus-detailed.md`).
+
+- AC-029: PASS - h1 "SitePlus+".
+- AC-030: PASS - atAGlance text matches, `text-[var(--text-muted)]`, directly under the h1.
+- AC-031: PASS - eleven chips in spec order: Full-Stack, Java/Spring Boot, Spring Security / JWT, React, TypeScript, Redux Toolkit, PostgreSQL, Redis, Docker, GitHub Actions, AWS.
+- AC-032: PASS - `<p>Demo: <a href=".../cmosxfpu96m3ew9doctdnhtah" target="_blank" rel="noopener noreferrer">interactive walkthrough</a></p>` and `<p>GitHub: <a href="https://github.com/LeonWu813/marketing-analytics" ...>marketing-analytics</a></p>`. Only the label is a link.
+- AC-033: PASS - pull-quote `border-l-2 border-[var(--accent)]`, text matches.
+- AC-034: PASS - nine h2 in spec order (with the commas). Images section has zero `<p>`, two images (reports then sites) with the table alts. Every other section has paragraphs.
+- AC-035: PASS - 11 `<strong>` elements, no literal `**` in visible HTML.
+- AC-036: PASS - no readFileSync, marked or markdown parsing in page.tsx or siteplus.ts; no `use client` in page.tsx.
+- AC-037: PASS - unchanged page.tsx awaits params (previously verified; file not changed).
+- AC-038: PASS - /projects/nope returns 404.
+- AC-039: PASS - generateStaticParams iterates `projects`; build lists all four slugs.
+- AC-040: PASS - title "SitePlus+ - Leon Wu", og:title/description/url/type/image, twitter:card/title/description/image, canonical https://www.leon-wu.com/projects/siteplus. (og:image resolves against http://localhost:3000 because metadataBase is unset; build warns. Not in this module's spec; see integration note.)
+- AC-120: PASS - scripted comparison of the 24 source paragraphs (code blocks excluded) against the rendered text, whitespace and bold markers normalised: 0 missing. h2 headings equal the source's eight plus Images. "Resilience on purpose." paragraph ends "fails over 100% of traffic to the survivor automatically."; "Securing an endpoint that has to be public." says "50 requests per minute per IP". Tags in the Tags-row order.
+- AC-127: PASS - feature image alt "Screenshot of the SitePlus+ home dashboard."; reports and sites alts exactly as the table; no empty alt on any siteplus image; the overlay `<dialog>` for each carries `aria-label` equal to that alt (ImageZoom.tsx `aria-label={alt}`, rendered in the HTML). Overlay open/close behaviour is MOD-003's and passed its QA (17e339f).
+- AC-126: PASS - no `tel:`, "206-677-7544" or "2066777544" in the /projects/siteplus HTML. "including /slideshow" part: NOT YET CHECKABLE (/slideshow returns 404; MOD-012 not built).
+- Integration with MOD-012: the three siteplusplus-* files exist and return 200. Not renamed.
+- CONV-001/CONV-005: PASS - siteplus.ts imports only `type ProjectEntry` and exports one `siteplus` constant; projects-data.ts imports it.
+
+Source content left out (the spec's position): the source's mermaid diagram (Architecture) and the data-model tree code block are not on the page. The spec requires only "section headings and paragraphs" to match word for word and the record format holds only paragraphs and images, so this is NOT a failure. The Architecture section does still contain the paragraph "The data model is deliberately simple ...", which leads into the omitted tree. The spec is silent on whether the diagram and tree should appear in some form, so it is a PM decision if wanted (would need a record-format/MOD-003 change).
+
+Human script: none needed. Everything this module owns is verifiable in HTML. The overlay feel is covered by MOD-003's sign-off.
+
+Result: all ACs PASS (AC-126 /slideshow portion not yet checkable).
+
+### Integration notes (for Tech Lead)
+- scan-integration.sh reports "file not found" for /siteplusplus-home.jpg and /siteplusplus-reports.jpeg in both mod-project-marketing and mod-slideshow. False positive: files are in site/public and served 200.
+- og:image/twitter:image resolve to http://localhost:3000/og-image.png (Next build warning: metadataBase not set). Owned by MOD-003 template or MOD-001 layout, not this module.
+
 ### Open items
 - none
