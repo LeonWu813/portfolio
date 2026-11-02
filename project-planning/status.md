@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: tech-lead
-mode: record-decisions
-module: n/a
-next: coordinator runs /pstack:blast-radius for INT-001, INT-002, INT-005 (rows say "blast-radius first"); then claude --agent engineer-mod-site-shell "integration-fix INT-001 INT-002 INT-010 INT-011" and claude --agent engineer-mod-projects-grid "integration-fix INT-003 INT-004 INT-005"; claude --agent engineer-mod-slideshow "integration-fix INT-006 INT-007" can run now; each followed by qa-mod-<name> "verify", Leon's verification, and claude --agent tech-lead "confirm-fix INT-..."; then claude --agent pm "checkpoint"
+agent: engineer-mod-slideshow
+mode: integration-fix
+module: mod-slideshow
 result: success
-timestamp: 2026-11-02T08:18:28Z
+next: claude --agent qa-mod-slideshow "integration-fix-verify INT-006" and "integration-fix-verify INT-007" (re-run AC-095/AC-099 return checks and tap/swipe checks)
+timestamp: 2026-11-02T09:00:00Z
 ```
 
 ## PM Updates

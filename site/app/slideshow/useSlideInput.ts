@@ -26,6 +26,7 @@ interface PointerGesture {
   startTime: number;
   startedOnButton: boolean;
   invalid: boolean;
+  isMouse: boolean;
 }
 
 export interface SlidePointerHandlers {
@@ -143,14 +144,21 @@ export function useSlideInput({
 
   const onPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
     const map = gestures.current;
-    const invalid = event.pointerType !== "mouse" && map.size > 0;
-    if (invalid) for (const gesture of map.values()) gesture.invalid = true;
+    let invalid = false;
+    if (event.pointerType !== "mouse") {
+      for (const gesture of map.values()) {
+        if (gesture.isMouse) continue;
+        gesture.invalid = true;
+        invalid = true;
+      }
+    }
     map.set(event.pointerId, {
       startX: event.clientX,
       startY: event.clientY,
       startTime: event.timeStamp,
       startedOnButton: isInsideButton(event.target),
       invalid,
+      isMouse: event.pointerType === "mouse",
     });
   }, []);
 

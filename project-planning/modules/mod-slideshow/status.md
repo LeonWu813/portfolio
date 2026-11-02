@@ -2,6 +2,9 @@
 
 ## Engineering Progress
 
+- integration-fix INT-006: useFullscreenSession.ts resolveReturnPath parses with new URL(path, origin); different origin or pathname /slideshow or /slideshow/ is a direct visit; routes to pathname only. Build/tsc/lint pass (warnings only).
+- integration-fix INT-007: useSlideInput.ts gesture entries carry isMouse; multi-touch test ignores mouse entries. 22eadb2 race fix untouched.
+
 ### Bugfix 2026-11-02 (AC-095, AC-099 race)
 - Cause as QA diagnosed: subscribe() set wasFullscreenRef early, so the hydration snapshot (false) looked like an in->out change and leave() ran before entry was read.
 - Fix in useFullscreenSession.ts: removed the write in subscribe (wasFullscreenRef is now set only by the effect when the snapshot is seen true, so only a real in->out transition leaves); leave() now reads the entry itself if not yet read, so the target is always the opening page.

@@ -16,14 +16,17 @@ interface SlideshowEntry {
 
 const DIRECT_VISIT: SlideshowEntry = { returnPath: "/", fromSite: false, fullscreenRequested: false };
 
-function isReturnPath(path: unknown): path is string {
-  return (
-    typeof path === "string" &&
-    path.startsWith("/") &&
-    !path.startsWith("//") &&
-    !path.includes("\\") &&
-    path !== SLIDESHOW_PATH
-  );
+function resolveReturnPath(path: unknown): string | null {
+  if (typeof path !== "string" || !path.startsWith("/")) return null;
+  let url: URL;
+  try {
+    url = new URL(path, window.location.origin);
+  } catch {
+    return null;
+  }
+  if (url.origin !== window.location.origin) return null;
+  if (url.pathname === SLIDESHOW_PATH || url.pathname === `${SLIDESHOW_PATH}/`) return null;
+  return url.pathname;
 }
 
 function readEntry(): SlideshowEntry {
@@ -43,10 +46,11 @@ function readEntry(): SlideshowEntry {
   }
   if (typeof value !== "object" || value === null) return DIRECT_VISIT;
   const { path, t, fs } = value as { path?: unknown; t?: unknown; fs?: unknown };
-  if (!isReturnPath(path) || typeof t !== "number" || Date.now() - t > ENTRY_MAX_AGE_MS) {
+  const returnPath = resolveReturnPath(path);
+  if (returnPath === null || typeof t !== "number" || Date.now() - t > ENTRY_MAX_AGE_MS) {
     return DIRECT_VISIT;
   }
-  return { returnPath: path, fromSite: true, fullscreenRequested: fs === true };
+  return { returnPath, fromSite: true, fullscreenRequested: fs === true };
 }
 
 function getFullscreenSnapshot(): boolean {
