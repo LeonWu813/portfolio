@@ -2,6 +2,9 @@
 
 ## Engineering Progress
 
+- Mode: spec-update (spec rev 1.10/1.11). Changed ACs: AC-084 (Images section, 7 sections), AC-089 (feature image, alt, caption), AC-111 (Images items with alts), AC-112 (image files), AC-127 (alts). Record: added featureImage, featureImageAlt, featureImageCaption and the Images section (Route beta, Profile, with alts) between "How it works end to end" and "Notable technical decisions".
+- Images made with Pillow (run with python3 -I): each 1206x2622 RGBA PNG from asset/screenshots/projectday/ resized with LANCZOS to height H=1300 (width 598); singles saved with `Image.save(out, "WEBP", quality=80, method=6)` for route, route-beta, profile. Screens: canvas RGBA (0,0,0,0) of width 3*598+2*30 = 1854 x 1300 (gap = round(598*0.05) = 30 px, no outer margin), Home, Gyms, Route pasted left to right, saved with the same WEBP call. Sizes: screens 124,140 B; route 41,120 B; route-beta 27,478 B; profile 26,538 B; total 219,276 B (limit 800,000; each under 300 KB). Gap pixels are alpha 0 (checked); the screens themselves are opaque.
+- Build: pass. Lint: 0 errors (6 warnings, none in this module). self-check.sh not run (fails at repo root).
 - Mode: implement (E1 = A2 step 2). Created site/data/projects/projectday.ts (CONV-005: type-only import, one named export `projectday`). Record 4 fields, six sections with PRD headings, word-for-word from source; editor's notes excluded (AC-084); links: []; no featureImage (AC-089).
 - projects-data.ts not edited. MOD-003 imports at index 1 in cutover.
 - Template check: app/projects/[slug]/page.tsx guards links (`links.length > 0`) and featureImage (`project.featureImage &&`), so no links row and no image slot render. No change needed.

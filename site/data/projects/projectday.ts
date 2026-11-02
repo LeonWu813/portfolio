@@ -20,6 +20,11 @@ export const projectday: ProjectEntry = {
   description:
     "An iOS app for indoor bouldering climbers in Taiwan: log a send in a few taps, watch beta videos tied to a specific route, and browse gym route lists. Built with my multi-agent development system and submitted to the App Store.",
   links: [],
+  featureImage: "/projectday-screens.webp",
+  featureImageAlt:
+    "Three ProjectDay screens in Traditional Chinese. Home shows saved gyms, a target route and new beta videos. Gyms lists climbing gyms with search and city filters. A route screen shows a V0 route at CORNER gym with its photo, send and attempt counts, and a Log climb button.",
+  featureImageCaption:
+    "ProjectDay's interface is in Traditional Chinese, for climbers in Taiwan.",
   sections: [
     {
       heading: "The problem",
@@ -43,6 +48,19 @@ export const projectday: ProjectEntry = {
         "**Video.** Uploads go straight to S3 through a presigned URL. AWS MediaConvert converts each clip to a single H.264 MP4, maps HDR footage to SDR, and grabs a poster frame. A per-minute job marks finished videos as ready, and the app plays them through CloudFront with short-lived signed URLs. The database stores only a storage key, never a URL. The AWS side is defined in CDK.",
         "**Social and safety.** Follows, likes and a notification inbox, with push notifications through Expo and APNs. Reporting, blocking and in-app account deletion meet App Store requirements, and a single database rule hides blocked, reported or private videos everywhere, including inside notifications.",
         "**Shipping.** Separate dev and prod Supabase projects, a separate \"Dev\" app variant, and four EAS build profiles. CI type-checks the Edge Functions, runs their tests and the CDK tests, replays the database migrations against a local Supabase, and checks that every English string has a Chinese translation.",
+      ],
+    },
+    {
+      heading: "Images",
+      items: [
+        {
+          image: "/projectday-route-beta.webp",
+          alt: "ProjectDay route screen scrolled to the Beta videos section, showing the thumbnail of a climber's beta video for a V0 route.",
+        },
+        {
+          image: "/projectday-profile.webp",
+          alt: "ProjectDay profile screen with climbing stats: top grade V10, 10 sends, 9 climbing days, and a bar chart of sends per grade.",
+        },
       ],
     },
     {
