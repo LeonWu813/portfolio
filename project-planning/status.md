@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-slideshow
-mode: bugfix
+agent: qa-mod-slideshow
+mode: regression
 module: mod-slideshow
-result: success
-next: claude --agent qa-mod-slideshow "regression"
-timestamp: 2026-11-02T04:00:00Z
+result: needs-signoff
+next: Leon runs the human sign-off script in project-planning/modules/mod-slideshow/status.md (Chrome, Safari, Firefox, iPhone Safari) and reports "ui-results: <per step>" to claude --agent qa-mod-slideshow
+timestamp: 2026-11-01T23:00:00Z
 ```
 
 ## PM Updates

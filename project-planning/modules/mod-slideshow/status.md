@@ -78,7 +78,7 @@
 - Extra hidden text: "Opens details." (screen-reader only, described-by on the two work cards) and "Next starts this project." (screen-reader only on the highlighted card), plus `aria-keyshortcuts`. Not visible, so no "Details cue" on screen; not asked for by the spec. Noted as small accessibility additions, not gold-plating that changes behaviour.
 - OG image `/og-image.png`: the file does not exist (404) and, with no `metadataBase`, every route's `og:image` is built as `http://localhost:3000/og-image.png`. This is site-wide, not caused by MOD-012, and AC-107 only asks for the tags. Passed; the MOD-001 `og-image.png` open item and the missing `metadataBase` stay Tech Lead's to schedule before release.
 
-### Human sign-off script for Leon (not yet run; run after the AC-095 fix)
+### Human sign-off script for Leon (not yet run; the AC-095 fix is in and QA-verified headless, so run it now)
 Run on the production build (`cd site && npm run build && npx next start`, open `http://localhost:3000`). Say PASS or describe what you saw, per numbered step.
 Desktop Mac, one browser at a time, for Chrome, Safari and Firefox (a screen recording that you step through frame by frame is optional but best for step 2):
 1. Open `/about`. Click the Slideshow item in the sidebar. It must go into full screen showing slide "Hi, I'm Leon" with no sidebar, top bar, theme toggle or photo anywhere. Press Esc once: you must be back on `/about`, out of full screen, and the sidebar keys (for example `2`) work.
@@ -98,9 +98,26 @@ iPhone Safari (open the site over your network address or the deployed preview):
 - MOD-001's handoff of `fs: true` relies on `document.fullscreenElement` becoming set before MOD-012 hydrates; the AC-095 race above is MOD-012's code, but it surfaces only on the MOD-001 entry path.
 - OG image and `metadataBase`: see Judgment calls (site-wide, open).
 
+### QA Run 2 — Regression — 2026-11-01
+
+**Workflow: regression (Engineer bugfix 22eadb2 for AC-095 / AC-099).** Fresh `npm run build` (pass, `/slideshow` static), `next start -p 3457`, headless Chrome over CDP, my timing recorder equivalents. The recorder is the original repro: a busy-loop `fullscreenchange` listener that slows the page (same race window that failed 4 of 16 before), trusted CDP input, wait 4 s.
+
+- **REGRESSION PASS AC-095**: original failure scenario resolved.
+  - Trusted key `7` from `/about`, 4 s wait: 40 of 40 ended on `/slideshow` with `document.fullscreenElement` set (before the fix: about 1 in 4 ended on `/`). Another 32 key runs (below) also all ended in full screen. Total 72 of 72.
+  - Trusted click on the visible nav item: 32 of 32 ended on `/slideshow` in full screen (earlier QA run could not hit the race through the nav item without the recorder; here under the same slowdown).
+- **REGRESSION PASS AC-099** (return target after a successful opening from `/about`, under the same slowdown, each exit method rotated across the runs):
+  - key `7` then Esc once: 8 of 8 landed on `/about`, out of full screen. Close button: 8 of 8. `document.exitFullscreen()` (browser exit stand-in): 8 of 8. Back: 8 of 8. Same four methods after nav-item click: 8 of 8 each. Every run `/about|false` (path|in full screen). 64 of 64.
+  - Quick re-checks: opening from `/projects/tabvault` then Back lands on `/projects/tabvault`, not in full screen; direct visit then Esc goes to `/`; Esc from full screen entered via `7` on `/about` returns to `/about` and key `2` on the site works afterwards.
+  - Not re-run this round (code path untouched by the fix, passed in run 1): stale key 20 s, bad JSON, `//evil.com`, `/slideshow` as path.
+- **AC-096 Method 1 timings (re-run)**: refused request (untrusted event, `userGesture:false`): nav item 1850, 1834, 1818, 1843 ms; key 7 1851, 1843, 1853, 1833 ms (all inside 1200-2000, margin to 2000 about 150 ms, same as run 1); `fsSeen` false, key `slideshow-return` consumed, no errors. Successful trusted key 7 (4 runs) and trusted nav click (4 runs): `fsSeen` true, hint never in the DOM (`shown` null). Direct visit: 375, 401, 358 ms (limit about 500; 401 is within, nearer than before, still pass).
+- **Quick regression of the rest**: AC-097 Space/Right/Left/Home navigation; AC-113 menu title, Next-on-menu hint; digit 1 starts project A; AC-114 job cards via keys 1 and 2 and back; AC-115 start links `projectday`, `tabvault`; AC-130 full-screen idle cursor `none` after about 3 s; direct-visit Esc to `/`. All pass. One script line reported FAIL for AC-131 (held key): artifact, the compared strings were the same slide ("Hi, I'm Leon") with and without the live-region suffix ". Press F for full screen" (hint appeared on a direct visit); the held Right arrow did move one slide (slide returned to the first after one Left). Treated as PASS. AC-094, 098, 100, 102 to 107, 117, 126, 130 and the rest were not re-measured: the fix is confined to `useFullscreenSession.ts` (entry read and the "in then out" test), which affects only AC-095, AC-096 and AC-099 paths, all re-checked.
+- `run-qa.sh`: no test command defined (static site), no change.
+- No new regressions. No escalation marker for AC-095 or AC-099 exists; both now pass.
+- Limit: headless Chrome has no macOS full-screen animation, so the race is shown fixed under a deliberately slowed page, not on Leon's real browsers. The human script below remains the confirmation (steps 1 and 2 repeat 5 times).
+
 ### Open items
-- [ ] AC-095 bugs-found — slideshow leaves to Home right after a successful full-screen opening, about 1 run in 4 under the recorder (2026-11-02)
-- [ ] AC-099 bugs-found — same race gives return target "/" and no return to the opening page when it hits (2026-11-02)
+- [x] AC-095 bugs-found — passed 2026-11-01 (regression run 2); was: slideshow leaves to Home right after a successful full-screen opening, about 1 run in 4 under the recorder (2026-11-02)
+- [x] AC-099 bugs-found — passed 2026-11-01 (regression run 2); was: same race gives return target "/" and no return to the opening page when it hits (2026-11-02)
 - [ ] AC-095 needs-signoff — Leon: Chrome, Safari, Firefox via nav item and `7`, and iPhone Safari, per the script above (2026-11-02)
 - [ ] AC-096 needs-signoff — Leon: hint never appears, not even for a frame, during the real full-screen animation (steps 1 and 2) and none on iPhone (2026-11-02)
 - [ ] AC-098 needs-signoff — real touch on iPhone Safari incl. pinch (step 9) (2026-11-02)
