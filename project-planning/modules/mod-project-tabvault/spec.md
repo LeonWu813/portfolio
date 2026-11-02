@@ -1,4 +1,4 @@
-**Last Synced from PRD Revision**: 1.10 | **Last Updated**: 2026-11-01
+**Last Synced from PRD Revision**: 1.12 | **Last Updated**: 2026-11-01
 
 ---
 
@@ -32,7 +32,7 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
 
 ## Related User Stories
 
-- No formal US-IDs defined in PRD revision 1.10. Requirements are drawn directly from PRD sections 4.5 and 5.
+- No formal US-IDs defined in PRD revision 1.12. Requirements are drawn directly from PRD sections 4.5 and 5.
 
 ## Requirements
 
@@ -69,7 +69,8 @@ Note: MOD-004, MOD-005, MOD-006, and MOD-011 are all served by a single dynamic 
   | `/tabvault-plugin.png` | Screenshot of the TabVault Chrome extension popup, with buttons to save the current tab, save all tabs or write a quick note, and a list of recent saves. |
 
 - TabVault is not live. It was deployed to production on AWS and is offline now, so the page has no live link, and no copy on it says TabVault is live.
-- Section headings and paragraphs match the source file `asset/content/case-study-tabvault-detailed.md` word for word (CONV-003); the paragraphs of "The problem" and "Impact" say TabVault was deployed and is offline now (AC-116).
+- Section headings are the list above. The paragraphs of "The problem" and "Impact" match the source file `asset/content/case-study-tabvault-detailed.md` word for word and say TabVault was deployed and is offline now (AC-116).
+- Body copy (added in revision 1.12): The page keeps the shorter text Leon chose, not the full source file. This is an exception to CONV-003, chosen by Leon on 2026-11-01. The reference for every paragraph outside "The problem" and "Impact" is the paragraph text in `site/data/projects/tabvault.ts` at commit c612306, the text MOD-006 QA Run 4 checked. Compared with the source file, that text has three paragraphs in "Architecture" (the source has five), leaves out the intro and three challenges in "Challenges and how I resolved them" (missing dependency, wrong status code on bad credentials, ISP blocking the new domain), the "lesson" sentences and a sentence of the secrets paragraph, and in "What I learned, and what I would improve" drops one sentence, puts 'done' in single quotes and uses two em dashes where the source has commas. The paragraphs of "The problem" and "Impact" still match the source file word for word (AC-116). A later edit to the source file changes the page only through a PRD change.
 - In the built HTML of every route, no link points to tab-vault.com, the text "tab-vault.com" does not appear, and no copy says TabVault is live (AC-117).
 - Every image on the page (the feature image and each Images-section image) carries exactly the alt text above and no project image has an empty alt (AC-127). Each image opens in the image overlay owned by MOD-003.
 - The file `/tabvault-home.png` is used on slide D1 of the slideshow (MOD-012): renaming any `site/public/tabvault-*` file breaks MOD-012.
@@ -162,6 +163,7 @@ interface ProjectEntry {
 - AC-064: The system shall export a metadata object with title "TabVault — Leon Wu" and Open Graph and Twitter card tags.
 - AC-116: On /projects/tabvault, the At-a-glance line reads exactly as in the header table, exactly one external link renders ("GitHub: " followed by the linked label "tab-management"), and the paragraphs of "The problem" and "Impact" match the source file word for word (they say TabVault was deployed and is offline now).
 - AC-117: In the built HTML of every route, including /slideshow, no link points to tab-vault.com, the text "tab-vault.com" does not appear, and no copy says TabVault is live. AC-117 does not cover the contents of the CV PDF served at /Leon_cv.pdf: the CV Leon chose on 2026-11-01 still names tab-vault.com (see section 6, Resume Hosting).
+- AC-133: On /projects/tabvault, the paragraphs of every section other than "Images", "The problem" and "Impact" match the paragraph text in `site/data/projects/tabvault.ts` at commit c612306 word for word, including its punctuation ('done' in single quotes, the em dashes in "What I learned, and what I would improve"). In those sections the page does not have to match `asset/content/case-study-tabvault-detailed.md`.
 - AC-127: On every /projects/<slug> page, the feature image and every image in an Images section have exactly the alt text given for them in sections 4.3 to 4.6 and 5, and no project image has an empty alt. The overlay dialog each one opens is named by that alt text. (For MOD-006, /projects/tabvault.)
 - AC-126: In the built HTML of every route, including /slideshow, no phone number appears: no `tel:` link, and neither "206-677-7544" nor "2066777544" nor any other phone number in text, links or meta tags. AC-126 does not cover the contents of the CV PDF served at /Leon_cv.pdf, which lists Leon's phone number (see section 6, Resume Hosting). (For MOD-006, the /projects/tabvault route.)
 

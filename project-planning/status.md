@@ -5,15 +5,13 @@
 ## Last Action
 
 ```
-agent: pm
-mode: change
-module: n/a
+agent: doc-sync
+mode: delta
+module: mod-project-tabvault
 result: success
-next: claude --agent doc-sync (delta sync of PRD rev 1.12: MOD-006 spec gets 4.5 Body copy and AC-133, production.md gets the CONV-003 exception); then claude --agent qa-mod-project-tabvault "verify" to re-verify MOD-006 against AC-133 and close QA Run 4's CONV-003 item as not a bug (follow Doc-Sync's Sync Report if it routes differently); then continue engineering in order: claude --agent engineer-mod-contact "spec-update" (MOD-010), claude --agent engineer-mod-slideshow "implement" (MOD-012), claude --agent engineer-mod-site-shell "spec-update" (MOD-001, last), each followed by its QA. At the Phase 4 integration review, Tech Lead takes up the SitePlus+ diagram/data-model tree candidate (Decisions, 2026-11-01).
-timestamp: 2026-11-02T05:35:52Z
+next: claude --agent qa-mod-project-tabvault "verify" (re-verify MOD-006 against AC-133 and close QA Run 4's CONV-003 item as not a bug, PRD rev 1.12); then continue engineering in order: claude --agent engineer-mod-contact "spec-update" (MOD-010), claude --agent engineer-mod-slideshow "implement" (MOD-012), claude --agent engineer-mod-site-shell "spec-update" (MOD-001, last), each followed by its QA. No Engineer run for MOD-006: the page at c612306 is the reference and no code change is expected.
+timestamp: 2026-11-01T00:00:00Z
 ```
-
----
 
 ## PM Updates
 
@@ -1131,6 +1129,24 @@ QA: MOD-003 and the record modules after step 2 (AC-127 grep, AC-128 at 1280x800
 **Not changed:** AC-017 note correction (status.md only, no spec change); agent wrappers (Source Paths, dependencies and spec paths unchanged); AC-091 "proposed" wording (PM left it as is). The old MOD-008 status.md QA record for AC-063 is a QA record and left untouched.
 **Spec-update scope:** MOD-008: AC-063 dropped, AC-132 added (page already matches). MOD-001: engineering note only. MOD-012: QA method only. MOD-007, MOD-010: no AC change.
 **verify-sync.sh result:** checks 1 to 3 PASS, then the script aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual: Check 4 PASS (no US-IDs); Check 5 PASS (no AMBIGUITY marker removed or added; the slideshow marker is gone); Check 6 N/A (Phase Plan unchanged). No HTML template comments added.
+
+---
+
+### Sync Report — Delta Sync — 2026-11-01 (rev 1.12)
+**Sync type:** delta
+**PRD Revision:** 1.12
+**PM Update reference:** 2026-11-01 [SUBSTANTIVE] TabVault keeps its shorter case-study text: exception to CONV-003 for /projects/tabvault, AC-133 pins the text at c612306; PRD rev 1.12
+**Files modified:**
+- project-planning/modules/mod-project-tabvault/spec.md (MOD-006) - word-for-word requirement for paragraphs outside "The problem" and "Impact" replaced by PRD 4.5 Body copy (verbatim); AC-133 added; revision header and Related User Stories line 1.12
+- project-planning/production.md - CONV-003 now carries the exception sentence; revision header 1.12
+**Files created:** none
+**Module removals noted:** none
+**AMBIGUITY markers added:** none
+**AMBIGUITY markers resolved:** none
+**CONFLICT markers added:** none
+**Not changed:** AC-116 (unchanged by PRD); agent wrappers (Source Paths, dependencies, spec paths unchanged); other module specs (CONV-003 reaches them only through production.md).
+**Spec-update scope:** MOD-006: no code change expected (page at c612306 is the reference). QA re-verifies against AC-133.
+**verify-sync.sh result:** checks 1 to 3 PASS, then the script aborts at check 4 (set -e with grep finding no US-IDs in the PRD), the same pre-existing failure as earlier syncs. Manual: Check 4 PASS (no US-IDs); Check 5 PASS (no marker added or removed); Check 6 N/A (Phase Plan unchanged). No HTML template comments added.
 
 ---
 
