@@ -77,5 +77,27 @@ Human sign-off: not needed (text-only copy change).
 ### Integration notes (for Tech Lead)
 - og:image / twitter:image resolve to http://localhost:3000/og-image.png because no metadataBase is set (build warning). Not a MOD-010 AC, but affects social previews in production.
 
+## QA Results — 2026-11-01 (regression, PRD rev 1.10/1.11, engineer fec5677)
+
+Workflow: regression — spec rebuilt to rev 1.11; engineer spec-update changed AC-125 text and AC-076 label. All ACs re-verified.
+Build (site/): PASS, /contact static. Evidence: real HTML from `next start` (port 3947), curl of /contact; no `verify` skill in project.
+
+- AC-072: PASS — `<h1>Contact</h1>`; intro verbatim "Looking for a 2026/2027 internship ... I'd love to hear about it."
+- AC-073: PASS — `<a href="mailto:leon.wu.tsan.yu@gmail.com">` with same display text.
+- AC-074: PASS — LinkedIn href, text, target, rel correct.
+- AC-075: PASS — GitHub href, text, target, rel correct.
+- AC-076: PASS — `<a href="/Leon_cv.pdf" download="Leon_Wu_Resume.pdf">Resume (PDF)</a>`, plain `<a>`; /Leon_cv.pdf HTTP 200.
+- AC-077: PASS — 0 `<form>`, 0 `<input>`.
+- AC-078: PASS — title "Contact — Leon Wu"; canonical and og:url https://www.leon-wu.com/contact; og and twitter tags present; no 'use client'.
+- AC-123: PASS — main list order Email, LinkedIn, GitHub, Resume, same markup/style; no Phone or Location label; only email on page is leon.wu.tsan.yu@gmail.com (sidebar Online block shows the same Email/LinkedIn/GitHub links, structure unchanged).
+- AC-125: PASS for /contact — description "Get in touch with Leon Wu — email, LinkedIn, GitHub, and resume.", og/twitter "Get in touch with Leon Wu."; no "Tsan-Yu (Leon) Wu" / "Tsan-Yu Wu (Leon)" / "Tsan-Yu Wu" in /contact HTML. Spot check of /, /about, /experience, /skills and four /projects/<slug> routes: no old name. One earlier scan flagged 1 match on /projects, not reproducible on three re-fetches (likely a loose case-insensitive pattern); other routes belong to other modules.
+- AC-126: PASS for /contact — no `tel:`, no 206-677-7544 / 2066777544, no Location/Phone text. "including /slideshow" part: NOT YET CHECKABLE (/slideshow returns 404; route does not exist yet).
+
+Layout wrapper `px-8 py-16 max-w-2xl mx-auto w-full` present (plus flex classes). No gold-plating. Human sign-off: not needed (text/markup checks only; visual styling unchanged).
+
+### Integration notes (for Tech Lead)
+- Sidebar Email link (mailto) carries target="_blank" rel="noopener noreferrer" (MOD-001, pre-existing; not a MOD-010 AC).
+- og:image/twitter:image still resolve to http://localhost:3000/og-image.png (no metadataBase), as noted previously.
+
 ### Open items
-- (none)
+- [ ] AC-126 not-yet-checkable — "including /slideshow" part cannot be verified until /slideshow exists (2026-11-01)

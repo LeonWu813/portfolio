@@ -5,12 +5,12 @@
 ## Last Action
 
 ```
-agent: engineer-mod-contact
-mode: spec-update
+agent: qa-mod-contact
+mode: regression
 module: mod-contact
 result: success
-next: claude --agent qa-mod-contact "verify"
-timestamp: 2026-11-01T00:00:00Z
+next: AC-126 /slideshow part is not yet checkable (route absent); re-run claude --agent qa-mod-contact "regression" once /slideshow exists. Otherwise proceed to the next module / phase-end review.
+timestamp: 2026-11-01T12:00:00Z
 ```
 
 ## PM Updates
